@@ -1,0 +1,1667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TAP3D: From Passive Lists to Proactive Agents</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/DrawSVGPlugin.min.js"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: {
+        display: ['"Plus Jakarta Sans"', 'sans-serif'],
+        body: ['"DM Sans"', 'sans-serif'],
+      },
+      colors: {
+        primary: '#1a1a1a',
+        secondary: '#6b6b6b',
+        accent: '#2563eb',
+        surface: '#f5f5f5',
+        highlight: '#e74c3c',
+      }
+    }
+  }
+}
+</script>
+<style>
+  * { -webkit-font-smoothing: antialiased; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; }
+
+  /* Typography refinements for sans-serif */
+  .font-display { letter-spacing: -0.02em; }
+  h1, h2, h3 { letter-spacing: -0.025em; }
+  .stat-number, .result-num { letter-spacing: -0.03em; }
+
+  /* Subtle grain overlay */
+  body::before {
+    content: ''; position: fixed; inset: 0; z-index: 999; pointer-events: none;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .toc { visibility: hidden; opacity: 0; transform: translateX(-16px); }
+  .toc.visible { visibility: visible; }
+  .toc-link { border-left: 2px solid transparent; transition: color 0.25s, border-color 0.25s; }
+  .toc-link:hover, .toc-link.active { color: #1a1a1a; font-weight: 500; }
+  .toc-link.active { border-left-color: #2563eb; }
+
+  .img-placeholder { position: relative; overflow: hidden; }
+  .img-placeholder::after {
+    content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    animation: shimmer 3s infinite;
+  }
+  @keyframes shimmer { 0% { left: -100%; } 100% { left: 200%; } }
+
+  .line-reveal { transform-origin: left; transform: scaleX(0); }
+  .gs-child { opacity: 0; transform: translateY(30px); }
+
+  .section-divider { overflow: visible; }
+  .section-divider .divider-line { stroke-dasharray: 1000; stroke-dashoffset: 1000; }
+
+  .floating-dot { position: absolute; border-radius: 50%; opacity: 0; background: #2563eb; }
+  .flow-connector path { stroke-dasharray: 8 4; }
+  .progress-ring circle { transition: stroke-dashoffset 0.8s ease; }
+
+  .text-highlight-box {
+    background: linear-gradient(120deg, #dbeafe 0%, #dbeafe 100%);
+    background-repeat: no-repeat; background-size: 0% 100%; background-position: 0 0;
+    transition: background-size 0.6s ease;
+    padding: 2px 4px; margin: -2px -4px; border-radius: 4px;
+  }
+  .text-highlight-box.active { background-size: 100% 100%; }
+
+  @keyframes pulse-ring {
+    0% { transform: scale(0.8); opacity: 1; }
+    100% { transform: scale(1.6); opacity: 0; }
+  }
+  .barrier-icon-pulse { animation: pulse-ring 2s ease-out infinite; }
+
+  .scroll-progress {
+    position: fixed; top: 0; left: 0; height: 3px;
+    background: linear-gradient(90deg, #2563eb, #7c3aed, #2563eb);
+    background-size: 200% 100%;
+    animation: gradient-shift 3s ease infinite;
+    z-index: 200; transform-origin: left; transform: scaleX(0);
+  }
+  @keyframes gradient-shift { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+
+  .parallax-slow { will-change: transform; }
+
+  /* Hero gradient mesh */
+  .hero-mesh {
+    position: absolute; inset: 0; pointer-events: none; z-index: 0;
+    background:
+      radial-gradient(ellipse 600px 400px at 10% 20%, rgba(37,99,235,0.04), transparent),
+      radial-gradient(ellipse 500px 300px at 80% 60%, rgba(124,58,237,0.03), transparent),
+      radial-gradient(ellipse 400px 400px at 50% 100%, rgba(37,99,235,0.02), transparent);
+  }
+
+  /* Scroll down indicator */
+  .scroll-indicator {
+    position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
+  }
+  @keyframes bounce-soft {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(6px); }
+  }
+  .scroll-indicator svg { animation: bounce-soft 2s ease-in-out infinite; }
+
+  /* Cursor glow on cards */
+  .card-glow {
+    position: relative; overflow: hidden;
+  }
+  .card-glow::before {
+    content: ''; position: absolute; width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(37,99,235,0.08), transparent 70%);
+    border-radius: 50%; pointer-events: none;
+    transform: translate(-50%, -50%);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .card-glow:hover::before { opacity: 1; }
+
+  /* Animated gradient border on key insight */
+  @keyframes border-glow {
+    0%, 100% { border-color: rgba(37,99,235,0.15); }
+    50% { border-color: rgba(37,99,235,0.35); }
+  }
+  .insight-glow { animation: border-glow 3s ease-in-out infinite; border-width: 1px; border-style: solid; }
+
+  /* Floating label animation */
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+  .float-anim { animation: float 4s ease-in-out infinite; }
+
+  /* Number highlight glow */
+  .num-glow { text-shadow: 0 0 30px rgba(37,99,235,0.15); }
+
+  /* TOC underline — text-width only via background-image on span */
+  .toc-link span {
+    background-image: linear-gradient(#1a1a1a, #1a1a1a);
+    background-size: 0% 1px;
+    background-repeat: no-repeat;
+    background-position: left bottom;
+    transition: background-size 0.3s ease;
+    padding-bottom: 2px;
+  }
+  .toc-link:hover span { background-size: 100% 1px; }
+  .toc-link.active span { background-size: 0% 1px; }
+
+  /* Flip cards */
+  .flip-card { position: relative; }
+  .flip-card-inner { position: relative; }
+  .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+  .flip-front { position: relative; z-index: 2; }
+  .flip-back { z-index: 1; }
+
+  /* Matrix chip dragging */
+  .matrix-chip.placed { opacity: 0.4; pointer-events: none; transform: scale(0.9); }
+  .matrix-chip-ghost {
+    position: absolute; z-index: 50; pointer-events: none;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    transform: scale(1.08);
+  }
+</style>
+</head>
+<body class="bg-white text-primary leading-relaxed">
+
+<!-- Scroll progress bar -->
+<div class="scroll-progress"></div>
+
+<!-- Scroll progress bar -->
+<div class="scroll-progress"></div>
+
+<!-- ─── TOC Sidebar ─── -->
+<nav class="toc fixed left-0 top-0 w-56 h-screen px-8 py-12 flex flex-col z-50 bg-white">
+  <a href="#" class="text-sm text-secondary hover:text-primary mb-6 no-underline transition-colors">← Back to Work</a>
+  <div class="flex flex-col gap-1.5">
+    <a href="#hero" class="toc-link text-sm text-secondary no-underline py-1.5 pl-3 -ml-3"><span>TAP3D</span></a>
+    <a href="#context" class="toc-link text-sm text-secondary no-underline py-1.5 pl-3 -ml-3"><span>The Problem</span></a>
+    <a href="#investigation" class="toc-link text-sm text-secondary no-underline py-1.5 pl-3 -ml-3"><span>Research</span></a>
+    <a href="#strategy" class="toc-link text-sm text-secondary no-underline py-1.5 pl-3 -ml-3"><span>Strategy</span></a>
+    <a href="#validation" class="toc-link text-sm text-secondary no-underline py-1.5 pl-3 -ml-3"><span>Validation</span></a>
+    <a href="#outcome" class="toc-link text-sm text-secondary no-underline py-1.5 pl-3 -ml-3"><span>Outcome</span></a>
+    <a href="#reflection" class="toc-link text-sm text-secondary no-underline py-1.5 pl-3 -ml-3"><span>Reflection</span></a>
+  </div>
+  <div class="w-full h-px bg-gray-200 my-5"></div>
+  <div class="mt-auto flex flex-col gap-1.5">
+    <a href="#" class="text-sm text-secondary hover:text-primary no-underline transition-colors">About</a>
+    <a href="#" class="text-sm text-secondary hover:text-primary no-underline transition-colors">Experiments</a>
+  </div>
+</nav>
+
+<!-- ─── Main ─── -->
+<div class="main">
+
+  <!-- ═══════ HERO ═══════ -->
+  <header class="px-10 lg:px-20 pt-20 pb-14 relative overflow-hidden" id="hero">
+    <div class="hero-mesh"></div>
+    <div class="absolute top-8 right-20 w-2 h-2 rounded-full bg-accent/10 parallax-slow"></div>
+    <div class="absolute top-32 right-40 w-3 h-3 rounded-full bg-accent/5 parallax-slow"></div>
+    <svg class="absolute top-6 left-6 w-12 h-12 text-gray-200/60 opacity-0 hero-corner" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1"><path d="M0 16V0h16"/></svg>
+    <svg class="absolute bottom-6 right-6 w-12 h-12 text-gray-200/60 opacity-0 hero-corner" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1"><path d="M48 32v16H32"/></svg>
+
+    <div class="relative z-10">
+      <!-- Logo -->
+      <div class="opacity-0 hero-logo mb-8">
+        <img src="TAP3D_Logo.png" alt="TAP3D Logo" class="h-8 object-contain">
+      </div>
+
+      <!-- Title + Subtitle -->
+      <h1 class="hero-subtitle font-display text-[1.75rem] lg:text-[2.25rem] font-semibold leading-[1.15] max-w-xl xl:max-w-2xl mb-5 opacity-0" style="letter-spacing:-0.03em">
+        Integrating AI to Reduce<br>Training Drop-off
+      </h1>
+      <p class="hero-subtitle text-base lg:text-lg text-secondary leading-relaxed max-w-lg mb-8 opacity-0">
+        Data-driven approach to solving silent churn in B2B VR training — from user research to shipped AI agent.
+      </p>
+
+      <!-- Badges -->
+      <div class="flex items-center gap-2.5 flex-wrap mb-14 opacity-0 hero-badge">
+        <span class="inline-flex items-center gap-1.5 bg-accent/5 border border-accent/15 rounded-full px-3.5 py-1.5 text-xs text-accent font-medium">Product Designer</span>
+        <span class="inline-flex items-center gap-1.5 bg-accent/5 border border-accent/15 rounded-full px-3.5 py-1.5 text-xs text-accent font-medium">Web Feature Lead</span>
+        <span class="inline-flex items-center gap-1.5 bg-surface border border-gray-200 rounded-full px-3.5 py-1.5 text-xs text-secondary">6 months</span>
+        <span class="inline-flex items-center gap-1.5 bg-surface border border-gray-200 rounded-full px-3.5 py-1.5 text-xs text-secondary">B2B / EdTech</span>
+      </div>
+
+      <!-- Meta Grid: 4 compact columns -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-8 pt-10 border-t border-gray-100">
+        <!-- Impact -->
+        <div class="meta-group opacity-0">
+          <div class="text-[10px] font-bold uppercase tracking-widest text-accent mb-4">Impact</div>
+          <div class="space-y-4">
+            <div><div class="font-display text-2xl font-semibold leading-none mb-1 stat-number" data-target="38" data-prefix="+" data-suffix="pp">+0pp</div><div class="text-xs text-secondary">Issue resolution</div></div>
+            <div><div class="font-display text-2xl font-semibold leading-none mb-1 stat-number" data-target="25" data-prefix="+" data-suffix="pp">+0pp</div><div class="text-xs text-secondary">Task start rate</div></div>
+            <div><div class="font-display text-2xl font-semibold leading-none mb-1 stat-number" data-target="33" data-prefix="+" data-suffix="pp">+0pp</div><div class="text-xs text-secondary">Engagement</div></div>
+          </div>
+        </div>
+        <!-- My Contributions — clickable links to sections -->
+        <div class="opacity-0 hero-contributions">
+          <div class="text-[10px] font-bold uppercase tracking-widest text-accent mb-4">What I Did</div>
+          <div class="space-y-3">
+            <a href="#investigation" class="block text-sm leading-snug no-underline group cursor-pointer"><strong class="group-hover:text-accent transition-colors">Led user research</strong><br><span class="text-secondary text-xs">9 interviews · affinity mapping</span></a>
+            <a href="#strategy" class="block text-sm leading-snug no-underline group cursor-pointer"><strong class="group-hover:text-accent transition-colors">Designed AI strategy</strong><br><span class="text-secondary text-xs">MVP → WoZ validation → Agent</span></a>
+            <a href="#validation" class="block text-sm leading-snug no-underline group cursor-pointer"><strong class="group-hover:text-accent transition-colors">Convinced C-suite</strong><br><span class="text-secondary text-xs">Simulation data → CFO buy-in</span></a>
+            <a href="#outcome" class="block text-sm leading-snug no-underline group cursor-pointer"><strong class="group-hover:text-accent transition-colors">Scaled globally</strong><br><span class="text-secondary text-xs">Design system · CN localization</span></a>
+          </div>
+        </div>
+        <!-- Team -->
+        <div class="meta-group opacity-0">
+          <div class="text-[10px] font-bold uppercase tracking-widest text-accent mb-4">Team</div>
+          <div class="text-sm leading-relaxed">
+            <strong>1 Product Designer</strong> (me)<br>
+            <span class="text-secondary text-xs">Web Feature Lead</span>
+          </div>
+          <div class="text-sm leading-relaxed mt-3">
+            6 cross-functional<br>
+            <span class="text-secondary text-xs">PM · FE/BE Engineers · QA</span>
+          </div>
+        </div>
+        <!-- Timeline -->
+        <div class="meta-group opacity-0">
+          <div class="text-[10px] font-bold uppercase tracking-widest text-accent mb-4">Timeline</div>
+          <div class="text-sm leading-relaxed">
+            <strong>6 Months</strong><br>
+            <span class="text-secondary text-xs">VR Training Platform · B2B</span>
+          </div>
+          <div class="text-sm leading-relaxed mt-3">
+            <strong>Domain</strong><br>
+            <span class="text-secondary text-xs">EdTech · Manufacturing</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="scroll-indicator opacity-0">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d1d5db" stroke-width="1.5"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
+    </div>
+  </header>
+
+  <!-- ═══════ HERO IMAGES — Real product screenshots ═══════ -->
+  <div class="hero-images grid grid-cols-2 lg:grid-cols-3 gap-4 px-10 lg:px-20 py-8">
+    <!-- Logo -->
+    <div class="bg-white rounded-xl overflow-hidden border border-gray-100 gs-child flex items-center justify-center p-8 min-h-[200px]">
+      <img src="TAP3D_Logo.png" alt="TAP3D — Training All People" class="max-h-[80px] w-auto object-contain">
+    </div>
+    <!-- AI Chat -->
+    <div class="bg-surface rounded-xl overflow-hidden border border-gray-100 gs-child min-h-[200px]">
+      <img src="AI.png" alt="AI Chat Agent Interface" class="w-full h-full object-cover">
+    </div>
+    <!-- Web Interface — spans 1 col on mobile, 1 on desktop -->
+    <div class="bg-surface rounded-xl overflow-hidden border border-gray-100 gs-child min-h-[200px]">
+      <img src="Web_interface.png" alt="TAP3D Web Training Dashboard" class="w-full h-full object-cover">
+    </div>
+  </div>
+
+  <!-- ═══════ QUICK SUMMARY — Interactive CTA ═══════ -->
+  <div class="relative overflow-hidden" id="quick-summary-section" style="min-height:320px">
+    <!-- Animated dot grid that reacts to scroll -->
+    <div class="absolute inset-0 opacity-[0.12]" style="background-image:radial-gradient(circle,#2563eb 0.6px,transparent 0.6px);background-size:28px 28px" id="dot-grid"></div>
+    <!-- Mouse-follow radial glow -->
+    <div id="summary-glow" class="absolute w-[500px] h-[500px] rounded-full pointer-events-none opacity-0 transition-opacity duration-500" style="background:radial-gradient(circle,rgba(37,99,235,0.08) 0%,transparent 70%);transform:translate(-50%,-50%)"></div>
+    <!-- Floating preview cards -->
+    <div class="absolute inset-0 pointer-events-none" id="floating-cards">
+      <div class="summary-float-card absolute bg-white rounded-xl shadow-lg border border-gray-100 p-3 w-36 opacity-0" style="top:15%;left:8%">
+        <div class="text-xs font-bold text-accent mb-1">+38pp</div>
+        <div class="text-[10px] text-secondary">Issue Resolution</div>
+        <div class="mt-1.5 h-1 bg-green-100 rounded-full overflow-hidden"><div class="h-full bg-green-400 rounded-full" style="width:71%"></div></div>
+      </div>
+      <div class="summary-float-card absolute bg-white rounded-xl shadow-lg border border-gray-100 p-3 w-32 opacity-0" style="top:20%;right:10%">
+        <div class="flex items-center gap-1.5 mb-1"><div class="w-1.5 h-1.5 rounded-full bg-accent animate-pulse"></div><div class="text-[10px] font-bold text-accent">AI Agent</div></div>
+        <div class="h-1 bg-accent/10 rounded w-full mb-0.5"></div>
+        <div class="h-1 bg-accent/5 rounded w-3/4"></div>
+      </div>
+      <div class="summary-float-card absolute bg-white rounded-xl shadow-lg border border-gray-100 p-3 w-28 opacity-0" style="bottom:18%;left:12%">
+        <div class="text-[10px] font-bold mb-1">n = 24</div>
+        <div class="text-[10px] text-secondary">WoZ Users</div>
+      </div>
+      <div class="summary-float-card absolute bg-white rounded-xl shadow-lg border border-gray-100 p-3 w-36 opacity-0" style="bottom:15%;right:8%">
+        <div class="text-xs font-bold text-green-600 mb-1">+25pp</div>
+        <div class="text-[10px] text-secondary">Task Start Rate</div>
+        <div class="mt-1.5 h-1 bg-green-100 rounded-full overflow-hidden"><div class="h-full bg-green-400 rounded-full" style="width:63%"></div></div>
+      </div>
+    </div>
+    <!-- Center content -->
+    <div class="relative z-10 flex flex-col items-center justify-center py-20 px-10">
+      <div class="inline-flex items-center gap-2 bg-accent/5 border border-accent/15 rounded-full px-4 py-1.5 mb-4 text-xs text-accent font-medium">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        ~2 min read
+      </div>
+      <h3 class="font-display text-xl lg:text-2xl font-semibold text-primary mb-3 text-center">Short on time?</h3>
+      <p class="text-base text-secondary mb-8 text-center max-w-sm">Get the quick highlights in a visual, swipeable format.</p>
+      <!-- Magnetic button -->
+      <button id="summary-btn" class="summary-magnetic relative inline-flex items-center gap-3 bg-primary text-white rounded-2xl px-10 py-5 shadow-xl hover:shadow-2xl transition-all duration-300 cursor-pointer group overflow-hidden">
+        <!-- Shine effect -->
+        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="relative z-10 group-hover:scale-110 transition-transform"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        <span class="text-base font-semibold relative z-10">Summary Mode</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="relative z-10 group-hover:translate-x-1 transition-transform"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+      <div class="mt-4 flex items-center gap-4 text-xs text-secondary">
+        <span class="flex items-center gap-1">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8L22 12L18 16"/><path d="M6 8L2 12L6 16"/></svg>
+          Swipeable slides
+        </span>
+        <span>·</span>
+        <span>4 key insights</span>
+        <span>·</span>
+        <span>ESC to close</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ SUMMARY OVERLAY ═══════ -->
+  <div id="summary-overlay" class="fixed inset-0 z-[200] hidden">
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" id="summary-backdrop"></div>
+    <div class="absolute inset-x-4 lg:inset-x-[15%] top-[5%] bottom-[5%] bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col" id="summary-card">
+      <!-- Close -->
+      <button id="summary-close" class="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-surface flex items-center justify-center hover:bg-gray-200 transition-colors cursor-pointer">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+      <!-- Slides -->
+      <div class="flex-1 overflow-hidden relative">
+        <div id="summary-slides" class="flex h-full transition-transform duration-500 ease-out">
+          <!-- Slide 1: Overview -->
+          <div class="w-full flex-shrink-0 flex flex-col lg:flex-row">
+            <div class="flex-1 bg-surface p-8 flex flex-col items-center justify-center">
+              <div class="w-20 h-20 rounded-2xl bg-accent/10 flex items-center justify-center mb-4">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="1.5"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4"/></svg>
+              </div>
+              <div class="font-display text-xl font-bold mb-1">TAP3D</div>
+              <div class="text-sm text-secondary">VR Training Platform · B2B / EdTech</div>
+            </div>
+            <div class="flex-1 p-8 flex flex-col justify-center">
+              <div class="font-display text-lg font-semibold mb-4">Project Summary</div>
+              <div class="text-sm text-secondary leading-relaxed mb-6">Reduced training drop-off by integrating an AI layer onto a checklist MVP, validated through Wizard of Oz simulation with 24 users.</div>
+              <div class="space-y-3">
+                <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-accent"></span><span class="text-sm"><strong>Role:</strong> Product Designer, Web Feature Lead</span></div>
+                <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-accent"></span><span class="text-sm"><strong>Timeline:</strong> 6 months</span></div>
+                <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-accent"></span><span class="text-sm"><strong>Team:</strong> 6 cross-functional members</span></div>
+              </div>
+              <div class="mt-6 grid grid-cols-2 gap-3">
+                <div class="bg-surface rounded-lg p-3 text-center border border-gray-100"><div class="font-display text-2xl font-semibold text-accent">+38pp</div><div class="text-xs text-secondary">Issue resolution</div></div>
+                <div class="bg-surface rounded-lg p-3 text-center border border-gray-100"><div class="font-display text-2xl font-semibold text-accent">+25pp</div><div class="text-xs text-secondary">Task start rate</div></div>
+              </div>
+            </div>
+          </div>
+          <!-- Slide 2: Problem + Research -->
+          <div class="w-full flex-shrink-0 flex flex-col lg:flex-row">
+            <div class="flex-1 bg-red-50/50 p-8 flex flex-col justify-center items-center">
+              <div class="text-xs font-bold uppercase tracking-wider text-highlight mb-4">The Problem</div>
+              <div class="flex items-center gap-3 mb-3">
+                <div class="w-12 h-12 rounded-full bg-red-100 border-2 border-red-300 flex items-center justify-center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e74c3c" stroke-width="2"><path d="M12 8v4M12 16h.01"/></svg></div>
+              </div>
+              <div class="font-display text-lg font-semibold text-center mb-2">Learners dropping off early</div>
+              <div class="text-sm text-secondary text-center">Data showed where, but not why.</div>
+            </div>
+            <div class="flex-1 p-8 flex flex-col justify-center">
+              <div class="text-xs font-bold uppercase tracking-wider text-accent mb-4">Research Findings</div>
+              <div class="text-sm text-secondary leading-relaxed mb-4">9 interviews · 200+ coded quotes</div>
+              <div class="space-y-3">
+                <div class="bg-surface rounded-lg p-3 border border-gray-100"><strong class="text-sm">Commitment Debt</strong><div class="text-xs text-secondary mt-1">"Feels too long" → defer starting</div></div>
+                <div class="bg-surface rounded-lg p-3 border border-gray-100"><strong class="text-sm">Decision Paralysis</strong><div class="text-xs text-secondary mt-1">"What do I do first?" → inaction</div></div>
+                <div class="bg-surface rounded-lg p-3 border border-gray-100"><strong class="text-sm">Support Gap</strong><div class="text-xs text-secondary mt-1">"No quick help" → defer to tomorrow</div></div>
+              </div>
+            </div>
+          </div>
+          <!-- Slide 3: Strategy -->
+          <div class="w-full flex-shrink-0 flex flex-col lg:flex-row">
+            <div class="flex-1 bg-accent/5 p-8 flex flex-col justify-center">
+              <div class="text-xs font-bold uppercase tracking-wider text-accent mb-4">Strategy</div>
+              <div class="font-display text-lg font-semibold mb-4">Phased Approach</div>
+              <div class="space-y-3">
+                <div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-accent text-white flex items-center justify-center text-xs font-bold">1</div><div class="text-sm"><strong>MVP:</strong> Checklist Card</div></div>
+                <div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center text-xs font-bold">2</div><div class="text-sm"><strong>Validate:</strong> WoZ Simulation</div></div>
+                <div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-green-100 text-green-700 flex items-center justify-center text-xs font-bold">3</div><div class="text-sm"><strong>Ship:</strong> AI Agent</div></div>
+              </div>
+            </div>
+            <div class="flex-1 p-8 flex flex-col justify-center">
+              <div class="text-xs font-bold uppercase tracking-wider text-accent mb-4">Validation Results</div>
+              <div class="text-sm text-secondary mb-4">Wizard of Oz · n=24 users</div>
+              <div class="space-y-3">
+                <div class="flex items-center justify-between bg-surface rounded-lg p-3 border border-gray-100"><span class="text-sm">Issue Handoff</span><span class="font-semibold text-green-600">33% → 71%</span></div>
+                <div class="flex items-center justify-between bg-surface rounded-lg p-3 border border-gray-100"><span class="text-sm">Task Start Rate</span><span class="font-semibold text-green-600">38% → 63%</span></div>
+                <div class="flex items-center justify-between bg-surface rounded-lg p-3 border border-gray-100"><span class="text-sm">Next-step Acceptance</span><span class="font-semibold text-green-600">25% → 58%</span></div>
+              </div>
+            </div>
+          </div>
+          <!-- Slide 4: Outcome -->
+          <div class="w-full flex-shrink-0 flex flex-col lg:flex-row">
+            <div class="flex-1 bg-green-50/50 p-8 flex flex-col justify-center">
+              <div class="text-xs font-bold uppercase tracking-wider text-green-600 mb-4">Outcome</div>
+              <div class="font-display text-lg font-semibold mb-4">Shipped &amp; Scaling</div>
+              <div class="space-y-3">
+                <div class="flex items-center gap-2"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="text-sm">AI Agent live across training flow</span></div>
+                <div class="flex items-center gap-2"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="text-sm">Modular design system component</span></div>
+                <div class="flex items-center gap-2"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="text-sm">Chinese localization in progress</span></div>
+              </div>
+            </div>
+            <div class="flex-1 p-8 flex flex-col justify-center">
+              <div class="text-xs font-bold uppercase tracking-wider text-accent mb-4">Key Takeaway</div>
+              <blockquote class="font-display text-lg font-medium leading-relaxed mb-6 pl-4 border-l-2 border-accent">Pre-launch simulation testing seeded a culture of data-driven design at TAP3D.</blockquote>
+              <div class="space-y-2">
+                <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-accent"></span><span class="text-sm">Cultivated validation culture at C-suite level</span></div>
+                <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-accent"></span><span class="text-sm">Navigated cross-functional constraints</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Navigation -->
+      <div class="flex items-center justify-center gap-4 py-4 border-t border-gray-100">
+        <button id="summary-prev" class="w-10 h-10 rounded-full bg-surface flex items-center justify-center hover:bg-gray-200 transition-colors cursor-pointer disabled:opacity-30" disabled>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </button>
+        <div id="summary-dots" class="flex gap-2">
+          <div class="summary-dot w-2.5 h-2.5 rounded-full bg-accent"></div>
+          <div class="summary-dot w-2.5 h-2.5 rounded-full bg-gray-300"></div>
+          <div class="summary-dot w-2.5 h-2.5 rounded-full bg-gray-300"></div>
+          <div class="summary-dot w-2.5 h-2.5 rounded-full bg-gray-300"></div>
+        </div>
+        <button id="summary-next" class="w-10 h-10 rounded-full bg-surface flex items-center justify-center hover:bg-gray-200 transition-colors cursor-pointer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+      <div class="text-center text-xs text-secondary pb-3">Click or swipe through. Click outside to dismiss.</div>
+    </div>
+  </div>
+
+  <!-- ═══════ BODY ═══════ -->
+  <div class="main-body ml-0 lg:ml-56 transition-[margin] duration-500">
+    <div class="w-full max-w-3xl lg:max-w-3xl xl:max-w-4xl 2xl:max-w-5xl px-10 lg:px-20">
+
+      <!-- ─── CONTEXT ─── -->
+      <section class="section py-20 border-b border-gray-200" id="context">
+        <div class="text-xs font-bold uppercase tracking-widest text-accent mb-6 gs-child">Context / Problem</div>
+        <h2 class="font-display text-2xl lg:text-[1.75rem] font-semibold leading-snug mb-8 max-w-xl xl:max-w-2xl gs-child">The Training Lag &amp; Churn Risk</h2>
+        <div class="text-base text-secondary leading-loose max-w-xl xl:max-w-2xl">
+          <p class="mb-5 gs-child">TAP3D is a <strong class="text-primary font-medium">B2B VR training platform</strong> preparing workers for advanced manufacturing roles, offering a seamless experience between VR and Web.</p>
+          <p class="mb-5 gs-child">Despite a seamless platform, internal data revealed a <strong class="text-primary font-medium">significant lag in the training completion cycle</strong>. Users were struggling to complete training and move to the review stage, directly impacting customer retention metrics.</p>
+        </div>
+
+        <!-- ★ Animated formula diagram -->
+        <div class="my-12 gs-child overflow-x-auto">
+          <div class="flex items-center justify-center gap-3 min-w-[540px]">
+            <div class="formula-box bg-green-50 border border-green-200 rounded-lg px-4 py-3 text-center flex-shrink-0">
+              <div class="text-[10px] text-green-600 font-bold uppercase tracking-wider mb-0.5">Expected</div>
+              <div class="font-display text-sm font-semibold whitespace-nowrap">Complete Training</div>
+            </div>
+            <svg class="formula-arrow w-6 h-6 text-gray-300 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            <div class="formula-box bg-green-50 border border-green-200 rounded-lg px-4 py-3 text-center flex-shrink-0">
+              <div class="text-[10px] text-green-600 font-bold uppercase tracking-wider mb-0.5">Goal</div>
+              <div class="font-display text-sm font-semibold whitespace-nowrap">Higher Retention</div>
+            </div>
+            <svg class="formula-arrow w-6 h-6 text-highlight flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            <div class="formula-box bg-red-50 border border-red-200 rounded-lg px-4 py-3 text-center flex-shrink-0">
+              <div class="text-[10px] text-highlight font-bold uppercase tracking-wider mb-0.5">Reality</div>
+              <div class="font-display text-sm font-semibold whitespace-nowrap">Early Drop-off</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="img-placeholder bg-surface rounded-xl flex items-center justify-center text-xs text-secondary border border-dashed border-gray-300 my-10 aspect-video gs-child">
+          <span>[ Usage Logs — Training Completion Data ]</span>
+        </div>
+        <div class="text-base text-secondary leading-loose max-w-xl xl:max-w-2xl">
+          <p class="mb-5 gs-child">Usage logs showed a clear pattern — learners were dropping off early, unable to keep pace with initial modules. The quantitative data showed <strong class="text-primary font-medium">where</strong> they dropped off, but not <strong class="text-primary font-medium">why</strong>.</p>
+        </div>
+
+        <!-- ★ Animated drop-off journey -->
+        <div class="my-12 gs-child">
+          <div class="drop-off-journey flex items-start justify-between gap-2 relative px-4">
+            <div class="absolute top-5 left-[60px] right-[60px] h-px bg-gray-200 z-0">
+              <div class="drop-off-line h-full bg-gradient-to-r from-blue-300 via-blue-200 to-red-300" style="width:0%"></div>
+            </div>
+            <div class="drop-off-step flex flex-col items-center text-center relative z-10 flex-1">
+              <div class="w-10 h-10 rounded-full bg-blue-100 border-2 border-blue-300 flex items-center justify-center mb-3">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+              </div>
+              <div class="text-xs font-semibold mb-0.5">Onboarding</div>
+              <div class="text-xs text-secondary">100%</div>
+            </div>
+            <div class="drop-off-step flex flex-col items-center text-center relative z-10 flex-1">
+              <div class="w-10 h-10 rounded-full bg-blue-50 border-2 border-blue-200 flex items-center justify-center mb-3">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+              </div>
+              <div class="text-xs font-semibold mb-0.5">Initial Modules</div>
+              <div class="text-xs text-secondary">Struggling</div>
+            </div>
+            <div class="drop-off-step flex flex-col items-center text-center relative z-10 flex-1">
+              <div class="w-10 h-10 rounded-full bg-red-50 border-2 border-red-300 flex items-center justify-center mb-3 relative">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#e74c3c" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83"/></svg>
+                <div class="absolute inset-0 rounded-full border-2 border-red-300 animate-ping opacity-20"></div>
+              </div>
+              <div class="text-xs font-semibold text-highlight mb-0.5">Drop-off</div>
+              <div class="text-xs text-highlight font-medium">← Churn Risk</div>
+            </div>
+            <div class="drop-off-step flex flex-col items-center text-center relative z-10 flex-1 opacity-30">
+              <div class="w-10 h-10 rounded-full bg-gray-50 border-2 border-gray-200 border-dashed flex items-center justify-center mb-3">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              </div>
+              <div class="text-xs font-semibold text-gray-400 mb-0.5">Review Stage</div>
+              <div class="text-xs text-gray-300">Unreached</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ★ Section transition divider -->
+      <div class="flex items-center gap-4 py-6">
+        <div class="flex-1 h-px bg-gray-100"></div>
+        <svg class="section-icon w-8 h-8 text-accent/30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <div class="flex-1 h-px bg-gray-100"></div>
+      </div>
+
+      <!-- ─── INVESTIGATION ─── -->
+      <section class="section py-20 border-b border-gray-200" id="investigation">
+        <div class="text-xs font-bold uppercase tracking-widest text-accent mb-6 gs-child">Research</div>
+        <h2 class="font-display text-2xl lg:text-[1.75rem] font-semibold leading-snug mb-8 max-w-xl xl:max-w-2xl gs-child">Uncovering the Cognitive Barriers</h2>
+        <div class="text-base text-secondary leading-loose max-w-xl xl:max-w-2xl">
+          <p class="mb-5 gs-child">To uncover the root cause, I conducted <strong class="text-primary font-medium">9 user interviews</strong> and performed affinity mapping on <strong class="text-primary font-medium">200+ coded quotes</strong> to identify recurring themes.</p>
+          <p class="mb-5 gs-child">My research centered on two key questions: <strong class="text-primary font-medium">What triggers a user to start right now?</strong> and <strong class="text-primary font-medium">What is the minimum information needed to commit?</strong></p>
+        </div>
+
+        <!-- ★ Research method visual -->
+        <div class="my-12 grid grid-cols-2 gap-4 gs-child">
+          <div class="bg-blue-50/50 rounded-xl p-6 flex items-start gap-4 border border-blue-100 research-method">
+            <div class="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-1">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div>
+              <div class="font-bold text-sm mb-1">User Interviews</div>
+              <div class="text-xs text-secondary">9 in-depth interviews with learners</div>
+            </div>
+          </div>
+          <div class="bg-blue-50/50 rounded-xl p-6 flex items-start gap-4 border border-blue-100 research-method">
+            <div class="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-1">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+            </div>
+            <div>
+              <div class="font-bold text-sm mb-1">Affinity Mapping</div>
+              <div class="text-xs text-secondary">200+ coded quotes mapped for recurring themes</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="img-placeholder bg-surface rounded-xl flex items-center justify-center text-xs text-secondary border border-dashed border-gray-300 my-10 aspect-video gs-child">
+          <span>[ Affinity Map — Research Synthesis ]</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 my-12">
+          <div class="gs-child">
+            <div class="font-display text-4xl font-semibold leading-none mb-3 text-highlight stat-number" data-target="9">0</div>
+            <div class="text-xs text-secondary leading-snug">user interviews conducted</div>
+          </div>
+          <div class="gs-child">
+            <div class="font-display text-4xl font-semibold leading-none mb-3 stat-number" data-target="200" data-suffix="+">0+</div>
+            <div class="text-xs text-secondary leading-snug">coded quotes analyzed via <strong class="text-primary font-bold">affinity mapping</strong></div>
+          </div>
+          <div class="gs-child">
+            <div class="font-display text-4xl font-semibold leading-none mb-3 stat-number" data-target="3">0</div>
+            <div class="text-xs text-secondary leading-snug">critical cognitive barriers confirmed</div>
+          </div>
+        </div>
+
+        <p class="text-base text-secondary leading-loose max-w-xl xl:max-w-2xl mb-8 gs-child">Research confirmed three critical barriers that explained the drop-off:</p>
+
+        <!-- ★ Barrier cards — Click to flip and reveal solution -->
+        <div class="text-xs text-secondary text-center mb-4 gs-child">
+          <span class="inline-flex items-center gap-1.5 bg-accent/5 border border-accent/10 rounded-full px-3 py-1">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5"/></svg>
+            Click each card to reveal the solution
+          </span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-10">
+          <!-- Flip Card 1 -->
+          <div class="gs-child" style="perspective:1000px">
+            <div class="flip-card cursor-pointer" onclick="this.classList.toggle('flipped')">
+              <div class="flip-card-inner" style="transform-style:preserve-3d;transition:transform 0.6s">
+                <div class="flip-front rounded-xl p-7 bg-surface border border-gray-200 relative" style="backface-visibility:hidden;min-height:200px">
+                  <div class="absolute top-4 right-4">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#d1d5db" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  </div>
+                  <div class="text-xs font-bold uppercase tracking-wider text-highlight mb-3">Barrier</div>
+                  <div class="font-bold text-base mb-2">Commitment Debt</div>
+                  <div class="text-sm text-secondary leading-relaxed italic pr-8">"Feels too long." Learners deferred because a "full lecture" felt like a heavy burden.</div>
+                  <div class="mt-4 text-xs text-gray-300 flex items-center gap-1">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/></svg>
+                    click to flip
+                  </div>
+                </div>
+                <div class="flip-back rounded-xl p-7 bg-accent text-white absolute inset-0" style="backface-visibility:hidden;transform:rotateY(180deg)">
+                  <div class="text-xs font-bold uppercase tracking-wider text-blue-200 mb-3">Solution</div>
+                  <div class="font-bold text-base mb-2">Bite-sized Checklist</div>
+                  <div class="text-sm text-blue-100 leading-relaxed">AI recommends 5–10 min actions instead of full lectures, making starting feel effortless.</div>
+                  <div class="mt-4 text-xs text-blue-300 flex items-center gap-1">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                    click to flip back
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Flip Card 2 -->
+          <div class="gs-child" style="perspective:1000px">
+            <div class="flip-card cursor-pointer" onclick="this.classList.toggle('flipped')">
+              <div class="flip-card-inner" style="transform-style:preserve-3d;transition:transform 0.6s">
+                <div class="flip-front rounded-xl p-7 bg-surface border border-gray-200 relative" style="backface-visibility:hidden;min-height:200px">
+                  <div class="absolute top-4 right-4">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#d1d5db" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+                  </div>
+                  <div class="text-xs font-bold uppercase tracking-wider text-highlight mb-3">Barrier</div>
+                  <div class="font-bold text-base mb-2">Decision Paralysis</div>
+                  <div class="text-sm text-secondary leading-relaxed italic pr-8">"I have so much to do, but I don't know what to do first."</div>
+                  <div class="mt-4 text-xs text-gray-300 flex items-center gap-1">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/></svg>
+                    click to flip
+                  </div>
+                </div>
+                <div class="flip-back rounded-xl p-7 bg-accent text-white absolute inset-0" style="backface-visibility:hidden;transform:rotateY(180deg)">
+                  <div class="text-xs font-bold uppercase tracking-wider text-blue-200 mb-3">Solution</div>
+                  <div class="font-bold text-base mb-2">Personalized Suggestion</div>
+                  <div class="text-sm text-blue-100 leading-relaxed">AI picks the best next step with a one-line rationale — "Here's a 5-min safety check. Do this now."</div>
+                  <div class="mt-4 text-xs text-blue-300 flex items-center gap-1">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                    click to flip back
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Flip Card 3 -->
+          <div class="gs-child md:col-span-2" style="perspective:1000px">
+            <div class="flip-card cursor-pointer" onclick="this.classList.toggle('flipped')">
+              <div class="flip-card-inner" style="transform-style:preserve-3d;transition:transform 0.6s">
+                <div class="flip-front rounded-xl p-7 bg-surface border border-gray-200 relative" style="backface-visibility:hidden;min-height:180px">
+                  <div class="absolute top-4 right-4">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#d1d5db" stroke-width="1.5"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                  </div>
+                  <div class="text-xs font-bold uppercase tracking-wider text-highlight mb-3">Barrier</div>
+                  <div class="font-bold text-base mb-2">Support Gap</div>
+                  <div class="text-sm text-secondary leading-relaxed italic pr-8">"No quick help." Without an immediate way to get answers, learners would defer tasks to "tomorrow."</div>
+                  <div class="mt-4 text-xs text-gray-300 flex items-center gap-1">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/></svg>
+                    click to flip
+                  </div>
+                </div>
+                <div class="flip-back rounded-xl p-7 bg-accent text-white absolute inset-0" style="backface-visibility:hidden;transform:rotateY(180deg)">
+                  <div class="text-xs font-bold uppercase tracking-wider text-blue-200 mb-3">Solution</div>
+                  <div class="font-bold text-base mb-2">Context-Aware Handoff</div>
+                  <div class="text-sm text-blue-100 leading-relaxed">Users upload a recording → AI auto-drafts a message with context for the instructor. A "rage quit" becomes a seamless escalation.</div>
+                  <div class="mt-4 text-xs text-blue-300 flex items-center gap-1">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                    click to flip back
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-surface rounded-xl p-8 my-10 gs-child relative overflow-hidden insight-glow">
+          <div class="absolute -right-4 -bottom-4 opacity-5">
+            <svg width="120" height="120" viewBox="0 0 24 24" fill="#2563eb"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+          </div>
+          <div class="text-xs font-bold uppercase tracking-widest text-accent mb-3">Core Goals</div>
+          <div class="font-display text-lg lg:text-xl font-semibold leading-snug">Make starting feel bite-sized. Make "why today" obvious. Provide a quick help path.</div>
+        </div>
+      </section>
+
+      <!-- ★ Section transition divider -->
+      <div class="flex items-center gap-4 py-6">
+        <div class="flex-1 h-px bg-gray-100"></div>
+        <svg class="section-icon w-8 h-8 text-accent/30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        <div class="flex-1 h-px bg-gray-100"></div>
+      </div>
+
+      <!-- ─── STRATEGY ─── -->
+      <section class="section py-20 border-b border-gray-200" id="strategy">
+        <div class="text-xs font-bold uppercase tracking-widest text-accent mb-6 gs-child">Strategy</div>
+        <h2 class="font-display text-2xl lg:text-[1.75rem] font-semibold leading-snug mb-8 max-w-xl xl:max-w-2xl gs-child">Balancing Impact vs. Feasibility</h2>
+        <div class="text-base text-secondary leading-loose max-w-xl xl:max-w-2xl">
+          <p class="mb-5 gs-child">I evaluated three options to address these goals, considering <strong class="text-primary font-medium">development cost</strong> and <strong class="text-primary font-medium">user value</strong>.</p>
+        </div>
+
+        <!-- ★ Three options comparison -->
+        <div class="my-12 grid grid-cols-1 md:grid-cols-3 gap-4 gs-child">
+          <div class="bg-surface rounded-xl p-6 border border-gray-200 relative">
+            <div class="absolute -top-2.5 left-4 bg-white px-2 py-0.5 rounded-full border border-gray-200">
+              <span class="text-xs font-bold text-secondary uppercase tracking-wider">Option 1</span>
+            </div>
+            <div class="mt-4 mb-3">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#6b6b6b" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+            </div>
+            <div class="font-bold text-sm mb-2">Human Mentor</div>
+            <div class="text-xs text-secondary leading-relaxed mb-3">High trust, handles complex issues.</div>
+            <div class="text-xs text-highlight">Low availability, high cost, slow</div>
+          </div>
+          <div class="bg-accent/5 rounded-xl p-6 border-2 border-accent/30 relative">
+            <div class="absolute -top-2.5 left-4 bg-accent px-2 py-0.5 rounded-full">
+              <span class="text-xs font-bold text-white uppercase tracking-wider">MVP ✓</span>
+            </div>
+            <div class="mt-4 mb-3">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+            </div>
+            <div class="font-bold text-sm mb-2 text-accent">Checklist</div>
+            <div class="text-xs text-secondary leading-relaxed mb-3">Low dev cost, leverages existing LMS metadata.</div>
+            <div class="text-xs text-accent font-medium">Quick delivery, immediate value</div>
+          </div>
+          <div class="bg-surface rounded-xl p-6 border border-gray-200 border-dashed relative">
+            <div class="absolute -top-2.5 left-4 bg-white px-2 py-0.5 rounded-full border border-gray-200">
+              <span class="text-xs font-bold text-secondary uppercase tracking-wider">Option 3</span>
+            </div>
+            <div class="mt-4 mb-3">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#6b6b6b" stroke-width="1.5"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4"/></svg>
+            </div>
+            <div class="font-bold text-sm mb-2">AI Agent</div>
+            <div class="text-xs text-secondary leading-relaxed mb-3">Personalized, 24/7, context-aware.</div>
+            <div class="text-xs text-secondary">High risk, needs validation first</div>
+          </div>
+        </div>
+
+        <!-- ★ Interactive 2×2 Matrix — Ghost hints, auto-reveals on scroll -->
+        <div class="my-10 gs-child">
+          <div class="text-xs text-secondary text-center mb-4">
+            <span class="inline-flex items-center gap-1.5 bg-accent/5 border border-accent/10 rounded-full px-3 py-1">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M5 9l4-4 4 4M5 15l4 4 4-4"/></svg>
+              Drag each option onto the matrix — or scroll to reveal
+            </span>
+          </div>
+          <div id="matrix-container" class="relative" style="user-select:none">
+            <div class="text-xs font-bold text-secondary uppercase tracking-wider text-center mb-2">↑ High Impact</div>
+            <div class="flex items-stretch gap-0">
+              <div class="text-xs font-bold text-secondary uppercase tracking-wider flex items-center" style="writing-mode:vertical-rl;transform:rotate(180deg);padding-right:8px">← Low Feasibility</div>
+              <div id="matrix-grid" class="flex-1 grid grid-cols-2 grid-rows-2 border border-gray-200 rounded-xl overflow-hidden relative" style="height:320px">
+                <div class="border-r border-b border-gray-100 bg-red-50/30 flex items-center justify-center text-xs text-gray-300 p-2">High Impact<br>Low Feasibility</div>
+                <div class="border-b border-gray-100 bg-green-50/30 flex items-center justify-center text-xs text-gray-300 p-2">High Impact<br>High Feasibility</div>
+                <div class="border-r border-gray-100 bg-gray-50/30 flex items-center justify-center text-xs text-gray-300 p-2">Low Impact<br>Low Feasibility</div>
+                <div class="bg-yellow-50/30 flex items-center justify-center text-xs text-gray-300 p-2">Low Impact<br>High Feasibility</div>
+                <!-- Ghost hints (faint, always visible) -->
+                <div class="matrix-ghost absolute bg-gray-200/40 border border-dashed border-gray-300 rounded-full px-3 py-1.5 text-xs text-gray-300 pointer-events-none" style="top:22%;left:18%;transform:translate(-50%,-50%)">Human Mentor</div>
+                <div class="matrix-ghost absolute bg-blue-100/30 border border-dashed border-blue-200 rounded-full px-3 py-1.5 text-xs text-blue-200 pointer-events-none" style="top:72%;left:72%;transform:translate(-50%,-50%)">Checklist</div>
+                <div class="matrix-ghost absolute bg-purple-100/30 border border-dashed border-purple-200 rounded-full px-3 py-1.5 text-xs text-purple-200 pointer-events-none" style="top:18%;left:28%;transform:translate(-50%,-50%)">AI Agent</div>
+                <!-- Placed chips (hidden, revealed on scroll or drag) -->
+                <div class="matrix-answer opacity-0 absolute bg-white border-2 border-gray-400 rounded-full px-4 py-2 text-xs font-bold shadow-md pointer-events-none" style="top:22%;left:18%;transform:translate(-50%,-50%)"><span class="inline-block w-2 h-2 rounded-full bg-gray-400 mr-1.5"></span>Human Mentor</div>
+                <div class="matrix-answer opacity-0 absolute bg-white border-2 border-accent rounded-full px-4 py-2 text-xs font-bold text-accent shadow-md pointer-events-none" style="top:72%;left:72%;transform:translate(-50%,-50%)"><span class="inline-block w-2 h-2 rounded-full bg-accent mr-1.5"></span>Checklist</div>
+                <div class="matrix-answer opacity-0 absolute bg-white border-2 border-purple-400 rounded-full px-4 py-2 text-xs font-bold text-purple-600 shadow-md pointer-events-none" style="top:18%;left:28%;transform:translate(-50%,-50%)"><span class="inline-block w-2 h-2 rounded-full bg-purple-400 mr-1.5"></span>AI Agent</div>
+              </div>
+              <div class="text-xs font-bold text-secondary uppercase tracking-wider flex items-center" style="writing-mode:vertical-rl;padding-left:8px">High Feasibility →</div>
+            </div>
+            <div class="text-xs font-bold text-secondary uppercase tracking-wider text-center mt-2">↓ Low Impact</div>
+            <!-- Draggable chips -->
+            <div id="matrix-chips" class="flex items-center justify-center gap-3 mt-6 flex-wrap">
+              <div class="matrix-chip bg-white border-2 border-gray-300 rounded-full px-4 py-2 text-xs font-bold cursor-grab active:cursor-grabbing shadow-sm hover:shadow-md transition-shadow" data-name="mentor">
+                <span class="inline-block w-2 h-2 rounded-full bg-gray-400 mr-1.5"></span>Human Mentor
+              </div>
+              <div class="matrix-chip bg-white border-2 border-accent rounded-full px-4 py-2 text-xs font-bold text-accent cursor-grab active:cursor-grabbing shadow-sm hover:shadow-md transition-shadow" data-name="checklist">
+                <span class="inline-block w-2 h-2 rounded-full bg-accent mr-1.5"></span>Checklist
+              </div>
+              <div class="matrix-chip bg-white border-2 border-purple-400 rounded-full px-4 py-2 text-xs font-bold text-purple-600 cursor-grab active:cursor-grabbing shadow-sm hover:shadow-md transition-shadow" data-name="ai">
+                <span class="inline-block w-2 h-2 rounded-full bg-purple-400 mr-1.5"></span>AI Agent
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ★ Phased approach visual timeline -->
+        <div class="my-12 gs-child">
+          <div class="flex items-center gap-0 justify-center phased-timeline">
+            <div class="phased-step flex flex-col items-center text-center flex-1 relative">
+              <div class="w-12 h-12 rounded-full bg-accent flex items-center justify-center mb-3 shadow-md shadow-accent/20">
+                <span class="text-white text-sm font-bold">1</span>
+              </div>
+              <div class="text-xs font-bold mb-1">Phase 1 — Now</div>
+              <div class="text-xs text-secondary">Checklist MVP</div>
+              <div class="mt-2 bg-accent/10 rounded-lg px-3 py-1.5 text-xs text-accent font-medium">Low cost, quick win</div>
+            </div>
+            <div class="flex-shrink-0 w-16 h-px bg-gray-300 relative -mt-8">
+              <div class="absolute -top-2 left-1/2 -translate-x-1/2 text-gray-300">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </div>
+            </div>
+            <div class="phased-step flex flex-col items-center text-center flex-1 relative">
+              <div class="w-12 h-12 rounded-full bg-amber-100 border-2 border-amber-300 flex items-center justify-center mb-3">
+                <span class="text-amber-700 text-sm font-bold">2</span>
+              </div>
+              <div class="text-xs font-bold mb-1">Validate</div>
+              <div class="text-xs text-secondary">WoZ Simulation</div>
+              <div class="mt-2 bg-amber-50 rounded-lg px-3 py-1.5 text-xs text-amber-700 font-medium">Prove ROI, n=24</div>
+            </div>
+            <div class="flex-shrink-0 w-16 h-px bg-gray-300 relative -mt-8">
+              <div class="absolute -top-2 left-1/2 -translate-x-1/2 text-gray-300">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </div>
+            </div>
+            <div class="phased-step flex flex-col items-center text-center flex-1 relative">
+              <div class="w-12 h-12 rounded-full bg-green-100 border-2 border-green-300 flex items-center justify-center mb-3">
+                <span class="text-green-700 text-sm font-bold">3</span>
+              </div>
+              <div class="text-xs font-bold mb-1">Phase 2 — Ship</div>
+              <div class="text-xs text-secondary">AI Agent</div>
+              <div class="mt-2 bg-green-50 rounded-lg px-3 py-1.5 text-xs text-green-700 font-medium">Full rollout</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ★ Decision callout -->
+        <div class="bg-surface rounded-xl p-8 my-10 gs-child">
+          <div class="text-xs font-bold uppercase tracking-widest text-accent mb-5">The Phased Approach</div>
+          <div class="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-6 items-center">
+            <div class="text-center md:text-left">
+              <div class="inline-flex items-center gap-2 bg-white rounded-full px-4 py-2 border border-gray-200 mb-3">
+                <span class="text-xs font-medium">Trade-off</span>
+              </div>
+              <p class="text-sm text-secondary leading-relaxed">The AI Agent clearly won on <strong class="text-primary font-medium">impact</strong>, but engineering was constrained — they were finalizing AI inside the VR sessions. Latency and token costs were concerns.</p>
+            </div>
+            <div class="hidden md:flex items-center justify-center">
+              <div class="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </div>
+            </div>
+            <div class="text-center md:text-left">
+              <div class="inline-flex items-center gap-2 bg-accent/5 rounded-full px-4 py-2 border border-accent/20 mb-3">
+                <span class="text-xs font-medium text-accent">Decision</span>
+              </div>
+              <p class="text-sm text-secondary leading-relaxed"><strong class="text-primary font-medium">Checklist as MVP</strong> to deliver immediate value. I designed a "Checklist Card" pinned to the top of the training page to clarify tasks and reduce cognitive load.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="rounded-xl overflow-hidden border border-gray-200 my-10 gs-child shadow-sm">
+          <img src="Web_interface.png" alt="TAP3D Checklist Card — MVP Design" class="w-full h-auto">
+        </div>
+      </section>
+
+      <!-- ★ Section transition divider -->
+      <div class="flex items-center gap-4 py-6">
+        <div class="flex-1 h-px bg-gray-100"></div>
+        <svg class="section-icon w-8 h-8 text-accent/30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+        <div class="flex-1 h-px bg-gray-100"></div>
+      </div>
+
+      <!-- ─── VALIDATION ─── -->
+      <section class="section py-20 border-b border-gray-200" id="validation">
+        <div class="text-xs font-bold uppercase tracking-widest text-accent mb-6 gs-child">Validation</div>
+        <h2 class="font-display text-2xl lg:text-[1.75rem] font-semibold leading-snug mb-8 max-w-xl xl:max-w-2xl gs-child">Validating the AI Layer</h2>
+
+        <!-- ★ MVP Limitation Visual — what checklist couldn't solve -->
+        <div class="my-10 gs-child">
+          <div class="text-xs font-bold uppercase tracking-wider text-highlight mb-4">What the MVP couldn't solve</div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+              <div class="text-sm font-bold mb-3">MVP — Checklist</div>
+              <div class="space-y-2.5 mb-4">
+                <div class="flex items-center gap-2"><div class="w-4 h-4 rounded border border-green-400 flex items-center justify-center"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div class="text-xs">See task list</div><span class="text-xs text-green-500 ml-auto">✓ solved</span></div>
+                <div class="flex items-center gap-2"><div class="w-4 h-4 rounded border border-red-300 flex items-center justify-center"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="3"><path d="M18 6 6 18M6 6l12 12"/></svg></div><div class="text-xs text-gray-400">"What should I do first?"</div><span class="text-xs text-highlight ml-auto">unsolved</span></div>
+                <div class="flex items-center gap-2"><div class="w-4 h-4 rounded border border-red-300 flex items-center justify-center"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="3"><path d="M18 6 6 18M6 6l12 12"/></svg></div><div class="text-xs text-gray-400">"I'm stuck, need help now"</div><span class="text-xs text-highlight ml-auto">unsolved</span></div>
+                <div class="flex items-center gap-2"><div class="w-4 h-4 rounded border border-red-300 flex items-center justify-center"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="3"><path d="M18 6 6 18M6 6l12 12"/></svg></div><div class="text-xs text-gray-400">"What did I do last week?"</div><span class="text-xs text-highlight ml-auto">unsolved</span></div>
+              </div>
+            </div>
+            <div class="bg-accent/5 rounded-xl border border-accent/20 p-5">
+              <div class="text-sm font-bold text-accent mb-3">Proposed — AI Layer</div>
+              <div class="space-y-2.5 mb-4">
+                <div class="flex items-center gap-2"><div class="w-4 h-4 rounded border border-green-400 flex items-center justify-center"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div class="text-xs">See task list</div></div>
+                <div class="flex items-center gap-2"><div class="w-4 h-4 rounded-full bg-accent flex items-center justify-center"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div class="text-xs font-medium">Personalized "do this now"</div></div>
+                <div class="flex items-center gap-2"><div class="w-4 h-4 rounded-full bg-accent flex items-center justify-center"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div class="text-xs font-medium">Context-aware issue handoff</div></div>
+                <div class="flex items-center gap-2"><div class="w-4 h-4 rounded-full bg-accent flex items-center justify-center"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div class="text-xs font-medium">Weekly progress summary</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-base text-secondary leading-loose max-w-xl xl:max-w-2xl">
+          <p class="mb-5 gs-child">To justify the investment and convince skeptical stakeholders, I led a <strong class="text-primary font-medium">Wizard of Oz simulation</strong> with <strong class="text-primary font-medium">24 users</strong> — I acted as the AI backend in real-time.</p>
+        </div>
+
+        <div class="my-8 gs-child">
+          <div class="inline-flex items-center gap-3 bg-amber-50 border border-amber-200 rounded-xl px-6 py-4">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="1.5"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            <div>
+              <div class="text-xs font-bold text-amber-700">Wizard of Oz Simulation</div>
+              <div class="text-xs text-amber-600">n=24 users · I acted as the AI backend · Real behavior data</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ★ Three test results with inline visuals -->
+        <div class="space-y-8 my-10">
+
+          <!-- Test 1: Issue Handoff + WoZ Interactive Sim -->
+          <div class="bg-surface rounded-xl p-8 gs-child">
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-1">
+                <span class="font-display text-sm font-bold text-accent">01</span>
+              </div>
+              <div class="flex-1">
+                <div class="font-bold text-base mb-1">Issue Handoff — Reducing Friction</div>
+                <p class="text-sm text-secondary leading-relaxed mb-4">Learners upload a short web/VR recording; the system auto-drafts a message with context for the instructor.</p>
+              </div>
+            </div>
+            <!-- Inline WoZ simulation -->
+            <div class="mt-6">
+              <div class="text-xs text-secondary text-center mb-3">
+                <span class="inline-flex items-center gap-1.5 bg-amber-50 border border-amber-200 rounded-full px-3 py-1 text-amber-700">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                  Try it — Click "Upload" to experience the handoff
+                </span>
+              </div>
+              <div id="woz-sim" class="bg-white rounded-xl p-6 max-w-lg mx-auto border border-gray-200 shadow-sm overflow-hidden">
+                <div id="woz-step-1">
+                  <div class="flex items-center gap-3 mb-4">
+                    <div class="w-8 h-8 rounded-full bg-red-50 border border-red-200 flex items-center justify-center"><div class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div></div>
+                    <div><div class="text-sm font-medium text-primary">Learner stuck on Module 3</div><div class="text-xs text-secondary">Recording: 0:42s</div></div>
+                  </div>
+                  <div class="bg-surface rounded-lg p-4 mb-4 border border-gray-200">
+                    <div class="flex items-center gap-3">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+                      <div class="flex-1"><div class="h-1.5 bg-gray-200 rounded-full overflow-hidden"><div class="h-full bg-red-400 rounded-full" style="width:70%"></div></div><div class="text-xs text-secondary mt-1">screen-recording-module3.webm</div></div>
+                    </div>
+                  </div>
+                  <button id="woz-upload-btn" class="w-full bg-accent hover:bg-blue-700 text-white text-sm font-medium py-3 rounded-lg transition-colors flex items-center justify-center gap-2 cursor-pointer">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    Upload to AI System
+                  </button>
+                </div>
+                <div id="woz-step-2" class="hidden">
+                  <div class="flex items-center gap-3 mb-4"><div class="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center"><svg class="animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg></div><div class="text-sm text-secondary">AI is analyzing the recording...</div></div>
+                  <div class="space-y-2"><div class="h-2 bg-gray-100 rounded-full overflow-hidden"><div id="woz-progress" class="h-full bg-accent rounded-full transition-all duration-1000" style="width:0%"></div></div><div id="woz-status" class="text-xs text-secondary">Extracting context...</div></div>
+                </div>
+                <div id="woz-step-3" class="hidden">
+                  <div class="flex items-center gap-3 mb-4"><div class="w-8 h-8 rounded-full bg-green-50 border border-green-200 flex items-center justify-center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div class="text-sm font-medium text-green-600">AI Draft Ready — Auto-sent to instructor</div></div>
+                  <div class="bg-surface rounded-lg p-4 border border-gray-200"><div class="text-xs text-secondary mb-2">To: Instructor Kim · Module 3</div><div id="woz-typing" class="text-sm text-primary leading-relaxed"></div></div>
+                  <div class="mt-4 flex items-center gap-2 text-xs text-green-600"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Resolved in under 2 min — vs. 24hr+ without AI</div>
+                </div>
+              </div>
+            </div>
+            <!-- Result -->
+            <div class="mt-6 flex items-center gap-6 justify-center">
+              <div class="text-center"><span class="font-display text-2xl text-gray-300 line-through">33%</span><div class="text-xs text-secondary">Before</div></div>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              <div class="text-center"><span class="font-display text-2xl font-semibold text-green-600 result-num" data-target="71" data-suffix="%">0%</span><div class="text-xs text-green-600 font-medium">+38pp</div></div>
+            </div>
+          </div>
+
+          <!-- Test 2: Personalized Suggestion + Before/After mockup -->
+          <div class="bg-surface rounded-xl p-8 gs-child">
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-1">
+                <span class="font-display text-sm font-bold text-accent">02</span>
+              </div>
+              <div class="flex-1">
+                <div class="font-bold text-base mb-1">Personalized Suggestion — Iterative Design</div>
+                <p class="text-sm text-secondary leading-relaxed mb-2">AI recommends a 5–10 minute action with a one-line rationale.</p>
+                <div class="bg-amber-50 border border-amber-200 rounded-lg px-4 py-3 mb-4">
+                  <div class="text-xs font-bold text-amber-700 mb-1">Real-time Iteration</div>
+                  <div class="text-xs text-amber-600">Users added items but didn't start — "Oldest-First" hid new tasks. I iterated to "Newest-First" with a "New" indicator.</div>
+                </div>
+              </div>
+            </div>
+            <!-- Before/After inline mockup -->
+            <div class="mt-4 grid grid-cols-2 gap-4">
+              <div class="bg-white rounded-lg border border-gray-200 p-4">
+                <div class="text-xs font-bold text-secondary uppercase tracking-wider mb-3">Before — Oldest First</div>
+                <div class="space-y-2">
+                  <div class="flex items-center gap-2 bg-gray-50 rounded px-2 py-1.5"><div class="w-3 h-3 rounded border border-gray-300"></div><div class="h-2 bg-gray-200 rounded-full flex-1"></div><div class="text-xs text-gray-300">Jan 3</div></div>
+                  <div class="flex items-center gap-2 bg-gray-50 rounded px-2 py-1.5"><div class="w-3 h-3 rounded border border-gray-300"></div><div class="h-2 bg-gray-200 rounded-full flex-1"></div><div class="text-xs text-gray-300">Jan 5</div></div>
+                  <div class="flex items-center gap-2 bg-gray-50 rounded px-2 py-1.5"><div class="w-3 h-3 rounded border border-gray-300"></div><div class="h-2 bg-gray-200 rounded-full flex-1"></div><div class="text-xs text-gray-300">Jan 8</div></div>
+                  <div class="flex items-center gap-2 bg-gray-50 rounded px-2 py-1.5 opacity-40"><div class="w-3 h-3 rounded border border-accent"></div><div class="h-2 bg-accent/20 rounded-full flex-1"></div><div class="text-xs text-accent">New ↓ buried</div></div>
+                </div>
+              </div>
+              <div class="bg-white rounded-lg border-2 border-accent/30 p-4">
+                <div class="text-xs font-bold text-accent uppercase tracking-wider mb-3">After — Newest First</div>
+                <div class="space-y-2">
+                  <div class="flex items-center gap-2 bg-accent/5 rounded px-2 py-1.5 border border-accent/20"><div class="w-3 h-3 rounded-full bg-accent flex items-center justify-center"><div class="w-1.5 h-1.5 rounded-full bg-white"></div></div><div class="h-2 bg-accent/20 rounded-full flex-1"></div><div class="text-xs text-accent font-bold">New ✨</div></div>
+                  <div class="flex items-center gap-2 bg-gray-50 rounded px-2 py-1.5"><div class="w-3 h-3 rounded border border-gray-300"></div><div class="h-2 bg-gray-200 rounded-full flex-1"></div><div class="text-xs text-gray-300">Jan 8</div></div>
+                  <div class="flex items-center gap-2 bg-gray-50 rounded px-2 py-1.5"><div class="w-3 h-3 rounded border border-gray-300"></div><div class="h-2 bg-gray-200 rounded-full flex-1"></div><div class="text-xs text-gray-300">Jan 5</div></div>
+                  <div class="flex items-center gap-2 bg-gray-50 rounded px-2 py-1.5"><div class="w-3 h-3 rounded border border-gray-300"></div><div class="h-2 bg-gray-200 rounded-full flex-1"></div><div class="text-xs text-gray-300">Jan 3</div></div>
+                </div>
+              </div>
+            </div>
+            <div class="mt-6 flex items-center gap-6 justify-center">
+              <div class="text-center"><span class="font-display text-2xl text-gray-300 line-through">38%</span><div class="text-xs text-secondary">Before</div></div>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              <div class="text-center"><span class="font-display text-2xl font-semibold text-green-600 result-num" data-target="63" data-suffix="%">0%</span><div class="text-xs text-green-600 font-medium">+25pp</div></div>
+            </div>
+          </div>
+
+          <!-- Test 3: Report Summary + Weekly summary mockup -->
+          <div class="bg-surface rounded-xl p-8 gs-child">
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-1">
+                <span class="font-display text-sm font-bold text-accent">03</span>
+              </div>
+              <div class="flex-1">
+                <div class="font-bold text-base mb-1">Report Summary — Context Retention</div>
+                <p class="text-sm text-secondary leading-relaxed mb-4">AI summarizes weekly/monthly progress and proposes the immediate next step to sustain motivation.</p>
+              </div>
+            </div>
+            <!-- Weekly summary mockup -->
+            <div class="mt-4 bg-white rounded-lg border border-gray-200 p-5 max-w-sm mx-auto shadow-sm">
+              <div class="flex items-center gap-2 mb-4">
+                <div class="w-2 h-2 rounded-full bg-accent animate-pulse"></div>
+                <span class="text-xs font-bold text-accent">Your Weekly Summary</span>
+              </div>
+              <div class="space-y-3 mb-4">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs text-secondary">Modules completed</span>
+                  <span class="text-xs font-bold">3 / 5</span>
+                </div>
+                <div class="w-full bg-gray-100 rounded-full h-2 overflow-hidden"><div class="h-full bg-accent rounded-full" style="width:60%"></div></div>
+                <div class="flex items-center justify-between">
+                  <span class="text-xs text-secondary">Time invested</span>
+                  <span class="text-xs font-bold">2h 15m</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-xs text-secondary">Safety score</span>
+                  <span class="text-xs font-bold text-green-600">↑ 72% → 88%</span>
+                </div>
+              </div>
+              <div class="bg-accent/5 rounded-lg border border-accent/15 p-3">
+                <div class="text-xs font-bold text-accent mb-1">Suggested Next Step</div>
+                <div class="text-xs text-secondary">Complete "Equipment Lockout" quiz (8 min) to finish your safety certification this week.</div>
+              </div>
+            </div>
+            <div class="mt-6 flex items-center gap-6 justify-center">
+              <div class="text-center"><span class="font-display text-2xl text-gray-300 line-through">25%</span><div class="text-xs text-secondary">Before</div></div>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              <div class="text-center"><span class="font-display text-2xl font-semibold text-green-600 result-num" data-target="58" data-suffix="%">0%</span><div class="text-xs text-green-600 font-medium">+33pp</div></div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ★ Section transition divider -->
+      <div class="flex items-center gap-4 py-6">
+        <div class="flex-1 h-px bg-gray-100"></div>
+        <svg class="section-icon w-8 h-8 text-accent/30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <div class="flex-1 h-px bg-gray-100"></div>
+      </div>
+
+      <!-- ─── OUTCOME ─── -->
+      <section class="section py-20 border-b border-gray-200" id="outcome">
+        <div class="text-xs font-bold uppercase tracking-widest text-accent mb-6 gs-child">Outcome</div>
+        <h2 class="font-display text-2xl lg:text-[1.75rem] font-semibold leading-snug mb-8 max-w-xl xl:max-w-2xl gs-child">Stakeholder Buy-in &amp; Scale</h2>
+        <div class="text-base text-secondary leading-loose max-w-xl xl:max-w-2xl">
+          <p class="mb-5 gs-child">I presented a side-by-side comparison (AI Agent screens vs. MVP screens) to Engineering, the PM, and the CFO.</p>
+          <p class="mb-5 gs-child">The CFO was initially worried about <strong class="text-primary font-medium">ROI and development costs</strong>. The specific conversion metrics from the simulation test provided concrete evidence. We decided to roll out the AI Agent immediately after the VR AI integration wrapped.</p>
+        </div>
+
+        <!-- ★ Interactive Before/After Slider — MVP vs AI Agent -->
+        <div class="my-10 gs-child">
+          <div class="text-xs text-secondary text-center mb-4">
+            <span class="inline-flex items-center gap-1.5 bg-accent/5 border border-accent/10 rounded-full px-3 py-1">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M18 8L22 12L18 16"/><path d="M6 8L2 12L6 16"/></svg>
+              Drag the slider to compare MVP vs. AI Agent
+            </span>
+          </div>
+          <div id="ba-slider" class="relative rounded-xl overflow-hidden border border-gray-200 cursor-ew-resize" style="height:360px">
+            <!-- Before (MVP) -->
+            <div class="absolute inset-0 bg-gray-50 p-8">
+              <div class="text-xs font-bold uppercase tracking-wider text-secondary mb-4">MVP — Checklist</div>
+              <div class="bg-white rounded-lg border border-gray-200 p-5 shadow-sm max-w-xs">
+                <div class="text-sm font-bold mb-3">Your Training Tasks</div>
+                <div class="space-y-2.5">
+                  <div class="flex items-center gap-2"><div class="w-4 h-4 rounded border border-gray-300"></div><div class="h-2.5 bg-gray-200 rounded-full flex-1"></div></div>
+                  <div class="flex items-center gap-2"><div class="w-4 h-4 rounded border border-gray-300"></div><div class="h-2.5 bg-gray-200 rounded-full flex-1"></div></div>
+                  <div class="flex items-center gap-2"><div class="w-4 h-4 rounded border border-gray-300"></div><div class="h-2.5 bg-gray-200 rounded-full flex-1"></div></div>
+                  <div class="flex items-center gap-2"><div class="w-4 h-4 rounded border border-gray-300"></div><div class="h-2.5 bg-gray-200 rounded-full flex-1"></div></div>
+                  <div class="flex items-center gap-2"><div class="w-4 h-4 rounded border border-gray-300"></div><div class="h-2.5 bg-gray-200 rounded-full flex-1"></div></div>
+                </div>
+                <div class="mt-4 text-xs text-gray-400 italic">User must decide what to do first...</div>
+              </div>
+              <div class="mt-4 inline-flex items-center gap-1.5 bg-red-50 border border-red-200 rounded-full px-3 py-1 text-xs text-highlight">Start Rate: 38%</div>
+            </div>
+            <!-- After (AI Agent) — clipped -->
+            <div id="ba-after" class="absolute inset-0 bg-blue-50/50 p-8" style="clip-path:inset(0 0 0 50%)">
+              <div class="text-xs font-bold uppercase tracking-wider text-accent mb-4">AI Agent — Proactive Dashboard</div>
+              <div class="bg-white rounded-lg border border-accent/20 p-5 shadow-md max-w-xs">
+                <div class="flex items-center gap-2 mb-3">
+                  <div class="w-2 h-2 rounded-full bg-accent animate-pulse"></div>
+                  <span class="text-xs font-bold text-accent">Recommended for you</span>
+                </div>
+                <div class="bg-accent/5 rounded-lg border border-accent/15 p-3 mb-3">
+                  <div class="text-sm font-bold mb-1">Safety Basics — Module 3</div>
+                  <div class="text-xs text-secondary mb-2">5 min · Interactive Quiz</div>
+                  <div class="text-xs text-accent bg-accent/10 rounded px-2 py-1 inline-block">↑ Your safety score dropped below 80%</div>
+                </div>
+                <div class="flex gap-2">
+                  <div class="flex-1 bg-accent text-white text-xs font-medium py-2 rounded text-center">Start Now</div>
+                  <div class="bg-gray-100 text-xs text-secondary py-2 px-3 rounded">Later</div>
+                </div>
+              </div>
+              <div class="mt-4 inline-flex items-center gap-1.5 bg-green-50 border border-green-200 rounded-full px-3 py-1 text-xs text-green-600">Start Rate: 63% (+25pp)</div>
+            </div>
+            <!-- Slider handle -->
+            <div id="ba-handle" class="absolute top-0 bottom-0 flex items-center" style="left:50%;transform:translateX(-50%);z-index:10">
+              <div class="w-px h-full bg-gray-400"></div>
+              <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white border-2 border-gray-400 shadow-lg flex items-center justify-center">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2"><path d="M18 8L22 12L18 16"/><path d="M6 8L2 12L6 16"/></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-base text-secondary leading-loose max-w-xl xl:max-w-2xl">
+          <p class="mb-5 gs-child">The AI Agent is now <strong class="text-primary font-medium">live across the training flow</strong>. I designed the AI widget as a modular component to ensure consistency across the design system.</p>
+          <p class="mb-5 gs-child">I pitched that a consistent AI experience creates <strong class="text-primary font-medium">job-ready talent efficiently</strong>, and that localizing for workforce-demand markets is key to scale. The CFO agreed, and we are now progressing with <strong class="text-primary font-medium">Chinese localization</strong>.</p>
+        </div>
+
+        <!-- ★ Scale visual -->
+        <div class="my-10 grid grid-cols-1 md:grid-cols-3 gap-4 gs-child">
+          <div class="bg-green-50 rounded-xl p-6 border border-green-200 text-center">
+            <svg class="mx-auto mb-3" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <div class="font-bold text-sm text-green-700 mb-1">AI Agent Live</div>
+            <div class="text-xs text-secondary">Across training flow</div>
+          </div>
+          <div class="bg-blue-50 rounded-xl p-6 border border-blue-200 text-center">
+            <svg class="mx-auto mb-3" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            <div class="font-bold text-sm text-accent mb-1">Modular Component</div>
+            <div class="text-xs text-secondary">Part of design system</div>
+          </div>
+          <div class="bg-purple-50 rounded-xl p-6 border border-purple-200 text-center">
+            <svg class="mx-auto mb-3" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            <div class="font-bold text-sm text-purple-700 mb-1">Global Expansion</div>
+            <div class="text-xs text-secondary">Chinese localization in progress</div>
+          </div>
+        </div>
+
+        <div class="img-placeholder bg-surface rounded-xl flex items-center justify-center text-xs text-secondary border border-dashed border-gray-300 my-10 aspect-video gs-child">
+          <span>[ AI Widget — Design System Component ]</span>
+        </div>
+      </section>
+
+      <!-- ─── REFLECTION ─── -->
+      <section class="section py-20" id="reflection">
+        <div class="text-xs font-bold uppercase tracking-widest text-accent mb-6 gs-child">Reflection</div>
+        <h2 class="font-display text-2xl lg:text-[1.75rem] font-semibold leading-snug mb-8 max-w-xl xl:max-w-2xl gs-child">Key Takeaways</h2>
+        <blockquote class="font-display text-lg lg:text-xl font-medium leading-relaxed my-10 pl-6 border-l-[3px] border-accent gs-child relative">
+          <span class="absolute -left-1 -top-6 text-accent/6 font-display text-6xl font-bold leading-none select-none">"</span>
+          Pre-launch simulation testing wasn't common at TAP3D. This project demonstrated its value to the C-suite, helping seed a culture of data-driven design.
+        </blockquote>
+
+        <div class="my-10 grid grid-cols-1 md:grid-cols-2 gap-4 gs-child">
+          <div class="flex items-start gap-3 p-4 rounded-xl bg-accent/5 border border-accent/10">
+            <div class="w-6 h-6 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="text-xs text-secondary leading-relaxed"><strong class="text-primary">Validation Culture</strong> — Simulation testing proved its value, seeding a culture of data-driven design and early validation at TAP3D.</div>
+          </div>
+          <div class="flex items-start gap-3 p-4 rounded-xl bg-accent/5 border border-accent/10">
+            <div class="w-6 h-6 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="text-xs text-secondary leading-relaxed"><strong class="text-primary">Cross-Functional Leadership</strong> — Navigated constraints with PMs and Engineers, making strategic trade-offs to arrive at the optimal phased solution.</div>
+          </div>
+        </div>
+
+        <p class="text-base text-secondary leading-loose max-w-xl xl:max-w-2xl gs-child">This project taught me to navigate constraints and make <strong class="text-primary font-medium">strategic trade-offs</strong>. I realized I want to design services that <strong class="text-primary font-medium">scale globally</strong> and solve complex ecosystem problems — leveraging cross-disciplinary collaboration and large-scale problem solving.</p>
+        <div class="img-placeholder bg-surface rounded-xl flex items-center justify-center text-xs text-secondary border border-dashed border-gray-300 my-10 aspect-video gs-child">
+          <span>[ Final Product — Live AI Agent Dashboard ]</span>
+        </div>
+      </section>
+
+      <!-- ★ Footer -->
+      <footer class="py-16 border-t border-gray-200 gs-child">
+        <div class="flex items-center justify-between">
+          <div>
+            <div class="font-display text-lg font-semibold mb-1">TAP3D Case Study</div>
+            <div class="text-xs text-secondary">Product Design · Web Feature Lead</div>
+          </div>
+          <div class="flex items-center gap-4">
+            <a href="#hero" class="inline-flex items-center gap-2 text-xs text-secondary hover:text-accent transition-colors no-underline group">
+              <span>Back to top</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-hover:-translate-y-0.5 transition-transform"><path d="M18 15l-6-6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+      </footer>
+
+    </div>
+  </div>
+</div>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+// ─── Scroll progress bar ───
+gsap.to('.scroll-progress', {
+  scaleX: 1,
+  ease: 'none',
+  scrollTrigger: { trigger: 'body', start: 'top top', end: 'bottom bottom', scrub: 0.3 }
+});
+
+// ─── Hero entrance ───
+const heroTl = gsap.timeline({ defaults: { ease: 'power3.out' }});
+heroTl
+  .fromTo('.hero-logo', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.8 })
+  .fromTo('.hero-subtitle', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.7 }, '-=0.5')
+  .fromTo('.hero-badge', { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.5 }, '-=0.3')
+  .fromTo('.hero-contributions', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6 }, '-=0.2')
+  .fromTo('.meta-group', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6, stagger: 0.15 }, '-=0.4')
+  .fromTo('.hero-corner', { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.6, stagger: 0.1, ease: 'back.out(2)' }, '-=0.4')
+  .fromTo('.scroll-indicator', { opacity: 0, y: -10 }, { opacity: 0.5, y: 0, duration: 0.8 }, '-=0.2');
+
+// ─── Parallax dots ───
+gsap.utils.toArray('.parallax-slow').forEach(dot => {
+  gsap.to(dot, {
+    y: -40, ease: 'none',
+    scrollTrigger: { trigger: dot, start: 'top bottom', end: 'bottom top', scrub: 1 }
+  });
+});
+
+// ─── Number counter ───
+function animateCounter(el) {
+  const target = parseFloat(el.dataset.target);
+  const prefix = el.dataset.prefix || '';
+  const suffix = el.dataset.suffix || '';
+  const isDecimal = el.dataset.decimal === 'true';
+  const obj = { val: 0 };
+  gsap.to(obj, {
+    val: target, duration: 1.5, ease: 'power2.out',
+    onUpdate: () => {
+      el.textContent = prefix + (isDecimal ? obj.val.toFixed(2) : Math.round(obj.val)) + suffix;
+    }
+  });
+}
+
+document.querySelectorAll('header .stat-number').forEach((el, i) => {
+  gsap.delayedCall(1.0 + i * 0.3, () => animateCounter(el));
+});
+
+// ─── Hero images ───
+gsap.to('.scroll-indicator', {
+  opacity: 0, scrollTrigger: { trigger: '.hero-images', start: 'top 90%', toggleActions: 'play none none reverse' }
+});
+gsap.fromTo('.hero-images .gs-child',
+  { opacity: 0, y: 40, scale: 0.96 },
+  { opacity: 1, y: 0, scale: 1, duration: 0.7, stagger: 0.12, ease: 'power3.out',
+    scrollTrigger: { trigger: '.hero-images', start: 'top 85%' }
+  }
+);
+
+// ─── TOC ───
+const toc = document.querySelector('.toc');
+ScrollTrigger.create({
+  trigger: '.main-body', start: 'top 60%',
+  onEnter: () => gsap.to(toc, { opacity: 1, x: 0, visibility: 'visible', duration: 0.5, ease: 'power2.out' }),
+  onLeaveBack: () => gsap.to(toc, { opacity: 0, x: -16, duration: 0.35, ease: 'power2.in', onComplete: () => { toc.style.visibility = 'hidden'; } })
+});
+
+const tocLinks = document.querySelectorAll('.toc-link');
+document.querySelectorAll('.section').forEach(section => {
+  ScrollTrigger.create({
+    trigger: section, start: 'top 30%', end: 'bottom 30%',
+    onEnter: () => setActive(section.id),
+    onEnterBack: () => setActive(section.id),
+  });
+});
+function setActive(id) {
+  tocLinks.forEach(link => link.classList.toggle('active', link.getAttribute('href') === '#' + id));
+}
+
+// ─── Section stagger reveals ───
+document.querySelectorAll('.section, .pillar').forEach(section => {
+  const children = section.querySelectorAll(':scope > .gs-child, :scope > div > .gs-child, :scope > div > div > .gs-child');
+  if (!children.length) return;
+  gsap.fromTo(children,
+    { opacity: 0, y: 30 },
+    { opacity: 1, y: 0, duration: 0.65, stagger: 0.08, ease: 'power3.out',
+      scrollTrigger: { trigger: section, start: 'top 80%' }
+    }
+  );
+});
+
+// ─── Body stat counters ───
+document.querySelectorAll('.main-body .stat-number, .main-body .result-num').forEach(el => {
+  ScrollTrigger.create({
+    trigger: el, start: 'top 85%', once: true,
+    onEnter: () => animateCounter(el),
+  });
+});
+
+// ─── Image placeholders ───
+document.querySelectorAll('.main-body .img-placeholder').forEach(el => {
+  gsap.fromTo(el,
+    { opacity: 0, y: 30, scale: 0.97 },
+    { opacity: 1, y: 0, scale: 1, duration: 0.7, ease: 'power3.out',
+      scrollTrigger: { trigger: el, start: 'top 85%' }
+    }
+  );
+});
+
+// ─── ★ Formula boxes stagger ───
+gsap.fromTo('.formula-box',
+  { opacity: 0, y: 20, scale: 0.9 },
+  { opacity: 1, y: 0, scale: 1, duration: 0.5, stagger: 0.15, ease: 'back.out(1.4)',
+    scrollTrigger: { trigger: '.formula-box', start: 'top 85%' }
+  }
+);
+gsap.fromTo('.formula-arrow',
+  { opacity: 0, x: -10 },
+  { opacity: 1, x: 0, duration: 0.4, stagger: 0.1, delay: 0.3,
+    scrollTrigger: { trigger: '.formula-box', start: 'top 85%' }
+  }
+);
+
+// ─── ★ Drop-off journey steps ───
+ScrollTrigger.create({
+  trigger: '.drop-off-journey', start: 'top 85%', once: true,
+  onEnter: () => {
+    gsap.fromTo('.drop-off-step',
+      { opacity: 0, y: 20, scale: 0.8 },
+      { opacity: 1, y: 0, scale: 1, duration: 0.5, stagger: 0.2, ease: 'back.out(1.4)' }
+    );
+    gsap.to('.drop-off-step:last-child', { opacity: 0.3, delay: 0.8 });
+    gsap.to('.drop-off-line', { width: '100%', duration: 1.2, delay: 0.3, ease: 'power2.inOut' });
+  }
+});
+
+// ─── ★ Research method cards ───
+gsap.fromTo('.research-method',
+  { opacity: 0, x: -20 },
+  { opacity: 1, x: 0, duration: 0.6, stagger: 0.15, ease: 'power3.out',
+    scrollTrigger: { trigger: '.research-method', start: 'top 85%' }
+  }
+);
+
+// ─── ★ Progress bar fill ───
+document.querySelectorAll('.progress-fill').forEach(bar => {
+  ScrollTrigger.create({
+    trigger: bar, start: 'top 90%', once: true,
+    onEnter: () => {
+      gsap.to(bar, { width: bar.dataset.width, duration: 1.2, ease: 'power2.out', delay: 0.5 });
+    }
+  });
+});
+
+// ─── ★ Section divider icons ───
+gsap.utils.toArray('.section-icon').forEach(icon => {
+  gsap.fromTo(icon,
+    { opacity: 0, rotation: -90, scale: 0.5 },
+    { opacity: 1, rotation: 0, scale: 1, duration: 0.6, ease: 'back.out(2)',
+      scrollTrigger: { trigger: icon, start: 'top 90%' }
+    }
+  );
+});
+
+// ═══════════════════════════════════════════
+// INTERACTIVE 1: 2×2 Matrix — Drag to place + auto-reveal remainder on scroll
+// ═══════════════════════════════════════════
+(function(){
+  const grid = document.getElementById('matrix-grid');
+  const chips = document.querySelectorAll('.matrix-chip');
+  const answers = document.querySelectorAll('.matrix-answer');
+  const ghosts = document.querySelectorAll('.matrix-ghost');
+  if(!grid || !chips.length) return;
+
+  // Answer positions map (name → answer index)
+  const answerMap = { mentor: 0, checklist: 1, ai: 2 };
+  const placed = new Set();
+  let activeChip = null, ghostEl = null, offX = 0, offY = 0;
+
+  function revealAnswer(idx) {
+    gsap.to(ghosts[idx], { opacity: 0, duration: 0.2 });
+    gsap.fromTo(answers[idx], { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.4, ease: 'back.out(2)' });
+  }
+
+  function revealAll() {
+    answers.forEach((a, i) => {
+      if(!placed.has(i)) {
+        gsap.to(ghosts[i], { opacity: 0, duration: 0.2 });
+        gsap.fromTo(a, { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.5, stagger: 0.15, delay: i * 0.15, ease: 'back.out(2)' });
+      }
+    });
+  }
+
+  // Scroll auto-reveal for remaining unplaced chips
+  ScrollTrigger.create({
+    trigger: '#matrix-grid', start: 'bottom 50%', once: true,
+    onEnter: () => revealAll()
+  });
+
+  // Drag logic
+  chips.forEach(chip => {
+    chip.addEventListener('pointerdown', e => {
+      if(chip.classList.contains('placed')) return;
+      e.preventDefault();
+      activeChip = chip;
+      const r = chip.getBoundingClientRect();
+      offX = e.clientX - r.left; offY = e.clientY - r.top;
+      ghostEl = chip.cloneNode(true);
+      ghostEl.classList.add('matrix-chip-ghost');
+      ghostEl.style.width = r.width + 'px';
+      ghostEl.style.left = (e.pageX - offX) + 'px';
+      ghostEl.style.top = (e.pageY - offY) + 'px';
+      document.body.appendChild(ghostEl);
+      chip.style.opacity = '0.3';
+    });
+  });
+
+  document.addEventListener('pointermove', e => {
+    if(!ghostEl) return;
+    ghostEl.style.left = (e.pageX - offX) + 'px';
+    ghostEl.style.top = (e.pageY - offY) + 'px';
+  });
+
+  document.addEventListener('pointerup', e => {
+    if(!ghostEl || !activeChip) return;
+    const gR = grid.getBoundingClientRect();
+    const x = e.clientX, y = e.clientY;
+    if(x >= gR.left && x <= gR.right && y >= gR.top && y <= gR.bottom) {
+      // Snap to correct answer position
+      const name = activeChip.dataset.name;
+      const idx = answerMap[name];
+      placed.add(idx);
+      revealAnswer(idx);
+      activeChip.classList.add('placed');
+    } else {
+      activeChip.style.opacity = '1';
+    }
+    ghostEl.remove(); ghostEl = null; activeChip = null;
+  });
+})();
+
+// Phased timeline animation
+gsap.fromTo('.phased-step',
+  { opacity: 0, y: 20 },
+  { opacity: 1, y: 0, duration: 0.5, stagger: 0.2, ease: 'power3.out',
+    scrollTrigger: { trigger: '.phased-timeline', start: 'top 85%' }
+  }
+);
+
+// ═══════════════════════════════════════════
+// INTERACTIVE 2: WoZ Upload Simulation
+// ═══════════════════════════════════════════
+(function(){
+  const btn = document.getElementById('woz-upload-btn');
+  if(!btn) return;
+  btn.addEventListener('click', () => {
+    // Step 1 → Step 2
+    document.getElementById('woz-step-1').classList.add('hidden');
+    const s2 = document.getElementById('woz-step-2');
+    s2.classList.remove('hidden');
+    const prog = document.getElementById('woz-progress');
+    const stat = document.getElementById('woz-status');
+    const stages = [
+      [30, 'Extracting context from recording...'],
+      [60, 'Identifying issue: Safety Protocol Step 4...'],
+      [85, 'Drafting message for instructor...'],
+      [100, 'Done — generating response']
+    ];
+    let i = 0;
+    const nextStage = () => {
+      if(i >= stages.length) {
+        setTimeout(() => {
+          s2.classList.add('hidden');
+          const s3 = document.getElementById('woz-step-3');
+          s3.classList.remove('hidden');
+          // Typewriter
+          const target = document.getElementById('woz-typing');
+          const msg = "Hi Instructor Kim, learner Alex is stuck on Safety Protocol Step 4 (Equipment Lockout). The recording shows they're confused about the valve sequence order. Could you clarify steps 4-B and 4-C? Context: 70% module completion, first attempt.";
+          let c = 0;
+          const typeIt = setInterval(() => {
+            target.textContent += msg[c]; c++;
+            if(c >= msg.length) clearInterval(typeIt);
+          }, 18);
+        }, 400);
+        return;
+      }
+      prog.style.width = stages[i][0] + '%';
+      stat.textContent = stages[i][1];
+      i++;
+      setTimeout(nextStage, 700);
+    };
+    setTimeout(nextStage, 300);
+  });
+})();
+
+// ═══════════════════════════════════════════
+// INTERACTIVE 3: Before/After Slider
+// ═══════════════════════════════════════════
+(function(){
+  const slider = document.getElementById('ba-slider');
+  const handle = document.getElementById('ba-handle');
+  const after = document.getElementById('ba-after');
+  if(!slider || !handle || !after) return;
+  let dragging = false;
+
+  function setPos(x) {
+    const r = slider.getBoundingClientRect();
+    let pct = ((x - r.left) / r.width) * 100;
+    pct = Math.max(5, Math.min(95, pct));
+    handle.style.left = pct + '%';
+    after.style.clipPath = 'inset(0 0 0 ' + pct + '%)';
+  }
+
+  handle.addEventListener('pointerdown', e => { dragging = true; e.preventDefault(); });
+  slider.addEventListener('pointerdown', e => { dragging = true; setPos(e.clientX); });
+  document.addEventListener('pointermove', e => { if(dragging) setPos(e.clientX); });
+  document.addEventListener('pointerup', () => { dragging = false; });
+})();
+
+// ═══════════════════════════════════════════
+// INTERACTIVE 4: Flip card entrance animation
+// ═══════════════════════════════════════════
+gsap.fromTo('.flip-card',
+  { opacity: 0, y: 20, rotateY: -15 },
+  { opacity: 1, y: 0, rotateY: 0, duration: 0.6, stagger: 0.15, ease: 'power3.out',
+    scrollTrigger: { trigger: '.flip-card', start: 'top 85%' }
+  }
+);
+
+// ═══════════════════════════════════════════
+// INTERACTIVE 5: Summary Mode Overlay Carousel
+// ═══════════════════════════════════════════
+
+// --- Mouse-follow glow ---
+(function(){
+  const section = document.getElementById('quick-summary-section');
+  const glow = document.getElementById('summary-glow');
+  if(!section || !glow) return;
+  section.addEventListener('mouseenter', () => { glow.style.opacity = '1'; });
+  section.addEventListener('mouseleave', () => { glow.style.opacity = '0'; });
+  section.addEventListener('mousemove', e => {
+    const r = section.getBoundingClientRect();
+    glow.style.left = (e.clientX - r.left) + 'px';
+    glow.style.top = (e.clientY - r.top) + 'px';
+  });
+})();
+
+// --- Floating preview cards entrance ---
+ScrollTrigger.create({
+  trigger: '#quick-summary-section', start: 'top 75%', once: true,
+  onEnter: () => {
+    gsap.fromTo('.summary-float-card',
+      { opacity: 0, y: 30, scale: 0.8 },
+      { opacity: 1, y: 0, scale: 1, duration: 0.7, stagger: 0.15, ease: 'back.out(1.7)' }
+    );
+    // Continuous gentle float
+    document.querySelectorAll('.summary-float-card').forEach((card, i) => {
+      gsap.to(card, {
+        y: '-=8', duration: 2 + i * 0.4, repeat: -1, yoyo: true, ease: 'sine.inOut', delay: i * 0.3
+      });
+    });
+  }
+});
+
+// --- Magnetic button effect ---
+(function(){
+  const btn = document.querySelector('.summary-magnetic');
+  if(!btn) return;
+  btn.addEventListener('mousemove', e => {
+    const r = btn.getBoundingClientRect();
+    const x = (e.clientX - r.left - r.width / 2) * 0.15;
+    const y = (e.clientY - r.top - r.height / 2) * 0.15;
+    btn.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+  });
+  btn.addEventListener('mouseleave', () => {
+    gsap.to(btn, { x: 0, y: 0, duration: 0.4, ease: 'elastic.out(1, 0.4)' });
+    btn.style.transform = '';
+  });
+})();
+
+// --- Carousel logic ---
+(function(){
+  const btn = document.getElementById('summary-btn');
+  const overlay = document.getElementById('summary-overlay');
+  const backdrop = document.getElementById('summary-backdrop');
+  const closeBtn = document.getElementById('summary-close');
+  const slides = document.getElementById('summary-slides');
+  const prevBtn = document.getElementById('summary-prev');
+  const nextBtn = document.getElementById('summary-next');
+  const dots = document.querySelectorAll('.summary-dot');
+  if(!btn || !overlay) return;
+
+  let current = 0;
+  const total = dots.length;
+
+  function goTo(i) {
+    current = Math.max(0, Math.min(total - 1, i));
+    slides.style.transform = 'translateX(-' + (current * 100) + '%)';
+    dots.forEach((d, idx) => {
+      d.style.backgroundColor = idx === current ? '#2563eb' : '#d1d5db';
+    });
+    prevBtn.disabled = current === 0;
+    nextBtn.style.opacity = current === total - 1 ? '0.3' : '1';
+  }
+
+  function openSummary() {
+    overlay.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    goTo(0);
+    gsap.fromTo('#summary-card', { opacity: 0, scale: 0.92, y: 40 }, { opacity: 1, scale: 1, y: 0, duration: 0.4, ease: 'power3.out' });
+  }
+
+  function closeSummary() {
+    gsap.to('#summary-card', { opacity: 0, scale: 0.95, y: 20, duration: 0.25, ease: 'power2.in', onComplete: () => {
+      overlay.classList.add('hidden');
+      document.body.style.overflow = '';
+    }});
+  }
+
+  btn.addEventListener('click', openSummary);
+  closeBtn.addEventListener('click', closeSummary);
+  backdrop.addEventListener('click', closeSummary);
+  prevBtn.addEventListener('click', () => goTo(current - 1));
+  nextBtn.addEventListener('click', () => goTo(current + 1));
+
+  // Keyboard nav
+  document.addEventListener('keydown', e => {
+    if(overlay.classList.contains('hidden')) return;
+    if(e.key === 'Escape') closeSummary();
+    if(e.key === 'ArrowRight') goTo(current + 1);
+    if(e.key === 'ArrowLeft') goTo(current - 1);
+  });
+})();
+</script>
+
+</body>
+</html>
