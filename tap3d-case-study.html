@@ -222,9 +222,11 @@ tailwind.config = {
     </div>
 
     <!-- 1. Full-width hero screenshot -->
-    <div class="pb-6 relative z-10">
-      <div class="w-screen relative left-1/2 -translate-x-1/2 opacity-0 hero-badge">
-        <img src="TAPimgs/TAP3D_hero_img.png" alt="TAP3D Platform" class="w-full block max-h-screen object-cover">
+    <div class="px-6 lg:px-16 pt-20 pb-6 relative z-10">
+      <div class="max-w-4xl mx-auto opacity-0 hero-badge">
+        <div class="rounded-xl overflow-hidden shadow-lg">
+          <img src="TAPimgs/TAP3D_hero_img.png" alt="TAP3D Platform" class="w-full block">
+        </div>
       </div>
     </div>
 
@@ -259,8 +261,8 @@ tailwind.config = {
       <div class="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-5xl mx-auto">
         <div class="hero-card rounded-xl overflow-hidden border border-gray-200 shadow-sm bg-white cursor-pointer relative">
           <div class="card-shine"></div>
-          <div class="aspect-[4/3] overflow-hidden">
-            <img src="TAPimgs/TAP3D_checklist_UI.png" alt="Checklist MVP UI" class="w-full h-full object-cover">
+          <div class="aspect-[4/3] overflow-hidden bg-gray-50 p-3">
+            <img src="TAPimgs/TAP3D_checklist_UI.png" alt="Checklist MVP UI" class="w-full h-full object-contain">
           </div>
         </div>
         <div class="hero-card rounded-xl overflow-hidden border border-gray-200 shadow-sm bg-white cursor-pointer relative">
@@ -306,7 +308,7 @@ tailwind.config = {
         <div class="meta-group opacity-0">
           <div class="text-[10px] font-bold uppercase tracking-widest text-accent mb-4">Team</div>
           <div class="text-sm leading-relaxed"><strong>1 Product Designer</strong> (me)<br><span class="text-secondary text-xs">Web Feature Lead</span></div>
-          <div class="text-sm leading-relaxed mt-3">6 Cross-functional partners<br><span class="text-secondary text-xs">PM · FE/BE Engineers · QA</span></div>
+          <div class="text-sm leading-relaxed mt-3"><strong>6 Cross-functional partners</strong><br><span class="text-secondary text-xs">PM · FE/BE Engineers · QA</span></div>
         </div>
         <div class="meta-group opacity-0">
           <div class="text-[10px] font-bold uppercase tracking-widest text-accent mb-4">Timeline</div>
