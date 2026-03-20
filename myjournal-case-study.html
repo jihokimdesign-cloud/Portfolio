@@ -1,0 +1,2270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beyond Chatbots: Designing Emotional Continuity for Gen Z</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: {
+        display: ['"Plus Jakarta Sans"', 'sans-serif'],
+        body: ['"Plus Jakarta Sans"', 'sans-serif'],
+        serif: ['"Instrument Serif"', 'serif'],
+        hand: ['"Caveat"', 'cursive'],
+      },
+      colors: {
+        primary: '#111',
+        secondary: '#555',
+        muted: '#999',
+        accent: '#8b5cf6',
+        surface: '#f5f5f5',
+        highlight: '#e74c3c',
+      }
+    }
+  }
+}
+</script>
+<style>
+  * { -webkit-font-smoothing: antialiased; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Plus Jakarta Sans', sans-serif; }
+  .font-display { letter-spacing: -0.02em; }
+  h1, h2, h3 { letter-spacing: -0.025em; }
+  .stat-number, .result-num { letter-spacing: -0.03em; }
+
+  body::before {
+    content: ''; position: fixed; inset: 0; z-index: 100; pointer-events: none;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .toc { visibility: hidden; opacity: 0; transform: translateX(-16px); }
+  .toc.visible { visibility: visible; }
+  .toc-link { border-left: 2px solid transparent; transition: color 0.25s, border-color 0.25s; }
+  .toc-link:hover, .toc-link.active { color: #1a1a1a; font-weight: 500; }
+  .toc-link.active { border-left-color: #8b5cf6; }
+
+  .img-placeholder { position: relative; overflow: hidden; }
+  .img-placeholder::after {
+    content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    animation: shimmer 3s infinite;
+  }
+  @keyframes shimmer { 0% { left: -100%; } 100% { left: 200%; } }
+
+  .gs-child { opacity: 0; transform: translateY(30px); }
+
+  .scroll-progress {
+    position: fixed; top: 0; left: 0; height: 3px;
+    background: linear-gradient(90deg, #8b5cf6, #c084fc, #8b5cf6);
+    background-size: 200% 100%;
+    animation: gradient-shift 3s ease infinite;
+    z-index: 200; transform-origin: left; transform: scaleX(0);
+  }
+  @keyframes gradient-shift { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+
+  .hero-mesh {
+    position: absolute; inset: 0; pointer-events: none; z-index: 0;
+    background:
+      radial-gradient(ellipse 600px 400px at 10% 20%, rgba(139,92,246,0.04), transparent),
+      radial-gradient(ellipse 500px 300px at 80% 60%, rgba(192,132,252,0.03), transparent),
+      radial-gradient(ellipse 400px 400px at 50% 100%, rgba(139,92,246,0.02), transparent);
+  }
+
+  @keyframes bounce-soft {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(6px); }
+  }
+
+  .card-glow { position: relative; overflow: hidden; }
+  .card-glow::before {
+    content: ''; position: absolute; width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(139,92,246,0.08), transparent 70%);
+    border-radius: 50%; pointer-events: none;
+    transform: translate(-50%, -50%);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .card-glow:hover::before { opacity: 1; }
+
+  @keyframes border-glow {
+    0%, 100% { border-color: rgba(139,92,246,0.15); }
+    50% { border-color: rgba(139,92,246,0.35); }
+  }
+  .insight-glow { animation: border-glow 3s ease-in-out infinite; border-width: 1px; border-style: solid; }
+
+  .num-glow { text-shadow: 0 0 30px rgba(139,92,246,0.15); }
+
+  .toc-link span {
+    background-image: linear-gradient(#1a1a1a, #1a1a1a);
+    background-size: 0% 1px; background-repeat: no-repeat;
+    background-position: left bottom;
+    transition: background-size 0.3s ease; padding-bottom: 2px;
+  }
+  .toc-link:hover span { background-size: 100% 1px; }
+  .toc-link.active span { background-size: 0% 1px; }
+
+  .research-method { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+  .research-method:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+
+  /* Typing dots */
+  @keyframes typingDot {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+    30% { transform: translateY(-6px); opacity: 1; }
+  }
+  .typing-dot { animation: typingDot 1.4s ease-in-out infinite; }
+  .typing-dot:nth-child(2) { animation-delay: 0.15s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.3s; }
+
+  /* Timeline */
+  .timeline-entry { opacity: 0; transform: translateX(-20px); }
+  .timeline-line-fill { height: 0%; transition: height 1.5s ease; }
+
+  /* Chat sim */
+  .mood-btn { transition: all 0.2s ease; }
+  .mood-btn:hover { transform: translateY(-2px); }
+  .mood-btn.selected { ring: 2px; transform: scale(1.05); }
+
+  /* Speed slider */
+  .speed-slider::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 20px; height: 20px; border-radius: 50%;
+    background: #8b5cf6; cursor: pointer; border: 3px solid white;
+    box-shadow: 0 2px 8px rgba(139,92,246,0.3);
+  }
+  .speed-slider::-moz-range-thumb {
+    width: 20px; height: 20px; border-radius: 50%;
+    background: #8b5cf6; cursor: pointer; border: 3px solid white;
+    box-shadow: 0 2px 8px rgba(139,92,246,0.3);
+  }
+
+  /* Onboarding toggle */
+  .toggle-track { transition: background-color 0.3s ease; }
+  .toggle-thumb { transition: transform 0.3s ease; }
+
+  /* Classifier tag animation */
+  @keyframes tagPop {
+    0% { transform: scale(0); opacity: 0; }
+    70% { transform: scale(1.15); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .tag-pop { animation: tagPop 0.4s ease-out forwards; }
+
+  /* Pulse ring for timeline */
+  @keyframes pulseRing {
+    0% { transform: scale(0.8); opacity: 1; }
+    100% { transform: scale(1.8); opacity: 0; }
+  }
+</style>
+</head>
+<body class="bg-white text-primary leading-relaxed">
+
+<style>
+  :root{--bg:#fff;--ink:#111;--secondary:#555;--muted:#999;--border:rgba(0,0,0,.06)}
+  .site-nav{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:200;height:52px;background:rgba(255,255,255,.55);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);border:1px solid rgba(255,255,255,.45);border-radius:100px;transition:transform .35s ease,background .35s,border-color .35s,box-shadow .35s;box-shadow:0 0 0 0.5px rgba(0,0,0,.04),0 4px 24px rgba(0,0,0,.06)}
+  .site-nav.nav-hidden{transform:translateX(-50%) translateY(-80px)}
+  .nav-inner{display:flex;align-items:center;justify-content:center;height:100%;padding:0 8px}
+  .nav-icons{display:flex;gap:4px;align-items:center}
+  .nav-divider{width:1px;height:20px;background:rgba(0,0,0,.1);margin:0 6px}
+  .nav-icon{position:relative;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--muted);text-decoration:none;transition:all .2s}
+  .nav-icon:hover{color:var(--ink);background:rgba(0,0,0,.05)}
+  .nav-icon i{font-size:20px;line-height:1}
+  .nav-tip{position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%) translateY(-4px);opacity:0;pointer-events:none;font-size:11px;font-weight:500;background:var(--ink);color:var(--bg);padding:5px 12px;border-radius:6px;white-space:nowrap;transition:opacity .2s,transform .2s;letter-spacing:.01em}
+  .nav-tip::after{content:'';position:absolute;bottom:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-bottom-color:var(--ink)}
+  .nav-icon:hover .nav-tip{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+
+<nav class="site-nav" id="caseNav">
+  <div class="nav-inner">
+    <div class="nav-icons">
+      <a href="portfolio.html" class="nav-icon"><i class="ph ph-house"></i><span class="nav-tip">Home</span></a>
+      <a href="portfolio.html#ar-lab" class="nav-icon"><i class="ph ph-cube"></i><span class="nav-tip">AR Lab</span></a>
+      <a href="portfolio.html#ai-lab" class="nav-icon"><i class="ph ph-flask"></i><span class="nav-tip">AI Lab</span></a>
+      <a href="about.html" class="nav-icon"><i class="ph ph-user"></i><span class="nav-tip">5min Guide</span></a>
+      <span class="nav-divider"></span>
+      <a href="#" class="nav-icon"><i class="ph ph-file-text"></i><span class="nav-tip">Resume</span></a>
+      <a href="#" class="nav-icon" target="_blank" rel="noopener"><i class="ph ph-linkedin-logo"></i><span class="nav-tip">LinkedIn</span></a>
+    </div>
+  </div>
+</nav>
+
+<script>
+(function(){
+  var nav=document.getElementById('caseNav'),lastY=0;
+  window.addEventListener('scroll',function(){
+    var y=window.scrollY;
+    if(y>lastY&&y>80) nav.classList.add('nav-hidden');
+    else nav.classList.remove('nav-hidden');
+    lastY=y;
+  });
+})();
+</script>
+
+<div class="scroll-progress"></div>
+
+<!-- ─── TOC Sidebar ─── -->
+<nav class="toc fixed left-0 top-0 w-56 h-screen px-8 py-12 flex flex-col z-50 bg-white border-r border-gray-100">
+  <a href="portfolio.html" class="text-sm text-secondary hover:text-primary mb-6 no-underline transition-colors">&larr; Back to Work</a>
+  <div class="flex flex-col gap-1 mt-4">
+    <a href="#hero" class="toc-link text-sm text-secondary py-1.5 pl-3 no-underline" data-section="hero"><span>Lepal.ai</span></a>
+    <a href="#context" class="toc-link text-sm text-secondary py-1.5 pl-3 no-underline" data-section="context"><span>The Problem</span></a>
+    <a href="#investigation" class="toc-link text-sm text-secondary py-1.5 pl-3 no-underline" data-section="investigation"><span>Research</span></a>
+    <a href="#framework" class="toc-link text-sm text-secondary py-1.5 pl-3 no-underline" data-section="framework"><span>The Framework</span></a>
+    <a href="#execution" class="toc-link text-sm text-secondary py-1.5 pl-3 no-underline" data-section="execution"><span>Execution</span></a>
+    <a href="#collaboration" class="toc-link text-sm text-secondary py-1.5 pl-3 no-underline" data-section="collaboration"><span>Collaboration</span></a>
+    <a href="#outcome" class="toc-link text-sm text-secondary py-1.5 pl-3 no-underline" data-section="outcome"><span>Outcome</span></a>
+    <a href="#reflection" class="toc-link text-sm text-secondary py-1.5 pl-3 no-underline" data-section="reflection"><span>Reflection</span></a>
+  </div>
+</nav>
+
+<!-- ─── Main ─── -->
+<div class="main">
+
+  <!-- ═══════ HERO ═══════ -->
+  <header class="relative overflow-hidden bg-white" id="hero">
+    <div id="hero-light" class="absolute top-0 left-0 w-full pointer-events-none" style="height:900px;opacity:1">
+      <div class="absolute inset-0" style="background:linear-gradient(180deg, rgba(139,92,246,0.22) 0%, rgba(167,139,250,0.12) 20%, rgba(196,181,253,0.06) 45%, transparent 80%)"></div>
+      <div class="absolute top-0 left-1/2 -translate-x-1/2" style="width:800px;height:600px;background:radial-gradient(ellipse at 50% 0%, rgba(139,92,246,0.25) 0%, rgba(139,92,246,0.08) 40%, transparent 70%)"></div>
+      <div class="absolute top-0 left-1/2 -translate-x-1/2" style="width:300px;height:400px;background:radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.6) 0%, transparent 55%)"></div>
+    </div>
+
+    <!-- 1. Full-width hero screenshot -->
+    <div class="px-6 lg:px-16 pt-20 pb-6 relative z-10">
+      <div class="max-w-4xl mx-auto opacity-0 hero-badge">
+        <div class="rounded-xl overflow-hidden shadow-lg bg-gradient-to-br from-violet-50 to-purple-50 img-placeholder" id="hero-img-1">
+          <div class="aspect-[16/9] flex items-center justify-center">
+            <div class="text-center">
+              <svg class="mx-auto mb-2" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="1"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              <div class="text-[10px] text-accent/60">Emotion-Aware 'My Journal' UI</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Center title + subtitle -->
+    <div class="px-10 lg:px-20 pt-14 pb-4 text-center relative z-10">
+      <h1 class="hero-subtitle font-display text-[1.75rem] lg:text-[2.5rem] font-semibold leading-[1.12] mx-auto mb-5 opacity-0" style="letter-spacing:-0.03em;max-width:520px">
+        Beyond Chatbots: Designing Emotional Continuity for Gen&nbsp;Z
+      </h1>
+      <p class="hero-subtitle text-sm lg:text-base text-secondary leading-relaxed max-w-sm mx-auto opacity-0">
+        Most wellness apps speak. Few listen. We built one that does.
+      </p>
+    </div>
+
+    <!-- 3. Scroll hint with animated arrow -->
+    <div class="text-center pt-8 pb-10 relative z-10 opacity-0 hero-badge">
+      <div class="text-[9px] font-bold uppercase tracking-[0.25em] text-secondary/60 mb-5 leading-relaxed">Read the study to learn how<br>empathy-driven design broke the 72-hour wall</div>
+      <div id="scroll-arrow" class="inline-block">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10.5" stroke="#8b5cf6" stroke-width="0.8" opacity="0.25"/><path d="M8.5 10.5l3.5 3 3.5-3" stroke="#8b5cf6" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+
+    <!-- 4. Badges -->
+    <div class="flex items-center gap-2 flex-wrap justify-center pb-10 opacity-0 hero-badge relative z-10">
+      <span class="inline-flex items-center gap-1.5 bg-accent/5 border border-accent/15 rounded-full px-3 py-1.5 text-xs text-accent font-medium">Lead Product Designer</span>
+      <span class="inline-flex items-center gap-1.5 bg-accent/5 border border-accent/15 rounded-full px-3 py-1.5 text-xs text-accent font-medium">0 → 1 Design</span>
+      <span class="inline-flex items-center gap-1.5 bg-surface border border-gray-200 rounded-full px-3 py-1.5 text-xs text-secondary">12 Weeks</span>
+      <span class="inline-flex items-center gap-1.5 bg-surface border border-gray-200 rounded-full px-3 py-1.5 text-xs text-secondary">HealthTech</span>
+    </div>
+
+    <!-- 5. Three interactive preview cards -->
+    <div class="px-6 lg:px-16 pb-14 relative z-10">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-5xl mx-auto">
+        <div class="hero-card rounded-xl overflow-hidden border border-gray-200 shadow-sm bg-white cursor-pointer relative">
+          <div class="aspect-[4/3] bg-gradient-to-br from-violet-50 to-purple-50 flex items-center justify-center img-placeholder" id="hero-img-2">
+            <div class="text-center">
+              <svg class="mx-auto mb-2" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="1"><path d="M12 20V10M18 20V4M6 20v-4"/></svg>
+              <div class="text-[9px] text-accent/60">AI Tone Framework Matrix</div>
+            </div>
+          </div>
+        </div>
+        <div class="hero-card rounded-xl overflow-hidden border border-gray-200 shadow-sm bg-white cursor-pointer relative">
+          <div class="aspect-[4/3] bg-gradient-to-br from-violet-50 to-fuchsia-50 flex items-center justify-center img-placeholder" id="hero-img-3">
+            <div class="text-center">
+              <svg class="mx-auto mb-2" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="1"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <div class="text-[9px] text-accent/60">Variable Latency Interaction Flow</div>
+            </div>
+          </div>
+        </div>
+        <div class="hero-card rounded-xl overflow-hidden border border-gray-200 shadow-sm bg-white cursor-pointer relative">
+          <div class="aspect-[4/3] bg-gradient-to-br from-purple-50 to-violet-50 flex items-center justify-center img-placeholder" id="hero-img-4">
+            <div class="text-center">
+              <svg class="mx-auto mb-2" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="1"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              <div class="text-[9px] text-accent/60">Hybrid Onboarding Flow</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. Four-column meta strip -->
+    <div class="px-6 lg:px-16 pb-16 relative z-10">
+      <div class="max-w-5xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-8 pt-8 border-t border-gray-100">
+        <div class="meta-group opacity-0">
+          <div class="text-[10px] font-bold uppercase tracking-widest text-accent mb-4">Impact</div>
+          <div class="space-y-4">
+            <div><div class="font-display text-2xl font-semibold leading-none mb-1 stat-number" data-target="15" data-prefix="+" data-suffix="%">+0%</div><div class="text-xs text-secondary">D7 retention lift</div></div>
+            <div><div class="font-display text-2xl font-semibold leading-none mb-1 stat-number" data-target="85" data-suffix="%">0%</div><div class="text-xs text-secondary">"Supportive" AI perception</div></div>
+            <div><div class="font-display text-2xl font-semibold leading-none mb-1 stat-number" data-target="60" data-suffix="%">0%</div><div class="text-xs text-secondary">User satisfaction (from 24%)</div></div>
+          </div>
+        </div>
+        <div class="meta-group opacity-0">
+          <div class="text-[10px] font-bold uppercase tracking-widest text-accent mb-4">What I Did</div>
+          <div class="space-y-3">
+            <a href="#research" class="block text-sm leading-snug no-underline group cursor-pointer"><strong class="group-hover:text-accent transition-colors">Led user research</strong><br><span class="text-secondary text-xs">5 interviews · Diary study · Drop-off mapping</span></a>
+            <a href="#framework" class="block text-sm leading-snug no-underline group cursor-pointer"><strong class="group-hover:text-accent transition-colors">Designed Tone Framework</strong><br><span class="text-secondary text-xs">Emotion classifier · Variable latency · Context over keywords</span></a>
+            <a href="#collaboration" class="block text-sm leading-snug no-underline group cursor-pointer"><strong class="group-hover:text-accent transition-colors">Drove cross-functional alignment</strong><br><span class="text-secondary text-xs">Resolved "Speed vs. Care" debate with Engineering</span></a>
+            <a href="#outcome" class="block text-sm leading-snug no-underline group cursor-pointer"><strong class="group-hover:text-accent transition-colors">Delivered 0→1 impact</strong><br><span class="text-secondary text-xs">Broke 72-hour wall · Mobile app launch</span></a>
+          </div>
+        </div>
+        <div class="meta-group opacity-0">
+          <div class="text-[10px] font-bold uppercase tracking-widest text-accent mb-4">Team</div>
+          <div class="text-sm leading-relaxed"><strong>1 Lead Product Designer</strong> (me)<br><span class="text-secondary text-xs">0→1 Product Strategy & UI</span></div>
+          <div class="text-sm leading-relaxed mt-3">5 Cross-functional partners<br><span class="text-secondary text-xs">PM · Engineers · CTO · Conv. Designer</span></div>
+        </div>
+        <div class="meta-group opacity-0">
+          <div class="text-[10px] font-bold uppercase tracking-widest text-accent mb-4">Timeline</div>
+          <div class="text-sm leading-relaxed"><strong>12 Weeks</strong><br><span class="text-secondary text-xs">AI Mental Wellness Platform</span></div>
+          <div class="text-sm leading-relaxed mt-3"><strong>Domain</strong><br><span class="text-secondary text-xs">HealthTech · Gen Z Consumer App</span></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══════ QUICK SUMMARY — Interactive CTA ═══════ -->
+  <div class="relative overflow-hidden" id="quick-summary-section" style="min-height:320px">
+    <!-- Animated dot grid -->
+    <div class="absolute inset-0 opacity-[0.12]" style="background-image:radial-gradient(circle,#8b5cf6 0.6px,transparent 0.6px);background-size:28px 28px" id="dot-grid"></div>
+    <!-- Mouse-follow radial glow -->
+    <div id="summary-glow" class="absolute w-[500px] h-[500px] rounded-full pointer-events-none opacity-0 transition-opacity duration-500" style="background:radial-gradient(circle,rgba(139,92,246,0.08) 0%,transparent 70%);transform:translate(-50%,-50%)"></div>
+    <!-- Floating preview cards -->
+    <div class="absolute inset-0 pointer-events-none" id="floating-cards">
+      <div class="summary-float-card absolute bg-white rounded-xl shadow-lg border border-gray-100 p-3 w-36 opacity-0" style="top:15%;left:8%">
+        <div class="text-xs font-bold text-accent mb-1">+15%</div>
+        <div class="text-[10px] text-secondary">D7 Retention Lift</div>
+        <div class="mt-1.5 h-1 bg-green-100 rounded-full overflow-hidden"><div class="h-full bg-green-400 rounded-full" style="width:65%"></div></div>
+      </div>
+      <div class="summary-float-card absolute bg-white rounded-xl shadow-lg border border-gray-100 p-3 w-32 opacity-0" style="top:20%;right:10%">
+        <div class="flex items-center gap-1.5 mb-1"><div class="w-1.5 h-1.5 rounded-full bg-accent animate-pulse"></div><div class="text-[10px] font-bold text-accent">Tone Framework</div></div>
+        <div class="h-1 bg-accent/10 rounded w-full mb-0.5"></div>
+        <div class="h-1 bg-accent/5 rounded w-3/4"></div>
+      </div>
+      <div class="summary-float-card absolute bg-white rounded-xl shadow-lg border border-gray-100 p-3 w-28 opacity-0" style="bottom:18%;left:12%">
+        <div class="text-[10px] font-bold mb-1">+85%</div>
+        <div class="text-[10px] text-secondary">"Supportive"</div>
+      </div>
+      <div class="summary-float-card absolute bg-white rounded-xl shadow-lg border border-gray-100 p-3 w-36 opacity-0" style="bottom:15%;right:8%">
+        <div class="text-xs font-bold text-green-600 mb-1">24→60%</div>
+        <div class="text-[10px] text-secondary">Satisfaction</div>
+        <div class="mt-1.5 h-1 bg-green-100 rounded-full overflow-hidden"><div class="h-full bg-green-400 rounded-full" style="width:60%"></div></div>
+      </div>
+    </div>
+    <!-- Center content -->
+    <div class="relative z-10 flex flex-col items-center justify-center py-20 px-10">
+      <div class="inline-flex items-center gap-2 bg-accent/5 border border-accent/15 rounded-full px-4 py-1.5 mb-4 text-xs text-accent font-medium">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        ~2 min read
+      </div>
+      <h3 class="font-display text-xl lg:text-2xl font-semibold text-primary mb-3 text-center">Short on time?</h3>
+      <p class="text-base text-secondary mb-8 text-center max-w-sm">Get the quick highlights in a visual, swipeable format.</p>
+      <!-- Magnetic button -->
+      <button id="summary-btn" class="summary-magnetic relative inline-flex items-center gap-3 bg-primary text-white rounded-2xl px-10 py-5 shadow-xl hover:shadow-2xl transition-all duration-300 cursor-pointer group overflow-hidden">
+        <!-- Shine effect -->
+        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="relative z-10 group-hover:scale-110 transition-transform"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        <span class="text-base font-semibold relative z-10">Summary Mode</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="relative z-10 group-hover:translate-x-1 transition-transform"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+      <div class="mt-4 flex items-center gap-4 text-xs text-secondary">
+        <span class="flex items-center gap-1">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8L22 12L18 16"/><path d="M6 8L2 12L6 16"/></svg>
+          Swipeable slides
+        </span>
+        <span>·</span>
+        <span>4 key insights</span>
+        <span>·</span>
+        <span>ESC to close</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ SUMMARY OVERLAY ═══════ -->
+  <div id="summary-overlay" class="fixed inset-0 z-[300] flex items-center justify-center hidden">
+    <div id="summary-backdrop" class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+    <div id="summary-card" class="relative bg-white rounded-2xl shadow-2xl w-[90vw] max-w-3xl max-h-[80vh] overflow-hidden flex flex-col">
+      <button id="summary-close" class="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-surface flex items-center justify-center hover:bg-gray-200 transition-colors cursor-pointer">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+      <div class="flex-1 overflow-hidden relative">
+        <div id="summary-slides" class="flex h-full transition-transform duration-500 ease-out">
+          <!-- Slide 1 -->
+          <div class="w-full flex-shrink-0 flex flex-col lg:flex-row">
+            <div class="flex-1 bg-surface p-8 flex flex-col items-center justify-center">
+              <div class="w-20 h-20 rounded-2xl bg-accent/10 flex items-center justify-center mb-4">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              </div>
+              <div class="font-display text-xl font-bold mb-1">Lepal.ai</div>
+              <div class="text-sm text-secondary">AI Mental Wellness Companion</div>
+            </div>
+            <div class="flex-1 p-8 flex flex-col justify-center">
+              <div class="font-display text-lg font-semibold mb-4">Project Summary</div>
+              <div class="text-sm text-secondary leading-relaxed mb-6">Designed an emotionally intelligent wellness chatbot from 0→1, shifting from efficiency to empathy to break a critical 72-hour retention wall for Gen Z users.</div>
+              <div class="space-y-3">
+                <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-accent"></span><span class="text-sm"><strong>Role:</strong> Lead Product Designer</span></div>
+                <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-accent"></span><span class="text-sm"><strong>Timeline:</strong> 12 weeks</span></div>
+                <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-accent"></span><span class="text-sm"><strong>Team:</strong> 6 members (2 Eng, 1 PM, 1 Conv. Designer, 1 CTO)</span></div>
+              </div>
+            </div>
+          </div>
+          <!-- Slide 2 -->
+          <div class="w-full flex-shrink-0 flex flex-col lg:flex-row">
+            <div class="flex-1 bg-red-50/50 p-8 flex flex-col justify-center items-center">
+              <div class="text-xs font-bold uppercase tracking-wider text-highlight mb-4">The Problem</div>
+              <div class="w-12 h-12 rounded-full bg-red-100 border-2 border-red-300 flex items-center justify-center mb-3"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e74c3c" stroke-width="2"><path d="M12 8v4M12 16h.01"/></svg></div>
+              <div class="font-display text-lg font-semibold text-center mb-2">The 72-Hour Wall</div>
+              <div class="text-sm text-secondary text-center">Users felt "unseen" — the AI offered solutions when they needed validation.</div>
+            </div>
+            <div class="flex-1 p-8 flex flex-col justify-center">
+              <div class="text-xs font-bold uppercase tracking-wider text-accent mb-4">Research</div>
+              <div class="text-sm text-secondary leading-relaxed mb-4">5 interviews · 3-day mood diary · 1,000+ quotes · 800+ sessions</div>
+              <div class="space-y-3">
+                <div class="bg-surface rounded-lg p-3 border border-gray-100"><strong class="text-sm">Empathy Gap</strong><div class="text-xs text-secondary mt-1">AI remembered facts but failed to read feelings</div></div>
+                <div class="bg-surface rounded-lg p-3 border border-gray-100"><strong class="text-sm">Generic Tone</strong><div class="text-xs text-secondary mt-1">"Productivity tips" when user was emotionally drained</div></div>
+                <div class="bg-surface rounded-lg p-3 border border-gray-100"><strong class="text-sm">Blank Page</strong><div class="text-xs text-secondary mt-1">Users didn't know how to start journaling</div></div>
+              </div>
+            </div>
+          </div>
+          <!-- Slide 3 -->
+          <div class="w-full flex-shrink-0 flex flex-col lg:flex-row">
+            <div class="flex-1 bg-accent/5 p-8 flex flex-col justify-center">
+              <div class="text-xs font-bold uppercase tracking-wider text-accent mb-4">Strategy</div>
+              <div class="font-display text-lg font-semibold mb-4">Adaptive Tone Framework</div>
+              <div class="space-y-3">
+                <div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-accent text-white flex items-center justify-center text-xs font-bold">1</div><div class="text-sm"><strong>Emotion Classifier:</strong> 4 mood states</div></div>
+                <div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-violet-200 text-violet-700 flex items-center justify-center text-xs font-bold">2</div><div class="text-sm"><strong>Typing Indicators:</strong> Authenticity over speed</div></div>
+                <div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-fuchsia-100 text-fuchsia-700 flex items-center justify-center text-xs font-bold">3</div><div class="text-sm"><strong>Hybrid Starters:</strong> Solve blank page anxiety</div></div>
+              </div>
+            </div>
+            <div class="flex-1 p-8 flex flex-col justify-center">
+              <div class="text-xs font-bold uppercase tracking-wider text-accent mb-4">Core Insight</div>
+              <blockquote class="font-display text-lg font-medium leading-relaxed mb-6 pl-4 border-l-2 border-accent">Prioritize empathy before solutions.</blockquote>
+              <div class="space-y-2">
+                <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-accent"></span><span class="text-sm">Reframed "memory bug" as "empathy gap"</span></div>
+                <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-accent"></span><span class="text-sm">Built emotion-aware AI framework with ML team</span></div>
+              </div>
+            </div>
+          </div>
+          <!-- Slide 4 -->
+          <div class="w-full flex-shrink-0 flex flex-col lg:flex-row">
+            <div class="flex-1 bg-green-50/50 p-8 flex flex-col justify-center">
+              <div class="text-xs font-bold uppercase tracking-wider text-green-600 mb-4">Outcome</div>
+              <div class="font-display text-lg font-semibold mb-4">Measurable Impact</div>
+              <div class="space-y-3">
+                <div class="flex items-center gap-2"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="text-sm">85% increase in "supportive" perception</span></div>
+                <div class="flex items-center gap-2"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="text-sm">15% D7 retention lift</span></div>
+                <div class="flex items-center gap-2"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="text-sm">30% → 45% engagement, 24% → 60% satisfaction</span></div>
+              </div>
+            </div>
+            <div class="flex-1 p-8 flex flex-col justify-center">
+              <div class="text-xs font-bold uppercase tracking-wider text-accent mb-4">Key Takeaway</div>
+              <blockquote class="font-display text-lg font-medium leading-relaxed mb-6 pl-4 border-l-2 border-accent">Good product design is about designing relationships.</blockquote>
+              <div class="space-y-2">
+                <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-accent"></span><span class="text-sm">Conflict → Collaboration with Engineering</span></div>
+                <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-accent"></span><span class="text-sm">Rituals over features</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center justify-center gap-4 py-4 border-t border-gray-100">
+        <button id="summary-prev" class="w-10 h-10 rounded-full bg-surface flex items-center justify-center hover:bg-gray-200 transition-colors cursor-pointer disabled:opacity-30" disabled>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </button>
+        <div id="summary-dots" class="flex gap-2">
+          <div class="summary-dot w-3 h-3 rounded-full bg-accent transition-colors cursor-pointer"></div>
+          <div class="summary-dot w-3 h-3 rounded-full bg-gray-300 transition-colors cursor-pointer"></div>
+          <div class="summary-dot w-3 h-3 rounded-full bg-gray-300 transition-colors cursor-pointer"></div>
+          <div class="summary-dot w-3 h-3 rounded-full bg-gray-300 transition-colors cursor-pointer"></div>
+        </div>
+        <button id="summary-next" class="w-10 h-10 rounded-full bg-surface flex items-center justify-center hover:bg-gray-200 transition-colors cursor-pointer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+      <div class="text-center text-xs text-secondary pb-3">Click or swipe through. Click outside to dismiss.</div>
+    </div>
+  </div>
+
+  <!-- ═══════ BODY ═══════ -->
+  <div class="main-body ml-0 lg:ml-56 transition-[margin] duration-500">
+    <div class="w-full max-w-2xl lg:max-w-3xl xl:max-w-4xl mx-auto px-10 lg:px-16">
+
+      <!-- ─── OVERVIEW ─── -->
+      <section class="section py-20 border-b border-gray-200" id="context">
+        <div class="text-xs font-bold uppercase tracking-widest text-accent mb-6 gs-child">Overview</div>
+        <h2 class="font-display text-2xl lg:text-[1.75rem] font-semibold leading-snug mb-8 max-w-xl xl:max-w-2xl gs-child">Why We Built Lepal.ai</h2>
+        <div class="text-base text-secondary leading-loose max-w-xl xl:max-w-2xl">
+          <p class="mb-5 gs-child">Existing wellness solutions offered productivity hacks but lacked <strong class="text-primary font-medium">emotional continuity</strong>. Our target users — Gen Z — needed empathy, not efficiency.</p>
+          <p class="mb-5 gs-child">As Lead Designer, I owned the end-to-end design for <strong class="text-primary font-medium">3 core experience pillars</strong>:</p>
+        </div>
+
+        <!-- Three pillars -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-10 gs-child">
+          <div class="bg-accent/5 rounded-xl p-6 border border-accent/15">
+            <div class="text-lg mb-2">🧠</div>
+            <div class="font-bold text-sm mb-1">My Journal</div>
+            <div class="text-xs text-secondary leading-relaxed">A mood-aware journaling flow. <strong class="text-accent text-[10px] uppercase tracking-wider">Focus of this study</strong></div>
+          </div>
+          <div class="bg-surface rounded-xl p-6 border border-gray-200">
+            <div class="text-lg mb-2">🔮</div>
+            <div class="font-bold text-sm mb-1">Crystal Ball</div>
+            <div class="text-xs text-secondary leading-relaxed">Daily micro-interaction offering reflective "fortune cookie" insights.</div>
+          </div>
+          <div class="bg-surface rounded-xl p-6 border border-gray-200">
+            <div class="text-lg mb-2">🌍</div>
+            <div class="font-bold text-sm mb-1">Therapy Planet</div>
+            <div class="text-xs text-secondary leading-relaxed">Topic-driven AI chat for deep dives into burnout or relationships.</div>
+          </div>
+        </div>
+
+        <div class="text-base text-secondary leading-loose max-w-xl xl:max-w-2xl">
+          <p class="mb-5 gs-child">While I designed the entire ecosystem, the biggest challenge lay in <strong class="text-primary font-medium">"My Journal,"</strong> where we needed the AI to feel like a supportive companion, not a robot.</p>
+        </div>
+
+        <!-- ★ Team Composition Visual -->
+        <div class="my-12 gs-child">
+          <div class="text-xs font-bold uppercase tracking-wider text-secondary mb-5">The Team</div>
+          <div class="bg-surface rounded-xl p-6 lg:p-8">
+            <div class="flex flex-col items-center">
+              <!-- Me at the center -->
+              <div class="relative mb-6">
+                <div class="w-16 h-16 rounded-full bg-accent text-white flex items-center justify-center shadow-lg">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </div>
+                <div class="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-green-500 border-2 border-white flex items-center justify-center">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+              </div>
+              <div class="text-sm font-bold mb-0.5">Me — Lead Product Designer</div>
+              <div class="text-[10px] text-secondary mb-6">0→1 Design, Strategy, Tone Framework</div>
+
+              <!-- Connection lines -->
+              <div class="w-px h-4 bg-accent/20"></div>
+              <div class="w-48 md:w-80 h-px bg-accent/20"></div>
+
+              <!-- Team members -->
+              <div class="grid grid-cols-5 gap-3 md:gap-6 mt-0 w-full max-w-lg">
+                <div class="text-center">
+                  <div class="w-px h-4 bg-accent/20 mx-auto"></div>
+                  <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-1.5">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+                  </div>
+                  <div class="text-[10px] font-bold">Eng</div>
+                  <div class="text-[8px] text-secondary">x2</div>
+                </div>
+                <div class="text-center">
+                  <div class="w-px h-4 bg-accent/20 mx-auto"></div>
+                  <div class="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center mx-auto mb-1.5">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="1.5"><path d="M12 20V10M18 20V4M6 20v-4"/></svg>
+                  </div>
+                  <div class="text-[10px] font-bold">PM</div>
+                  <div class="text-[8px] text-secondary">x1</div>
+                </div>
+                <div class="text-center">
+                  <div class="w-px h-4 bg-accent/20 mx-auto"></div>
+                  <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-1.5">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                  </div>
+                  <div class="text-[10px] font-bold leading-tight">Conv. Designer</div>
+                  <div class="text-[8px] text-secondary">x1</div>
+                </div>
+                <div class="text-center">
+                  <div class="w-px h-4 bg-accent/20 mx-auto"></div>
+                  <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-1.5">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                  </div>
+                  <div class="text-[10px] font-bold">CTO</div>
+                  <div class="text-[8px] text-secondary">x1</div>
+                </div>
+                <div class="text-center">
+                  <div class="w-px h-4 bg-accent/20 mx-auto"></div>
+                  <div class="w-10 h-10 rounded-full bg-violet-100 flex items-center justify-center mx-auto mb-1.5">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                  </div>
+                  <div class="text-[10px] font-bold">ML Eng</div>
+                  <div class="text-[8px] text-secondary">x1</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- My role callout -->
+            <div class="mt-6 bg-accent/5 border border-accent/10 rounded-lg p-4">
+              <div class="text-[10px] font-bold uppercase tracking-wider text-accent mb-1.5">My Role as the Bridge</div>
+              <div class="text-xs text-secondary leading-relaxed">Facilitated cross-functional alignment, reframed technical debates using user psychology, and built shared artifacts that gave every discipline ownership of the solution.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══ The 72-Hour Wall ═══ -->
+        <div class="mt-16 gs-child">
+          <h3 class="font-display text-xl font-semibold mb-6">The "72-Hour Wall"</h3>
+          <p class="text-base text-secondary leading-loose max-w-xl xl:max-w-2xl mb-8">Despite a promising beta, data showed strong Day-1 interest but rapid disengagement around the <strong class="text-primary font-medium">72-hour mark</strong>.</p>
+        </div>
+
+        <!-- ★ NEW INTERACTION: 72-Hour Timeline with diary entries -->
+        <div class="my-10 gs-child">
+          <div class="relative bg-white rounded-xl border border-gray-200 p-6 lg:p-8 shadow-sm">
+            <div class="text-sm font-semibold text-primary mb-6">72-Hour Drop-off Timeline</div>
+            <div class="relative flex">
+              <!-- Timeline line -->
+              <div class="absolute left-4 top-0 bottom-0 w-0.5 bg-gray-100">
+                <div id="timeline-fill" class="timeline-line-fill w-full bg-gradient-to-b from-accent via-amber-400 to-red-400 rounded-full"></div>
+              </div>
+              <!-- Entries -->
+              <div class="space-y-6 ml-12 flex-1">
+                <div class="timeline-entry relative">
+                  <div class="absolute -left-[2.35rem] w-3 h-3 rounded-full bg-accent border-2 border-white shadow-sm"></div>
+                  <div class="text-[10px] font-bold uppercase tracking-wider text-accent mb-1">Day 1 — Excited</div>
+                  <div class="bg-accent/5 rounded-lg p-3 border border-accent/10">
+                    <div class="text-xs text-secondary italic">"This is cool! I told it about my day and it actually responded nicely."</div>
+                    <div class="mt-2 flex items-center gap-2"><div class="h-1 rounded-full bg-accent flex-1"></div><span class="text-[10px] text-accent font-medium">100% active</span></div>
+                  </div>
+                </div>
+                <div class="timeline-entry relative">
+                  <div class="absolute -left-[2.35rem] w-3 h-3 rounded-full bg-amber-400 border-2 border-white shadow-sm"></div>
+                  <div class="text-[10px] font-bold uppercase tracking-wider text-amber-600 mb-1">Day 2 — Lukewarm</div>
+                  <div class="bg-amber-50 rounded-lg p-3 border border-amber-100">
+                    <div class="text-xs text-secondary italic">"Hmm, it gave me the same kind of response as yesterday. Kinda generic."</div>
+                    <div class="mt-2 flex items-center gap-2"><div class="h-1 rounded-full bg-amber-400" style="width:68%"></div><div class="h-1 rounded-full bg-gray-100 flex-1"></div><span class="text-[10px] text-amber-600 font-medium">68% active</span></div>
+                  </div>
+                </div>
+                <div class="timeline-entry relative">
+                  <div class="absolute -left-[2.35rem] w-4 h-4 rounded-full bg-red-400 border-2 border-white shadow-sm -ml-0.5" style="margin-top:-2px">
+                    <div class="absolute inset-0 rounded-full border-2 border-red-300" style="animation:pulseRing 2s ease-out infinite"></div>
+                  </div>
+                  <div class="text-[10px] font-bold uppercase tracking-wider text-highlight mb-1">Day 3 — The Wall ⚠</div>
+                  <div class="bg-red-50 rounded-lg p-3 border border-red-200">
+                    <div class="text-xs text-secondary italic">"I'm wiped after back-to-back labs. Zero energy."</div>
+                    <div class="mt-2 bg-white rounded p-2 border border-red-100">
+                      <div class="text-[10px] font-bold text-red-500 mb-1">AI Response (The Drop-off Trigger):</div>
+                      <div class="text-xs text-secondary">"Got it! Let's do a deep reflection with 5 questions to boost productivity!"</div>
+                    </div>
+                    <div class="mt-2 flex items-center gap-2"><div class="h-1 rounded-full bg-red-400" style="width:31%"></div><div class="h-1 rounded-full bg-gray-100 flex-1"></div><span class="text-[10px] text-highlight font-medium">31% active — cliff</span></div>
+                    <!-- Insight callout -->
+                    <div class="mt-3 bg-red-100/50 rounded-lg p-2.5 border border-red-200/50">
+                      <div class="flex items-start gap-2">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" class="flex-shrink-0 mt-0.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        <div class="text-[10px] text-red-800 leading-relaxed"><strong>The Insight:</strong> When users expressed fatigue or vulnerability, the AI defaulted to a "productivity" framework. This empathy mismatch caused a <strong>40% spike in session drop-offs</strong>. The issue wasn't app performance — it was the AI failing to "read the room."</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="timeline-entry relative opacity-40">
+                  <div class="absolute -left-[2.35rem] w-3 h-3 rounded-full bg-gray-300 border-2 border-white shadow-sm border-dashed"></div>
+                  <div class="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-1">Day 7 — Gone</div>
+                  <div class="bg-gray-50 rounded-lg p-3 border border-gray-200 border-dashed">
+                    <div class="text-xs text-gray-400 italic">User never returned.</div>
+                    <div class="mt-2 flex items-center gap-2"><div class="h-1 rounded-full bg-gray-300" style="width:14%"></div><div class="h-1 rounded-full bg-gray-100 flex-1"></div><span class="text-[10px] text-gray-400 font-medium">14% active</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ★ Engineering vs Design — The Core Disagreement -->
+        <div class="my-12 gs-child">
+          <div class="text-xs font-bold uppercase tracking-wider text-amber-600 mb-5">The team was split on the root cause</div>
+
+          <div class="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-0 items-stretch">
+            <!-- Engineering -->
+            <div class="bg-blue-50 rounded-xl md:rounded-r-none p-6 border border-blue-200 md:border-r-0">
+              <div class="flex items-center gap-2 mb-4">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+                <span class="text-[10px] font-bold uppercase tracking-wider text-blue-600">Engineering</span>
+              </div>
+              <div class="font-display text-xl font-bold text-blue-900 mb-2">"It's a memory bug."</div>
+              <p class="text-xs text-blue-800/60 leading-relaxed mb-4">Backend wasn't persisting context, causing disjointed conversations.</p>
+              <div class="bg-white/60 rounded-lg px-3 py-2 inline-flex items-center gap-2">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+                <span class="text-[10px] text-blue-700 font-medium">Fix session persistence</span>
+              </div>
+            </div>
+
+            <!-- VS -->
+            <div class="hidden md:flex items-center justify-center bg-gray-100 px-3 border-y border-gray-200 z-10">
+              <span class="text-[10px] font-black text-secondary/50 tracking-wider">VS</span>
+            </div>
+            <div class="md:hidden flex justify-center -my-3 z-10">
+              <div class="w-8 h-8 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center">
+                <span class="text-[9px] font-black text-secondary/50">VS</span>
+              </div>
+            </div>
+
+            <!-- Design -->
+            <div class="bg-accent/5 rounded-xl md:rounded-l-none p-6 border border-accent/20 md:border-l-0">
+              <div class="flex items-center gap-2 mb-4">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                <span class="text-[10px] font-bold uppercase tracking-wider text-accent">Design (Me)</span>
+              </div>
+              <div class="font-display text-xl font-bold text-primary mb-2">"It's an empathy gap."</div>
+              <p class="text-xs text-secondary leading-relaxed mb-4">The AI remembered facts but failed to read feelings. Users didn't feel <em>heard</em>.</p>
+              <div class="bg-white/60 rounded-lg px-3 py-2 inline-flex items-center gap-2">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                <span class="text-[10px] text-accent font-medium">Redesign tone & interactions</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section divider -->
+      <div class="flex items-center gap-4 py-6">
+        <div class="flex-1 h-px bg-gray-100"></div>
+        <svg class="section-icon w-8 h-8 text-accent/30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <div class="flex-1 h-px bg-gray-100"></div>
+      </div>
+
+      <!-- ─── RESEARCH ─── -->
+      <section class="section py-20 border-b border-gray-200" id="investigation">
+        <div class="text-xs font-bold uppercase tracking-widest text-accent mb-6 gs-child">Research</div>
+        <h2 class="font-display text-2xl lg:text-[1.75rem] font-semibold leading-snug mb-8 max-w-xl xl:max-w-2xl gs-child">Validating the Hypothesis</h2>
+        <div class="text-base text-secondary leading-loose max-w-xl xl:max-w-2xl">
+          <p class="mb-5 gs-child">To find the "why," I conducted a <strong class="text-primary font-medium">mixed-method study</strong>: 5 semi-structured interviews with Gen Z graduate students and a 3-day mood diary study.</p>
+        </div>
+
+        <!-- Research stats -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 my-10">
+          <div class="gs-child text-center">
+            <div class="font-display text-3xl font-semibold text-accent stat-number" data-target="5">0</div>
+            <div class="text-xs text-secondary mt-1">interviews</div>
+          </div>
+          <div class="gs-child text-center">
+            <div class="font-display text-3xl font-semibold stat-number" data-target="3">0</div>
+            <div class="text-xs text-secondary mt-1">day mood diary</div>
+          </div>
+          <div class="gs-child text-center">
+            <div class="font-display text-3xl font-semibold stat-number" data-target="1000" data-suffix="+">0+</div>
+            <div class="text-xs text-secondary mt-1">quotes analyzed</div>
+          </div>
+          <div class="gs-child text-center">
+            <div class="font-display text-3xl font-semibold stat-number" data-target="800" data-suffix="+">0+</div>
+            <div class="text-xs text-secondary mt-1">sessions reviewed</div>
+          </div>
+        </div>
+
+        <!-- Key insight -->
+        <div class="bg-surface rounded-xl p-8 my-10 gs-child relative overflow-hidden insight-glow">
+          <div class="absolute -right-4 -bottom-4 opacity-5">
+            <svg width="120" height="120" viewBox="0 0 24 24" fill="#8b5cf6"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+          </div>
+          <div class="text-xs font-bold uppercase tracking-widest text-accent mb-3">The Insight</div>
+          <div class="font-display text-lg lg:text-xl font-semibold leading-snug mb-4">Users felt "unseen."</div>
+          <div class="text-sm text-secondary leading-relaxed">The AI was offering solutions when the user needed validation. A backend fix wasn't enough — we needed an <strong class="text-primary font-medium">emotional overhaul</strong>.</div>
+        </div>
+      </section>
+
+      <!-- Section divider -->
+      <div class="flex items-center gap-4 py-6">
+        <div class="flex-1 h-px bg-gray-100"></div>
+        <svg class="section-icon w-8 h-8 text-accent/30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20V10M18 20V4M6 20v-4"/></svg>
+        <div class="flex-1 h-px bg-gray-100"></div>
+      </div>
+
+      <!-- ─── THE FRAMEWORK ─── -->
+      <section class="section py-20 border-b border-gray-200" id="framework">
+        <div class="text-xs font-bold uppercase tracking-widest text-accent mb-6 gs-child">Strategy</div>
+        <h2 class="font-display text-2xl lg:text-[1.75rem] font-semibold leading-snug mb-8 max-w-xl xl:max-w-2xl gs-child">Adaptive Tone Framework</h2>
+        <div class="text-base text-secondary leading-loose max-w-xl xl:max-w-2xl">
+          <p class="mb-5 gs-child">I reframed the goal from <strong class="text-primary font-medium">"Fixing memory"</strong> to <strong class="text-primary font-medium">"Prioritizing empathy before solutions."</strong></p>
+          <p class="mb-5 gs-child">I collaborated with ML engineers and PM to build an <strong class="text-primary font-medium">Emotion-Aware AI Framework</strong>. Instead of one-size-fits-all, the system now intercepts user input to "read the room."</p>
+        </div>
+
+        <!-- ★ NEW INTERACTION: Live Emotion Classifier -->
+        <div class="my-12 gs-child">
+          <div class="text-xs text-secondary text-center mb-4">
+            <span class="inline-flex items-center gap-1.5 bg-accent/5 border border-accent/10 rounded-full px-3 py-1">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><path d="M12 20V10M18 20V4M6 20v-4"/></svg>
+              Try it — Type a sentence and watch the classifier work
+            </span>
+          </div>
+          <div class="bg-white rounded-xl border border-gray-200 p-6 lg:p-8 shadow-sm">
+            <div class="text-xs font-bold uppercase tracking-wider text-accent mb-4">Live Emotion Classifier</div>
+            <div class="flex gap-3 mb-6">
+              <input id="classifier-input" type="text" placeholder="Type how you're feeling... (e.g. &quot;I'm wiped after back-to-back labs&quot;)" class="flex-1 bg-surface border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/30 transition-colors" />
+              <button id="classifier-btn" class="bg-accent hover:bg-violet-700 text-white text-sm font-medium px-5 py-3 rounded-lg transition-colors cursor-pointer flex-shrink-0">Classify</button>
+            </div>
+            <!-- Quick try buttons -->
+            <div class="flex flex-wrap gap-2 mb-6">
+              <div class="text-[10px] text-secondary mr-1 self-center">Try:</div>
+              <button class="classifier-try text-xs bg-surface hover:bg-gray-200 px-3 py-1.5 rounded-full border border-gray-200 cursor-pointer transition-colors" data-text="I'm wiped after back-to-back labs. Zero energy.">😰 Anxious</button>
+              <button class="classifier-try text-xs bg-surface hover:bg-gray-200 px-3 py-1.5 rounded-full border border-gray-200 cursor-pointer transition-colors" data-text="I feel really down today. Nothing seems to work.">😢 Sad</button>
+              <button class="classifier-try text-xs bg-surface hover:bg-gray-200 px-3 py-1.5 rounded-full border border-gray-200 cursor-pointer transition-colors" data-text="Just finished my workout and got a promotion!">😊 Positive</button>
+              <button class="classifier-try text-xs bg-surface hover:bg-gray-200 px-3 py-1.5 rounded-full border border-gray-200 cursor-pointer transition-colors" data-text="Had a normal day, nothing special happened.">😐 Neutral</button>
+            </div>
+            <!-- Result area -->
+            <div id="classifier-result" class="hidden">
+              <!-- Pipeline visualization -->
+              <div class="flex items-center gap-2 mb-6 overflow-x-auto pb-2">
+                <div id="cr-step1" class="flex-shrink-0 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-center opacity-0">
+                  <div class="text-[9px] text-secondary uppercase tracking-wider">Input</div>
+                  <div class="text-xs font-medium mt-0.5" id="cr-input-text">...</div>
+                </div>
+                <svg class="w-4 h-4 text-gray-300 flex-shrink-0 cr-arrow opacity-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                <div id="cr-step2" class="flex-shrink-0 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-center opacity-0">
+                  <div class="text-[9px] text-secondary uppercase tracking-wider">Classified</div>
+                  <div class="text-xs font-bold mt-0.5" id="cr-mood-tag">...</div>
+                </div>
+                <svg class="w-4 h-4 text-gray-300 flex-shrink-0 cr-arrow opacity-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                <div id="cr-step3" class="flex-shrink-0 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-center opacity-0">
+                  <div class="text-[9px] text-secondary uppercase tracking-wider">Tone</div>
+                  <div class="text-xs font-medium mt-0.5" id="cr-tone-text">...</div>
+                </div>
+                <svg class="w-4 h-4 text-gray-300 flex-shrink-0 cr-arrow opacity-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                <div id="cr-step4" class="flex-shrink-0 border rounded-lg px-3 py-2 text-center opacity-0" style="background:#f0fdf4;border-color:#bbf7d0">
+                  <div class="text-[9px] text-green-600 uppercase tracking-wider">Output</div>
+                  <div class="text-xs font-medium text-green-700 mt-0.5">Adapted Response</div>
+                </div>
+              </div>
+              <!-- Tone card -->
+              <div id="cr-tone-card" class="rounded-xl p-5 border opacity-0">
+                <div class="flex items-center gap-3 mb-3">
+                  <div id="cr-emoji" class="text-2xl">😰</div>
+                  <div>
+                    <div class="text-xs font-bold uppercase tracking-wider" id="cr-state-label">Anxious</div>
+                    <div class="text-[10px] text-secondary" id="cr-tone-label">Calm & Validating</div>
+                  </div>
+                </div>
+                <div class="space-y-2 text-xs text-secondary">
+                  <div><strong class="text-primary">Structure:</strong> <span id="cr-structure">Acknowledge → Tiny step → Soft close</span></div>
+                  <div><strong class="text-primary">Markers:</strong> <span id="cr-markers">Short sentences, minimal exclamations</span></div>
+                </div>
+                <div class="mt-4 bg-white rounded-lg p-3 border border-gray-100">
+                  <div class="text-[10px] font-bold text-accent mb-1">AI Would Respond:</div>
+                  <div class="text-sm text-secondary italic" id="cr-response">...</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- How It Works: Context Over Keywords -->
+        <div class="bg-surface rounded-xl p-6 lg:p-8 my-10 gs-child">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            </div>
+            <div>
+              <div class="text-xs font-bold uppercase tracking-wider text-accent">How It Works</div>
+              <div class="text-[10px] text-secondary">Context Over Keywords</div>
+            </div>
+          </div>
+          <p class="text-sm text-secondary leading-relaxed mb-5">Rather than relying on basic keyword matching, I collaborated with ML engineers to map user inputs to <strong class="text-primary font-medium">4 core emotional states using LLM-based context analysis</strong>.</p>
+
+          <!-- Example: context-aware classification -->
+          <div class="bg-white rounded-xl border border-gray-200 p-5">
+            <div class="text-[10px] font-bold uppercase tracking-wider text-secondary mb-3">Example</div>
+            <div class="flex items-start gap-3 mb-4">
+              <div class="w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              </div>
+              <div>
+                <div class="text-[10px] text-secondary mb-1">User types:</div>
+                <div class="bg-gray-50 text-sm px-3 py-2 rounded-lg border border-gray-100 italic">"Just got back from meeting my advisor."</div>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div class="bg-gray-50 rounded-lg p-3 border border-gray-100">
+                <div class="text-[10px] font-bold text-secondary mb-1.5">Keyword-only approach</div>
+                <div class="flex items-center gap-1.5 mb-1">
+                  <span class="text-sm">😐</span>
+                  <span class="text-xs font-medium text-gray-500">Neutral</span>
+                </div>
+                <div class="text-[10px] text-secondary">No negative keywords detected — defaults to generic tone.</div>
+              </div>
+              <div class="bg-accent/5 rounded-lg p-3 border border-accent/15">
+                <div class="text-[10px] font-bold text-accent mb-1.5">LLM context analysis</div>
+                <div class="flex items-center gap-1.5 mb-1">
+                  <span class="text-sm">😰</span>
+                  <span class="text-xs font-medium text-amber-600">Anxious</span>
+                </div>
+                <div class="text-[10px] text-secondary">Evaluates historical inputs (recent high anxiety) → responds with <strong class="text-accent">Calm & Validating</strong> tone.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Four mood states -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 my-10 gs-child">
+          <div class="bg-amber-50 rounded-xl p-4 border border-amber-200 text-center">
+            <div class="text-2xl mb-2">😰</div>
+            <div class="text-xs font-bold text-amber-700">Anxious</div>
+            <div class="text-[10px] text-secondary mt-1">Calm & Validating</div>
+          </div>
+          <div class="bg-blue-50 rounded-xl p-4 border border-blue-200 text-center">
+            <div class="text-2xl mb-2">😢</div>
+            <div class="text-xs font-bold text-blue-700">Sad</div>
+            <div class="text-[10px] text-secondary mt-1">Warm & Gentle</div>
+          </div>
+          <div class="bg-gray-50 rounded-xl p-4 border border-gray-200 text-center">
+            <div class="text-2xl mb-2">😐</div>
+            <div class="text-xs font-bold text-gray-700">Neutral</div>
+            <div class="text-[10px] text-secondary mt-1">Curious & Open</div>
+          </div>
+          <div class="bg-green-50 rounded-xl p-4 border border-green-200 text-center">
+            <div class="text-2xl mb-2">😊</div>
+            <div class="text-xs font-bold text-green-700">Positive</div>
+            <div class="text-[10px] text-secondary mt-1">Celebratory & Affirming</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section divider -->
+      <div class="flex items-center gap-4 py-6">
+        <div class="flex-1 h-px bg-gray-100"></div>
+        <svg class="section-icon w-8 h-8 text-accent/30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+        <div class="flex-1 h-px bg-gray-100"></div>
+      </div>
+
+      <!-- ─── EXECUTION ─── -->
+      <section class="section py-20 border-b border-gray-200" id="execution">
+        <div class="text-xs font-bold uppercase tracking-widest text-accent mb-6 gs-child">Design Execution</div>
+        <h2 class="font-display text-2xl lg:text-[1.75rem] font-semibold leading-snug mb-8 max-w-xl xl:max-w-2xl gs-child">Designing "My Journal"</h2>
+        <p class="text-base text-secondary leading-loose max-w-xl xl:max-w-2xl mb-5 gs-child">Once we established the Tone Framework, I had to translate that logic into the interface. I led the redesign of the "My Journal" screen, focusing on <strong class="text-primary font-medium">two pivotal decisions</strong> to make the AI feel less like a machine and more like a companion.</p>
+
+        <div class="space-y-16 my-10">
+
+          <!-- ═══ Decision 1: The "Thinking" Indicator ═══ -->
+          <div class="gs-child">
+            <div class="flex items-start gap-4 mb-6">
+              <div class="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-1">
+                <span class="font-display text-sm font-bold text-accent">01</span>
+              </div>
+              <div class="flex-1">
+                <div class="font-bold text-lg mb-1">The "Thinking" Indicator</div>
+                <div class="inline-flex items-center gap-1.5 bg-accent/5 border border-accent/10 rounded-full px-3 py-1 text-xs text-accent font-medium">Authenticity</div>
+              </div>
+            </div>
+
+            <!-- Challenge -->
+            <div class="bg-surface rounded-xl p-6 mb-6">
+              <div class="text-xs font-bold uppercase tracking-wider text-secondary mb-3">The Challenge</div>
+              <p class="text-sm text-secondary leading-relaxed">Even with an empathetic tone, the AI's <strong class="text-primary font-medium">instant responses felt robotic</strong>. We needed a visual cue that implied "processing" and "care," not just "loading."</p>
+            </div>
+
+            <!-- Trade-off: Option A vs B -->
+            <div class="text-xs font-bold uppercase tracking-wider text-secondary mb-4">The Trade-off</div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+              <!-- Option A -->
+              <div class="bg-white rounded-xl border border-gray-200 p-5">
+                <div class="flex items-center gap-2 mb-3">
+                  <div class="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center">
+                    <span class="text-[10px] font-bold text-secondary">A</span>
+                  </div>
+                  <span class="text-sm font-bold">Generic Indicator</span>
+                </div>
+                <p class="text-xs text-secondary leading-relaxed mb-3">Clear system status, easy to build.</p>
+                <!-- Mini gradient bar visual -->
+                <div class="bg-gray-50 rounded-lg p-3 mb-3">
+                  <div class="h-1.5 rounded-full bg-gray-200 overflow-hidden relative">
+                    <div class="absolute inset-0 rounded-full overflow-hidden" style="background:linear-gradient(90deg,transparent,rgba(139,92,246,0.4),transparent);background-size:200% 100%;animation:gradient-shift 1.5s ease-in-out infinite"></div>
+                  </div>
+                  <span class="text-[10px] text-gray-400 mt-2 block">Generating response...</span>
+                </div>
+                <div class="flex items-center gap-1.5 bg-red-50 rounded-lg px-3 py-2">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                  <span class="text-[10px] text-red-600 font-medium">Too functional — feels like waiting for a server, not a friend.</span>
+                </div>
+              </div>
+              <!-- Option B -->
+              <div class="bg-white rounded-xl border-2 border-accent/30 p-5 relative">
+                <div class="absolute -top-2.5 right-4 bg-accent text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full">Selected</div>
+                <div class="flex items-center gap-2 mb-3">
+                  <div class="w-6 h-6 rounded-full bg-accent/10 flex items-center justify-center">
+                    <span class="text-[10px] font-bold text-accent">B</span>
+                  </div>
+                  <span class="text-sm font-bold">Typing Dots</span>
+                </div>
+                <p class="text-xs text-secondary leading-relaxed mb-3">Mimics human behavior.</p>
+                <!-- Mini typing dots visual -->
+                <div class="flex items-center gap-3 bg-gray-50 rounded-lg p-3 mb-3">
+                  <div class="flex items-center gap-1">
+                    <div class="typing-dot w-2 h-2 rounded-full bg-accent/60"></div>
+                    <div class="typing-dot w-2 h-2 rounded-full bg-accent/60"></div>
+                    <div class="typing-dot w-2 h-2 rounded-full bg-accent/60"></div>
+                  </div>
+                  <span class="text-[10px] text-accent">Thinking...</span>
+                </div>
+                <div class="flex items-center gap-1.5 bg-green-50 rounded-lg px-3 py-2">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                  <span class="text-[10px] text-green-600 font-medium">Feels like a companion is thinking about what you said.</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Outcome -->
+            <div class="bg-accent/5 border border-accent/15 rounded-xl p-6 mb-8">
+              <div class="text-xs font-bold uppercase tracking-wider text-accent mb-3">The Outcome</div>
+              <p class="text-sm text-secondary leading-relaxed">I implemented animated typing dots with <strong class="text-primary font-medium">variable latency</strong>. This small visual shift changed the user's perception from <em>"The app is downloading a reply"</em> to <em>"A companion is thinking about what I said,"</em> significantly boosting the feeling of authenticity.</p>
+              <!-- Variable delay spec -->
+              <div class="grid grid-cols-3 gap-3 mt-4">
+                <div class="bg-white rounded-lg p-3 border border-accent/10 text-center">
+                  <div class="text-lg font-semibold text-accent mb-1">1–1.5s</div>
+                  <div class="text-[10px] text-secondary">Light check-ins</div>
+                </div>
+                <div class="bg-white rounded-lg p-3 border border-accent/10 text-center">
+                  <div class="text-lg font-semibold text-accent mb-1">1.5–2s</div>
+                  <div class="text-[10px] text-secondary">Moderate sharing</div>
+                </div>
+                <div class="bg-white rounded-lg p-3 border border-accent/10 text-center">
+                  <div class="text-lg font-semibold text-accent mb-1">2–3s</div>
+                  <div class="text-[10px] text-secondary">Heavy emotional</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Speed slider interactive -->
+            <div class="text-xs text-secondary text-center mb-3">
+              <span class="inline-flex items-center gap-1.5 bg-accent/5 border border-accent/10 rounded-full px-3 py-1">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                Drag the slider to feel the difference
+              </span>
+            </div>
+            <div class="bg-white rounded-xl p-6 max-w-md mx-auto border border-gray-200 shadow-sm">
+              <div class="mb-4">
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-[10px] font-bold uppercase tracking-wider text-secondary">Response Speed</span>
+                  <span id="speed-label" class="text-[10px] font-bold text-accent">1.5s — Thoughtful</span>
+                </div>
+                <input id="speed-slider" type="range" min="0" max="3" step="0.1" value="1.5" class="speed-slider w-full h-1.5 bg-gray-200 rounded-full appearance-none cursor-pointer accent-accent" />
+                <div class="flex justify-between mt-1">
+                  <span class="text-[10px] text-red-400">Instant (robotic)</span>
+                  <span class="text-[10px] text-accent">3s (deeply thoughtful)</span>
+                </div>
+              </div>
+              <div class="border-t border-gray-100 pt-4">
+                <div class="flex justify-end mb-3">
+                  <div class="bg-accent text-white text-sm px-4 py-2.5 rounded-2xl rounded-br-md max-w-[80%]">I've been feeling really anxious lately...</div>
+                </div>
+                <div class="flex items-start gap-2">
+                  <div class="w-7 h-7 rounded-full bg-violet-100 flex items-center justify-center flex-shrink-0">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                  </div>
+                  <div>
+                    <div id="speed-dots" class="bg-gray-100 rounded-2xl rounded-bl-md px-4 py-3 inline-flex items-center gap-1.5">
+                      <div class="typing-dot w-2 h-2 rounded-full bg-accent/60"></div>
+                      <div class="typing-dot w-2 h-2 rounded-full bg-accent/60"></div>
+                      <div class="typing-dot w-2 h-2 rounded-full bg-accent/60"></div>
+                    </div>
+                    <div id="speed-response" class="bg-gray-100 text-sm px-4 py-2.5 rounded-2xl rounded-bl-md max-w-[85%] hidden">That sounds really tough. There's no rush — I'm here whenever you want to talk about it.</div>
+                  </div>
+                </div>
+              </div>
+              <button id="speed-replay" class="mt-4 w-full bg-accent/10 hover:bg-accent/20 text-accent text-xs font-medium py-2.5 rounded-lg transition-colors cursor-pointer flex items-center justify-center gap-1.5">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                Replay with current speed
+              </button>
+            </div>
+
+            <!-- ★ Final Product — Before & After — Decision 1 -->
+            <div class="mt-10 gs-child">
+              <div class="text-xs font-bold uppercase tracking-wider text-secondary mb-4">Final Design</div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Before -->
+                <div>
+                  <div class="flex items-center gap-2 mb-2">
+                    <div class="w-5 h-5 rounded-full bg-red-50 flex items-center justify-center">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                    </div>
+                    <span class="text-xs font-bold text-red-500">Before</span>
+                  </div>
+                  <div class="rounded-xl overflow-hidden border border-gray-200 shadow-sm bg-gray-50">
+                    <div class="aspect-[4/3] flex items-center justify-center" id="decision1-before-img">
+                      <div class="text-center">
+                        <svg class="mx-auto mb-2" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+                        <div class="text-[10px] text-secondary">Before image</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- After -->
+                <div>
+                  <div class="flex items-center gap-2 mb-2">
+                    <div class="w-5 h-5 rounded-full bg-green-50 flex items-center justify-center">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                    </div>
+                    <span class="text-xs font-bold text-green-600">After</span>
+                  </div>
+                  <div class="rounded-xl overflow-hidden border-2 border-accent/30 shadow-sm bg-gray-50">
+                    <div class="aspect-[4/3] flex items-center justify-center" id="decision1-after-img">
+                      <div class="text-center">
+                        <svg class="mx-auto mb-2" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+                        <div class="text-[10px] text-accent">After image</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section mini-divider between decisions -->
+          <div class="flex items-center gap-4">
+            <div class="flex-1 h-px bg-gray-200"></div>
+            <div class="w-2 h-2 rounded-full bg-accent/20"></div>
+            <div class="flex-1 h-px bg-gray-200"></div>
+          </div>
+
+          <!-- ═══ Decision 2: The "Blank Page" Dilemma ═══ -->
+          <div class="gs-child">
+            <div class="flex items-start gap-4 mb-6">
+              <div class="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-1">
+                <span class="font-display text-sm font-bold text-accent">02</span>
+              </div>
+              <div class="flex-1">
+                <div class="font-bold text-lg mb-1">The "Blank Page" Dilemma</div>
+                <div class="inline-flex items-center gap-1.5 bg-accent/5 border border-accent/10 rounded-full px-3 py-1 text-xs text-accent font-medium">Onboarding</div>
+              </div>
+            </div>
+
+            <!-- Challenge -->
+            <div class="bg-surface rounded-xl p-6 mb-6">
+              <div class="text-xs font-bold uppercase tracking-wider text-secondary mb-3">The Challenge</div>
+              <p class="text-sm text-secondary leading-relaxed">Users often <strong class="text-primary font-medium">froze when facing an empty chat box</strong>. We needed to guide them without compromising the quality of the emotional data we were collecting.</p>
+            </div>
+
+            <!-- Trade-off: Option A vs B -->
+            <div class="text-xs font-bold uppercase tracking-wider text-secondary mb-4">The Trade-off</div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+              <!-- Option A -->
+              <div class="bg-white rounded-xl border border-gray-200 p-5">
+                <div class="flex items-center gap-2 mb-3">
+                  <div class="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center">
+                    <span class="text-[10px] font-bold text-secondary">A</span>
+                  </div>
+                  <span class="text-sm font-bold">Always Show FAQ</span>
+                </div>
+                <p class="text-xs text-secondary leading-relaxed mb-3">Display FAQ guidance text permanently above the chat.</p>
+                <!-- Mini visual: FAQ sentences on top of chat -->
+                <div class="bg-gray-50 rounded-lg overflow-hidden mb-3">
+                  <div class="bg-accent/5 border-b border-accent/10 px-3 py-2 space-y-1">
+                    <div class="flex items-start gap-1.5">
+                      <span class="text-[8px] font-bold text-accent mt-0.5">1.</span>
+                      <span class="text-[9px] text-secondary">Share how you're feeling</span>
+                    </div>
+                    <div class="flex items-start gap-1.5">
+                      <span class="text-[8px] font-bold text-accent mt-0.5">2.</span>
+                      <span class="text-[9px] text-secondary">I'll respond based on your mood</span>
+                    </div>
+                    <div class="flex items-start gap-1.5">
+                      <span class="text-[8px] font-bold text-accent mt-0.5">3.</span>
+                      <span class="text-[9px] text-secondary">Everything stays private</span>
+                    </div>
+                  </div>
+                  <div class="px-3 py-2">
+                    <div class="bg-white rounded-full border border-gray-200 px-2 py-1 flex items-center">
+                      <span class="text-[9px] text-gray-300 italic flex-1">Type here...</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-1.5 bg-red-50 rounded-lg px-3 py-2">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                  <span class="text-[10px] text-red-600 font-medium">Always-visible FAQ clutters the chat and feels hand-holdy for returning users.</span>
+                </div>
+              </div>
+              <!-- Option B -->
+              <div class="bg-white rounded-xl border border-gray-200 p-5">
+                <div class="flex items-center gap-2 mb-3">
+                  <div class="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center">
+                    <span class="text-[10px] font-bold text-secondary">B</span>
+                  </div>
+                  <span class="text-sm font-bold">Remove Prompts Entirely</span>
+                </div>
+                <p class="text-xs text-secondary leading-relaxed mb-3">A clean input field.</p>
+                <!-- Mini visual -->
+                <div class="bg-gray-50 rounded-lg p-3 mb-3">
+                  <div class="bg-white rounded-full border border-gray-200 px-3 py-2 flex items-center">
+                    <span class="text-[10px] text-gray-300 italic flex-1">What's on your mind?</span>
+                    <div class="w-4 h-4 rounded-full bg-gray-200"></div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-1.5 bg-red-50 rounded-lg px-3 py-2">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                  <span class="text-[10px] text-red-600 font-medium">High friction. New users don't know how to start and drop off.</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Solution — emphasized -->
+            <div class="rounded-xl mb-6 relative border-2 border-accent/30 shadow-lg">
+              <div class="absolute -top-3 left-5 bg-accent text-white text-[10px] font-bold px-3 py-1 rounded-full z-10">My Solution</div>
+              <!-- Header -->
+              <div class="bg-gradient-to-r from-accent/10 via-violet-50 to-accent/5 px-8 pt-8 pb-5 rounded-t-xl">
+                <div class="font-display text-lg font-bold text-primary mb-1">The Hybrid Approach</div>
+                <p class="text-xs text-secondary leading-relaxed max-w-lg">I designed a middle ground that satisfies both needs — reducing friction for new users while preserving data quality for the Tone Framework.</p>
+              </div>
+              <!-- Three phases as a visual flow -->
+              <div class="bg-white px-8 py-6">
+                <div class="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr_auto_1fr] gap-4 items-start">
+                  <!-- Phase 1 -->
+                  <div class="bg-accent/5 rounded-xl p-5 border border-accent/10">
+                    <div class="flex items-center gap-2 mb-3">
+                      <div class="w-7 h-7 rounded-full bg-accent text-white flex items-center justify-center flex-shrink-0">
+                        <span class="text-[10px] font-bold">1</span>
+                      </div>
+                      <div class="text-xs font-bold text-accent">First Run Only</div>
+                    </div>
+                    <div class="text-[10px] text-secondary leading-relaxed mb-3">Contextual starters tailored to Gen Z/students:</div>
+                    <div class="space-y-1.5">
+                      <div class="bg-white text-[10px] px-2.5 py-1.5 rounded-lg border border-accent/10 text-accent leading-relaxed">"My head is a mess from labs and assignments 🤯"</div>
+                      <div class="bg-white text-[10px] px-2.5 py-1.5 rounded-lg border border-accent/10 text-accent leading-relaxed">"Things are a bit rocky with a friend right now 💬"</div>
+                      <div class="bg-white text-[10px] px-2.5 py-1.5 rounded-lg border border-accent/10 text-accent leading-relaxed">"I just want to do absolutely nothing and recharge 🔋"</div>
+                    </div>
+                  </div>
+                  <!-- Arrow -->
+                  <div class="hidden md:flex items-center justify-center pt-8">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="1.5" class="opacity-40"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                  </div>
+                  <!-- Phase 2 -->
+                  <div class="bg-green-50 rounded-xl p-5 border border-green-200">
+                    <div class="flex items-center gap-2 mb-3">
+                      <div class="w-7 h-7 rounded-full bg-green-500 text-white flex items-center justify-center flex-shrink-0">
+                        <span class="text-[10px] font-bold">2</span>
+                      </div>
+                      <div class="text-xs font-bold text-green-700">Organic Return</div>
+                    </div>
+                    <div class="text-[10px] text-secondary leading-relaxed mb-3">Once a user actively engages, starters smoothly fade out to encourage <strong class="text-primary font-medium">authentic, self-directed journaling</strong>.</div>
+                    <!-- Mini visual: clean input -->
+                    <div class="bg-white rounded-lg p-3 border border-green-100">
+                      <div class="bg-gray-50 rounded-full px-3 py-1.5 flex items-center">
+                        <span class="text-[9px] text-gray-400 italic flex-1">What's on your mind today?</span>
+                        <div class="w-4 h-4 rounded-full bg-accent/20 flex items-center justify-center">
+                          <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Arrow -->
+                  <div class="hidden md:flex items-center justify-center pt-8">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="1.5" class="opacity-40"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                  </div>
+                  <!-- Phase 3 -->
+                  <div class="bg-amber-50 rounded-xl p-5 border border-amber-200">
+                    <div class="flex items-center gap-2 mb-3">
+                      <div class="w-7 h-7 rounded-full bg-amber-500 text-white flex items-center justify-center flex-shrink-0">
+                        <span class="text-[10px] font-bold">3</span>
+                      </div>
+                      <div class="text-xs font-bold text-amber-700">The Safety Net</div>
+                    </div>
+                    <div class="text-[10px] text-secondary leading-relaxed mb-3">A discreet <strong class="text-primary font-medium">"i" button</strong> provides on-demand FAQ guidance without cluttering the interface or biasing natural input.</div>
+                    <!-- Mini visual: "i" button -->
+                    <div class="bg-white rounded-lg p-3 border border-amber-100 flex items-center justify-between">
+                      <span class="text-[9px] text-secondary">Always accessible</span>
+                      <div class="w-6 h-6 rounded-full bg-accent text-white flex items-center justify-center">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Bottom bar: why this works -->
+              <div class="bg-accent/5 border-t border-accent/10 px-8 py-4 flex items-center gap-6 flex-wrap rounded-b-xl">
+                <div class="flex items-center gap-1.5">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                  <span class="text-[10px] text-secondary"><strong class="text-primary">New users</strong> get guided onboarding</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                  <span class="text-[10px] text-secondary"><strong class="text-primary">Returning users</strong> get a clean canvas</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                  <span class="text-[10px] text-secondary"><strong class="text-primary">Tone Framework</strong> gets authentic data</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Interactive: FAQ "i" button demo -->
+            <div class="text-xs text-secondary text-center mb-3">
+              <span class="inline-flex items-center gap-1.5 bg-accent/5 border border-accent/10 rounded-full px-3 py-1">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                Click the "i" button to toggle FAQ guidance
+              </span>
+            </div>
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden max-w-md mx-auto" id="faq-demo">
+              <!-- Chat header with "i" button -->
+              <div class="flex items-center justify-between py-3 px-5 border-b border-gray-100 bg-gray-50/50">
+                <div class="flex items-center gap-2">
+                  <div class="w-6 h-6 rounded-full bg-violet-100 flex items-center justify-center">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                  </div>
+                  <span class="text-xs font-bold">My Journal</span>
+                </div>
+                <button id="faq-i-btn" class="w-7 h-7 rounded-full bg-accent text-white flex items-center justify-center flex-shrink-0 cursor-pointer hover:bg-accent/80 transition-colors shadow-sm" title="Toggle FAQ">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                </button>
+              </div>
+
+              <!-- FAQ panel — visible by default -->
+              <div id="faq-panel" class="bg-accent/5 border-b border-accent/10 px-5 py-4 transition-all duration-300" style="max-height:300px;overflow:hidden;opacity:1">
+                <div class="text-[10px] text-accent font-bold uppercase tracking-wider mb-2.5">How to use My Journal</div>
+                <div class="space-y-2">
+                  <div class="flex items-start gap-2">
+                    <div class="w-4 h-4 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="text-[8px] font-bold text-accent">1</span></div>
+                    <span class="text-xs text-secondary leading-relaxed">Share how you're feeling — there's no wrong answer.</span>
+                  </div>
+                  <div class="flex items-start gap-2">
+                    <div class="w-4 h-4 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="text-[8px] font-bold text-accent">2</span></div>
+                    <span class="text-xs text-secondary leading-relaxed">I'll respond based on your mood, not a script.</span>
+                  </div>
+                  <div class="flex items-start gap-2">
+                    <div class="w-4 h-4 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="text-[8px] font-bold text-accent">3</span></div>
+                    <span class="text-xs text-secondary leading-relaxed">Everything stays private. This is your space.</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Chat area -->
+              <div class="p-5">
+                <div class="flex items-start gap-2 mb-4">
+                  <div class="w-7 h-7 rounded-full bg-violet-100 flex items-center justify-center flex-shrink-0">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                  </div>
+                  <div class="bg-gray-100 text-sm px-4 py-2.5 rounded-2xl rounded-bl-md">Hey! How are you feeling today?</div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <div class="flex-1 flex items-center gap-2 bg-surface rounded-full border border-gray-200 px-4 py-2.5">
+                    <span class="text-xs text-gray-400 flex-1">Type anything you'd like to share...</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ★ Final Product Image Placeholder — Decision 2 -->
+            <div class="mt-10 gs-child">
+              <div class="text-xs font-bold uppercase tracking-wider text-secondary mb-4">Final Design</div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Before -->
+                <div>
+                  <div class="flex items-center gap-2 mb-2">
+                    <div class="w-5 h-5 rounded-full bg-red-50 flex items-center justify-center">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                    </div>
+                    <span class="text-xs font-bold text-red-500">Before</span>
+                  </div>
+                  <div class="rounded-xl overflow-hidden border border-gray-200 shadow-sm bg-gray-50">
+                    <div class="aspect-[4/3] flex items-center justify-center" id="decision2-before-img">
+                      <div class="text-center">
+                        <svg class="mx-auto mb-2" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+                        <div class="text-[10px] text-secondary">Before image</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- After -->
+                <div>
+                  <div class="flex items-center gap-2 mb-2">
+                    <div class="w-5 h-5 rounded-full bg-green-50 flex items-center justify-center">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                    </div>
+                    <span class="text-xs font-bold text-green-600">After</span>
+                  </div>
+                  <div class="rounded-xl overflow-hidden border-2 border-accent/30 shadow-sm bg-gray-50">
+                    <div class="aspect-[4/3] flex items-center justify-center" id="decision2-after-img">
+                      <div class="text-center">
+                        <svg class="mx-auto mb-2" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+                        <div class="text-[10px] text-accent">After image</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Section divider -->
+      <div class="flex items-center gap-4 py-6">
+        <div class="flex-1 h-px bg-gray-100"></div>
+        <svg class="section-icon w-8 h-8 text-accent/30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <div class="flex-1 h-px bg-gray-100"></div>
+      </div>
+
+      <!-- ─── COLLABORATION ─── -->
+      <section class="section py-20 border-b border-gray-200" id="collaboration">
+        <div class="text-xs font-bold uppercase tracking-widest text-accent mb-6 gs-child">Cross-Functional Collaboration</div>
+        <h2 class="font-display text-2xl lg:text-[1.75rem] font-semibold leading-snug mb-4 max-w-xl xl:max-w-2xl gs-child">Turning Conflict into Co-Creation</h2>
+        <p class="text-base text-secondary leading-loose max-w-xl xl:max-w-2xl mb-10 gs-child">The biggest challenge wasn't the pixels — it was <strong class="text-primary font-medium">aligning the team on why</strong> we were building this way.</p>
+
+        <!-- ★ Collaboration Journey Timeline -->
+        <div class="my-10 gs-child">
+          <div class="relative max-w-2xl mx-auto">
+            <!-- Continuous connector line -->
+            <div class="absolute top-[18px] left-[10%] right-[10%] h-[2px] bg-gradient-to-r from-red-200 via-amber-200 via-[40%] to-green-200"></div>
+            <!-- Steps grid -->
+            <div class="grid grid-cols-5 relative">
+              <div class="flex flex-col items-center">
+                <div class="w-9 h-9 rounded-full bg-red-100 border-2 border-red-300 flex items-center justify-center z-10">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                </div>
+                <div class="text-[11px] font-bold mt-2">Disagreement</div>
+                <div class="text-[10px] text-secondary">Week 1</div>
+              </div>
+              <div class="flex flex-col items-center">
+                <div class="w-9 h-9 rounded-full bg-amber-100 border-2 border-amber-300 flex items-center justify-center z-10">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                </div>
+                <div class="text-[11px] font-bold mt-2">Research</div>
+                <div class="text-[10px] text-secondary">Week 2–4</div>
+              </div>
+              <div class="flex flex-col items-center">
+                <div class="w-9 h-9 rounded-full bg-purple-100 border-2 border-purple-300 flex items-center justify-center z-10">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+                </div>
+                <div class="text-[11px] font-bold mt-2">Shared Framework</div>
+                <div class="text-[10px] text-secondary">Week 5–6</div>
+              </div>
+              <div class="flex flex-col items-center">
+                <div class="w-9 h-9 rounded-full bg-blue-100 border-2 border-blue-300 flex items-center justify-center z-10">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </div>
+                <div class="text-[11px] font-bold mt-2">Co-building</div>
+                <div class="text-[10px] text-secondary">Week 7–10</div>
+              </div>
+              <div class="flex flex-col items-center">
+                <div class="w-9 h-9 rounded-full bg-green-100 border-2 border-green-300 flex items-center justify-center z-10">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <div class="text-[11px] font-bold mt-2">Launch</div>
+                <div class="text-[10px] text-secondary">Week 12</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══ Negotiation 1: Speed vs Care ═══ -->
+        <div class="my-10 gs-child">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+              <span class="font-display text-xs font-bold text-blue-700">01</span>
+            </div>
+            <div class="font-bold text-base">The "Speed vs. Care" Debate</div>
+            <div class="text-[10px] font-medium text-blue-600 bg-blue-50 border border-blue-100 rounded-full px-2.5 py-0.5">with Engineering</div>
+          </div>
+
+          <!-- Key moment -->
+          <div class="bg-white rounded-xl border border-gray-200 shadow-sm max-w-xl mx-auto overflow-hidden" id="collab-chat-1">
+            <div class="p-5 space-y-4">
+              <!-- Eng pushback -->
+              <div class="flex items-start gap-3">
+                <div class="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0 text-[10px] font-bold text-blue-600">ENG</div>
+                <div>
+                  <div class="text-[10px] text-secondary mb-1"><strong class="text-primary">Lead Engineer</strong></div>
+                  <div class="bg-gray-100 text-sm px-4 py-2.5 rounded-2xl rounded-tl-md">"You want us to add <em>artificial latency</em>?"</div>
+                </div>
+              </div>
+              <!-- My reframe — highlighted as the turning point -->
+              <div class="flex items-start gap-3">
+                <div class="w-8 h-8 rounded-lg bg-accent/15 flex items-center justify-center flex-shrink-0 text-[10px] font-bold text-accent">ME</div>
+                <div>
+                  <div class="text-[10px] text-secondary mb-1"><strong class="text-primary">Me (Designer)</strong></div>
+                  <div class="bg-accent/10 border border-accent/20 text-sm px-4 py-2.5 rounded-2xl rounded-tl-md font-medium">"Latency isn't <em>lag</em> — it's <em>listening</em>."</div>
+                </div>
+              </div>
+            </div>
+            <!-- Resolution bar -->
+            <div class="bg-green-50 border-t border-green-100 px-5 py-2.5 flex items-center gap-2">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span class="text-[11px] font-medium text-green-700">"Variable Latency" shipped as a feature, not a bug</span>
+            </div>
+          </div>
+
+          <!-- Usability Testing Validation -->
+          <div class="bg-surface rounded-xl p-6 mt-6 max-w-xl mx-auto">
+            <div class="flex items-center gap-2 mb-4">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="1.5"><path d="M9 19v-6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2zm0 0V9a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v10m-6 0a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2m0 0V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2z"/></svg>
+              <div class="text-xs font-bold uppercase tracking-wider text-accent">Usability Testing: Speed vs. Care</div>
+            </div>
+            <p class="text-xs text-secondary leading-relaxed mb-4">While intentional delay builds trust, excessive lag frustrates users. I established a <strong class="text-primary font-medium">maximum latency threshold of 3 seconds</strong> and ran a pre-launch comparison test.</p>
+            <div class="grid grid-cols-2 gap-3">
+              <div class="bg-white rounded-lg p-4 border border-gray-200 text-center">
+                <div class="text-[10px] font-bold uppercase tracking-wider text-secondary mb-2">Control</div>
+                <div class="text-lg font-semibold text-secondary mb-1">&lt;100ms</div>
+                <div class="text-[10px] text-secondary">Instant Reply</div>
+                <div class="mt-2 bg-gray-100 rounded-full h-1.5"><div class="bg-gray-400 rounded-full h-1.5" style="width:35%"></div></div>
+                <div class="text-[10px] text-secondary mt-1">"Feeling heard" score</div>
+              </div>
+              <div class="bg-white rounded-lg p-4 border-2 border-accent/30 text-center relative">
+                <div class="absolute -top-2 right-3 bg-green-500 text-white text-[8px] font-bold px-2 py-0.5 rounded-full">Winner</div>
+                <div class="text-[10px] font-bold uppercase tracking-wider text-accent mb-2">Variant</div>
+                <div class="text-lg font-semibold text-accent mb-1">1.5–3s</div>
+                <div class="text-[10px] text-secondary">Variable Latency</div>
+                <div class="mt-2 bg-accent/10 rounded-full h-1.5"><div class="bg-accent rounded-full h-1.5" style="width:82%"></div></div>
+                <div class="text-[10px] text-accent font-medium mt-1">Significantly higher + zero "slow" complaints</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══ Negotiation 2: Friction vs Data ═══ -->
+        <div class="my-10 gs-child">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
+              <span class="font-display text-xs font-bold text-amber-700">02</span>
+            </div>
+            <div class="font-bold text-base">The "Friction vs. Data" Trade-off</div>
+            <div class="text-[10px] font-medium text-amber-600 bg-amber-50 border border-amber-100 rounded-full px-2.5 py-0.5">with PM</div>
+          </div>
+
+          <!-- Visual: Tug of war diagram -->
+          <div class="bg-surface rounded-xl p-8 max-w-xl mx-auto">
+            <!-- Two sides pulling -->
+            <div class="grid grid-cols-[1fr_auto_1fr] gap-4 items-center mb-6">
+              <!-- PM side -->
+              <div class="text-center">
+                <div class="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center mx-auto mb-2">
+                  <span class="text-xs font-bold text-amber-700">PM</span>
+                </div>
+                <div class="text-xs font-bold mb-1">Keep prompts</div>
+                <div class="text-[10px] text-secondary">"Users will freeze and churn without guidance"</div>
+              </div>
+              <!-- Tension icon -->
+              <div class="flex flex-col items-center gap-1">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="1.5"><path d="M5 12h14"/><path d="M5 12l3-3M5 12l3 3"/><path d="M19 12l-3-3M19 12l-3 3"/></svg>
+                <span class="text-[10px] font-bold text-amber-500">TENSION</span>
+              </div>
+              <!-- Design side -->
+              <div class="text-center">
+                <div class="w-10 h-10 rounded-full bg-accent/15 flex items-center justify-center mx-auto mb-2">
+                  <span class="text-xs font-bold text-accent">ME</span>
+                </div>
+                <div class="text-xs font-bold mb-1">Remove prompts</div>
+                <div class="text-[10px] text-secondary">"Button-mashing gives us garbage data"</div>
+              </div>
+            </div>
+
+            <!-- Arrow down to resolution -->
+            <div class="flex justify-center mb-4">
+              <div class="flex flex-col items-center gap-1">
+                <div class="w-px h-6 bg-gray-300"></div>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+              </div>
+            </div>
+
+            <!-- Resolution -->
+            <div class="bg-green-50 border border-green-200 rounded-xl p-5">
+              <div class="flex items-center gap-2 mb-3">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                <span class="text-sm font-bold text-green-800">The "Training Wheels" Compromise</span>
+              </div>
+              <div class="grid grid-cols-3 gap-3">
+                <div class="bg-white rounded-lg p-3 text-center border border-green-100">
+                  <div class="text-lg mb-1">🆕</div>
+                  <div class="text-[10px] font-bold">New users</div>
+                  <div class="text-[10px] text-secondary">Starters ON</div>
+                </div>
+                <div class="bg-white rounded-lg p-3 text-center border border-green-100">
+                  <div class="text-lg mb-1">🔄</div>
+                  <div class="text-[10px] font-bold">Returning</div>
+                  <div class="text-[10px] text-secondary">Starters OFF</div>
+                </div>
+                <div class="bg-white rounded-lg p-3 text-center border border-green-100">
+                  <div class="text-lg mb-1">🛟</div>
+                  <div class="text-[10px] font-bold">Safety net</div>
+                  <div class="text-[10px] text-secondary">FAQ button</div>
+                </div>
+              </div>
+              <!-- Who got what -->
+              <div class="flex items-center gap-4 justify-center mt-4">
+                <div class="flex items-center gap-1.5">
+                  <div class="w-5 h-5 rounded-full bg-amber-100 flex items-center justify-center"><span class="text-[8px] font-bold text-amber-700">PM</span></div>
+                  <span class="text-[10px] text-secondary">Retention protected</span>
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <div class="w-px h-4 bg-gray-200"></div>
+                <div class="flex items-center gap-1.5">
+                  <div class="w-5 h-5 rounded-full bg-accent/15 flex items-center justify-center"><span class="text-[8px] font-bold text-accent">ME</span></div>
+                  <span class="text-[10px] text-secondary">Data quality intact</span>
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ★ The Shared Artifact: Tone Framework Ownership Map -->
+        <div class="my-12 gs-child">
+          <div class="text-xs font-bold uppercase tracking-wider text-accent mb-5">The Shared Artifact</div>
+          <p class="text-sm text-secondary leading-relaxed mb-6 max-w-xl">The Tone Framework became the team's shared language — a single artifact where every discipline had ownership of a piece. This is what turned conflict into co-creation.</p>
+
+          <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6 lg:p-8">
+            <!-- Central framework label -->
+            <div class="text-center mb-6">
+              <div class="inline-flex items-center gap-2 bg-accent/5 border border-accent/15 rounded-full px-5 py-2.5">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <span class="text-sm font-bold text-accent">Adaptive Tone Framework</span>
+              </div>
+            </div>
+            <!-- Ownership grid -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+              <div class="bg-accent/5 rounded-xl p-4 border border-accent/10 text-center">
+                <div class="w-10 h-10 rounded-full bg-accent text-white flex items-center justify-center mx-auto mb-2">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                </div>
+                <div class="text-xs font-bold text-accent mb-1">Me (Design)</div>
+                <div class="text-[10px] text-secondary leading-relaxed">Tone rules, interaction patterns, latency UX</div>
+              </div>
+              <div class="bg-blue-50 rounded-xl p-4 border border-blue-100 text-center">
+                <div class="w-10 h-10 rounded-full bg-blue-500 text-white flex items-center justify-center mx-auto mb-2">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+                </div>
+                <div class="text-xs font-bold text-blue-700 mb-1">Engineering</div>
+                <div class="text-[10px] text-secondary leading-relaxed">Variable latency logic, context pipeline</div>
+              </div>
+              <div class="bg-amber-50 rounded-xl p-4 border border-amber-100 text-center">
+                <div class="w-10 h-10 rounded-full bg-amber-500 text-white flex items-center justify-center mx-auto mb-2">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20V10M18 20V4M6 20v-4"/></svg>
+                </div>
+                <div class="text-xs font-bold text-amber-700 mb-1">PM</div>
+                <div class="text-[10px] text-secondary leading-relaxed">Success metrics, retention KPIs, A/B test design</div>
+              </div>
+              <div class="bg-green-50 rounded-xl p-4 border border-green-100 text-center">
+                <div class="w-10 h-10 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto mb-2">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                </div>
+                <div class="text-xs font-bold text-green-700 mb-1">Conv. Designer</div>
+                <div class="text-[10px] text-secondary leading-relaxed">Response templates, empathy markers, tone copy</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ★ Stakeholder Quotes -->
+        <div class="my-12 gs-child">
+          <div class="text-xs font-bold uppercase tracking-wider text-secondary mb-5">What the team said</div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-blue-50 rounded-xl p-5 border border-blue-100">
+              <svg class="mb-3 opacity-30" width="20" height="20" viewBox="0 0 24 24" fill="#2563eb" stroke="none"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
+              <p class="text-xs text-blue-800 italic leading-relaxed mb-3">"I didn't see it as a UX problem until she reframed latency as listening. That changed how I thought about the entire architecture."</p>
+              <div class="flex items-center gap-2">
+                <div class="w-6 h-6 rounded-full bg-blue-200 flex items-center justify-center"><span class="text-[8px] font-bold text-blue-700">SE</span></div>
+                <div>
+                  <div class="text-[10px] font-bold text-blue-700">Lead Engineer</div>
+                </div>
+              </div>
+            </div>
+            <div class="bg-amber-50 rounded-xl p-5 border border-amber-100">
+              <svg class="mb-3 opacity-30" width="20" height="20" viewBox="0 0 24 24" fill="#d97706" stroke="none"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
+              <p class="text-xs text-amber-800 italic leading-relaxed mb-3">"The 'Training Wheels' metaphor made it click for me. We didn't have to choose between retention and data quality — we could have both."</p>
+              <div class="flex items-center gap-2">
+                <div class="w-6 h-6 rounded-full bg-amber-200 flex items-center justify-center"><span class="text-[8px] font-bold text-amber-700">PM</span></div>
+                <div>
+                  <div class="text-[10px] font-bold text-amber-700">Product Manager</div>
+                </div>
+              </div>
+            </div>
+            <div class="bg-green-50 rounded-xl p-5 border border-green-100">
+              <svg class="mb-3 opacity-30" width="20" height="20" viewBox="0 0 24 24" fill="#16a34a" stroke="none"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
+              <p class="text-xs text-green-800 italic leading-relaxed mb-3">"Having clear tone rules and empathy markers made my job easier. I wasn't guessing anymore — I was writing with a system."</p>
+              <div class="flex items-center gap-2">
+                <div class="w-6 h-6 rounded-full bg-green-200 flex items-center justify-center"><span class="text-[8px] font-bold text-green-700">CD</span></div>
+                <div>
+                  <div class="text-[10px] font-bold text-green-700">Conversation Designer</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Section divider -->
+      <div class="flex items-center gap-4 py-6">
+        <div class="flex-1 h-px bg-gray-100"></div>
+        <svg class="section-icon w-8 h-8 text-accent/30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <div class="flex-1 h-px bg-gray-100"></div>
+      </div>
+
+      <!-- ─── OUTCOME ─── -->
+      <section class="section py-20 border-b border-gray-200" id="outcome">
+        <div class="text-xs font-bold uppercase tracking-widest text-accent mb-6 gs-child">Outcomes & Impact</div>
+        <h2 class="font-display text-2xl lg:text-[1.75rem] font-semibold leading-snug mb-8 max-w-xl xl:max-w-2xl gs-child">From Productivity Tool to Emotional Companion</h2>
+        <div class="text-base text-secondary leading-loose max-w-xl xl:max-w-2xl">
+          <p class="mb-5 gs-child">To validate the Tone Framework, we ran an <strong class="text-primary font-medium">A/B test</strong> comparing the original "Productivity-driven" tone (Control) against our new "Emotion-Aware" framework (Variant).</p>
+        </div>
+
+        <!-- A/B Test framing -->
+        <div class="flex items-center gap-3 my-8 gs-child">
+          <div class="flex items-center gap-2 bg-gray-100 rounded-full px-4 py-2">
+            <div class="w-2 h-2 rounded-full bg-gray-400"></div>
+            <span class="text-xs font-medium text-secondary">Control: Productivity-driven tone</span>
+          </div>
+          <span class="text-xs text-secondary">vs</span>
+          <div class="flex items-center gap-2 bg-green-50 border border-green-200 rounded-full px-4 py-2">
+            <div class="w-2 h-2 rounded-full bg-green-500"></div>
+            <span class="text-xs font-bold text-green-700">Variant: Emotion-Aware framework</span>
+          </div>
+        </div>
+
+        <!-- Stat cards -->
+        <div class="my-10 grid grid-cols-2 md:grid-cols-4 gap-4 gs-child">
+          <div class="bg-green-50 rounded-xl p-5 border border-green-200 text-center">
+            <div class="font-display text-3xl font-semibold text-green-600 stat-number" data-target="85" data-suffix="%">0%</div>
+            <div class="text-xs text-secondary mt-2">increase in "supportive" perception</div>
+            <div class="text-[10px] text-green-600 mt-1">post-test survey</div>
+          </div>
+          <div class="bg-green-50 rounded-xl p-5 border border-green-200 text-center">
+            <div class="font-display text-3xl font-semibold text-green-600 stat-number" data-prefix="+" data-target="15" data-suffix="%">0%</div>
+            <div class="text-xs text-secondary mt-2">D7 retention lift</div>
+            <div class="text-[10px] text-green-600 mt-1">variant cohort</div>
+          </div>
+          <div class="bg-green-50 rounded-xl p-5 border border-green-200 text-center">
+            <div class="text-xs text-secondary mb-1">30% →</div>
+            <div class="font-display text-3xl font-semibold text-green-600 stat-number" data-target="45" data-suffix="%">0%</div>
+            <div class="text-xs text-secondary mt-2">Engagement</div>
+          </div>
+          <div class="bg-green-50 rounded-xl p-5 border border-green-200 text-center">
+            <div class="text-xs text-secondary mb-1">24% →</div>
+            <div class="font-display text-3xl font-semibold text-green-600 stat-number" data-target="60" data-suffix="%">0%</div>
+            <div class="text-xs text-secondary mt-2">Satisfaction</div>
+          </div>
+        </div>
+
+        <!-- ★ Final Mockups -->
+        <div class="my-12 gs-child">
+          <div class="text-xs font-bold uppercase tracking-wider text-secondary mb-5">Final Mockups</div>
+          <div class="rounded-xl overflow-hidden border border-gray-200 shadow-sm bg-gray-50 img-placeholder">
+            <div class="aspect-[16/9] flex items-center justify-center" id="outcome-mockup-1">
+              <div class="text-center">
+                <svg class="mx-auto mb-2" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+                <div class="text-[10px] text-secondary">Final mockup image</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─── REFLECTION ─── -->
+      <section class="section py-24" id="reflection">
+        <div class="text-xs font-bold uppercase tracking-widest text-accent mb-6 gs-child">Reflection</div>
+        <h2 class="font-display text-2xl lg:text-[1.75rem] font-semibold leading-snug mb-8 max-w-xl xl:max-w-2xl gs-child">What I Learned</h2>
+        <blockquote class="font-display text-lg lg:text-xl font-medium leading-relaxed my-10 pl-6 border-l-[3px] border-accent gs-child relative">
+          Good product design is about designing relationships.
+        </blockquote>
+
+        <div class="my-10 grid grid-cols-1 md:grid-cols-2 gap-4 gs-child">
+          <div class="flex items-start gap-3 p-4 rounded-xl bg-accent/5 border border-accent/10">
+            <div class="w-6 h-6 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="text-xs text-secondary leading-relaxed"><strong class="text-primary">Conflict → Collaboration</strong> — I aligned Engineering's need for "logic" with Design's need for "empathy" by building a shared Tone Framework they could both contribute to.</div>
+          </div>
+          <div class="flex items-start gap-3 p-4 rounded-xl bg-accent/5 border border-accent/10">
+            <div class="w-6 h-6 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="text-xs text-secondary leading-relaxed"><strong class="text-primary">Rituals over Features</strong> — Success wasn't about adding more tools, but refining the daily ritual of journaling to be emotionally safe. A smaller, warmer feature set won over a larger, colder one.</div>
+          </div>
+        </div>
+
+        <p class="text-base text-secondary leading-loose max-w-xl xl:max-w-2xl gs-child">This project taught me that the best AI products don't just process language — they <strong class="text-primary font-medium">understand context, respect emotion, and create space for human vulnerability</strong>.</p>
+      </section>
+
+      <!-- Footer -->
+      <footer class="py-16 border-t border-gray-200 gs-child">
+        <div class="flex items-center justify-between mb-8">
+          <div>
+            <div class="font-display text-lg font-semibold mb-1">Lepal.ai Case Study</div>
+            <div class="text-xs text-secondary">Lead Product Designer · 0 → 1 Design</div>
+          </div>
+          <a href="#hero" class="inline-flex items-center gap-2 text-xs text-secondary hover:text-accent transition-colors no-underline group bg-surface rounded-full px-4 py-2 border border-gray-200 hover:border-accent/30">
+            <span>Back to top</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-hover:-translate-y-0.5 transition-transform"><path d="M18 15l-6-6-6 6"/></svg>
+          </a>
+        </div>
+        <div class="flex items-center gap-6 text-xs text-secondary/60">
+          <span>2024</span>
+          <span class="w-px h-3 bg-gray-200"></span>
+          <span>Lepal.ai · AI Wellness · Gen Z</span>
+        </div>
+      </footer>
+
+    </div>
+  </div>
+</div>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+// ─── Scroll progress ───
+gsap.to('.scroll-progress', {
+  scaleX: 1, ease: 'none',
+  scrollTrigger: { trigger: 'body', start: 'top top', end: 'bottom bottom', scrub: 0.3 }
+});
+
+// ─── Hero entrance ───
+const heroTl = gsap.timeline({ defaults: { ease: 'power3.out' }});
+heroTl
+  .fromTo('#hero-light', { y: -40 }, { y: 0, duration: 2, ease: 'power2.out' })
+  .fromTo('.hero-badge', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.8, stagger: 0.12 }, '-=0.8')
+  .fromTo('.hero-subtitle', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.7, stagger: 0.1 }, '-=0.5')
+  .fromTo('.meta-group', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6, stagger: 0.12 }, '-=0.4');
+
+gsap.to('#scroll-arrow', { y: 5, duration: 1.2, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+gsap.to('#hero-light', { y: 150, opacity: 0, ease: 'none', scrollTrigger: { trigger: '#hero', start: '20% top', end: 'bottom top', scrub: 1 }});
+
+// ─── TOC ───
+const toc = document.querySelector('.toc');
+ScrollTrigger.create({
+  trigger: '.main-body', start: 'top 60%',
+  onEnter: () => gsap.to(toc, { opacity: 1, x: 0, visibility: 'visible', duration: 0.5, ease: 'power2.out' }),
+  onLeaveBack: () => gsap.to(toc, { opacity: 0, x: -16, duration: 0.35, ease: 'power2.in', onComplete: () => { toc.style.visibility = 'hidden'; } })
+});
+function setActiveToc(id) {
+  document.querySelectorAll('.toc-link').forEach(l => l.classList.remove('active'));
+  const link = document.querySelector(`.toc-link[data-section="${id}"]`);
+  if (link) link.classList.add('active');
+}
+document.querySelectorAll('.section').forEach(sec => {
+  ScrollTrigger.create({
+    trigger: sec, start: 'top 50%', end: 'bottom 50%',
+    onEnter: () => setActiveToc(sec.id),
+    onEnterBack: () => setActiveToc(sec.id),
+  });
+});
+
+// ─── Section stagger reveals ───
+document.querySelectorAll('.section').forEach(section => {
+  const children = section.querySelectorAll(':scope > .gs-child, :scope > div > .gs-child, :scope > div > div > .gs-child');
+  if (!children.length) return;
+  gsap.fromTo(children,
+    { opacity: 0, y: 30 },
+    { opacity: 1, y: 0, duration: 0.65, stagger: 0.08, ease: 'power3.out',
+      scrollTrigger: { trigger: section, start: 'top 80%' }
+    }
+  );
+});
+
+// ─── Number counter ───
+function animateCounter(el) {
+  const target = parseFloat(el.dataset.target);
+  const prefix = el.dataset.prefix || '';
+  const suffix = el.dataset.suffix || '';
+  const obj = { val: 0 };
+  gsap.to(obj, {
+    val: target, duration: 1.5, ease: 'power2.out',
+    onUpdate: () => { el.textContent = prefix + Math.round(obj.val) + suffix; }
+  });
+}
+document.querySelectorAll('.main-body .stat-number').forEach(el => {
+  ScrollTrigger.create({ trigger: el, start: 'top 85%', once: true, onEnter: () => animateCounter(el) });
+});
+
+// ─── Section divider icons ───
+gsap.utils.toArray('.section-icon').forEach(icon => {
+  gsap.fromTo(icon, { opacity: 0, rotation: -90, scale: 0.5 },
+    { opacity: 1, rotation: 0, scale: 1, duration: 0.6, ease: 'back.out(2)', scrollTrigger: { trigger: icon, start: 'top 90%' } });
+});
+
+// ═══════════════════════════════════════════
+// INTERACTION 1: 72-Hour Timeline Animation
+// ═══════════════════════════════════════════
+(function(){
+  const fill = document.getElementById('timeline-fill');
+  const entries = document.querySelectorAll('.timeline-entry');
+  if(!fill || !entries.length) return;
+  ScrollTrigger.create({
+    trigger: '#timeline-fill', start: 'top 80%', once: true,
+    onEnter: () => {
+      fill.style.height = '100%';
+      entries.forEach((entry, i) => {
+        gsap.to(entry, { opacity: entry.classList.contains('opacity-40') ? 0.4 : 1, x: 0, duration: 0.6, delay: i * 0.4, ease: 'power3.out' });
+      });
+    }
+  });
+})();
+
+// ═══════════════════════════════════════════
+// INTERACTION 2: Live Emotion Classifier
+// ═══════════════════════════════════════════
+(function(){
+  const input = document.getElementById('classifier-input');
+  const btn = document.getElementById('classifier-btn');
+  const result = document.getElementById('classifier-result');
+  if(!input || !btn) return;
+
+  const moods = {
+    anxious: {
+      keywords: ['anxious','anxiety','worried','stress','stressed','nervous','overwhelm','wiped','exhausted','tired','drained','panic','scared','fear','tense','pressure','deadline'],
+      emoji: '😰', state: 'Anxious', tone: 'Calm & Validating',
+      bg: 'bg-amber-50', border: 'border-amber-200', textColor: 'text-amber-700',
+      structure: 'Acknowledge emotion → Tiny step → Soft close',
+      markers: 'Short sentences, minimal exclamations, gentle language',
+      response: "That sounds really exhausting. It's okay to feel drained — you don't have to push through right now. Want to just sit with this for a moment?"
+    },
+    sad: {
+      keywords: ['sad','down','depressed','lonely','crying','cry','hurt','lost','empty','hopeless','broken','grief','miss','pain','unhappy','rough'],
+      emoji: '😢', state: 'Sad', tone: 'Warm & Gentle',
+      bg: 'bg-blue-50', border: 'border-blue-200', textColor: 'text-blue-700',
+      structure: 'Validate feelings → Sit with them → Gentle invitation',
+      markers: 'Warm language, no silver-lining, patient pacing',
+      response: "I hear you. Some days are just heavy, and that's okay. You don't need to fix anything right now. I'm here if you want to talk or just want some company."
+    },
+    positive: {
+      keywords: ['great','amazing','happy','excited','good','wonderful','fantastic','awesome','love','proud','celebrate','promotion','won','success','best','accomplished','workout','achievement'],
+      emoji: '😊', state: 'Positive', tone: 'Celebratory & Affirming',
+      bg: 'bg-green-50', border: 'border-green-200', textColor: 'text-green-700',
+      structure: 'Mirror excitement → Affirm → Explore the win',
+      markers: 'Energetic language, affirmation, curiosity about details',
+      response: "That's incredible! You should feel really proud of yourself. Tell me more — what was the moment that felt best?"
+    },
+    neutral: {
+      keywords: ['okay','fine','normal','nothing','meh','alright','usual','regular','whatever','just','ordinary'],
+      emoji: '😐', state: 'Neutral', tone: 'Curious & Open',
+      bg: 'bg-gray-50', border: 'border-gray-200', textColor: 'text-gray-700',
+      structure: 'Show interest → Open-ended question → Explore gently',
+      markers: 'Warm curiosity, open questions, no assumptions',
+      response: "Thanks for sharing. Sometimes \"normal\" days have interesting layers. What's been on your mind today, even just a little?"
+    }
+  };
+
+  function classify(text) {
+    const lower = text.toLowerCase();
+    let bestMood = 'neutral';
+    let bestScore = 0;
+    for (const [mood, data] of Object.entries(moods)) {
+      let score = 0;
+      data.keywords.forEach(kw => { if (lower.includes(kw)) score++; });
+      if (score > bestScore) { bestScore = score; bestMood = mood; }
+    }
+    return moods[bestMood];
+  }
+
+  function runClassifier() {
+    const text = input.value.trim();
+    if (!text) return;
+    const mood = classify(text);
+    result.classList.remove('hidden');
+
+    // Reset all steps
+    document.querySelectorAll('#classifier-result [id^="cr-step"], .cr-arrow, #cr-tone-card').forEach(el => {
+      el.style.opacity = '0';
+    });
+
+    // Animate pipeline step by step
+    const truncated = text.length > 30 ? text.substring(0, 30) + '...' : text;
+    document.getElementById('cr-input-text').textContent = truncated;
+    document.getElementById('cr-mood-tag').textContent = mood.emoji + ' ' + mood.state;
+    document.getElementById('cr-tone-text').textContent = mood.tone;
+
+    gsap.to('#cr-step1', { opacity: 1, duration: 0.3, delay: 0.1 });
+    gsap.to(document.querySelectorAll('.cr-arrow')[0], { opacity: 1, duration: 0.2, delay: 0.4 });
+    gsap.to('#cr-step2', { opacity: 1, duration: 0.3, delay: 0.6 });
+    gsap.to(document.querySelectorAll('.cr-arrow')[1], { opacity: 1, duration: 0.2, delay: 0.9 });
+    gsap.to('#cr-step3', { opacity: 1, duration: 0.3, delay: 1.1 });
+    gsap.to(document.querySelectorAll('.cr-arrow')[2], { opacity: 1, duration: 0.2, delay: 1.4 });
+    gsap.to('#cr-step4', { opacity: 1, duration: 0.3, delay: 1.6 });
+
+    // Tone card
+    const card = document.getElementById('cr-tone-card');
+    card.className = 'rounded-xl p-5 border opacity-0 ' + mood.bg + ' ' + mood.border;
+    document.getElementById('cr-emoji').textContent = mood.emoji;
+    document.getElementById('cr-state-label').textContent = mood.state;
+    document.getElementById('cr-state-label').className = 'text-xs font-bold uppercase tracking-wider ' + mood.textColor;
+    document.getElementById('cr-tone-label').textContent = mood.tone;
+    document.getElementById('cr-structure').textContent = mood.structure;
+    document.getElementById('cr-markers').textContent = mood.markers;
+    document.getElementById('cr-response').textContent = mood.response;
+    gsap.to(card, { opacity: 1, duration: 0.5, delay: 2 });
+  }
+
+  btn.addEventListener('click', runClassifier);
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') runClassifier(); });
+
+  // Quick try buttons
+  document.querySelectorAll('.classifier-try').forEach(tryBtn => {
+    tryBtn.addEventListener('click', () => {
+      input.value = tryBtn.dataset.text;
+      runClassifier();
+    });
+  });
+})();
+
+// ═══════════════════════════════════════════
+// INTERACTION 3: Response Speed Slider
+// ═══════════════════════════════════════════
+(function(){
+  const slider = document.getElementById('speed-slider');
+  const label = document.getElementById('speed-label');
+  const dots = document.getElementById('speed-dots');
+  const response = document.getElementById('speed-response');
+  const replay = document.getElementById('speed-replay');
+  if(!slider) return;
+
+  function getSpeedLabel(val) {
+    if (val < 0.3) return '0s — Instant (robotic)';
+    if (val < 0.8) return val.toFixed(1) + 's — Quick';
+    if (val < 1.5) return val.toFixed(1) + 's — Natural';
+    if (val < 2.5) return val.toFixed(1) + 's — Thoughtful';
+    return val.toFixed(1) + 's — Deeply thoughtful';
+  }
+
+  slider.addEventListener('input', () => {
+    label.textContent = getSpeedLabel(parseFloat(slider.value));
+  });
+
+  function playDemo() {
+    dots.classList.remove('hidden');
+    response.classList.add('hidden');
+    const delay = parseFloat(slider.value) * 1000;
+    if (delay < 100) {
+      dots.classList.add('hidden');
+      response.classList.remove('hidden');
+    } else {
+      setTimeout(() => {
+        dots.classList.add('hidden');
+        response.classList.remove('hidden');
+        gsap.fromTo(response, { opacity: 0, y: 5 }, { opacity: 1, y: 0, duration: 0.3 });
+      }, delay);
+    }
+  }
+
+  replay.addEventListener('click', playDemo);
+
+  // Auto-play on scroll
+  ScrollTrigger.create({
+    trigger: '#speed-slider', start: 'top 80%', once: true,
+    onEnter: () => { setTimeout(playDemo, 500); }
+  });
+})();
+
+// ═══════════════════════════════════════════
+// INTERACTION 4: First-run vs Returning Toggle
+// ═══════════════════════════════════════════
+// INTERACTION 4: FAQ "i" Button Toggle
+// ═══════════════════════════════════════════
+(function(){
+  const btn = document.getElementById('faq-i-btn');
+  const panel = document.getElementById('faq-panel');
+  if(!btn || !panel) return;
+
+  let isOpen = true; // FAQ is visible by default
+
+  btn.addEventListener('click', () => {
+    isOpen = !isOpen;
+    if (isOpen) {
+      panel.style.maxHeight = '300px';
+      panel.style.opacity = '1';
+      panel.style.paddingTop = '16px';
+      panel.style.paddingBottom = '16px';
+      btn.classList.add('bg-accent','text-white');
+      btn.classList.remove('bg-gray-100','text-secondary');
+    } else {
+      panel.style.maxHeight = '0';
+      panel.style.opacity = '0';
+      panel.style.paddingTop = '0';
+      panel.style.paddingBottom = '0';
+      btn.classList.remove('bg-accent','text-white');
+      btn.classList.add('bg-gray-100','text-secondary');
+    }
+  });
+})();
+
+// ═══════════════════════════════════════════
+// INTERACTION 5: Chat Mood Simulator
+// ═══════════════════════════════════════════
+(function(){
+  const messages = document.getElementById('chat-messages');
+  const badge = document.getElementById('chat-mood-badge');
+  const btns = document.querySelectorAll('.chat-mood-btn');
+  if(!messages) return;
+
+  const conversations = {
+    anxious: {
+      user: "I'm wiped after back-to-back labs. Zero energy.",
+      oldResponse: "Got it! Let's do a deep reflection with 5 questions to boost productivity!",
+      newResponse: "That sounds really exhausting. Back-to-back labs are no joke. You don't have to do anything right now — even just showing up here took energy.",
+      moodColor: 'bg-amber-100 text-amber-700',
+      moodLabel: '😰 Anxious → Calm & Validating'
+    },
+    sad: {
+      user: "I feel really alone today. Nobody checked in on me.",
+      oldResponse: "Try reaching out to friends! Here are 5 ways to build social connections.",
+      newResponse: "I'm sorry you're feeling that way. Feeling unseen is really painful. I'm here with you right now, and I'm glad you shared that.",
+      moodColor: 'bg-blue-100 text-blue-700',
+      moodLabel: '😢 Sad → Warm & Gentle'
+    },
+    neutral: {
+      user: "Just had a regular day. Nothing special happened.",
+      oldResponse: "Great! Let's set some goals for tomorrow to make it more productive!",
+      newResponse: "Thanks for checking in. Sometimes ordinary days have quiet moments worth noticing. Was there anything, even small, that caught your attention today?",
+      moodColor: 'bg-gray-200 text-gray-700',
+      moodLabel: '😐 Neutral → Curious & Open'
+    },
+    positive: {
+      user: "I just finished my workout and got a promotion today!!",
+      oldResponse: "Nice! Don't forget to log your exercise. Here's a habit tracker template.",
+      newResponse: "That's amazing!! A workout AND a promotion?! You're absolutely crushing it. Tell me more — how did the promotion happen?",
+      moodColor: 'bg-green-100 text-green-700',
+      moodLabel: '😊 Positive → Celebratory'
+    }
+  };
+
+  btns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const mood = btn.dataset.mood;
+      const conv = conversations[mood];
+
+      // Clear messages
+      messages.innerHTML = '';
+
+      // User message
+      const userDiv = document.createElement('div');
+      userDiv.className = 'flex justify-end mb-3';
+      userDiv.innerHTML = '<div class="bg-accent text-white text-sm px-4 py-2.5 rounded-2xl rounded-br-md max-w-[80%]">' + conv.user + '</div>';
+      messages.appendChild(userDiv);
+
+      // Show badge
+      badge.className = 'ml-auto text-[10px] rounded-full px-2.5 py-1 ' + conv.moodColor;
+      badge.textContent = conv.moodLabel;
+      badge.classList.remove('hidden');
+
+      // Old response (crossed out)
+      setTimeout(() => {
+        const oldDiv = document.createElement('div');
+        oldDiv.className = 'flex items-start gap-2 mb-2 opacity-0';
+        oldDiv.innerHTML = '<div class="w-7 h-7 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></div><div><div class="text-[9px] text-red-400 font-bold uppercase tracking-wider mb-1">Old Response (generic)</div><div class="bg-red-50 text-sm px-4 py-2.5 rounded-2xl rounded-bl-md text-red-400 line-through border border-red-100">' + conv.oldResponse + '</div></div>';
+        messages.appendChild(oldDiv);
+        gsap.to(oldDiv, { opacity: 1, duration: 0.4 });
+      }, 500);
+
+      // Typing dots
+      setTimeout(() => {
+        const dotsDiv = document.createElement('div');
+        dotsDiv.id = 'chat-typing';
+        dotsDiv.className = 'flex items-start gap-2 mb-2';
+        dotsDiv.innerHTML = '<div class="w-7 h-7 rounded-full bg-violet-100 flex items-center justify-center flex-shrink-0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div><div class="bg-gray-100 rounded-2xl rounded-bl-md px-4 py-3 inline-flex items-center gap-1.5"><div class="typing-dot w-2 h-2 rounded-full bg-accent/60"></div><div class="typing-dot w-2 h-2 rounded-full bg-accent/60"></div><div class="typing-dot w-2 h-2 rounded-full bg-accent/60"></div></div>';
+        messages.appendChild(dotsDiv);
+      }, 1200);
+
+      // New response
+      setTimeout(() => {
+        const typing = document.getElementById('chat-typing');
+        if (typing) typing.remove();
+        const newDiv = document.createElement('div');
+        newDiv.className = 'flex items-start gap-2 opacity-0';
+        newDiv.innerHTML = '<div class="w-7 h-7 rounded-full bg-violet-100 flex items-center justify-center flex-shrink-0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div><div><div class="text-[9px] text-accent font-bold uppercase tracking-wider mb-1">New Response (emotion-aware)</div><div class="bg-accent/10 text-sm px-4 py-2.5 rounded-2xl rounded-bl-md border border-accent/20">' + conv.newResponse + '</div></div>';
+        messages.appendChild(newDiv);
+        gsap.to(newDiv, { opacity: 1, duration: 0.5 });
+        messages.scrollTop = messages.scrollHeight;
+      }, 3000);
+    });
+  });
+})();
+
+// ═══════════════════════════════════════════
+// Summary Carousel
+// ═══════════════════════════════════════════
+(function(){
+  const section = document.getElementById('quick-summary-section');
+  const glow = document.getElementById('summary-glow');
+  if(section && glow) {
+    section.addEventListener('mouseenter', () => { glow.style.opacity = '1'; });
+    section.addEventListener('mouseleave', () => { glow.style.opacity = '0'; });
+    section.addEventListener('mousemove', e => {
+      const r = section.getBoundingClientRect();
+      glow.style.left = (e.clientX - r.left) + 'px';
+      glow.style.top = (e.clientY - r.top) + 'px';
+    });
+  }
+
+  ScrollTrigger.create({
+    trigger: '#quick-summary-section', start: 'top 75%', once: true,
+    onEnter: () => {
+      gsap.fromTo('.summary-float-card',
+        { opacity: 0, y: 30, scale: 0.8 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.7, stagger: 0.15, ease: 'back.out(1.7)' }
+      );
+      document.querySelectorAll('.summary-float-card').forEach((card, i) => {
+        gsap.to(card, { y: '-=8', duration: 2 + i * 0.4, repeat: -1, yoyo: true, ease: 'sine.inOut', delay: i * 0.3 });
+      });
+    }
+  });
+
+  const mbtn = document.querySelector('.summary-magnetic');
+  if(mbtn) {
+    mbtn.addEventListener('mousemove', e => {
+      const r = mbtn.getBoundingClientRect();
+      const x = (e.clientX - r.left - r.width / 2) * 0.15;
+      const y = (e.clientY - r.top - r.height / 2) * 0.15;
+      mbtn.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+    });
+    mbtn.addEventListener('mouseleave', () => {
+      gsap.to(mbtn, { x: 0, y: 0, duration: 0.4, ease: 'elastic.out(1, 0.4)' });
+      mbtn.style.transform = '';
+    });
+  }
+
+  const btn = document.getElementById('summary-btn');
+  const overlay = document.getElementById('summary-overlay');
+  const backdrop = document.getElementById('summary-backdrop');
+  const closeBtn = document.getElementById('summary-close');
+  const slides = document.getElementById('summary-slides');
+  const prevBtn = document.getElementById('summary-prev');
+  const nextBtn = document.getElementById('summary-next');
+  const dots = document.querySelectorAll('.summary-dot');
+  if(!btn || !overlay) return;
+
+  let current = 0;
+  const total = dots.length;
+
+  function goTo(i) {
+    current = Math.max(0, Math.min(total - 1, i));
+    slides.style.transform = 'translateX(-' + (current * 100) + '%)';
+    dots.forEach((d, idx) => { d.style.backgroundColor = idx === current ? '#8b5cf6' : '#d1d5db'; });
+    prevBtn.disabled = current === 0;
+    nextBtn.style.opacity = current === total - 1 ? '0.3' : '1';
+  }
+
+  function openSummary() {
+    overlay.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    goTo(0);
+    gsap.fromTo('#summary-card', { opacity: 0, scale: 0.92, y: 40 }, { opacity: 1, scale: 1, y: 0, duration: 0.4, ease: 'power3.out' });
+  }
+
+  function closeSummary() {
+    gsap.to('#summary-card', { opacity: 0, scale: 0.95, y: 20, duration: 0.25, ease: 'power2.in', onComplete: () => {
+      overlay.classList.add('hidden');
+      document.body.style.overflow = '';
+    }});
+  }
+
+  btn.addEventListener('click', openSummary);
+  closeBtn.addEventListener('click', closeSummary);
+  backdrop.addEventListener('click', closeSummary);
+  prevBtn.addEventListener('click', () => goTo(current - 1));
+  nextBtn.addEventListener('click', () => goTo(current + 1));
+  dots.forEach((dot, idx) => { dot.addEventListener('click', () => goTo(idx)); });
+  document.addEventListener('keydown', e => {
+    if(overlay.classList.contains('hidden')) return;
+    if(e.key === 'Escape') closeSummary();
+    if(e.key === 'ArrowRight') goTo(current + 1);
+    if(e.key === 'ArrowLeft') goTo(current - 1);
+  });
+})();
+</script>
+
+</body>
+</html>

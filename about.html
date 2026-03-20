@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jiho Kim — 5min Guide for Recruiters</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+  :root{
+    --bg:#ffffff;
+    --ink:#111;
+    --secondary:#555;
+    --muted:#999;
+    --border:rgba(0,0,0,.06);
+    --dark-bg:#111;
+    --dark-surface:#1a1a1a;
+    --dark-ink:#e5e5e5;
+    --dark-muted:#666;
+    --accent:#007AFF;
+  }
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  *{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+  html{scroll-behavior:smooth}
+  body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--ink);overflow-x:hidden}
+
+  /* ── Reading Progress Bar ── */
+  .scroll-progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,#007AFF,#5856D6,#007AFF);background-size:200% 100%;animation:gradient-shift 3s ease infinite;z-index:200;transform-origin:left;transform:scaleX(0);width:100%}
+  @keyframes gradient-shift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+
+  /* ── Nav (Floating Pill) ── */
+  .site-nav{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:100;height:52px;background:rgba(255,255,255,.55);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);border:1px solid rgba(255,255,255,.45);border-radius:100px;transition:background .35s,border-color .35s,box-shadow .35s,transform .35s,opacity .35s;box-shadow:0 0 0 0.5px rgba(0,0,0,.04),0 4px 24px rgba(0,0,0,.06)}
+  .site-nav.nav-hidden{transform:translateX(-50%) translateY(-80px);opacity:0}
+  .nav-inner{display:flex;align-items:center;justify-content:center;height:100%;padding:0 8px}
+  .nav-icons{display:flex;gap:4px;align-items:center}
+  .nav-divider{width:1px;height:20px;background:rgba(0,0,0,.1);margin:0 6px}
+  .nav-icon{position:relative;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--muted);text-decoration:none;transition:all .2s}
+  .nav-icon:hover{color:var(--ink);background:rgba(0,0,0,.05)}
+  .nav-icon i{font-size:20px;line-height:1}
+  .nav-icon.active{background:rgba(0,0,0,.06);color:var(--ink)}
+  .nav-tip{position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%) translateY(-4px);opacity:0;pointer-events:none;font-size:11px;font-weight:500;background:var(--ink);color:var(--bg);padding:5px 12px;border-radius:6px;white-space:nowrap;transition:opacity .2s,transform .2s;letter-spacing:.01em}
+  .nav-tip::after{content:'';position:absolute;bottom:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-bottom-color:var(--ink)}
+  .nav-icon:hover .nav-tip{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  /* ── Page Container ── */
+  .page{max-width:800px;margin:0 auto;padding:0 32px}
+
+  /* ── Section 2: Hero / Intro ── */
+  .hero{padding:140px 0 64px;text-align:center}
+  .hero-avatar{width:96px;height:96px;border-radius:12px;overflow:hidden;margin:0 auto 28px;box-shadow:0 4px 24px rgba(0,0,0,.12)}
+  .hero-avatar img{width:100%;height:100%;object-fit:cover;display:block}
+  .hero-name{font-size:clamp(32px,5vw,42px);font-weight:700;letter-spacing:-.04em;line-height:1.1;margin-bottom:8px}
+  .hero-tagline{font-family:'Instrument Serif',serif;font-style:italic;font-size:clamp(18px,2.5vw,22px);color:var(--secondary);line-height:1.4;margin-bottom:20px}
+  .hero-badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;color:var(--muted);background:rgba(0,0,0,.03);padding:6px 14px;border-radius:100px;margin-bottom:28px}
+  .hero-badge i{font-size:14px}
+  .hero-ctas{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:6px;font-family:inherit;font-size:13px;font-weight:500;padding:10px 24px;border-radius:100px;cursor:pointer;transition:all .2s;text-decoration:none;border:1px solid rgba(0,0,0,.12)}
+  .btn:active{transform:scale(.97)}
+  .btn-primary{color:#fff;background:var(--accent);border-color:var(--accent)}
+  .btn-primary:hover{background:#0066DD;border-color:#0066DD}
+  .btn-outline{color:var(--ink);background:transparent}
+  .btn-outline:hover{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.22)}
+  .btn i{font-size:16px}
+
+  /* ── Section 3: TL;DR Strip ── */
+  .tldr{padding:0 0 64px}
+  .tldr-row{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
+  .tldr-pill{font-size:13px;font-weight:500;color:var(--secondary);padding:8px 18px;border-radius:100px;border:1px solid var(--border);background:rgba(0,0,0,.015);white-space:nowrap}
+
+  /* ── Section 4: Skills & Tools ── */
+  .skills{padding:64px 0;border-top:1px solid var(--border)}
+  .skills-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+  .skills-philosophy{font-size:15px;line-height:1.7;color:var(--secondary)}
+  .skills-philosophy strong{color:var(--ink);font-weight:600}
+  .skill-category{margin-bottom:24px}
+  .skill-category:last-child{margin-bottom:0}
+  .skill-cat-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:10px}
+  .skill-tags{display:flex;flex-wrap:wrap;gap:6px}
+  .skill-tag{font-size:12px;font-weight:500;padding:5px 12px;border-radius:100px;border:1px solid var(--border);color:var(--secondary);background:rgba(0,0,0,.015);transition:all .2s}
+  .skill-tag:hover{border-color:rgba(0,0,0,.15);color:var(--ink)}
+
+  /* ── Section 5: Experience Timeline ── */
+  .timeline{padding:64px 0;border-top:1px solid var(--border)}
+  .timeline-heading{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:32px}
+  .timeline-item{display:grid;grid-template-columns:140px 1fr;gap:24px;padding:20px 0;border-bottom:1px solid var(--border)}
+  .timeline-item:last-child{border-bottom:none}
+  .timeline-date{font-size:13px;color:var(--muted);padding-top:2px;white-space:nowrap}
+  .timeline-role{font-size:16px;font-weight:600;letter-spacing:-.02em;color:var(--ink);line-height:1.3;margin-bottom:2px}
+  .timeline-company{font-size:13px;color:var(--muted);margin-bottom:4px}
+  .timeline-desc{font-size:14px;color:var(--secondary);line-height:1.55}
+  .current-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;color:#16a34a;background:#DDFBEE;padding:3px 10px;border-radius:100px;margin-left:8px;vertical-align:middle}
+  .current-dot{width:6px;height:6px;border-radius:50%;background:#16a34a;animation:pulse-dot 2s ease-in-out infinite}
+  @keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.7)}}
+
+  /* ── Section 6: Featured Work ── */
+  .featured{padding:64px 0;border-top:1px solid var(--border)}
+  .featured-heading{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:32px}
+  .featured-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  .featured-card{text-decoration:none;color:inherit;display:block;border-radius:14px;overflow:hidden;border:1px solid var(--border);transition:transform .45s cubic-bezier(.19,1,.22,1),box-shadow .45s ease}
+  .featured-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,.1)}
+  .featured-thumb{aspect-ratio:3/2;overflow:hidden;position:relative}
+  .featured-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .65s cubic-bezier(.19,1,.22,1)}
+  .featured-card:hover .featured-thumb img{transform:scale(1.04)}
+  .featured-info{padding:16px 18px 18px}
+  .featured-name{font-size:15px;font-weight:600;letter-spacing:-.02em;color:var(--ink);margin-bottom:4px}
+  .featured-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+  .featured-tag{font-size:10px;font-weight:500;padding:3px 10px;border-radius:100px;border:1px solid var(--border);color:var(--muted);letter-spacing:.02em}
+  .featured-stat{font-size:12px;font-weight:600;color:var(--accent)}
+
+  /* ── Section 7: Footer / CTA ── */
+  .site-footer{background:var(--dark-bg);padding:72px 0 48px;border-top:1px solid rgba(255,255,255,.04)}
+  .footer-inner{max-width:800px;margin:0 auto;padding:0 32px}
+  .footer-quote{font-family:'Instrument Serif',serif;font-style:italic;font-size:clamp(22px,3vw,30px);line-height:1.35;color:var(--dark-ink);margin-bottom:36px;max-width:620px}
+  .footer-ctas{display:flex;gap:10px;margin-bottom:48px;flex-wrap:wrap}
+  .btn-dark{color:var(--dark-ink);border-color:rgba(255,255,255,.12);background:transparent}
+  .btn-dark:hover{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.22)}
+  .btn-dark-primary{color:#fff;background:var(--accent);border-color:var(--accent)}
+  .btn-dark-primary:hover{background:#0066DD;border-color:#0066DD}
+  .footer-copy{font-size:10px;font-weight:400;color:rgba(255,255,255,.15);letter-spacing:.02em}
+
+  /* ── Scroll Reveal ── */
+  .sr{opacity:0;transform:translateY(16px)}
+  .hero-enter{opacity:0;transform:translateY(24px)}
+
+  /* ── Responsive ── */
+  @media(max-width:768px){
+    .page{padding:0 20px}
+    .hero{padding:110px 0 48px}
+    .skills-grid{grid-template-columns:1fr;gap:32px}
+    .timeline-item{grid-template-columns:1fr;gap:4px}
+    .timeline-date{padding-top:0}
+    .featured-grid{grid-template-columns:1fr}
+    .footer-inner{padding:0 20px}
+    .site-nav .nav-icon{width:34px;height:34px}
+    .hero-avatar{width:72px;height:72px}
+  }
+</style>
+</head>
+<body>
+
+<!-- Reading Progress -->
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- Nav -->
+<nav class="site-nav" id="mainNav">
+  <div class="nav-inner">
+    <div class="nav-icons">
+      <a href="portfolio.html" class="nav-icon"><i class="ph ph-house"></i><span class="nav-tip">Home</span></a>
+      <a href="portfolio.html#ar-lab" class="nav-icon"><i class="ph ph-cube"></i><span class="nav-tip">AR Lab</span></a>
+      <a href="portfolio.html#ai-lab" class="nav-icon"><i class="ph ph-flask"></i><span class="nav-tip">AI Lab</span></a>
+      <a href="about.html" class="nav-icon active"><i class="ph ph-user"></i><span class="nav-tip">5min Guide</span></a>
+      <span class="nav-divider"></span>
+      <a href="#" class="nav-icon"><i class="ph ph-file-text"></i><span class="nav-tip">Resume</span></a>
+      <a href="#" class="nav-icon" target="_blank" rel="noopener"><i class="ph ph-linkedin-logo"></i><span class="nav-tip">LinkedIn</span></a>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero / Intro -->
+<section class="hero">
+  <div class="page">
+    <div class="hero-avatar hero-enter">
+      <img src="landing+imgs/image 2020.png" alt="Jiho Kim">
+    </div>
+    <h1 class="hero-name hero-enter">Jiho Kim</h1>
+    <p class="hero-tagline hero-enter">The designer who turns technical ambiguity into 'wow, that was easy'</p>
+    <div class="hero-badge hero-enter"><i class="ph ph-clock"></i> 5 min read</div>
+    <div class="hero-ctas hero-enter">
+      <a href="#" class="btn btn-primary"><i class="ph ph-file-arrow-down"></i> Download Resume</a>
+      <a href="#" class="btn btn-outline" target="_blank" rel="noopener"><i class="ph ph-linkedin-logo"></i> LinkedIn</a>
+    </div>
+  </div>
+</section>
+
+<!-- TL;DR Strip -->
+<section class="tldr">
+  <div class="page">
+    <div class="tldr-row sr">
+      <span class="tldr-pill">4 Products Shipped</span>
+      <span class="tldr-pill">AI + XR Focus</span>
+      <span class="tldr-pill">UW MHCID '24</span>
+      <span class="tldr-pill">0 Defects (Sidewalk)</span>
+    </div>
+  </div>
+</section>
+
+<!-- Skills & Tools -->
+<section class="skills">
+  <div class="page">
+    <div class="skills-grid">
+      <div class="sr">
+        <p class="skills-philosophy">
+          I believe <strong>great design is invisible</strong> — it shows up as fewer support tickets, shorter onboarding, and users who say <em>"that was easy."</em>
+          <br><br>
+          My sweet spot is the intersection of <strong>AI, spatial computing, and product design</strong>. I prototype fast, validate early, and ship polished interfaces that respect both technical constraints and human behavior.
+        </p>
+      </div>
+      <div>
+        <div class="skill-category sr">
+          <p class="skill-cat-label">Design</p>
+          <div class="skill-tags">
+            <span class="skill-tag">Product Design</span>
+            <span class="skill-tag">Interaction Design</span>
+            <span class="skill-tag">Design Systems</span>
+            <span class="skill-tag">Prototyping</span>
+            <span class="skill-tag">Visual Design</span>
+          </div>
+        </div>
+        <div class="skill-category sr">
+          <p class="skill-cat-label">AI / XR</p>
+          <div class="skill-tags">
+            <span class="skill-tag">AI UX</span>
+            <span class="skill-tag">LLM Integration</span>
+            <span class="skill-tag">AR/VR</span>
+            <span class="skill-tag">Spatial UI</span>
+            <span class="skill-tag">MediaPipe</span>
+          </div>
+        </div>
+        <div class="skill-category sr">
+          <p class="skill-cat-label">Research</p>
+          <div class="skill-tags">
+            <span class="skill-tag">User Research</span>
+            <span class="skill-tag">Usability Testing</span>
+            <span class="skill-tag">A/B Testing</span>
+            <span class="skill-tag">WCAG Audits</span>
+          </div>
+        </div>
+        <div class="skill-category sr">
+          <p class="skill-cat-label">Tools</p>
+          <div class="skill-tags">
+            <span class="skill-tag">Figma</span>
+            <span class="skill-tag">Unity</span>
+            <span class="skill-tag">ShapesXR</span>
+            <span class="skill-tag">Cursor AI</span>
+            <span class="skill-tag">Claude Code</span>
+            <span class="skill-tag">HTML/CSS/JS</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Experience Timeline -->
+<section class="timeline">
+  <div class="page">
+    <p class="timeline-heading sr">Experience</p>
+
+    <div class="timeline-item sr">
+      <div class="timeline-date">Nov 2024 — Present</div>
+      <div>
+        <p class="timeline-role">Product Designer &amp; Founder <span class="current-badge"><span class="current-dot"></span> Current</span></p>
+        <p class="timeline-company">Stealth AI Startup</p>
+        <p class="timeline-desc">Designed a multimodal video player with AI-powered content segmentation, voice/gesture controls, and in-context Q&A. Cut engineering handoff cycles by 50%.</p>
+      </div>
+    </div>
+
+    <div class="timeline-item sr">
+      <div class="timeline-date">Sep — Nov 2024</div>
+      <div>
+        <p class="timeline-role">Product Designer</p>
+        <p class="timeline-company">Lepal.ai</p>
+        <p class="timeline-desc">Designed native iOS/Android features for an AI wellness app. Increased user satisfaction 60% via micro-interactions. 15% lift in Day-7 retention through A/B-tested chat flows.</p>
+      </div>
+    </div>
+
+    <div class="timeline-item sr">
+      <div class="timeline-date">Mar — Aug 2024</div>
+      <div>
+        <p class="timeline-role">Product Designer</p>
+        <p class="timeline-company">TAP3D (XR Training)</p>
+        <p class="timeline-desc">Delivered AR onboarding for industrial engineers, reducing training time 30%. Led interaction design in Unity and ShapesXR with 8+ field engineer user tests.</p>
+      </div>
+    </div>
+
+    <div class="timeline-item sr">
+      <div class="timeline-date">Sep 2023 — Aug 2024</div>
+      <div>
+        <p class="timeline-role">Product Designer</p>
+        <p class="timeline-company">Project Sidewalk</p>
+        <p class="timeline-desc">Redesigned map navigation for a civic accessibility platform serving 11,000+ users. Built a WCAG 2.2 AA design system adopted across 3 teams — zero defects shipped.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Featured Work -->
+<section class="featured">
+  <div class="page">
+    <p class="featured-heading sr">Featured Work</p>
+    <div class="featured-grid">
+
+      <a class="featured-card sr" href="tap3d-case-study.html">
+        <div class="featured-thumb" style="background:#0f172a">
+          <img src="landing+imgs/tap_landing.png" alt="TAP3D">
+        </div>
+        <div class="featured-info">
+          <p class="featured-name">TAP</p>
+          <div class="featured-tags">
+            <span class="featured-tag">AI Design</span>
+            <span class="featured-tag">Enterprise SaaS</span>
+          </div>
+          <p class="featured-stat">9-month onboarding &rarr; cut by 40%</p>
+        </div>
+      </a>
+
+      <a class="featured-card sr" href="proxiplay-case-study.html">
+        <div class="featured-thumb" style="background:#0a0a0a">
+          <img src="landing+imgs/cheffy_landing.png" alt="Cheffy">
+        </div>
+        <div class="featured-info">
+          <p class="featured-name">Cheffy</p>
+          <div class="featured-tags">
+            <span class="featured-tag">Interaction</span>
+            <span class="featured-tag">Gesture</span>
+          </div>
+          <p class="featured-stat">3x faster hands-free tasks</p>
+        </div>
+      </a>
+
+      <a class="featured-card sr" href="myjournal-case-study.html">
+        <div class="featured-thumb" style="background:#0a0a0a">
+          <img src="landing+imgs/lepal_landing.png" alt="Lepal">
+        </div>
+        <div class="featured-info">
+          <p class="featured-name">Lepal</p>
+          <div class="featured-tags">
+            <span class="featured-tag">AI Design</span>
+            <span class="featured-tag">Emotional</span>
+          </div>
+          <p class="featured-stat">85% retention &middot; 2.4x engagement</p>
+        </div>
+      </a>
+
+      <a class="featured-card sr" href="sidewalk-case-study.html">
+        <div class="featured-thumb" style="background:#0a0a0a">
+          <img src="landing+imgs/sidewalk_landing.png" alt="Project Sidewalk">
+        </div>
+        <div class="featured-info">
+          <p class="featured-name">Project Sidewalk</p>
+          <div class="featured-tags">
+            <span class="featured-tag">Design System</span>
+            <span class="featured-tag">Civic Tech</span>
+          </div>
+          <p class="featured-stat">0 defects &middot; 12k+ labels mapped</p>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- Footer / CTA -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p class="footer-quote sr">Good design is invisible. Great design is felt.</p>
+    <div class="footer-ctas sr">
+      <a href="#" class="btn btn-dark-primary"><i class="ph ph-file-arrow-down"></i> Download Resume</a>
+      <a href="#" class="btn btn-dark" target="_blank" rel="noopener"><i class="ph ph-linkedin-logo"></i> LinkedIn</a>
+      <a href="portfolio.html" class="btn btn-dark"><i class="ph ph-arrow-left"></i> Back to Portfolio</a>
+    </div>
+    <span class="footer-copy sr">Made with Figma, Claude Code, and GSAP</span>
+  </div>
+</footer>
+
+<script>
+/* ======================================
+   GSAP — Scroll Reveal
+   ====================================== */
+gsap.registerPlugin(ScrollTrigger);
+
+gsap.utils.toArray('.sr').forEach(function(el,i){
+  gsap.to(el,{opacity:1,y:0,duration:.9,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 90%',once:true},delay:(i%4)*.06});
+});
+
+/* ======================================
+   NAV — Scroll hide / show
+   ====================================== */
+(function(){
+  var nav=document.getElementById('mainNav');
+  var lastY=window.scrollY;
+  var ticking=false;
+
+  window.addEventListener('scroll',function(){
+    if(!ticking){
+      requestAnimationFrame(function(){
+        var y=window.scrollY;
+        if(y>lastY&&y>80){
+          nav.classList.add('nav-hidden');
+        }else{
+          nav.classList.remove('nav-hidden');
+        }
+        lastY=y;
+        ticking=false;
+      });
+      ticking=true;
+    }
+  },{passive:true});
+})();
+
+/* ======================================
+   READING PROGRESS BAR
+   ====================================== */
+(function(){
+  var bar=document.getElementById('scrollProgress');
+  window.addEventListener('scroll',function(){
+    var h=document.documentElement.scrollHeight-window.innerHeight;
+    var p=h>0?window.scrollY/h:0;
+    bar.style.transform='scaleX('+p+')';
+  },{passive:true});
+})();
+
+/* ======================================
+   HERO STAGGER ENTRANCE
+   ====================================== */
+gsap.to('.hero-enter',{
+  opacity:1,y:0,duration:.8,ease:'power3.out',stagger:.12,delay:.15
+});
+</script>
+</body>
+</html>
