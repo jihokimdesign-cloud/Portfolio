@@ -4,10 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TAP3D: From Passive Lists to Proactive Agents</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
@@ -18,14 +15,11 @@ tailwind.config = {
     extend: {
       fontFamily: {
         display: ['"Plus Jakarta Sans"', 'sans-serif'],
-        body: ['"Plus Jakarta Sans"', 'sans-serif'],
-        serif: ['"Instrument Serif"', 'serif'],
-        hand: ['"Caveat"', 'cursive'],
+        body: ['"DM Sans"', 'sans-serif'],
       },
       colors: {
-        primary: '#111',
-        secondary: '#555',
-        muted: '#999',
+        primary: '#1a1a1a',
+        secondary: '#6b6b6b',
         accent: '#2563eb',
         surface: '#f5f5f5',
         highlight: '#e74c3c',
@@ -37,7 +31,7 @@ tailwind.config = {
 <style>
   * { -webkit-font-smoothing: antialiased; }
   html { scroll-behavior: smooth; }
-  body { font-family: 'Plus Jakarta Sans', sans-serif; }
+  body { font-family: 'DM Sans', sans-serif; }
 
   /* Typography refinements for sans-serif */
   .font-display { letter-spacing: -0.02em; }
@@ -191,62 +185,26 @@ tailwind.config = {
 </head>
 <body class="bg-white text-primary leading-relaxed">
 
-<style>
-  :root{--bg:#fff;--ink:#111;--secondary:#555;--muted:#999;--border:rgba(0,0,0,.06)}
-  .site-nav{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:200;height:52px;background:rgba(255,255,255,.55);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);border:1px solid rgba(255,255,255,.45);border-radius:100px;transition:transform .35s ease,background .35s,border-color .35s,box-shadow .35s;box-shadow:0 0 0 0.5px rgba(0,0,0,.04),0 4px 24px rgba(0,0,0,.06)}
-  .site-nav.nav-hidden{transform:translateX(-50%) translateY(-80px)}
-  .nav-inner{display:flex;align-items:center;justify-content:center;height:100%;padding:0 8px}
-  .nav-icons{display:flex;gap:4px;align-items:center}
-  .nav-divider{width:1px;height:20px;background:rgba(0,0,0,.1);margin:0 6px}
-  .nav-icon{position:relative;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--muted);text-decoration:none;transition:all .2s}
-  .nav-icon:hover{color:var(--ink);background:rgba(0,0,0,.05)}
-  .nav-icon i{font-size:20px;line-height:1}
-  .nav-tip{position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%) translateY(-4px);opacity:0;pointer-events:none;font-size:11px;font-weight:500;background:var(--ink);color:var(--bg);padding:5px 12px;border-radius:6px;white-space:nowrap;transition:opacity .2s,transform .2s;letter-spacing:.01em}
-  .nav-tip::after{content:'';position:absolute;bottom:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-bottom-color:var(--ink)}
-  .nav-icon:hover .nav-tip{opacity:1;transform:translateX(-50%) translateY(0)}
-</style>
-
-<nav class="site-nav" id="caseNav">
-  <div class="nav-inner">
-    <div class="nav-icons">
-      <a href="index.html" class="nav-icon"><i class="ph ph-house"></i><span class="nav-tip">Home</span></a>
-      <a href="index.html#ar-lab" class="nav-icon"><i class="ph ph-cube"></i><span class="nav-tip">AR Lab</span></a>
-      <a href="index.html#ai-lab" class="nav-icon"><i class="ph ph-flask"></i><span class="nav-tip">AI Lab</span></a>
-      <a href="about.html" class="nav-icon"><i class="ph ph-user"></i><span class="nav-tip">5min Guide</span></a>
-      <span class="nav-divider"></span>
-      <a href="#" class="nav-icon"><i class="ph ph-file-text"></i><span class="nav-tip">Resume</span></a>
-      <a href="#" class="nav-icon" target="_blank" rel="noopener"><i class="ph ph-linkedin-logo"></i><span class="nav-tip">LinkedIn</span></a>
-    </div>
-  </div>
-</nav>
-
-<script>
-(function(){
-  var nav=document.getElementById('caseNav'),lastY=0;
-  window.addEventListener('scroll',function(){
-    var y=window.scrollY;
-    if(y>lastY&&y>80) nav.classList.add('nav-hidden');
-    else nav.classList.remove('nav-hidden');
-    lastY=y;
-  });
-})();
-</script>
-
 <!-- Scroll progress bar -->
 <div class="scroll-progress"></div>
 
 <!-- ─── TOC Sidebar ─── -->
 <nav class="toc fixed left-0 top-0 w-56 h-screen px-8 py-12 flex flex-col z-50 bg-white border-r border-gray-100">
-  <a href="index.html" class="text-sm text-secondary hover:text-primary mb-6 no-underline transition-colors">&larr; Back to Work</a>
-  <div class="flex flex-col gap-1 mt-4">
-    <a href="#hero" class="toc-link text-sm text-secondary py-1.5 pl-3 no-underline" data-section="hero"><span>TAP3D</span></a>
-    <a href="#context" class="toc-link text-sm text-secondary py-1.5 pl-3 no-underline" data-section="context"><span>The Problem</span></a>
-    <a href="#investigation" class="toc-link text-sm text-secondary py-1.5 pl-3 no-underline" data-section="investigation"><span>Research</span></a>
-    <a href="#strategy" class="toc-link text-sm text-secondary py-1.5 pl-3 no-underline" data-section="strategy"><span>Strategy</span></a>
-    <a href="#validation" class="toc-link text-sm text-secondary py-1.5 pl-3 no-underline" data-section="validation"><span>Validation</span></a>
-    <a href="#outcome" class="toc-link text-sm text-secondary py-1.5 pl-3 no-underline" data-section="outcome"><span>Outcome</span></a>
-    <a href="#collaboration" class="toc-link text-sm text-secondary py-1.5 pl-3 no-underline" data-section="collaboration"><span>Collaboration</span></a>
-    <a href="#reflection" class="toc-link text-sm text-secondary py-1.5 pl-3 no-underline" data-section="reflection"><span>Reflection</span></a>
+  <a href="#" class="text-sm text-secondary hover:text-primary mb-6 no-underline transition-colors">← Back to Work</a>
+  <div class="flex flex-col gap-1.5">
+    <a href="#hero" class="toc-link text-sm text-secondary no-underline py-1.5 pl-3 -ml-3"><span>TAP3D</span></a>
+    <a href="#context" class="toc-link text-sm text-secondary no-underline py-1.5 pl-3 -ml-3"><span>The Problem</span></a>
+    <a href="#investigation" class="toc-link text-sm text-secondary no-underline py-1.5 pl-3 -ml-3"><span>Research</span></a>
+    <a href="#strategy" class="toc-link text-sm text-secondary no-underline py-1.5 pl-3 -ml-3"><span>Strategy</span></a>
+    <a href="#validation" class="toc-link text-sm text-secondary no-underline py-1.5 pl-3 -ml-3"><span>Validation</span></a>
+    <a href="#outcome" class="toc-link text-sm text-secondary no-underline py-1.5 pl-3 -ml-3"><span>Outcome</span></a>
+    <a href="#collaboration" class="toc-link text-sm text-secondary no-underline py-1.5 pl-3 -ml-3"><span>Collaboration</span></a>
+    <a href="#reflection" class="toc-link text-sm text-secondary no-underline py-1.5 pl-3 -ml-3"><span>Reflection</span></a>
+  </div>
+  <div class="w-full h-px bg-gray-200 my-5"></div>
+  <div class="mt-auto flex flex-col gap-1.5">
+    <a href="#" class="text-sm text-secondary hover:text-primary no-underline transition-colors">About</a>
+    <a href="#" class="text-sm text-secondary hover:text-primary no-underline transition-colors">Experiments</a>
   </div>
 </nav>
 
@@ -264,11 +222,9 @@ tailwind.config = {
     </div>
 
     <!-- 1. Full-width hero screenshot -->
-    <div class="px-6 lg:px-16 pt-20 pb-6 relative z-10">
-      <div class="max-w-4xl mx-auto opacity-0 hero-badge">
-        <div class="rounded-xl overflow-hidden shadow-lg">
-          <img src="TAPimgs/TAP3D_hero_img.png" alt="TAP3D Platform" class="w-full block">
-        </div>
+    <div class="pb-6 relative z-10">
+      <div class="w-screen relative left-1/2 -translate-x-1/2 opacity-0 hero-badge">
+        <img src="TAPimgs/TAP3D_hero_img.png" alt="TAP3D Platform" class="w-full block max-h-screen object-cover">
       </div>
     </div>
 
@@ -303,8 +259,8 @@ tailwind.config = {
       <div class="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-5xl mx-auto">
         <div class="hero-card rounded-xl overflow-hidden border border-gray-200 shadow-sm bg-white cursor-pointer relative">
           <div class="card-shine"></div>
-          <div class="aspect-[4/3] overflow-hidden bg-gray-50 p-3">
-            <img src="TAPimgs/TAP3D_checklist_UI.png" alt="Checklist MVP UI" class="w-full h-full object-contain">
+          <div class="aspect-[4/3] overflow-hidden">
+            <img src="TAPimgs/TAP3D_checklist_UI.png" alt="Checklist MVP UI" class="w-full h-full object-cover">
           </div>
         </div>
         <div class="hero-card rounded-xl overflow-hidden border border-gray-200 shadow-sm bg-white cursor-pointer relative">
@@ -350,7 +306,7 @@ tailwind.config = {
         <div class="meta-group opacity-0">
           <div class="text-[10px] font-bold uppercase tracking-widest text-accent mb-4">Team</div>
           <div class="text-sm leading-relaxed"><strong>1 Product Designer</strong> (me)<br><span class="text-secondary text-xs">Web Feature Lead</span></div>
-          <div class="text-sm leading-relaxed mt-3"><strong>6 Cross-functional partners</strong><br><span class="text-secondary text-xs">PM · FE/BE Engineers · QA</span></div>
+          <div class="text-sm leading-relaxed mt-3">6 Cross-functional partners<br><span class="text-secondary text-xs">PM · FE/BE Engineers · QA</span></div>
         </div>
         <div class="meta-group opacity-0">
           <div class="text-[10px] font-bold uppercase tracking-widest text-accent mb-4">Timeline</div>
@@ -1636,18 +1592,17 @@ ScrollTrigger.create({
   onLeaveBack: () => gsap.to(toc, { opacity: 0, x: -16, duration: 0.35, ease: 'power2.in', onComplete: () => { toc.style.visibility = 'hidden'; } })
 });
 
-function setActiveToc(id) {
-  document.querySelectorAll('.toc-link').forEach(l => l.classList.remove('active'));
-  const link = document.querySelector(`.toc-link[data-section="${id}"]`);
-  if (link) link.classList.add('active');
-}
-document.querySelectorAll('.section').forEach(sec => {
+const tocLinks = document.querySelectorAll('.toc-link');
+document.querySelectorAll('.section').forEach(section => {
   ScrollTrigger.create({
-    trigger: sec, start: 'top 50%', end: 'bottom 50%',
-    onEnter: () => setActiveToc(sec.id),
-    onEnterBack: () => setActiveToc(sec.id),
+    trigger: section, start: 'top 30%', end: 'bottom 30%',
+    onEnter: () => setActive(section.id),
+    onEnterBack: () => setActive(section.id),
   });
 });
+function setActive(id) {
+  tocLinks.forEach(link => link.classList.toggle('active', link.getAttribute('href') === '#' + id));
+}
 
 // ─── Section stagger reveals ───
 document.querySelectorAll('.section, .pillar').forEach(section => {
