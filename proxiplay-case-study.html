@@ -4,10 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ProxiPlay: When Hands Can't Touch</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
@@ -17,14 +14,11 @@ tailwind.config = {
     extend: {
       fontFamily: {
         display: ['"Plus Jakarta Sans"', 'sans-serif'],
-        body: ['"Plus Jakarta Sans"', 'sans-serif'],
-        serif: ['"Instrument Serif"', 'serif'],
-        hand: ['"Caveat"', 'cursive'],
+        body: ['"DM Sans"', 'sans-serif'],
       },
       colors: {
-        primary: '#111',
-        secondary: '#555',
-        muted: '#999',
+        primary: '#1a1a1a',
+        secondary: '#6b6b6b',
         accent: '#ea580c',
         surface: '#fffbeb',
         highlight: '#ef4444',
@@ -38,7 +32,7 @@ tailwind.config = {
 <style>
   * { -webkit-font-smoothing: antialiased; }
   html { scroll-behavior: smooth; }
-  body { font-family: 'Plus Jakarta Sans', sans-serif; }
+  body { font-family: 'DM Sans', sans-serif; }
 
   .font-display { letter-spacing: -0.02em; }
   h1, h2, h3 { letter-spacing: -0.025em; }
@@ -202,53 +196,12 @@ tailwind.config = {
 </head>
 <body class="bg-white text-primary leading-relaxed">
 
-<style>
-  :root{--bg:#fff;--ink:#111;--secondary:#555;--muted:#999;--border:rgba(0,0,0,.06)}
-  .site-nav{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:200;height:52px;background:rgba(255,255,255,.55);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);border:1px solid rgba(255,255,255,.45);border-radius:100px;transition:transform .35s ease,background .35s,border-color .35s,box-shadow .35s;box-shadow:0 0 0 0.5px rgba(0,0,0,.04),0 4px 24px rgba(0,0,0,.06)}
-  .site-nav.nav-hidden{transform:translateX(-50%) translateY(-80px)}
-  .nav-inner{display:flex;align-items:center;justify-content:center;height:100%;padding:0 8px}
-  .nav-icons{display:flex;gap:4px;align-items:center}
-  .nav-divider{width:1px;height:20px;background:rgba(0,0,0,.1);margin:0 6px}
-  .nav-icon{position:relative;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--muted);text-decoration:none;transition:all .2s}
-  .nav-icon:hover{color:var(--ink);background:rgba(0,0,0,.05)}
-  .nav-icon i{font-size:20px;line-height:1}
-  .nav-tip{position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%) translateY(-4px);opacity:0;pointer-events:none;font-size:11px;font-weight:500;background:var(--ink);color:var(--bg);padding:5px 12px;border-radius:6px;white-space:nowrap;transition:opacity .2s,transform .2s;letter-spacing:.01em}
-  .nav-tip::after{content:'';position:absolute;bottom:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-bottom-color:var(--ink)}
-  .nav-icon:hover .nav-tip{opacity:1;transform:translateX(-50%) translateY(0)}
-</style>
-
-<nav class="site-nav" id="caseNav">
-  <div class="nav-inner">
-    <div class="nav-icons">
-      <a href="index.html" class="nav-icon"><i class="ph ph-house"></i><span class="nav-tip">Home</span></a>
-      <a href="index.html#ar-lab" class="nav-icon"><i class="ph ph-cube"></i><span class="nav-tip">AR Lab</span></a>
-      <a href="index.html#ai-lab" class="nav-icon"><i class="ph ph-flask"></i><span class="nav-tip">AI Lab</span></a>
-      <a href="about.html" class="nav-icon"><i class="ph ph-user"></i><span class="nav-tip">5min Guide</span></a>
-      <span class="nav-divider"></span>
-      <a href="#" class="nav-icon"><i class="ph ph-file-text"></i><span class="nav-tip">Resume</span></a>
-      <a href="#" class="nav-icon" target="_blank" rel="noopener"><i class="ph ph-linkedin-logo"></i><span class="nav-tip">LinkedIn</span></a>
-    </div>
-  </div>
-</nav>
-
-<script>
-(function(){
-  var nav=document.getElementById('caseNav'),lastY=0;
-  window.addEventListener('scroll',function(){
-    var y=window.scrollY;
-    if(y>lastY&&y>80) nav.classList.add('nav-hidden');
-    else nav.classList.remove('nav-hidden');
-    lastY=y;
-  });
-})();
-</script>
-
 <!-- Scroll progress bar -->
 <div class="scroll-progress"></div>
 
 <!-- ─── TOC Sidebar ─── -->
 <nav class="toc fixed left-0 top-0 w-56 h-screen px-8 py-12 flex flex-col z-50 bg-white border-r border-gray-100">
-  <a href="index.html" class="text-sm text-secondary hover:text-primary mb-6 no-underline transition-colors">&larr; Back to Work</a>
+  <a href="#" class="text-sm text-secondary hover:text-primary mb-6 no-underline transition-colors">&larr; Back to Work</a>
   <div class="flex flex-col gap-1 mt-4">
     <a href="#hero" class="toc-link text-sm text-secondary py-1.5 pl-3 no-underline" data-section="hero"><span>Overview</span></a>
     <a href="#context" class="toc-link text-sm text-secondary py-1.5 pl-3 no-underline" data-section="context"><span>The Problem</span></a>
@@ -354,42 +307,6 @@ tailwind.config = {
       <span class="inline-flex items-center gap-1.5 bg-accent/5 border border-accent/15 rounded-full px-3 py-1.5 text-xs text-accent font-medium">Sensor Integration</span>
       <span class="inline-flex items-center gap-1.5 bg-surface border border-gray-200 rounded-full px-3 py-1.5 text-xs text-secondary">8 weeks</span>
       <span class="inline-flex items-center gap-1.5 bg-surface border border-gray-200 rounded-full px-3 py-1.5 text-xs text-secondary">Cooking + IoT</span>
-    </div>
-
-    <!-- 5. Three preview cards -->
-    <div class="px-6 lg:px-16 pb-14 relative z-10">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-5xl mx-auto">
-        <div class="hero-card rounded-xl overflow-hidden border border-gray-200 shadow-sm bg-white cursor-pointer relative">
-          <div class="card-shine"></div>
-          <div class="aspect-[4/3] bg-gradient-to-br from-red-50 to-orange-50 flex items-center justify-center p-6">
-            <div class="text-center">
-              <div class="text-3xl mb-2">🎤 &times; 👋</div>
-              <div class="text-xs font-medium text-primary">Input Failure Cascade</div>
-              <div class="text-[10px] text-secondary mt-1">Voice + Gesture both fail</div>
-            </div>
-          </div>
-        </div>
-        <div class="hero-card rounded-xl overflow-hidden border border-gray-200 shadow-sm bg-white cursor-pointer relative">
-          <div class="card-shine"></div>
-          <div class="aspect-[4/3] bg-gradient-to-br from-amber-50 to-yellow-50 flex items-center justify-center p-6">
-            <div class="text-center">
-              <div class="text-3xl mb-2">📷</div>
-              <div class="text-xs font-medium text-primary">Proximity Detection</div>
-              <div class="text-[10px] text-secondary mt-1">Front camera &lt; 30cm trigger</div>
-            </div>
-          </div>
-        </div>
-        <div class="hero-card rounded-xl overflow-hidden border border-gray-200 shadow-sm bg-white cursor-pointer relative">
-          <div class="card-shine"></div>
-          <div class="aspect-[4/3] bg-gradient-to-br from-green-50 to-emerald-50 flex items-center justify-center p-6">
-            <div class="text-center">
-              <div class="text-3xl mb-2">💪</div>
-              <div class="text-xs font-medium text-primary">Elbow-Bump Mode</div>
-              <div class="text-[10px] text-secondary mt-1">50% screen macro button</div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
 
     <!-- 6. Metadata row -->
@@ -956,8 +873,8 @@ tailwind.config = {
                 <rect x="25" y="50" width="200" height="56" rx="10" fill="white" stroke="#fca5a5" stroke-width="1.5"/>
                 <circle cx="48" cy="78" r="12" fill="#fef2f2"/>
                 <text x="48" y="82" text-anchor="middle" font-size="12">🎤</text>
-                <text x="68" y="73" font-family="Plus Jakarta Sans, sans-serif" font-size="12" font-weight="700" fill="#1a1a1a">Voice Input</text>
-                <text x="68" y="90" font-family="Plus Jakarta Sans, sans-serif" font-size="11" fill="#ef4444" font-weight="500">FAILED</text>
+                <text x="68" y="73" font-family="DM Sans, sans-serif" font-size="12" font-weight="700" fill="#1a1a1a">Voice Input</text>
+                <text x="68" y="90" font-family="DM Sans, sans-serif" font-size="11" fill="#ef4444" font-weight="500">FAILED</text>
                 <circle cx="210" cy="78" r="5" fill="#ef4444"/>
               </g>
 
@@ -966,15 +883,15 @@ tailwind.config = {
                 <rect x="25" y="120" width="200" height="56" rx="10" fill="white" stroke="#fca5a5" stroke-width="1.5"/>
                 <circle cx="48" cy="148" r="12" fill="#fef2f2"/>
                 <text x="48" y="152" text-anchor="middle" font-size="12">👋</text>
-                <text x="68" y="143" font-family="Plus Jakarta Sans, sans-serif" font-size="12" font-weight="700" fill="#1a1a1a">Gesture Confidence</text>
-                <text x="68" y="160" font-family="Plus Jakarta Sans, sans-serif" font-size="11" fill="#ef4444" font-weight="500">&lt; 40%</text>
+                <text x="68" y="143" font-family="DM Sans, sans-serif" font-size="12" font-weight="700" fill="#1a1a1a">Gesture Confidence</text>
+                <text x="68" y="160" font-family="DM Sans, sans-serif" font-size="11" fill="#ef4444" font-weight="500">&lt; 40%</text>
                 <circle cx="210" cy="148" r="5" fill="#ef4444"/>
               </g>
 
               <!-- AND gate -->
               <g id="node-and" opacity="0">
                 <rect x="275" y="90" width="50" height="36" rx="6" fill="#fef2f2" stroke="#ef4444" stroke-width="1.5"/>
-                <text x="300" y="113" text-anchor="middle" font-family="Plus Jakarta Sans, sans-serif" font-size="12" font-weight="700" fill="#ef4444">AND</text>
+                <text x="300" y="113" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="12" font-weight="700" fill="#ef4444">AND</text>
               </g>
 
               <!-- Connector lines: triggers to AND -->
@@ -990,8 +907,8 @@ tailwind.config = {
                 <rect x="25" y="268" width="200" height="42" rx="10" fill="white" stroke="#fde68a" stroke-width="1.5"/>
                 <circle cx="48" cy="289" r="12" fill="#fffbeb"/>
                 <text x="48" y="293" text-anchor="middle" font-size="12">📷</text>
-                <text x="68" y="285" font-family="Plus Jakarta Sans, sans-serif" font-size="12" font-weight="700" fill="#1a1a1a">Front Camera</text>
-                <text x="68" y="300" font-family="Plus Jakarta Sans, sans-serif" font-size="11" fill="#f59e0b" font-weight="500">Proximity &lt; 30cm</text>
+                <text x="68" y="285" font-family="DM Sans, sans-serif" font-size="12" font-weight="700" fill="#1a1a1a">Front Camera</text>
+                <text x="68" y="300" font-family="DM Sans, sans-serif" font-size="11" fill="#f59e0b" font-weight="500">Proximity &lt; 30cm</text>
               </g>
 
               <!-- Connector: proximity to decision -->
@@ -1000,8 +917,8 @@ tailwind.config = {
               <!-- DECISION diamond -->
               <g id="node-decision" opacity="0">
                 <polygon points="400,170 440,210 400,250 360,210" fill="white" stroke="#f59e0b" stroke-width="2"/>
-                <text x="400" y="207" text-anchor="middle" font-family="Plus Jakarta Sans, sans-serif" font-size="9" font-weight="600" fill="#1a1a1a">ALL</text>
-                <text x="400" y="219" text-anchor="middle" font-family="Plus Jakarta Sans, sans-serif" font-size="9" font-weight="600" fill="#1a1a1a">MET?</text>
+                <text x="400" y="207" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="9" font-weight="600" fill="#1a1a1a">ALL</text>
+                <text x="400" y="219" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="9" font-weight="600" fill="#1a1a1a">MET?</text>
               </g>
 
               <!-- Connector: AND to decision -->
@@ -1009,13 +926,13 @@ tailwind.config = {
 
               <!-- YES path -->
               <path id="path-yes" d="M 440 210 L 500 210" stroke="#16a34a" stroke-width="2" class="flow-path" marker-end="url(#arrow-green)"/>
-              <text id="label-yes" x="460" y="200" font-family="Plus Jakarta Sans, sans-serif" font-size="10" font-weight="600" fill="#16a34a" opacity="0">YES</text>
+              <text id="label-yes" x="460" y="200" font-family="DM Sans, sans-serif" font-size="10" font-weight="600" fill="#16a34a" opacity="0">YES</text>
 
               <!-- NO path -->
               <path id="path-no" d="M 400 250 L 400 375" stroke="#9ca3af" stroke-width="1.5" class="flow-path" stroke-dasharray="4 3"/>
               <g id="label-no" opacity="0">
                 <rect x="355" y="380" width="130" height="28" rx="6" fill="#f9fafb" stroke="#d1d5db" stroke-width="1"/>
-                <text x="420" y="399" text-anchor="middle" font-family="Plus Jakarta Sans, sans-serif" font-size="10" font-weight="500" fill="#9ca3af">NO &#x2192; Stay Default</text>
+                <text x="420" y="399" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="10" font-weight="500" fill="#9ca3af">NO &#x2192; Stay Default</text>
               </g>
 
               <!-- STATE CHANGE ZONE -->
@@ -1025,8 +942,8 @@ tailwind.config = {
               <!-- Default UI node -->
               <g id="node-default-ui" opacity="0">
                 <rect x="520" y="170" width="110" height="50" rx="8" fill="white" stroke="#d1d5db" stroke-width="1.5"/>
-                <text x="575" y="192" text-anchor="middle" font-family="Plus Jakarta Sans, sans-serif" font-size="11" font-weight="700" fill="#6b6b6b">Default UI</text>
-                <text x="575" y="207" text-anchor="middle" font-family="Plus Jakarta Sans, sans-serif" font-size="9" fill="#9ca3af">Standard Controls</text>
+                <text x="575" y="192" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="11" font-weight="700" fill="#6b6b6b">Default UI</text>
+                <text x="575" y="207" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="9" fill="#9ca3af">Standard Controls</text>
               </g>
 
               <!-- Arrow between states -->
@@ -1038,16 +955,16 @@ tailwind.config = {
               <!-- Macro UI node -->
               <g id="node-macro-ui" opacity="0">
                 <rect x="660" y="170" width="110" height="50" rx="8" fill="#16a34a" stroke="#16a34a" stroke-width="1.5"/>
-                <text x="715" y="192" text-anchor="middle" font-family="Plus Jakarta Sans, sans-serif" font-size="11" font-weight="700" fill="white">Macro UI</text>
-                <text x="715" y="207" text-anchor="middle" font-family="Plus Jakarta Sans, sans-serif" font-size="9" fill="#bbf7d0">Elbow-Bump Mode</text>
+                <text x="715" y="192" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="11" font-weight="700" fill="white">Macro UI</text>
+                <text x="715" y="207" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="9" fill="#bbf7d0">Elbow-Bump Mode</text>
               </g>
 
               <!-- Visual output description -->
               <g id="node-visual" opacity="0">
                 <rect x="520" y="240" width="250" height="55" rx="8" fill="white" stroke="#bbf7d0" stroke-width="1" stroke-dasharray="4 3"/>
-                <text x="535" y="260" font-family="Plus Jakarta Sans, sans-serif" font-size="10" fill="#6b6b6b">Visual: Bottom 50% becomes giant</text>
-                <text x="535" y="275" font-family="Plus Jakarta Sans, sans-serif" font-size="10" fill="#6b6b6b">semi-transparent "Next Step" button</text>
-                <text x="535" y="290" font-family="Plus Jakarta Sans, sans-serif" font-size="9" fill="#16a34a" font-weight="500">Transition: 400ms ease-out scale</text>
+                <text x="535" y="260" font-family="DM Sans, sans-serif" font-size="10" fill="#6b6b6b">Visual: Bottom 50% becomes giant</text>
+                <text x="535" y="275" font-family="DM Sans, sans-serif" font-size="10" fill="#6b6b6b">semi-transparent "Next Step" button</text>
+                <text x="535" y="290" font-family="DM Sans, sans-serif" font-size="9" fill="#16a34a" font-weight="500">Transition: 400ms ease-out scale</text>
               </g>
 
               <!-- Arrow markers -->
