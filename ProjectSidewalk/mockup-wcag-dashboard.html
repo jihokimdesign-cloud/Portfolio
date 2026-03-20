@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WCAG 2.2 AA Audit Dashboard</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --canvas: #faf9f7;
+    --surface: #ffffff;
+    --surface-inset: #f5f3f0;
+    --ink: #1c1917;
+    --ink-secondary: #78716c;
+    --ink-tertiary: #a8a29e;
+    --ink-muted: #d6d3d1;
+    --border: rgba(28,25,23,0.07);
+    --border-emphasis: rgba(28,25,23,0.13);
+    --canopy: #16a34a;
+    --canopy-soft: #f0fdf4;
+    --canopy-muted: rgba(22,163,74,0.12);
+    --signal: #ea580c;
+    --barrier: #dc2626;
+    --barrier-soft: #fef2f2;
+    --caution: #ca8a04;
+    --radius-sm: 4px;
+    --radius-md: 6px;
+    --radius-lg: 8px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: var(--canvas);
+    color: var(--ink);
+    width: 960px;
+    height: 600px;
+    overflow: hidden;
+    font-size: 11px;
+    line-height: 1.4;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .app {
+    display: flex;
+    flex-direction: column;
+    height: 600px;
+  }
+
+  /* ── Top bar ── */
+  .topbar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .topbar-title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  .topbar-status {
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 9px;
+    font-weight: 600;
+    background: var(--canopy-soft);
+    color: var(--canopy);
+  }
+  .topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .topbar-tab {
+    padding: 5px 11px;
+    font-size: 10.5px;
+    font-weight: 500;
+    color: var(--ink-tertiary);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.1s;
+  }
+  .topbar-tab.on {
+    background: var(--canopy-soft);
+    color: var(--canopy);
+    font-weight: 600;
+  }
+  .scan-time {
+    font-size: 9px;
+    color: var(--ink-tertiary);
+    margin-left: 8px;
+  }
+
+  /* ── Main content ── */
+  .body {
+    flex: 1;
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow: hidden;
+  }
+
+  /* Score row */
+  .score-row {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 12px;
+  }
+
+  .score-hero {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 18px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+
+  .ring-wrap {
+    position: relative;
+    width: 88px; height: 88px;
+    flex-shrink: 0;
+  }
+  .ring-wrap svg {
+    width: 88px; height: 88px;
+    transform: rotate(-90deg);
+  }
+  .ring-track {
+    fill: none;
+    stroke: var(--canopy-soft);
+    stroke-width: 7;
+  }
+  .ring-value {
+    fill: none;
+    stroke: var(--canopy);
+    stroke-width: 7;
+    stroke-linecap: round;
+    stroke-dasharray: 245;
+    stroke-dashoffset: 0;
+  }
+  .ring-center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .ring-num {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--canopy);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+  }
+  .ring-label {
+    font-size: 7.5px;
+    color: var(--ink-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 2px;
+  }
+
+  .score-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .score-stat {
+    display: flex;
+    align-items: baseline;
+    gap: 3px;
+  }
+  .stat-big {
+    font-size: 16px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat-dim {
+    font-size: 10px;
+    color: var(--ink-tertiary);
+    font-weight: 450;
+  }
+  .stat-caption {
+    font-size: 10px;
+    color: var(--ink-secondary);
+  }
+
+  /* Category cards */
+  .cats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+  .cat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+  .cat-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .cat-name {
+    font-size: 10.5px;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: -0.005em;
+  }
+  .cat-pct {
+    font-size: 10px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: var(--canopy);
+  }
+  .cat-bar {
+    height: 3px;
+    background: var(--surface-inset);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .cat-fill {
+    height: 100%;
+    border-radius: 2px;
+    background: var(--canopy);
+  }
+  .cat-checks {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .chk {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 9.5px;
+    color: var(--ink-secondary);
+  }
+  .chk-icon {
+    width: 11px; height: 11px;
+    border-radius: 50%;
+    display: grid; place-items: center;
+    font-size: 7px;
+    font-weight: 700;
+    flex-shrink: 0;
+    background: var(--canopy-soft);
+    color: var(--canopy);
+  }
+
+  /* Bottom panels */
+  .bottom {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .panel-head {
+    padding: 9px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .panel-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+  }
+  .panel-badge {
+    font-size: 9px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 20px;
+  }
+  .badge-green { background: var(--canopy-soft); color: var(--canopy); }
+
+  .panel-body {
+    flex: 1;
+    overflow: hidden;
+  }
+
+  /* Issues list */
+  .issue {
+    padding: 7px 14px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    border-bottom: 1px solid rgba(0,0,0,0.03);
+    opacity: 0.45;
+    text-decoration: line-through;
+    text-decoration-color: var(--ink-muted);
+  }
+  .issue:last-child { border: none; }
+  .issue-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .issue-dot.critical { background: var(--barrier); }
+  .issue-dot.major { background: var(--signal); }
+  .issue-dot.minor { background: var(--caution); }
+  .issue-text {
+    flex: 1;
+    font-size: 10.5px;
+    color: var(--ink);
+  }
+  .issue-code {
+    font-size: 8.5px;
+    color: var(--ink-tertiary);
+    font-family: 'JetBrains Mono', monospace;
+    white-space: nowrap;
+  }
+  .issue-comp {
+    font-size: 8.5px;
+    padding: 1px 5px;
+    border-radius: var(--radius-sm);
+    background: var(--surface-inset);
+    color: var(--ink-secondary);
+    white-space: nowrap;
+    font-weight: 500;
+  }
+
+  .panel-foot {
+    padding: 7px 14px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-shrink: 0;
+  }
+  .foot-stat {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 9.5px;
+    color: var(--ink-secondary);
+  }
+  .foot-stat b {
+    font-weight: 700;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .foot-accent {
+    margin-left: auto;
+    color: var(--canopy);
+    font-weight: 600;
+  }
+
+  /* Coverage bars */
+  .cov-list {
+    padding: 10px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .cov {
+    display: grid;
+    grid-template-columns: 80px 1fr 36px;
+    gap: 8px;
+    align-items: center;
+  }
+  .cov-name {
+    font-size: 10px;
+    color: var(--ink-secondary);
+    font-weight: 450;
+  }
+  .cov-track {
+    height: 14px;
+    background: var(--surface-inset);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .cov-fill {
+    height: 100%;
+    border-radius: 2px;
+    background: var(--canopy);
+  }
+  .cov-pct {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--canopy);
+    text-align: right;
+    font-family: 'JetBrains Mono', monospace;
+    font-variant-numeric: tabular-nums;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-title">WCAG 2.2 AA Audit</div>
+      <div class="topbar-status">Passing</div>
+    </div>
+    <div class="topbar-right">
+      <div class="topbar-tab on">Overview</div>
+      <div class="topbar-tab">Issues</div>
+      <div class="topbar-tab">Components</div>
+      <div class="topbar-tab">History</div>
+      <span class="scan-time">Last scan: 2 hrs ago</span>
+    </div>
+  </div>
+
+  <div class="body">
+    <!-- Score + Categories -->
+    <div class="score-row">
+      <div class="score-hero">
+        <div class="ring-wrap">
+          <svg viewBox="0 0 88 88">
+            <circle class="ring-track" cx="44" cy="44" r="39"/>
+            <circle class="ring-value" cx="44" cy="44" r="39"/>
+          </svg>
+          <div class="ring-center">
+            <div class="ring-num">100</div>
+            <div class="ring-label">Score</div>
+          </div>
+        </div>
+        <div class="score-meta">
+          <div>
+            <div class="score-stat"><span class="stat-big">48</span><span class="stat-dim">/ 48</span></div>
+            <div class="stat-caption">criteria passing</div>
+          </div>
+          <div style="margin-top:2px">
+            <div class="score-stat"><span class="stat-big" style="color:var(--canopy)">0</span><span class="stat-dim">violations</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cats">
+        <div class="cat">
+          <div class="cat-top"><span class="cat-name">Perceivable</span><span class="cat-pct">100%</span></div>
+          <div class="cat-bar"><div class="cat-fill" style="width:100%"></div></div>
+          <div class="cat-checks">
+            <div class="chk"><span class="chk-icon">✓</span> Text alternatives</div>
+            <div class="chk"><span class="chk-icon">✓</span> Color contrast</div>
+            <div class="chk"><span class="chk-icon">✓</span> Resize text</div>
+            <div class="chk"><span class="chk-icon">✓</span> Non-text contrast</div>
+          </div>
+        </div>
+        <div class="cat">
+          <div class="cat-top"><span class="cat-name">Operable</span><span class="cat-pct">100%</span></div>
+          <div class="cat-bar"><div class="cat-fill" style="width:100%"></div></div>
+          <div class="cat-checks">
+            <div class="chk"><span class="chk-icon">✓</span> Keyboard access</div>
+            <div class="chk"><span class="chk-icon">✓</span> Focus visible</div>
+            <div class="chk"><span class="chk-icon">✓</span> Target size</div>
+            <div class="chk"><span class="chk-icon">✓</span> Dragging</div>
+          </div>
+        </div>
+        <div class="cat">
+          <div class="cat-top"><span class="cat-name">Understandable</span><span class="cat-pct">100%</span></div>
+          <div class="cat-bar"><div class="cat-fill" style="width:100%"></div></div>
+          <div class="cat-checks">
+            <div class="chk"><span class="chk-icon">✓</span> Language</div>
+            <div class="chk"><span class="chk-icon">✓</span> Error identification</div>
+            <div class="chk"><span class="chk-icon">✓</span> Labels</div>
+            <div class="chk"><span class="chk-icon">✓</span> Consistent nav</div>
+          </div>
+        </div>
+        <div class="cat">
+          <div class="cat-top"><span class="cat-name">Robust</span><span class="cat-pct">100%</span></div>
+          <div class="cat-bar"><div class="cat-fill" style="width:100%"></div></div>
+          <div class="cat-checks">
+            <div class="chk"><span class="chk-icon">✓</span> Valid HTML</div>
+            <div class="chk"><span class="chk-icon">✓</span> Name, role, value</div>
+            <div class="chk"><span class="chk-icon">✓</span> Status messages</div>
+            <div class="chk"><span class="chk-icon">✓</span> Parsing</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom: Issues + Coverage -->
+    <div class="bottom">
+      <div class="panel">
+        <div class="panel-head">
+          <span class="panel-title">Resolved Issues</span>
+          <span class="panel-badge badge-green">All fixed</span>
+        </div>
+        <div class="panel-body">
+          <div class="issue">
+            <div class="issue-dot critical"></div>
+            <span class="issue-text">Missing alt text on map pin images</span>
+            <span class="issue-code">1.1.1</span>
+            <span class="issue-comp">MapPin</span>
+          </div>
+          <div class="issue">
+            <div class="issue-dot critical"></div>
+            <span class="issue-text">Insufficient contrast on severity badges</span>
+            <span class="issue-code">1.4.3</span>
+            <span class="issue-comp">SevBadge</span>
+          </div>
+          <div class="issue">
+            <div class="issue-dot major"></div>
+            <span class="issue-text">Focus indicator not visible on filter toggles</span>
+            <span class="issue-code">2.4.7</span>
+            <span class="issue-comp">FilterBtn</span>
+          </div>
+          <div class="issue">
+            <div class="issue-dot major"></div>
+            <span class="issue-text">Keyboard trap in image carousel modal</span>
+            <span class="issue-code">2.1.2</span>
+            <span class="issue-comp">Carousel</span>
+          </div>
+          <div class="issue">
+            <div class="issue-dot minor"></div>
+            <span class="issue-text">Missing landmark regions for sidebar nav</span>
+            <span class="issue-code">1.3.1</span>
+            <span class="issue-comp">Sidebar</span>
+          </div>
+          <div class="issue">
+            <div class="issue-dot minor"></div>
+            <span class="issue-text">Touch target below 24×24px on mobile</span>
+            <span class="issue-code">2.5.8</span>
+            <span class="issue-comp">SevBtn</span>
+          </div>
+        </div>
+        <div class="panel-foot">
+          <div class="foot-stat"><b>6</b> resolved</div>
+          <div class="foot-stat"><b>0</b> remaining</div>
+          <div class="foot-stat foot-accent">Zero defects</div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <span class="panel-title">Component Coverage</span>
+          <span class="panel-badge badge-green">34 / 34</span>
+        </div>
+        <div class="panel-body">
+          <div class="cov-list">
+            <div class="cov"><span class="cov-name">Buttons</span><div class="cov-track"><div class="cov-fill" style="width:100%"></div></div><span class="cov-pct">100%</span></div>
+            <div class="cov"><span class="cov-name">Form Controls</span><div class="cov-track"><div class="cov-fill" style="width:100%"></div></div><span class="cov-pct">100%</span></div>
+            <div class="cov"><span class="cov-name">Navigation</span><div class="cov-track"><div class="cov-fill" style="width:100%"></div></div><span class="cov-pct">100%</span></div>
+            <div class="cov"><span class="cov-name">Map Controls</span><div class="cov-track"><div class="cov-fill" style="width:100%"></div></div><span class="cov-pct">100%</span></div>
+            <div class="cov"><span class="cov-name">Labels & Tags</span><div class="cov-track"><div class="cov-fill" style="width:100%"></div></div><span class="cov-pct">100%</span></div>
+            <div class="cov"><span class="cov-name">Cards</span><div class="cov-track"><div class="cov-fill" style="width:100%"></div></div><span class="cov-pct">100%</span></div>
+            <div class="cov"><span class="cov-name">Modals</span><div class="cov-track"><div class="cov-fill" style="width:100%"></div></div><span class="cov-pct">100%</span></div>
+            <div class="cov"><span class="cov-name">Data Tables</span><div class="cov-track"><div class="cov-fill" style="width:100%"></div></div><span class="cov-pct">100%</span></div>
+          </div>
+        </div>
+        <div class="panel-foot">
+          <div class="foot-stat"><b>34</b> components</div>
+          <div class="foot-stat"><b>48</b> criteria</div>
+          <div class="foot-stat foot-accent">Full coverage</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
