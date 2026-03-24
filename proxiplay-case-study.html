@@ -320,7 +320,7 @@ tailwind.config = {
 
     <!-- 2. Center title + subtitle -->
     <div class="px-10 lg:px-20 pt-14 pb-4 text-center relative z-10">
-      <h1 class="hero-subtitle font-display text-[1.75rem] lg:text-[2.5rem] font-semibold leading-[1.12] mx-auto mb-5 opacity-0" style="letter-spacing:-0.03em;max-width:560px">
+      <h1 class="hero-subtitle font-display text-[1.75rem] lg:text-[2.5rem] font-semibold leading-[1.12] mx-auto mb-3 opacity-0" style="letter-spacing:-0.03em;max-width:560px">
         ProxiPlay: An Adaptive UI for Hands-Occupied Cooking
       </h1>
       <p class="hero-subtitle text-sm lg:text-base text-secondary leading-relaxed max-w-sm mx-auto opacity-0">
@@ -728,6 +728,73 @@ tailwind.config = {
           </div>
         </div>
       </div>
+
+        <!-- ★ App Analysis — Visual Flow -->
+        <div class="mt-16 gs-child">
+          <h3 class="font-display text-xl font-semibold mb-4">App Analysis: Why Existing Solutions Fail</h3>
+          <p class="text-base text-secondary leading-loose max-w-xl xl:max-w-2xl mb-8">With 72% of users pausing to wash their hands while cooking, I audited top recipe apps (NYT Cooking, Tasty, etc.) to understand where their interaction models break down.</p>
+
+          <!-- Visual flow: two problems converge into opportunity -->
+          <div class="flex flex-col items-center gap-6">
+            <!-- Problem row -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-2xl">
+              <div class="bg-red-50/50 rounded-xl p-6 border border-red-100 transition-shadow duration-200 hover:shadow-md" style="box-shadow:0 1px 2px rgba(17,24,39,0.04)">
+                <div class="flex items-center gap-3 mb-3">
+                  <div class="w-10 h-10 rounded-xl bg-red-100 flex items-center justify-center flex-shrink-0">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="1.5"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>
+                  </div>
+                  <div class="font-display text-sm font-bold">Touch Fails</div>
+                </div>
+                <p class="text-sm text-secondary leading-relaxed mb-3">Apps rely on precise micro-interactions — tiny arrows, swiping carousels. Hands coated in flour or oil make screens a physical barrier.</p>
+                <div class="flex flex-wrap gap-1.5">
+                  <span class="text-[10px] bg-red-100/60 text-red-600 rounded-full px-2 py-0.5">NYT Cooking</span>
+                  <span class="text-[10px] bg-red-100/60 text-red-600 rounded-full px-2 py-0.5">Tasty</span>
+                  <span class="text-[10px] bg-red-100/60 text-red-600 rounded-full px-2 py-0.5">Paprika</span>
+                </div>
+              </div>
+              <div class="bg-amber-50/50 rounded-xl p-6 border border-amber-100 transition-shadow duration-200 hover:shadow-md" style="box-shadow:0 1px 2px rgba(17,24,39,0.04)">
+                <div class="flex items-center gap-3 mb-3">
+                  <div class="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center flex-shrink-0">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="1.5"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg>
+                  </div>
+                  <div class="font-display text-sm font-bold">Voice Fails</div>
+                </div>
+                <p class="text-sm text-secondary leading-relaxed mb-3">Basic voice commands ("Next step") fail in real kitchens. Sizzling pans, running water, and blenders cause high error rates and frustration.</p>
+                <div class="flex flex-wrap gap-1.5">
+                  <span class="text-[10px] bg-amber-100/60 text-amber-700 rounded-full px-2 py-0.5">Siri Shortcuts</span>
+                  <span class="text-[10px] bg-amber-100/60 text-amber-700 rounded-full px-2 py-0.5">Alexa Skills</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Converging arrow -->
+            <div class="flex flex-col items-center gap-1">
+              <div class="flex gap-16">
+                <div class="w-px h-6 bg-gray-200"></div>
+                <div class="w-px h-6 bg-gray-200"></div>
+              </div>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+            </div>
+
+            <!-- Opportunity -->
+            <div class="bg-accent/[0.04] rounded-2xl p-8 border border-accent/15 max-w-2xl w-full transition-shadow duration-200 hover:shadow-md" style="box-shadow:0 0 0 0.5px rgba(234,88,12,0.08),0 1px 3px rgba(17,24,39,0.04)">
+              <div class="flex items-center gap-3 mb-3">
+                <div class="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center flex-shrink-0">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="1.5"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <div class="font-display text-base font-bold">The Multimodal Opportunity</div>
+              </div>
+              <p class="text-sm text-secondary leading-relaxed mb-4">The audit revealed a massive gap: users need to control the UI without clean hands or a silent room. This validated Cheffy's core premise.</p>
+              <div class="flex items-center gap-3 flex-wrap">
+                <span class="inline-flex items-center gap-1.5 bg-accent/10 rounded-full px-3 py-1.5 text-xs font-medium text-accent">Macro-Gestures</span>
+                <span class="text-xs text-secondary/40">+</span>
+                <span class="inline-flex items-center gap-1.5 bg-accent/10 rounded-full px-3 py-1.5 text-xs font-medium text-accent">Voice Fallback</span>
+                <span class="text-xs text-secondary/40">+</span>
+                <span class="inline-flex items-center gap-1.5 bg-accent/10 rounded-full px-3 py-1.5 text-xs font-medium text-accent">Adaptive UI</span>
+              </div>
+            </div>
+          </div>
+        </div>
     </section>
 
     <!-- ─── INVESTIGATION ─── -->

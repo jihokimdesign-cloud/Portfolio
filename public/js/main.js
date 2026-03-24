@@ -1000,3 +1000,15 @@ ScrollTrigger.create({
     });
   });
 })();
+
+/* ======================================
+   AUTO-OPEN DEMO FROM URL HASH
+   ====================================== */
+(function(){
+  var hash=window.location.hash;
+  if(hash==='#demo-hands'||hash==='#demo-face'){
+    var mode=hash==='#demo-hands'?'hands':'face';
+    var card=document.querySelector('.demo-card[data-mode="'+mode+'"]');
+    if(card) setTimeout(function(){card.click()},600);
+  }
+})();
