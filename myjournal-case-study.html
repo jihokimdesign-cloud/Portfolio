@@ -243,10 +243,10 @@ tailwind.config = {
 
     <!-- 2. Center title + subtitle -->
     <div class="px-10 lg:px-20 pt-14 pb-4 text-center relative z-10">
-      <h1 class="hero-subtitle font-display text-[1.75rem] lg:text-[2.5rem] font-semibold leading-[1.12] mx-auto mb-5 opacity-0" style="letter-spacing:-0.03em;max-width:520px">
+      <h1 class="hero-subtitle font-display text-[1.75rem] lg:text-[2.5rem] font-semibold leading-[1.12] mx-auto mb-5 opacity-0" style="letter-spacing:-0.03em;max-width:700px">
         Beyond Chatbots: Designing Emotional Continuity for Gen&nbsp;Z
       </h1>
-      <p class="hero-subtitle text-sm lg:text-base text-secondary leading-relaxed max-w-sm mx-auto opacity-0">
+      <p class="hero-subtitle text-sm lg:text-base text-secondary leading-relaxed max-w-xl mx-auto opacity-0" style="white-space:nowrap">
         Most wellness apps speak. Few listen. We built one that does.
       </p>
     </div>
@@ -290,7 +290,7 @@ tailwind.config = {
         <div class="meta-group opacity-0">
           <div class="text-[10px] font-bold uppercase tracking-widest text-accent mb-4">Team</div>
           <div class="text-sm leading-relaxed"><strong>1 Lead Product Designer</strong> (me)<br><span class="text-secondary text-xs">0→1 Product Strategy & UI</span></div>
-          <div class="text-sm leading-relaxed mt-3">5 Cross-functional partners<br><span class="text-secondary text-xs">PM · Engineers · CTO · Conv. Designer</span></div>
+          <div class="text-sm leading-relaxed mt-3"><strong>5 Cross-functional partners</strong><br><span class="text-secondary text-xs">PM · Engineers · CTO · Conv. Designer</span></div>
         </div>
         <div class="meta-group opacity-0">
           <div class="text-[10px] font-bold uppercase tracking-widest text-accent mb-4">Timeline</div>
@@ -574,6 +574,19 @@ tailwind.config = {
           </div>
         </div>
 
+        <!-- ★ Context image placeholder -->
+        <div class="my-10 gs-child">
+          <div class="rounded-xl overflow-hidden border border-gray-200 shadow-sm bg-gray-50">
+            <div class="aspect-[16/9] flex items-center justify-center">
+              <div class="text-center">
+                <svg class="mx-auto mb-2" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+                <div class="text-[10px] text-secondary">App screenshot before redesign</div>
+              </div>
+            </div>
+          </div>
+          <div class="mt-3 text-[10px] text-secondary/50 italic text-center">The existing Lepal.ai experience before the emotional continuity redesign</div>
+        </div>
+
         <!-- ═══ The 72-Hour Wall ═══ -->
         <div class="mt-16 gs-child">
           <h3 class="font-display text-xl font-semibold mb-6">The "72-Hour Wall"</h3>
@@ -731,6 +744,16 @@ tailwind.config = {
           <div class="font-display text-lg lg:text-xl font-semibold leading-snug mb-4">Users felt "unseen."</div>
           <div class="text-sm text-secondary leading-relaxed">The AI was offering solutions when the user needed validation. A backend fix wasn't enough — we needed an <strong class="text-primary font-medium">emotional overhaul</strong>.</div>
         </div>
+
+        <!-- ★ Research NDA notice -->
+        <div class="my-10 gs-child">
+          <div class="rounded-xl border border-dashed border-gray-300 bg-gray-50/50 p-8 flex items-center justify-center">
+            <div class="text-center">
+              <svg class="mx-auto mb-3" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <div class="text-xs text-secondary">Research artifacts are under NDA and cannot be shown.</div>
+            </div>
+          </div>
+        </div>
       </section>
 
       <!-- Section divider -->
@@ -747,6 +770,14 @@ tailwind.config = {
         <div class="text-base text-secondary leading-loose max-w-xl xl:max-w-2xl">
           <p class="mb-5 gs-child">I reframed the goal from <strong class="text-primary font-medium">"Fixing memory"</strong> to <strong class="text-primary font-medium">"Prioritizing empathy before solutions."</strong></p>
           <p class="mb-5 gs-child">I collaborated with ML engineers and PM to build an <strong class="text-primary font-medium">Emotion-Aware AI Framework</strong>. Instead of one-size-fits-all, the system now intercepts user input to "read the room."</p>
+        </div>
+
+        <!-- ★ Framework diagram -->
+        <div class="my-10 gs-child">
+          <div class="rounded-xl overflow-hidden border border-gray-200 shadow-sm">
+            <img src="lepal_img/The Adaptive Tone Framework — how the system classifies emotion and adjusts responses.png" alt="Adaptive Tone Framework" class="w-full block">
+          </div>
+          <div class="mt-3 text-[10px] text-secondary/50 italic text-center">The Adaptive Tone Framework — how the system classifies emotion and adjusts responses</div>
         </div>
 
         <!-- ★ NEW INTERACTION: Live Emotion Classifier -->
@@ -1047,13 +1078,8 @@ tailwind.config = {
                     </div>
                     <span class="text-xs font-bold text-red-500">Before</span>
                   </div>
-                  <div class="rounded-xl overflow-hidden border border-gray-200 shadow-sm bg-gray-50">
-                    <div class="aspect-[4/3] flex items-center justify-center" id="decision1-before-img">
-                      <div class="text-center">
-                        <svg class="mx-auto mb-2" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
-                        <div class="text-[10px] text-secondary">Before image</div>
-                      </div>
-                    </div>
+                  <div class="rounded-xl overflow-hidden border border-gray-200 shadow-sm">
+                    <img src="lepal_img/lepal_before.png" alt="Before — generic AI response" class="w-full block">
                   </div>
                 </div>
                 <!-- After -->
@@ -1064,13 +1090,8 @@ tailwind.config = {
                     </div>
                     <span class="text-xs font-bold text-green-600">After</span>
                   </div>
-                  <div class="rounded-xl overflow-hidden border-2 border-accent/30 shadow-sm bg-gray-50">
-                    <div class="aspect-[4/3] flex items-center justify-center" id="decision1-after-img">
-                      <div class="text-center">
-                        <svg class="mx-auto mb-2" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
-                        <div class="text-[10px] text-accent">After image</div>
-                      </div>
-                    </div>
+                  <div class="rounded-xl overflow-hidden border-2 border-accent/30 shadow-sm">
+                    <img src="lepal_img/lepal_after.png" alt="After — tone-adaptive thinking indicator" class="w-full block">
                   </div>
                 </div>
               </div>
@@ -1367,6 +1388,19 @@ tailwind.config = {
         <div class="text-xs font-bold uppercase tracking-widest text-accent mb-6 gs-child">Cross-Functional Collaboration</div>
         <h2 class="font-display text-2xl lg:text-[1.75rem] font-semibold leading-snug mb-4 max-w-xl xl:max-w-2xl gs-child">Turning Conflict into Co-Creation</h2>
         <p class="text-base text-secondary leading-loose max-w-xl xl:max-w-2xl mb-10 gs-child">The biggest challenge wasn't the pixels — it was <strong class="text-primary font-medium">aligning the team on why</strong> we were building this way.</p>
+
+        <!-- ★ Collaboration image placeholder -->
+        <div class="my-10 gs-child">
+          <div class="rounded-xl overflow-hidden border border-gray-200 shadow-sm bg-gray-50">
+            <div class="aspect-[16/9] flex items-center justify-center">
+              <div class="text-center">
+                <svg class="mx-auto mb-2" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+                <div class="text-[10px] text-secondary">Collaboration artifacts</div>
+              </div>
+            </div>
+          </div>
+          <div class="mt-3 text-[10px] text-secondary/50 italic text-center">Figma workspace, design reviews, or team alignment sessions</div>
+        </div>
 
         <!-- ★ Collaboration Journey Timeline -->
         <div class="my-10 gs-child">
@@ -1740,6 +1774,19 @@ tailwind.config = {
         </div>
 
         <p class="text-base text-secondary leading-loose max-w-xl xl:max-w-2xl gs-child">This project taught me that the best AI products don't just process language — they <strong class="text-primary font-medium">understand context, respect emotion, and create space for human vulnerability</strong>.</p>
+
+        <!-- ★ Reflection image placeholder -->
+        <div class="my-10 gs-child">
+          <div class="rounded-xl overflow-hidden border border-gray-200 shadow-sm bg-gray-50">
+            <div class="aspect-[16/9] flex items-center justify-center">
+              <div class="text-center">
+                <svg class="mx-auto mb-2" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+                <div class="text-[10px] text-secondary">Team photo or presentation</div>
+              </div>
+            </div>
+          </div>
+          <div class="mt-3 text-[10px] text-secondary/50 italic text-center">Presenting the final product or team working session</div>
+        </div>
       </section>
 
       <!-- Footer -->
@@ -1833,7 +1880,7 @@ function animateCounter(el) {
     onUpdate: () => { el.textContent = prefix + Math.round(obj.val) + suffix; }
   });
 }
-document.querySelectorAll('.main-body .stat-number').forEach(el => {
+document.querySelectorAll('.stat-number').forEach(el => {
   ScrollTrigger.create({ trigger: el, start: 'top 85%', once: true, onEnter: () => animateCounter(el) });
 });
 
