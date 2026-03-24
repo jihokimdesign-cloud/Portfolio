@@ -43,11 +43,19 @@ tailwind.config = {
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
-  .toc { visibility: hidden; opacity: 0; transform: translateX(-16px); }
-  .toc.visible { visibility: visible; }
-  .toc-link { border-left: 2px solid transparent; transition: color 0.25s, border-color 0.25s; }
-  .toc-link:hover, .toc-link.active { color: #1a1a1a; font-weight: 500; }
-  .toc-link.active { border-left-color: #16a34a; }
+  .toc { position: fixed; top: 50%; left: max(24px, calc(50% - 640px)); transform: translateY(-50%); z-index: 50; width: 144px; visibility: hidden; opacity: 0; }
+  .toc-card { background: rgba(255,255,255,0.72); backdrop-filter: blur(16px) saturate(180%); -webkit-backdrop-filter: blur(16px) saturate(180%); border: 1px solid rgba(0,0,0,0.06); border-radius: 14px; padding: 10px; box-shadow: 0 0 0 0.5px rgba(0,0,0,0.03), 0 1px 3px rgba(0,0,0,0.04), 0 6px 24px rgba(0,0,0,0.06); }
+  .toc-back { display: inline-flex; align-items: center; font-size: 11px; font-weight: 500; letter-spacing: 0.01em; color: #999; text-decoration: none; margin-bottom: 10px; transition: color 0.18s; }
+  .toc-back:hover { color: #1a1a1a; }
+  .toc-links { display: flex; flex-direction: column; gap: 1px; }
+  .toc-link { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #999; text-decoration: none; padding: 6px 10px; border-radius: 8px; transition: color 0.18s, background 0.18s; line-height: 1.3; }
+  .toc-link:hover { color: #1a1a1a; background: rgba(0,0,0,0.03); }
+  .toc-link:active { transform: scale(0.97); }
+  .toc-link.active { color: #1a1a1a; font-weight: 500; background: rgba(22,163,74,0.06); }
+  .toc-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; opacity: 0.2; flex-shrink: 0; transition: all 0.25s cubic-bezier(.19,1,.22,1); }
+  .toc-link:hover .toc-dot { opacity: 0.5; }
+  .toc-link.active .toc-dot { opacity: 1; width: 6px; height: 6px; background: #16a34a; box-shadow: 0 0 0 3px rgba(22,163,74,0.15); }
+  @media (max-width: 1440px) { .toc { display: none; } }
 
   .img-placeholder { position: relative; overflow: hidden; }
   .img-placeholder::after {
@@ -96,6 +104,34 @@ tailwind.config = {
     border-radius: inherit;
   }
   .hero-card:hover .card-shine { opacity: 1; }
+
+  /* Hero brand background text + fade */
+  .hero-brand-bg {
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: clamp(100px, 14vw, 240px);
+    font-weight: 800;
+    color: rgba(22,163,74,0.07);
+    letter-spacing: -0.05em;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 1;
+    line-height: 0.85;
+    user-select: none;
+  }
+  .hero-fade {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, rgba(22,163,74,0.15) 0%, rgba(22,163,74,0.06) 30%, transparent 60%);
+    pointer-events: none;
+    z-index: 1;
+  }
 
   .scroll-indicator {
     position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
@@ -164,15 +200,17 @@ tailwind.config = {
 <script>(function(){var n=document.getElementById('caseNav'),ly=0;window.addEventListener('scroll',function(){var y=window.scrollY;if(y>ly&&y>80)n.classList.add('nav-hidden');else n.classList.remove('nav-hidden');ly=y},{passive:true})})();</script>
 
 <!-- ─── TOC Sidebar ─── -->
-<nav class="toc fixed left-0 top-0 w-56 h-screen px-8 py-12 flex flex-col z-50 bg-white border-r border-gray-100">
-  <a href="#" class="text-sm text-secondary hover:text-primary mb-6 no-underline transition-colors">&larr; Back to Work</a>
-  <div class="flex flex-col gap-1.5">
-    <a href="#hero" class="toc-link text-sm text-secondary no-underline py-1.5 pl-3 -ml-3"><span>Sidewalk</span></a>
-    <a href="#context" class="toc-link text-sm text-secondary no-underline py-1.5 pl-3 -ml-3"><span>The Challenge</span></a>
-    <a href="#process" class="toc-link text-sm text-secondary no-underline py-1.5 pl-3 -ml-3"><span>Process</span></a>
-    <a href="#system" class="toc-link text-sm text-secondary no-underline py-1.5 pl-3 -ml-3"><span>Design System</span></a>
-    <a href="#outcome" class="toc-link text-sm text-secondary no-underline py-1.5 pl-3 -ml-3"><span>Outcome &amp; Impact</span></a>
-    <a href="#reflection" class="toc-link text-sm text-secondary no-underline py-1.5 pl-3 -ml-3"><span>Reflection</span></a>
+<nav class="toc">
+  <a href="index.html" class="toc-back">&larr; Back to Work</a>
+  <div class="toc-card">
+    <div class="toc-links">
+      <a href="#hero" class="toc-link"><span class="toc-dot"></span>Sidewalk</a>
+      <a href="#context" class="toc-link"><span class="toc-dot"></span>The Challenge</a>
+      <a href="#process" class="toc-link"><span class="toc-dot"></span>Process</a>
+      <a href="#system" class="toc-link"><span class="toc-dot"></span>Design System</a>
+      <a href="#outcome" class="toc-link"><span class="toc-dot"></span>Outcome &amp; Impact</a>
+      <a href="#reflection" class="toc-link"><span class="toc-dot"></span>Reflection</a>
+    </div>
   </div>
 </nav>
 
@@ -181,16 +219,17 @@ tailwind.config = {
 
   <!-- ═══════ HERO ═══════ -->
   <header class="relative overflow-hidden bg-white" id="hero">
-    <div id="hero-light" class="absolute top-0 left-0 w-full pointer-events-none" style="height:900px;opacity:1">
-      <div class="absolute inset-0" style="background:linear-gradient(180deg, rgba(22,163,74,0.22) 0%, rgba(74,222,128,0.12) 20%, rgba(134,239,172,0.06) 45%, transparent 80%)"></div>
-      <div class="absolute top-0 left-1/2 -translate-x-1/2" style="width:800px;height:600px;background:radial-gradient(ellipse at 50% 0%, rgba(22,163,74,0.25) 0%, rgba(22,163,74,0.08) 40%, transparent 70%)"></div>
-      <div class="absolute top-0 left-1/2 -translate-x-1/2" style="width:300px;height:400px;background:radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.6) 0%, transparent 55%)"></div>
-    </div>
+    <div class="hero-mesh"></div>
+    <div class="hero-fade"></div>
+    <div class="hero-brand-bg" aria-hidden="true">Sidewalk</div>
 
     <!-- Hero photo -->
-    <div class="px-6 lg:px-16 pt-20 pb-6 relative z-10">
+    <div class="px-6 lg:px-16 pt-52 pb-6 relative z-10" style="overflow:visible">
       <div class="max-w-4xl mx-auto opacity-0 hero-badge">
         <img src="ProjectSidewalk/PS_Mockup.png" alt="Project Sidewalk — Final Product" class="w-full h-auto block" />
+      </div>
+      <div id="hero-light" class="absolute left-0 w-full pointer-events-none" style="top:0;left:0;right:0;height:100%;opacity:1">
+        <div class="absolute inset-0" style="background:linear-gradient(180deg, rgba(22,163,74,0.18) 0%, rgba(74,222,128,0.08) 30%, transparent 60%)"></div>
       </div>
     </div>
 
@@ -1290,200 +1329,222 @@ tailwind.config = {
 <script>
 gsap.registerPlugin(ScrollTrigger);
 
-// ─── Scroll progress bar ───
-gsap.to('.scroll-progress', {
-  scaleX: 1,
-  ease: 'none',
-  scrollTrigger: { trigger: 'body', start: 'top top', end: 'bottom bottom', scrub: 0.3 }
-});
+// ─── Detect reduced motion preference for event-driven animations ───
+var _prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-// ─── Hero entrance ───
-const heroTl = gsap.timeline({ defaults: { ease: 'power3.out' }});
-heroTl
-  .fromTo('#hero-light', { y: -40 }, { y: 0, duration: 2, ease: 'power2.out' })
-  .fromTo('.hero-badge', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.8, stagger: 0.12 }, '-=0.8')
-  .fromTo('.hero-subtitle', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.7, stagger: 0.1 }, '-=0.5')
-  .fromTo('.hero-contributions', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6 }, '-=0.3')
-  .fromTo('.meta-group', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6, stagger: 0.12 }, '-=0.4');
-
-// ─── Scroll arrow gentle bounce ───
-gsap.to('#scroll-arrow', {
-  y: 5, duration: 1.2, repeat: -1, yoyo: true, ease: 'sine.inOut'
-});
-
-// ─── Audit bar chart animation ───
-ScrollTrigger.create({
-  trigger: '.audit-bar', start: 'top 85%', once: true,
-  onEnter: () => {
-    document.querySelectorAll('.audit-bar').forEach((bar, i) => {
-      const targetW = bar.getAttribute('data-width');
-      gsap.to(bar, { width: targetW, duration: 1, delay: i * 0.15, ease: 'power3.out' });
-    });
-    document.querySelectorAll('.audit-label').forEach((lbl, i) => {
-      gsap.to(lbl, { opacity: 1, duration: 0.3, delay: 0.6 + i * 0.15 });
-    });
-  }
-});
-
-// ─── Result bar animation ───
-ScrollTrigger.create({
-  trigger: '.result-bar', start: 'top 85%', once: true,
-  onEnter: () => {
-    document.querySelectorAll('.result-bar').forEach((bar, i) => {
-      const targetW = bar.getAttribute('data-width');
-      gsap.to(bar, { width: targetW, duration: 1.2, delay: i * 0.15, ease: 'power3.out' });
-    });
-    document.querySelectorAll('.result-label').forEach((lbl, i) => {
-      gsap.to(lbl, { opacity: 1, duration: 0.3, delay: 0.8 + i * 0.15 });
-    });
-  }
-});
-
-// ─── Hero cards scroll-triggered entrance ───
-gsap.set('.hero-card', { opacity: 0, y: 40 });
-ScrollTrigger.create({
-  trigger: '.hero-card', start: 'top 85%', once: true,
-  onEnter: () => {
-    gsap.to('.hero-card', {
-      opacity: 1, y: 0, duration: 0.7, stagger: 0.2, ease: 'power3.out'
-    });
-  }
-});
-
-// ─── Hero cards 3D tilt on hover ───
-document.querySelectorAll('.hero-card').forEach(card => {
-  card.addEventListener('mousemove', e => {
-    const r = card.getBoundingClientRect();
-    const x = (e.clientX - r.left) / r.width;
-    const y = (e.clientY - r.top) / r.height;
-    const tiltX = (y - 0.5) * -10;
-    const tiltY = (x - 0.5) * 10;
-    card.style.transform = 'perspective(600px) rotateX(' + tiltX + 'deg) rotateY(' + tiltY + 'deg) scale(1.02)';
-    card.style.boxShadow = '0 20px 40px rgba(22,163,74,0.1), 0 8px 16px rgba(0,0,0,0.06)';
-    card.style.setProperty('--mx', (x * 100) + '%');
-    card.style.setProperty('--my', (y * 100) + '%');
-  });
-  card.addEventListener('mouseleave', () => {
-    card.style.transform = '';
-    card.style.boxShadow = '';
-  });
-});
-
-// ─── Light beam follows scroll ───
-gsap.to('#hero-light', {
-  y: 150, opacity: 0, ease: 'none',
-  scrollTrigger: { trigger: '#hero', start: '20% top', end: 'bottom top', scrub: 1 }
-});
-
-// ─── Number counter ───
-function animateCounter(el) {
-  const target = parseFloat(el.dataset.target);
-  const prefix = el.dataset.prefix || '';
-  const suffix = el.dataset.suffix || '';
-  const isDecimal = el.dataset.decimal === 'true';
-  const obj = { val: 0 };
+// ─── Number counter (utility used both inside and outside matchMedia) ───
+function animateCounter(el, reduced) {
+  var target = parseFloat(el.dataset.target);
+  var prefix = el.dataset.prefix || '';
+  var suffix = el.dataset.suffix || '';
+  var isDecimal = el.dataset.decimal === 'true';
+  var obj = { val: 0 };
   gsap.to(obj, {
-    val: target, duration: 1.5, ease: 'power2.out',
-    onUpdate: () => {
+    val: target, duration: reduced ? 0 : 1.5, ease: 'power2.out',
+    onUpdate: function() {
       el.textContent = prefix + (isDecimal ? obj.val.toFixed(2) : Math.round(obj.val)) + suffix;
     }
   });
 }
 
-// ─── Hero meta-strip stat counters ───
-document.querySelectorAll('.meta-group .stat-number').forEach(el => {
-  animateCounter(el);
-});
+var mm = gsap.matchMedia();
+mm.add({
+  normal: '(prefers-reduced-motion: no-preference)',
+  reduced: '(prefers-reduced-motion: reduce)'
+}, function(context) {
+  var reduced = context.conditions.reduced;
 
-// ─── TOC ───
-const toc = document.querySelector('.toc');
-ScrollTrigger.create({
-  trigger: '.main-body', start: 'top 60%',
-  onEnter: () => gsap.to(toc, { opacity: 1, x: 0, visibility: 'visible', duration: 0.5, ease: 'power2.out' }),
-  onLeaveBack: () => gsap.to(toc, { opacity: 0, x: -16, duration: 0.35, ease: 'power2.in', onComplete: () => { toc.style.visibility = 'hidden'; } })
-});
+  // ─── Scroll progress bar (scrub-based, user-driven) ───
+  gsap.to('.scroll-progress', {
+    scaleX: 1,
+    ease: 'none',
+    scrollTrigger: { trigger: 'body', start: 'top top', end: 'bottom bottom', scrub: 0.3 }
+  });
 
-const tocLinks = document.querySelectorAll('.toc-link');
-document.querySelectorAll('.section').forEach(section => {
+  // ─── Hero entrance ───
+  var heroTl = gsap.timeline({ defaults: { ease: 'power3.out' }});
+  heroTl
+    .fromTo('.hero-brand-bg', { opacity: 0, scale: 0.92 }, { opacity: 1, scale: 1, duration: reduced ? 0 : 0.8, ease: 'power2.out' })
+    .fromTo('.hero-badge', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: reduced ? 0 : 0.8, stagger: 0.12 }, '-=0.3')
+    .fromTo('.hero-subtitle', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: reduced ? 0 : 0.7, stagger: 0.1 }, '-=0.5')
+    .fromTo('.hero-contributions', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: reduced ? 0 : 0.6 }, '-=0.3')
+    .fromTo('.meta-group', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: reduced ? 0 : 0.6, stagger: 0.12 }, '-=0.4');
+
+  // ─── Scroll arrow gentle bounce ───
+  gsap.to('#scroll-arrow', {
+    y: 5, duration: reduced ? 0 : 1.2, repeat: reduced ? 0 : -1, yoyo: true, ease: 'sine.inOut'
+  });
+
+  // ─── Audit bar chart animation ───
   ScrollTrigger.create({
-    trigger: section, start: 'top 30%', end: 'bottom 30%',
-    onEnter: () => setActive(section.id),
-    onEnterBack: () => setActive(section.id),
+    trigger: '.audit-bar', start: 'top 85%', once: true,
+    onEnter: function() {
+      document.querySelectorAll('.audit-bar').forEach(function(bar, i) {
+        var targetW = bar.getAttribute('data-width');
+        gsap.to(bar, { width: targetW, duration: reduced ? 0 : 1, delay: i * 0.15, ease: 'power3.out' });
+      });
+      document.querySelectorAll('.audit-label').forEach(function(lbl, i) {
+        gsap.to(lbl, { opacity: 1, duration: reduced ? 0 : 0.3, delay: 0.6 + i * 0.15 });
+      });
+    }
+  });
+
+  // ─── Result bar animation ───
+  ScrollTrigger.create({
+    trigger: '.result-bar', start: 'top 85%', once: true,
+    onEnter: function() {
+      document.querySelectorAll('.result-bar').forEach(function(bar, i) {
+        var targetW = bar.getAttribute('data-width');
+        gsap.to(bar, { width: targetW, duration: reduced ? 0 : 1.2, delay: i * 0.15, ease: 'power3.out' });
+      });
+      document.querySelectorAll('.result-label').forEach(function(lbl, i) {
+        gsap.to(lbl, { opacity: 1, duration: reduced ? 0 : 0.3, delay: 0.8 + i * 0.15 });
+      });
+    }
+  });
+
+  // ─── Hero cards scroll-triggered entrance ───
+  gsap.set('.hero-card', { opacity: 0, y: 40 });
+  ScrollTrigger.create({
+    trigger: '.hero-card', start: 'top 85%', once: true,
+    onEnter: function() {
+      gsap.to('.hero-card', {
+        opacity: 1, y: 0, duration: reduced ? 0 : 0.7, stagger: 0.2, ease: 'power3.out'
+      });
+    }
+  });
+
+  // ─── Hero meta-strip stat counters ───
+  document.querySelectorAll('.meta-group .stat-number').forEach(function(el) {
+    animateCounter(el, reduced);
+  });
+
+  // ─── TOC ───
+  var toc = document.querySelector('.toc');
+  ScrollTrigger.create({
+    trigger: '.main-body', start: 'top 60%',
+    onEnter: function() { gsap.to(toc, { opacity: 1, visibility: 'visible', duration: reduced ? 0 : 0.4, ease: 'power2.out' }); },
+    onLeaveBack: function() { gsap.to(toc, { opacity: 0, duration: reduced ? 0 : 0.3, ease: 'power2.in', onComplete: function() { toc.style.visibility = 'hidden'; } }); }
+  });
+
+  var tocLinks = document.querySelectorAll('.toc-link');
+  document.querySelectorAll('.section').forEach(function(section) {
+    ScrollTrigger.create({
+      trigger: section, start: 'top 30%', end: 'bottom 30%',
+      onEnter: function() { setActive(section.id); },
+      onEnterBack: function() { setActive(section.id); },
+    });
+  });
+  function setActive(id) {
+    tocLinks.forEach(function(link) { link.classList.toggle('active', link.getAttribute('href') === '#' + id); });
+  }
+
+  // ─── Section stagger reveals ───
+  document.querySelectorAll('.section, .pillar').forEach(function(section) {
+    var children = section.querySelectorAll(':scope > .gs-child, :scope > div > .gs-child, :scope > div > div > .gs-child');
+    if (!children.length) return;
+    gsap.fromTo(children,
+      { opacity: 0, y: 30 },
+      { opacity: 1, y: 0, duration: reduced ? 0 : 0.65, stagger: 0.08, ease: 'power3.out',
+        scrollTrigger: { trigger: section, start: 'top 80%' }
+      }
+    );
+  });
+
+  // ─── Body stat counters ───
+  document.querySelectorAll('.main-body .stat-number, .main-body .result-num').forEach(function(el) {
+    ScrollTrigger.create({
+      trigger: el, start: 'top 85%', once: true,
+      onEnter: function() { animateCounter(el, reduced); },
+    });
+  });
+
+  // ─── Image placeholders ───
+  document.querySelectorAll('.main-body .img-placeholder').forEach(function(el) {
+    gsap.fromTo(el,
+      { opacity: 0, y: 30, scale: 0.97 },
+      { opacity: 1, y: 0, scale: 1, duration: reduced ? 0 : 0.7, ease: 'power3.out',
+        scrollTrigger: { trigger: el, start: 'top 85%' }
+      }
+    );
+  });
+
+  // ─── Formula boxes stagger ───
+  gsap.fromTo('.formula-box',
+    { opacity: 0, y: 20, scale: 0.9 },
+    { opacity: 1, y: 0, scale: 1, duration: reduced ? 0 : 0.5, stagger: 0.15, ease: 'back.out(1.4)',
+      scrollTrigger: { trigger: '.formula-box', start: 'top 85%' }
+    }
+  );
+  gsap.fromTo('.formula-arrow',
+    { opacity: 0, x: -10 },
+    { opacity: 1, x: 0, duration: reduced ? 0 : 0.4, stagger: 0.1, delay: 0.3,
+      scrollTrigger: { trigger: '.formula-box', start: 'top 85%' }
+    }
+  );
+
+  // ─── Research method cards ───
+  gsap.fromTo('.research-method',
+    { opacity: 0, x: -20 },
+    { opacity: 1, x: 0, duration: reduced ? 0 : 0.6, stagger: 0.15, ease: 'power3.out',
+      scrollTrigger: { trigger: '.research-method', start: 'top 85%' }
+    }
+  );
+
+  // ─── Section divider icons ───
+  gsap.utils.toArray('.section-icon').forEach(function(icon) {
+    gsap.fromTo(icon,
+      { opacity: 0, rotation: -90, scale: 0.5 },
+      { opacity: 1, rotation: 0, scale: 1, duration: reduced ? 0 : 0.6, ease: 'back.out(2)',
+        scrollTrigger: { trigger: icon, start: 'top 90%' }
+      }
+    );
+  });
+
+  // ─── Flip card entrance animation ───
+  gsap.fromTo('.flip-card',
+    { opacity: 0, y: 20, rotateY: -15 },
+    { opacity: 1, y: 0, rotateY: 0, duration: reduced ? 0 : 0.6, stagger: 0.15, ease: 'power3.out',
+      scrollTrigger: { trigger: '.flip-card', start: 'top 85%' }
+    }
+  );
+
+  // --- Floating preview cards entrance ---
+  ScrollTrigger.create({
+    trigger: '#quick-summary-section', start: 'top 75%', once: true,
+    onEnter: function() {
+      gsap.fromTo('.summary-float-card',
+        { opacity: 0, y: 30, scale: 0.8 },
+        { opacity: 1, y: 0, scale: 1, duration: reduced ? 0 : 0.7, stagger: 0.15, ease: 'back.out(1.7)' }
+      );
+      document.querySelectorAll('.summary-float-card').forEach(function(card, i) {
+        gsap.to(card, {
+          y: '-=8', duration: reduced ? 0 : (2 + i * 0.4), repeat: reduced ? 0 : -1, yoyo: true, ease: 'sine.inOut', delay: i * 0.3
+        });
+      });
+    }
+  });
+
+}); // end mm.add
+
+// ─── Hero cards 3D tilt on hover ───
+document.querySelectorAll('.hero-card').forEach(function(card) {
+  card.addEventListener('mousemove', function(e) {
+    var r = card.getBoundingClientRect();
+    var x = (e.clientX - r.left) / r.width;
+    var y = (e.clientY - r.top) / r.height;
+    var tiltX = (y - 0.5) * -10;
+    var tiltY = (x - 0.5) * 10;
+    card.style.transform = 'perspective(600px) rotateX(' + tiltX + 'deg) rotateY(' + tiltY + 'deg) scale(1.02)';
+    card.style.boxShadow = '0 20px 40px rgba(22,163,74,0.1), 0 8px 16px rgba(0,0,0,0.06)';
+    card.style.setProperty('--mx', (x * 100) + '%');
+    card.style.setProperty('--my', (y * 100) + '%');
+  });
+  card.addEventListener('mouseleave', function() {
+    card.style.transform = '';
+    card.style.boxShadow = '';
   });
 });
-function setActive(id) {
-  tocLinks.forEach(link => link.classList.toggle('active', link.getAttribute('href') === '#' + id));
-}
-
-// ─── Section stagger reveals ───
-document.querySelectorAll('.section, .pillar').forEach(section => {
-  const children = section.querySelectorAll(':scope > .gs-child, :scope > div > .gs-child, :scope > div > div > .gs-child');
-  if (!children.length) return;
-  gsap.fromTo(children,
-    { opacity: 0, y: 30 },
-    { opacity: 1, y: 0, duration: 0.65, stagger: 0.08, ease: 'power3.out',
-      scrollTrigger: { trigger: section, start: 'top 80%' }
-    }
-  );
-});
-
-// ─── Body stat counters ───
-document.querySelectorAll('.main-body .stat-number, .main-body .result-num').forEach(el => {
-  ScrollTrigger.create({
-    trigger: el, start: 'top 85%', once: true,
-    onEnter: () => animateCounter(el),
-  });
-});
-
-// ─── Image placeholders ───
-document.querySelectorAll('.main-body .img-placeholder').forEach(el => {
-  gsap.fromTo(el,
-    { opacity: 0, y: 30, scale: 0.97 },
-    { opacity: 1, y: 0, scale: 1, duration: 0.7, ease: 'power3.out',
-      scrollTrigger: { trigger: el, start: 'top 85%' }
-    }
-  );
-});
-
-// ─── Formula boxes stagger ───
-gsap.fromTo('.formula-box',
-  { opacity: 0, y: 20, scale: 0.9 },
-  { opacity: 1, y: 0, scale: 1, duration: 0.5, stagger: 0.15, ease: 'back.out(1.4)',
-    scrollTrigger: { trigger: '.formula-box', start: 'top 85%' }
-  }
-);
-gsap.fromTo('.formula-arrow',
-  { opacity: 0, x: -10 },
-  { opacity: 1, x: 0, duration: 0.4, stagger: 0.1, delay: 0.3,
-    scrollTrigger: { trigger: '.formula-box', start: 'top 85%' }
-  }
-);
-
-// ─── Research method cards ───
-gsap.fromTo('.research-method',
-  { opacity: 0, x: -20 },
-  { opacity: 1, x: 0, duration: 0.6, stagger: 0.15, ease: 'power3.out',
-    scrollTrigger: { trigger: '.research-method', start: 'top 85%' }
-  }
-);
-
-// ─── Section divider icons ───
-gsap.utils.toArray('.section-icon').forEach(icon => {
-  gsap.fromTo(icon,
-    { opacity: 0, rotation: -90, scale: 0.5 },
-    { opacity: 1, rotation: 0, scale: 1, duration: 0.6, ease: 'back.out(2)',
-      scrollTrigger: { trigger: icon, start: 'top 90%' }
-    }
-  );
-});
-
-// ─── Flip card entrance animation ───
-gsap.fromTo('.flip-card',
-  { opacity: 0, y: 20, rotateY: -15 },
-  { opacity: 1, y: 0, rotateY: 0, duration: 0.6, stagger: 0.15, ease: 'power3.out',
-    scrollTrigger: { trigger: '.flip-card', start: 'top 85%' }
-  }
-);
 
 // ═══════════════════════════════════════════
 // INTERACTIVE: Summary Mode Overlay Carousel
@@ -1491,69 +1552,53 @@ gsap.fromTo('.flip-card',
 
 // --- Mouse-follow glow ---
 (function(){
-  const section = document.getElementById('quick-summary-section');
-  const glow = document.getElementById('summary-glow');
+  var section = document.getElementById('quick-summary-section');
+  var glow = document.getElementById('summary-glow');
   if(!section || !glow) return;
-  section.addEventListener('mouseenter', () => { glow.style.opacity = '1'; });
-  section.addEventListener('mouseleave', () => { glow.style.opacity = '0'; });
-  section.addEventListener('mousemove', e => {
-    const r = section.getBoundingClientRect();
+  section.addEventListener('mouseenter', function() { glow.style.opacity = '1'; });
+  section.addEventListener('mouseleave', function() { glow.style.opacity = '0'; });
+  section.addEventListener('mousemove', function(e) {
+    var r = section.getBoundingClientRect();
     glow.style.left = (e.clientX - r.left) + 'px';
     glow.style.top = (e.clientY - r.top) + 'px';
   });
 })();
 
-// --- Floating preview cards entrance ---
-ScrollTrigger.create({
-  trigger: '#quick-summary-section', start: 'top 75%', once: true,
-  onEnter: () => {
-    gsap.fromTo('.summary-float-card',
-      { opacity: 0, y: 30, scale: 0.8 },
-      { opacity: 1, y: 0, scale: 1, duration: 0.7, stagger: 0.15, ease: 'back.out(1.7)' }
-    );
-    document.querySelectorAll('.summary-float-card').forEach((card, i) => {
-      gsap.to(card, {
-        y: '-=8', duration: 2 + i * 0.4, repeat: -1, yoyo: true, ease: 'sine.inOut', delay: i * 0.3
-      });
-    });
-  }
-});
-
 // --- Magnetic button effect ---
 (function(){
-  const btn = document.querySelector('.summary-magnetic');
+  var btn = document.querySelector('.summary-magnetic');
   if(!btn) return;
-  btn.addEventListener('mousemove', e => {
-    const r = btn.getBoundingClientRect();
-    const x = (e.clientX - r.left - r.width / 2) * 0.15;
-    const y = (e.clientY - r.top - r.height / 2) * 0.15;
+  btn.addEventListener('mousemove', function(e) {
+    var r = btn.getBoundingClientRect();
+    var x = (e.clientX - r.left - r.width / 2) * 0.15;
+    var y = (e.clientY - r.top - r.height / 2) * 0.15;
     btn.style.transform = 'translate(' + x + 'px,' + y + 'px)';
   });
-  btn.addEventListener('mouseleave', () => {
-    gsap.to(btn, { x: 0, y: 0, duration: 0.4, ease: 'elastic.out(1, 0.4)' });
+  btn.addEventListener('mouseleave', function() {
+    gsap.to(btn, { x: 0, y: 0, duration: _prefersReduced ? 0 : 0.4, ease: 'elastic.out(1, 0.4)' });
     btn.style.transform = '';
   });
 })();
 
 // --- Carousel logic ---
 (function(){
-  const btn = document.getElementById('summary-btn');
-  const overlay = document.getElementById('summary-overlay');
-  const backdrop = document.getElementById('summary-backdrop');
-  const closeBtn = document.getElementById('summary-close');
-  const slides = document.getElementById('summary-slides');
-  const prevBtn = document.getElementById('summary-prev');
-  const nextBtn = document.getElementById('summary-next');
-  const dots = document.querySelectorAll('.summary-dot');
+  var btn = document.getElementById('summary-btn');
+  var overlay = document.getElementById('summary-overlay');
+  var backdrop = document.getElementById('summary-backdrop');
+  var closeBtn = document.getElementById('summary-close');
+  var slides = document.getElementById('summary-slides');
+  var prevBtn = document.getElementById('summary-prev');
+  var nextBtn = document.getElementById('summary-next');
+  var dots = document.querySelectorAll('.summary-dot');
   if(!btn || !overlay) return;
 
-  let current = 0;
-  const total = dots.length;
+  var current = 0;
+  var total = dots.length;
 
   function goTo(i) {
     current = Math.max(0, Math.min(total - 1, i));
     slides.style.transform = 'translateX(-' + (current * 100) + '%)';
-    dots.forEach((d, idx) => {
+    dots.forEach(function(d, idx) {
       d.style.backgroundColor = idx === current ? '#16a34a' : '#d1d5db';
     });
     prevBtn.disabled = current === 0;
@@ -1564,11 +1609,11 @@ ScrollTrigger.create({
     overlay.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
     goTo(0);
-    gsap.fromTo('#summary-card', { opacity: 0, scale: 0.92, y: 40 }, { opacity: 1, scale: 1, y: 0, duration: 0.4, ease: 'power3.out' });
+    gsap.fromTo('#summary-card', { opacity: 0, scale: 0.92, y: 40 }, { opacity: 1, scale: 1, y: 0, duration: _prefersReduced ? 0 : 0.4, ease: 'power3.out' });
   }
 
   function closeSummary() {
-    gsap.to('#summary-card', { opacity: 0, scale: 0.95, y: 20, duration: 0.25, ease: 'power2.in', onComplete: () => {
+    gsap.to('#summary-card', { opacity: 0, scale: 0.95, y: 20, duration: _prefersReduced ? 0 : 0.25, ease: 'power2.in', onComplete: function() {
       overlay.classList.add('hidden');
       document.body.style.overflow = '';
     }});
@@ -1577,14 +1622,14 @@ ScrollTrigger.create({
   btn.addEventListener('click', openSummary);
   closeBtn.addEventListener('click', closeSummary);
   backdrop.addEventListener('click', closeSummary);
-  prevBtn.addEventListener('click', () => goTo(current - 1));
-  nextBtn.addEventListener('click', () => goTo(current + 1));
+  prevBtn.addEventListener('click', function() { goTo(current - 1); });
+  nextBtn.addEventListener('click', function() { goTo(current + 1); });
 
-  dots.forEach((dot, idx) => {
-    dot.addEventListener('click', () => goTo(idx));
+  dots.forEach(function(dot, idx) {
+    dot.addEventListener('click', function() { goTo(idx); });
   });
 
-  document.addEventListener('keydown', e => {
+  document.addEventListener('keydown', function(e) {
     if(overlay.classList.contains('hidden')) return;
     if(e.key === 'Escape') closeSummary();
     if(e.key === 'ArrowRight') goTo(current + 1);

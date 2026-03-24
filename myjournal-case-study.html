@@ -42,11 +42,19 @@ tailwind.config = {
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
-  .toc { visibility: hidden; opacity: 0; transform: translateX(-16px); }
-  .toc.visible { visibility: visible; }
-  .toc-link { border-left: 2px solid transparent; transition: color 0.25s, border-color 0.25s; }
-  .toc-link:hover, .toc-link.active { color: #1a1a1a; font-weight: 500; }
-  .toc-link.active { border-left-color: #8b5cf6; }
+  .toc { position: fixed; top: 50%; left: max(24px, calc(50% - 640px)); transform: translateY(-50%); z-index: 50; width: 144px; visibility: hidden; opacity: 0; }
+  .toc-card { background: rgba(255,255,255,0.72); backdrop-filter: blur(16px) saturate(180%); -webkit-backdrop-filter: blur(16px) saturate(180%); border: 1px solid rgba(0,0,0,0.06); border-radius: 14px; padding: 10px; box-shadow: 0 0 0 0.5px rgba(0,0,0,0.03), 0 1px 3px rgba(0,0,0,0.04), 0 6px 24px rgba(0,0,0,0.06); }
+  .toc-back { display: inline-flex; align-items: center; font-size: 11px; font-weight: 500; letter-spacing: 0.01em; color: #999; text-decoration: none; margin-bottom: 10px; transition: color 0.18s; }
+  .toc-back:hover { color: #1a1a1a; }
+  .toc-links { display: flex; flex-direction: column; gap: 1px; }
+  .toc-link { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #999; text-decoration: none; padding: 6px 10px; border-radius: 8px; transition: color 0.18s, background 0.18s; line-height: 1.3; }
+  .toc-link:hover { color: #1a1a1a; background: rgba(0,0,0,0.03); }
+  .toc-link:active { transform: scale(0.97); }
+  .toc-link.active { color: #1a1a1a; font-weight: 500; background: rgba(139,92,246,0.06); }
+  .toc-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; opacity: 0.2; flex-shrink: 0; transition: all 0.25s cubic-bezier(.19,1,.22,1); }
+  .toc-link:hover .toc-dot { opacity: 0.5; }
+  .toc-link.active .toc-dot { opacity: 1; width: 6px; height: 6px; background: #8b5cf6; box-shadow: 0 0 0 3px rgba(139,92,246,0.15); }
+  @media (max-width: 1440px) { .toc { display: none; } }
 
   .img-placeholder { position: relative; overflow: hidden; }
   .img-placeholder::after {
@@ -73,6 +81,34 @@ tailwind.config = {
       radial-gradient(ellipse 600px 400px at 10% 20%, rgba(139,92,246,0.04), transparent),
       radial-gradient(ellipse 500px 300px at 80% 60%, rgba(192,132,252,0.03), transparent),
       radial-gradient(ellipse 400px 400px at 50% 100%, rgba(139,92,246,0.02), transparent);
+  }
+
+  /* Hero brand background text + fade */
+  .hero-brand-bg {
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: clamp(120px, 18vw, 300px);
+    font-weight: 800;
+    color: rgba(139,92,246,0.07);
+    letter-spacing: -0.05em;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 1;
+    line-height: 0.85;
+    user-select: none;
+  }
+  .hero-fade {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, rgba(139,92,246,0.15) 0%, rgba(139,92,246,0.06) 30%, transparent 60%);
+    pointer-events: none;
+    z-index: 1;
   }
 
   @keyframes bounce-soft {
@@ -168,17 +204,19 @@ tailwind.config = {
 <script>(function(){var n=document.getElementById('caseNav'),ly=0;window.addEventListener('scroll',function(){var y=window.scrollY;if(y>ly&&y>80)n.classList.add('nav-hidden');else n.classList.remove('nav-hidden');ly=y},{passive:true})})();</script>
 
 <!-- ─── TOC Sidebar ─── -->
-<nav class="toc fixed left-0 top-0 w-56 h-screen px-8 py-12 flex flex-col z-50 bg-white border-r border-gray-100">
-  <a href="#" class="text-sm text-secondary hover:text-primary mb-6 no-underline transition-colors">← Back to Work</a>
-  <div class="flex flex-col gap-1.5">
-    <a href="#hero" class="toc-link text-sm text-secondary no-underline py-1.5 pl-3 -ml-3"><span>Lepal.ai</span></a>
-    <a href="#context" class="toc-link text-sm text-secondary no-underline py-1.5 pl-3 -ml-3"><span>The Problem</span></a>
-    <a href="#investigation" class="toc-link text-sm text-secondary no-underline py-1.5 pl-3 -ml-3"><span>Research</span></a>
-    <a href="#framework" class="toc-link text-sm text-secondary no-underline py-1.5 pl-3 -ml-3"><span>The Framework</span></a>
-    <a href="#execution" class="toc-link text-sm text-secondary no-underline py-1.5 pl-3 -ml-3"><span>Execution</span></a>
-    <a href="#collaboration" class="toc-link text-sm text-secondary no-underline py-1.5 pl-3 -ml-3"><span>Collaboration</span></a>
-    <a href="#outcome" class="toc-link text-sm text-secondary no-underline py-1.5 pl-3 -ml-3"><span>Outcome</span></a>
-    <a href="#reflection" class="toc-link text-sm text-secondary no-underline py-1.5 pl-3 -ml-3"><span>Reflection</span></a>
+<nav class="toc">
+  <a href="index.html" class="toc-back">&larr; Back to Work</a>
+  <div class="toc-card">
+    <div class="toc-links">
+      <a href="#hero" class="toc-link"><span class="toc-dot"></span>Lepal.ai</a>
+      <a href="#context" class="toc-link"><span class="toc-dot"></span>The Problem</a>
+      <a href="#investigation" class="toc-link"><span class="toc-dot"></span>Research</a>
+      <a href="#framework" class="toc-link"><span class="toc-dot"></span>The Framework</a>
+      <a href="#execution" class="toc-link"><span class="toc-dot"></span>Execution</a>
+      <a href="#collaboration" class="toc-link"><span class="toc-dot"></span>Collaboration</a>
+      <a href="#outcome" class="toc-link"><span class="toc-dot"></span>Outcome</a>
+      <a href="#reflection" class="toc-link"><span class="toc-dot"></span>Reflection</a>
+    </div>
   </div>
 </nav>
 
@@ -187,18 +225,19 @@ tailwind.config = {
 
   <!-- ═══════ HERO ═══════ -->
   <header class="relative overflow-hidden bg-white" id="hero">
-    <div id="hero-light" class="absolute top-0 left-0 w-full pointer-events-none" style="height:900px;opacity:1">
-      <div class="absolute inset-0" style="background:linear-gradient(180deg, rgba(139,92,246,0.22) 0%, rgba(167,139,250,0.12) 20%, rgba(196,181,253,0.06) 45%, transparent 80%)"></div>
-      <div class="absolute top-0 left-1/2 -translate-x-1/2" style="width:800px;height:600px;background:radial-gradient(ellipse at 50% 0%, rgba(139,92,246,0.25) 0%, rgba(139,92,246,0.08) 40%, transparent 70%)"></div>
-      <div class="absolute top-0 left-1/2 -translate-x-1/2" style="width:300px;height:400px;background:radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.6) 0%, transparent 55%)"></div>
-    </div>
+    <div class="hero-mesh"></div>
+    <div class="hero-fade"></div>
+    <div class="hero-brand-bg" aria-hidden="true">Lepal</div>
 
     <!-- 1. Full-width hero screenshot -->
-    <div class="px-6 lg:px-16 pt-20 pb-6 relative z-10">
+    <div class="px-6 lg:px-16 pt-52 pb-6 relative z-10" style="overflow:visible">
       <div class="max-w-4xl mx-auto opacity-0 hero-badge">
         <div class="rounded-xl overflow-hidden shadow-lg">
           <img src="lepal_img/Frame 2087325946.png" alt="My Journal UI" class="w-full block">
         </div>
+      </div>
+      <div id="hero-light" class="absolute left-0 w-full pointer-events-none" style="top:0;left:0;right:0;height:100%;opacity:1">
+        <div class="absolute inset-0" style="background:linear-gradient(180deg, rgba(139,92,246,0.18) 0%, rgba(167,139,250,0.08) 30%, transparent 60%)"></div>
       </div>
     </div>
 
@@ -426,7 +465,7 @@ tailwind.config = {
   </div>
 
   <!-- ═══════ BODY ═══════ -->
-  <div class="main-body ml-0 lg:ml-56 transition-[margin] duration-500">
+  <div class="main-body">
     <div class="w-full max-w-2xl lg:max-w-3xl xl:max-w-4xl mx-auto px-10 lg:px-16">
 
       <!-- ─── OVERVIEW ─── -->
@@ -1729,6 +1768,13 @@ tailwind.config = {
 <script>
 gsap.registerPlugin(ScrollTrigger);
 
+var mm = gsap.matchMedia();
+mm.add({
+  normal: '(prefers-reduced-motion: no-preference)',
+  reduced: '(prefers-reduced-motion: reduce)'
+}, function(context) {
+  var reduced = context.conditions.reduced;
+
 // ─── Scroll progress ───
 gsap.to('.scroll-progress', {
   scaleX: 1, ease: 'none',
@@ -1738,20 +1784,19 @@ gsap.to('.scroll-progress', {
 // ─── Hero entrance ───
 const heroTl = gsap.timeline({ defaults: { ease: 'power3.out' }});
 heroTl
-  .fromTo('#hero-light', { y: -40 }, { y: 0, duration: 2, ease: 'power2.out' })
-  .fromTo('.hero-badge', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.8, stagger: 0.12 }, '-=0.8')
-  .fromTo('.hero-subtitle', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.7, stagger: 0.1 }, '-=0.5')
-  .fromTo('.meta-group', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6, stagger: 0.12 }, '-=0.4');
+  .fromTo('.hero-brand-bg', { opacity: 0, scale: 0.92 }, { opacity: 1, scale: 1, duration: reduced ? 0 : 0.8, ease: 'power2.out' })
+  .fromTo('.hero-badge', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: reduced ? 0 : 0.8, stagger: 0.12 }, '-=0.3')
+  .fromTo('.hero-subtitle', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: reduced ? 0 : 0.7, stagger: 0.1 }, '-=0.5')
+  .fromTo('.meta-group', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: reduced ? 0 : 0.6, stagger: 0.12 }, '-=0.4');
 
-gsap.to('#scroll-arrow', { y: 5, duration: 1.2, repeat: -1, yoyo: true, ease: 'sine.inOut' });
-gsap.to('#hero-light', { y: 150, opacity: 0, ease: 'none', scrollTrigger: { trigger: '#hero', start: '20% top', end: 'bottom top', scrub: 1 }});
+gsap.to('#scroll-arrow', { y: 5, duration: reduced ? 0 : 1.2, repeat: reduced ? 0 : -1, yoyo: true, ease: 'sine.inOut' });
 
 // ─── TOC ───
 const toc = document.querySelector('.toc');
 ScrollTrigger.create({
   trigger: '.main-body', start: 'top 60%',
-  onEnter: () => gsap.to(toc, { opacity: 1, x: 0, visibility: 'visible', duration: 0.5, ease: 'power2.out' }),
-  onLeaveBack: () => gsap.to(toc, { opacity: 0, x: -16, duration: 0.35, ease: 'power2.in', onComplete: () => { toc.style.visibility = 'hidden'; } })
+  onEnter: () => gsap.to(toc, { opacity: 1, visibility: 'visible', duration: reduced ? 0 : 0.4, ease: 'power2.out' }),
+  onLeaveBack: () => gsap.to(toc, { opacity: 0, duration: reduced ? 0 : 0.3, ease: 'power2.in', onComplete: () => { toc.style.visibility = 'hidden'; } })
 });
 const tocLinks = document.querySelectorAll('.toc-link');
 document.querySelectorAll('.section').forEach(section => {
@@ -1771,7 +1816,7 @@ document.querySelectorAll('.section').forEach(section => {
   if (!children.length) return;
   gsap.fromTo(children,
     { opacity: 0, y: 30 },
-    { opacity: 1, y: 0, duration: 0.65, stagger: 0.08, ease: 'power3.out',
+    { opacity: 1, y: 0, duration: reduced ? 0 : 0.65, stagger: 0.08, ease: 'power3.out',
       scrollTrigger: { trigger: section, start: 'top 80%' }
     }
   );
@@ -1784,7 +1829,7 @@ function animateCounter(el) {
   const suffix = el.dataset.suffix || '';
   const obj = { val: 0 };
   gsap.to(obj, {
-    val: target, duration: 1.5, ease: 'power2.out',
+    val: target, duration: reduced ? 0 : 1.5, ease: 'power2.out',
     onUpdate: () => { el.textContent = prefix + Math.round(obj.val) + suffix; }
   });
 }
@@ -1795,7 +1840,7 @@ document.querySelectorAll('.main-body .stat-number').forEach(el => {
 // ─── Section divider icons ───
 gsap.utils.toArray('.section-icon').forEach(icon => {
   gsap.fromTo(icon, { opacity: 0, rotation: -90, scale: 0.5 },
-    { opacity: 1, rotation: 0, scale: 1, duration: 0.6, ease: 'back.out(2)', scrollTrigger: { trigger: icon, start: 'top 90%' } });
+    { opacity: 1, rotation: 0, scale: 1, duration: reduced ? 0 : 0.6, ease: 'back.out(2)', scrollTrigger: { trigger: icon, start: 'top 90%' } });
 });
 
 // ═══════════════════════════════════════════
@@ -1810,7 +1855,7 @@ gsap.utils.toArray('.section-icon').forEach(icon => {
     onEnter: () => {
       fill.style.height = '100%';
       entries.forEach((entry, i) => {
-        gsap.to(entry, { opacity: entry.classList.contains('opacity-40') ? 0.4 : 1, x: 0, duration: 0.6, delay: i * 0.4, ease: 'power3.out' });
+        gsap.to(entry, { opacity: entry.classList.contains('opacity-40') ? 0.4 : 1, x: 0, duration: reduced ? 0 : 0.6, delay: i * 0.4, ease: 'power3.out' });
       });
     }
   });
@@ -1889,13 +1934,13 @@ gsap.utils.toArray('.section-icon').forEach(icon => {
     document.getElementById('cr-mood-tag').textContent = mood.emoji + ' ' + mood.state;
     document.getElementById('cr-tone-text').textContent = mood.tone;
 
-    gsap.to('#cr-step1', { opacity: 1, duration: 0.3, delay: 0.1 });
-    gsap.to(document.querySelectorAll('.cr-arrow')[0], { opacity: 1, duration: 0.2, delay: 0.4 });
-    gsap.to('#cr-step2', { opacity: 1, duration: 0.3, delay: 0.6 });
-    gsap.to(document.querySelectorAll('.cr-arrow')[1], { opacity: 1, duration: 0.2, delay: 0.9 });
-    gsap.to('#cr-step3', { opacity: 1, duration: 0.3, delay: 1.1 });
-    gsap.to(document.querySelectorAll('.cr-arrow')[2], { opacity: 1, duration: 0.2, delay: 1.4 });
-    gsap.to('#cr-step4', { opacity: 1, duration: 0.3, delay: 1.6 });
+    gsap.to('#cr-step1', { opacity: 1, duration: reduced ? 0 : 0.3, delay: 0.1 });
+    gsap.to(document.querySelectorAll('.cr-arrow')[0], { opacity: 1, duration: reduced ? 0 : 0.2, delay: 0.4 });
+    gsap.to('#cr-step2', { opacity: 1, duration: reduced ? 0 : 0.3, delay: 0.6 });
+    gsap.to(document.querySelectorAll('.cr-arrow')[1], { opacity: 1, duration: reduced ? 0 : 0.2, delay: 0.9 });
+    gsap.to('#cr-step3', { opacity: 1, duration: reduced ? 0 : 0.3, delay: 1.1 });
+    gsap.to(document.querySelectorAll('.cr-arrow')[2], { opacity: 1, duration: reduced ? 0 : 0.2, delay: 1.4 });
+    gsap.to('#cr-step4', { opacity: 1, duration: reduced ? 0 : 0.3, delay: 1.6 });
 
     // Tone card
     const card = document.getElementById('cr-tone-card');
@@ -1907,7 +1952,7 @@ gsap.utils.toArray('.section-icon').forEach(icon => {
     document.getElementById('cr-structure').textContent = mood.structure;
     document.getElementById('cr-markers').textContent = mood.markers;
     document.getElementById('cr-response').textContent = mood.response;
-    gsap.to(card, { opacity: 1, duration: 0.5, delay: 2 });
+    gsap.to(card, { opacity: 1, duration: reduced ? 0 : 0.5, delay: 2 });
   }
 
   btn.addEventListener('click', runClassifier);
@@ -1956,7 +2001,7 @@ gsap.utils.toArray('.section-icon').forEach(icon => {
       setTimeout(() => {
         dots.classList.add('hidden');
         response.classList.remove('hidden');
-        gsap.fromTo(response, { opacity: 0, y: 5 }, { opacity: 1, y: 0, duration: 0.3 });
+        gsap.fromTo(response, { opacity: 0, y: 5 }, { opacity: 1, y: 0, duration: reduced ? 0 : 0.3 });
       }, delay);
     }
   }
@@ -2067,7 +2112,7 @@ gsap.utils.toArray('.section-icon').forEach(icon => {
         oldDiv.className = 'flex items-start gap-2 mb-2 opacity-0';
         oldDiv.innerHTML = '<div class="w-7 h-7 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></div><div><div class="text-[9px] text-red-400 font-bold uppercase tracking-wider mb-1">Old Response (generic)</div><div class="bg-red-50 text-sm px-4 py-2.5 rounded-2xl rounded-bl-md text-red-400 line-through border border-red-100">' + conv.oldResponse + '</div></div>';
         messages.appendChild(oldDiv);
-        gsap.to(oldDiv, { opacity: 1, duration: 0.4 });
+        gsap.to(oldDiv, { opacity: 1, duration: reduced ? 0 : 0.4 });
       }, 500);
 
       // Typing dots
@@ -2087,7 +2132,7 @@ gsap.utils.toArray('.section-icon').forEach(icon => {
         newDiv.className = 'flex items-start gap-2 opacity-0';
         newDiv.innerHTML = '<div class="w-7 h-7 rounded-full bg-violet-100 flex items-center justify-center flex-shrink-0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div><div><div class="text-[9px] text-accent font-bold uppercase tracking-wider mb-1">New Response (emotion-aware)</div><div class="bg-accent/10 text-sm px-4 py-2.5 rounded-2xl rounded-bl-md border border-accent/20">' + conv.newResponse + '</div></div>';
         messages.appendChild(newDiv);
-        gsap.to(newDiv, { opacity: 1, duration: 0.5 });
+        gsap.to(newDiv, { opacity: 1, duration: reduced ? 0 : 0.5 });
         messages.scrollTop = messages.scrollHeight;
       }, 3000);
     });
@@ -2115,10 +2160,10 @@ gsap.utils.toArray('.section-icon').forEach(icon => {
     onEnter: () => {
       gsap.fromTo('.summary-float-card',
         { opacity: 0, y: 30, scale: 0.8 },
-        { opacity: 1, y: 0, scale: 1, duration: 0.7, stagger: 0.15, ease: 'back.out(1.7)' }
+        { opacity: 1, y: 0, scale: 1, duration: reduced ? 0 : 0.7, stagger: 0.15, ease: 'back.out(1.7)' }
       );
       document.querySelectorAll('.summary-float-card').forEach((card, i) => {
-        gsap.to(card, { y: '-=8', duration: 2 + i * 0.4, repeat: -1, yoyo: true, ease: 'sine.inOut', delay: i * 0.3 });
+        gsap.to(card, { y: '-=8', duration: reduced ? 0 : 2 + i * 0.4, repeat: reduced ? 0 : -1, yoyo: true, ease: 'sine.inOut', delay: i * 0.3 });
       });
     }
   });
@@ -2132,7 +2177,7 @@ gsap.utils.toArray('.section-icon').forEach(icon => {
       mbtn.style.transform = 'translate(' + x + 'px,' + y + 'px)';
     });
     mbtn.addEventListener('mouseleave', () => {
-      gsap.to(mbtn, { x: 0, y: 0, duration: 0.4, ease: 'elastic.out(1, 0.4)' });
+      gsap.to(mbtn, { x: 0, y: 0, duration: reduced ? 0 : 0.4, ease: 'elastic.out(1, 0.4)' });
       mbtn.style.transform = '';
     });
   }
@@ -2162,11 +2207,11 @@ gsap.utils.toArray('.section-icon').forEach(icon => {
     overlay.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
     goTo(0);
-    gsap.fromTo('#summary-card', { opacity: 0, scale: 0.92, y: 40 }, { opacity: 1, scale: 1, y: 0, duration: 0.4, ease: 'power3.out' });
+    gsap.fromTo('#summary-card', { opacity: 0, scale: 0.92, y: 40 }, { opacity: 1, scale: 1, y: 0, duration: reduced ? 0 : 0.4, ease: 'power3.out' });
   }
 
   function closeSummary() {
-    gsap.to('#summary-card', { opacity: 0, scale: 0.95, y: 20, duration: 0.25, ease: 'power2.in', onComplete: () => {
+    gsap.to('#summary-card', { opacity: 0, scale: 0.95, y: 20, duration: reduced ? 0 : 0.25, ease: 'power2.in', onComplete: () => {
       overlay.classList.add('hidden');
       document.body.style.overflow = '';
     }});
@@ -2185,6 +2230,8 @@ gsap.utils.toArray('.section-icon').forEach(icon => {
     if(e.key === 'ArrowLeft') goTo(current - 1);
   });
 })();
+
+}); // end gsap.matchMedia
 </script>
 
 </body>

@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jiho Kim — Product Designer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css">
+<link rel="stylesheet" href="/css/style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+</head>
+<body>
+
+<!-- Nav -->
+<nav class="site-nav" id="mainNav">
+  <div class="nav-inner">
+    <div class="nav-icons">
+      <a href="/" class="nav-icon"><i class="ph ph-house"></i><span class="nav-tip">Home</span></a>
+      <a href="#ar-lab" class="nav-icon"><i class="ph ph-cube"></i><span class="nav-tip">AR Lab</span></a>
+      <a href="#ai-lab" class="nav-icon"><i class="ph ph-flask"></i><span class="nav-tip">AI Lab</span></a>
+      <a href="about.html" class="nav-icon"><i class="ph ph-user"></i><span class="nav-tip">5min Guide</span></a>
+      <span class="nav-divider"></span>
+      <a href="https://drive.google.com/file/d/1339iKvokajvEe63I9VeepkqOrsxVILGW/view?usp=sharing" class="nav-icon" target="_blank" rel="noopener"><i class="ph ph-file-text"></i><span class="nav-tip">Resume</span></a>
+      <a href="https://www.linkedin.com/in/hoyak/" class="nav-icon" target="_blank" rel="noopener"><i class="ph ph-linkedin-logo"></i><span class="nav-tip">LinkedIn</span></a>
+    </div>
+  </div>
+</nav>
+
+
+<!-- Intro -->
+<section class="intro-section">
+  <div class="container">
+    <div class="intro-main sr">
+        <div class="intro-scribble">
+          The product designer<br>you've been looking for
+          <img class="intro-arrow" src="landingimgs/arrpw.png" alt="" width="56">
+        </div>
+        <p class="intro-label">Product Designer @Stealth Startup</p>
+        <h1 class="intro-text">
+          I'm <span class="intro-avatar"><img src="landingimgs/image2020.png" alt="Jiho" id="heroAvatar"></span> the designer who turns<br>technical ambiguity and complex <span style="white-space:nowrap">AI <span class="intro-ai-icon"><img src="landingimgs/star.png" alt="AI" style="width:.55em;height:.55em;object-fit:contain"></span></span> into <span class="intro-muted">'wow, that was easy'</span>
+        </h1>
+        <div class="intro-btns">
+          <a href="https://drive.google.com/file/d/1339iKvokajvEe63I9VeepkqOrsxVILGW/view?usp=sharing" class="intro-btn primary" target="_blank" rel="noopener">Resume</a>
+          <a href="about.html" class="intro-btn">5min Guide for Recruiters</a>
+        </div>
+        <p class="intro-link">Or connect on <a href="https://www.linkedin.com/in/hoyak/" target="_blank" rel="noopener">LinkedIn</a></p>
+    </div>
+  </div>
+</section>
+
+<!-- Work -->
+<section id="work" class="work-section">
+  <div class="container">
+    <p class="hero-annotation sr">Selected Work <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v10M5 10l3 3 3-3"/></svg></p>
+    <div class="project-grid">
+
+      <!-- 1. TAP3D -->
+      <a class="project-card sr" href="tap3d-case-study.html">
+        <div class="card-thumb" style="background:#0f172a">
+          <img src="landingimgs/tap_landing.png" alt="TAP 3D">
+          <div class="card-info-grad"></div>
+          <div class="card-info">
+            <h3 class="card-title">TAP</h3>
+            <p class="card-desc">From passive lists to proactive agents — reducing the 9-month onboarding cliff.</p>
+            <div class="card-tags">
+              <span class="tag">AI Design</span>
+              <span class="tag">Enterprise SaaS</span>
+              <span class="tag">Product Design</span>
+            </div>
+            <div class="card-impact">
+              <div class="card-stat"><span class="card-stat-num">9mo</span><span class="card-stat-label">Onboarding cut</span></div>
+              <div class="card-stat"><span class="card-stat-num">40%</span><span class="card-stat-label">Faster adoption</span></div>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- 2. Cheffy -->
+      <a class="project-card sr" href="proxiplay-case-study.html">
+        <div class="card-thumb" style="background:#0a0a0a">
+          <img src="landingimgs/cheffy_landing.png" alt="Cheffy">
+          <div class="card-info-grad"></div>
+          <div class="card-info">
+            <h3 class="card-title">Cheffy</h3>
+            <p class="card-desc">Rethinking hands-free cooking when 72% of users pause to wash their hands.</p>
+            <div class="card-tags">
+              <span class="tag">Interaction Design</span>
+              <span class="tag">Gesture</span>
+              <span class="tag">&#128640; Pre-Launch</span>
+            </div>
+            <div class="card-impact">
+              <div class="card-stat"><span class="card-stat-num">72%</span><span class="card-stat-label">Users pausing</span></div>
+              <div class="card-stat"><span class="card-stat-num">3x</span><span class="card-stat-label">Faster tasks</span></div>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- 3. Lepal -->
+      <a class="project-card sr" href="myjournal-case-study.html">
+        <div class="card-thumb" style="background:#0a0a0a">
+          <img src="landingimgs/lepal_landing.png" alt="Lepal">
+          <div class="card-info-grad"></div>
+          <div class="card-info">
+            <h3 class="card-title">Lepal</h3>
+            <p class="card-desc">Designing emotional continuity — beyond chatbot transcripts into genuine journaling.</p>
+            <div class="card-tags">
+              <span class="tag">AI Design</span>
+              <span class="tag">Emotional Design</span>
+              <span class="tag">Gen Z</span>
+            </div>
+            <div class="card-impact">
+              <div class="card-stat"><span class="card-stat-num">85%</span><span class="card-stat-label">Retention rate</span></div>
+              <div class="card-stat"><span class="card-stat-num">2.4x</span><span class="card-stat-label">Engagement</span></div>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- 4. Project Sidewalk -->
+      <a class="project-card sr" href="sidewalk-case-study.html">
+        <div class="card-thumb" style="background:#0a0a0a">
+          <img src="landingimgs/sidewalk_landing.png" alt="Project Sidewalk">
+          <div class="card-info-grad"></div>
+          <div class="card-info">
+            <h3 class="card-title">Project Sidewalk</h3>
+            <p class="card-desc">A zero-defect design system for civic accessibility mapping at scale.</p>
+            <div class="card-tags">
+              <span class="tag">Design System</span>
+              <span class="tag">Accessibility</span>
+              <span class="tag">Civic Tech</span>
+            </div>
+            <div class="card-impact">
+              <div class="card-stat"><span class="card-stat-num">0</span><span class="card-stat-label">Defects shipped</span></div>
+              <div class="card-stat"><span class="card-stat-num">12k+</span><span class="card-stat-label">Labels mapped</span></div>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- 5. Blank CTA -->
+      <div class="blank-card sr">
+        <div class="blank-plus">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M10 4v12M4 10h12"/></svg>
+        </div>
+        <p class="blank-title">This can be our project.</p>
+        <p class="blank-desc">Want to build a project together?</p>
+        <a href="#" class="blank-btn">Message me <svg viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px"><path d="M1 6.5h11M8 2.5l4 4-4 4"/></svg></a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Experience -->
+<section class="exp-section" id="experience">
+  <div class="container">
+    <div id="exp-root"></div>
+  </div>
+</section>
+
+<!-- Bridge -->
+<section class="bridge">
+  <div class="container">
+    <p class="bridge-text sr">Beyond case studies, I explore AI and AR in the browser.</p>
+  </div>
+</section>
+
+<!-- AR Lab -->
+<section id="ar-lab" class="ar-section">
+  <div class="container">
+    <div class="ar-header">
+      <div>
+        <p class="ar-label sr">AR Exploration</p>
+        <h2 class="ar-title sr">Spatial Design</h2>
+        <p class="ar-sub sr">Research and prototyping at the intersection of augmented reality and human interaction.</p>
+      </div>
+    </div>
+    <div class="ar-grid">
+      <div class="ar-card sr">
+        <div class="ar-card-visual" style="background:#0c1a2e">
+          <img src="Sub_proj/CookAR_gif.webp" alt="CookAR">
+        </div>
+        <h3 class="ar-card-title">CookAR</h3>
+        <p class="ar-card-desc">An AR system with real-time object affordance augmentations to support safe and efficient interactions with kitchen tools.</p>
+        <div class="ar-card-tags">
+          <span class="ar-tag">AR/VR</span>
+          <span class="ar-tag">Accessibility</span>
+          <span class="ar-tag award">UIST 2024 Best Paper &#127942;</span>
+        </div>
+      </div>
+      <div class="ar-card sr">
+        <div class="ar-card-visual" style="background:#1a1a2e">
+          <img src="Sub_proj/XR_gif.png" alt="XR Furniture Shopping">
+        </div>
+        <h3 class="ar-card-title">Create XR Applications for Furniture Shopping</h3>
+        <p class="ar-card-desc">Investigating user engagement with 3D furniture representations in extended reality shopping applications.</p>
+        <div class="ar-card-tags">
+          <span class="ar-tag">Retail</span>
+          <span class="ar-tag">XR</span>
+          <span class="ar-tag published">Medium Published &#9997;&#127995;</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AI Lab -->
+<section id="ai-lab" class="ai-section">
+  <div class="ai-inner">
+    <p class="ai-label sr">AI Lab</p>
+    <h2 class="ai-title sr">AI, Live.</h2>
+    <p class="ai-sub sr">Three experiments running entirely in your browser. No servers — just your camera, your drawings, and a neural network.</p>
+
+    <div class="demo-grid">
+      <div class="demo-card sr" data-mode="hands">
+        <div class="demo-thumb" style="background:#0a0a0a">
+          <video src="Sub_proj/flower_bloom.mp4" muted autoplay loop playsinline style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0"></video>
+        </div>
+        <div class="demo-info">
+          <span class="demo-tag">MediaPipe &middot; Gesture</span>
+          <h3 class="demo-card-title">Bloom Garden</h3>
+          <p class="demo-card-desc">Open your hand and watch flowers bloom from your fingertips.</p>
+        </div>
+      </div>
+      <div class="demo-card sr" data-mode="face">
+        <div class="demo-thumb" style="background:#0a0a0a">
+          <video src="Sub_proj/fingerspell_demo.mov" muted autoplay loop playsinline style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0"></video>
+        </div>
+        <div class="demo-info">
+          <span class="demo-tag">MediaPipe &middot; Gesture</span>
+          <h3 class="demo-card-title">Finger Spell</h3>
+          <p class="demo-card-desc">Spell out sentences with hand signs — letter by letter.</p>
+        </div>
+      </div>
+      <div class="demo-card sr" data-mode="sketch">
+        <div class="demo-thumb" style="background:#0a0a0a">
+          <video src="Sub_proj/AIlab_3_demo.mov" muted autoplay loop playsinline style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0"></video>
+        </div>
+        <div class="demo-info">
+          <span class="demo-tag">Canvas &middot; Symmetry</span>
+          <h3 class="demo-card-title">Kaleidoscope</h3>
+          <p class="demo-card-desc">Draw once, mirror eight times &mdash; create mandalas in seconds.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Modal -->
+<div class="modal-overlay" id="demoModal">
+  <div class="modal-box">
+    <button class="modal-close" id="modalClose">&#10005;</button>
+    <div class="modal-head">
+      <h3 class="modal-title" id="modalTitle"></h3>
+      <p class="modal-desc" id="modalDesc"></p>
+    </div>
+
+    <!-- Camera (hands & face) -->
+    <div class="camera-wrap" id="cameraWrap">
+      <video id="webcam" playsinline autoplay muted></video>
+      <canvas id="outputCanvas"></canvas>
+      <div class="camera-prompt" id="cameraPrompt">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.2)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="18" rx="4"/><circle cx="12" cy="12" r="3"/></svg>
+        <p style="color:var(--dark-muted);font-size:13px" id="promptText">Show your hand to the camera</p>
+        <button class="start-btn" id="startBtn">Start Camera</button>
+      </div>
+      <div class="model-loading" id="modelLoading">
+        <div class="spinner"></div>
+        <p style="color:var(--dark-muted);font-size:12px" id="loadingText">Loading AI model...</p>
+      </div>
+    </div>
+
+    <!-- Sketch canvas -->
+    <div class="sketch-wrap" id="sketchWrap">
+      <canvas id="sketchCanvas" width="420" height="315"></canvas>
+    </div>
+    <div class="sketch-tools" id="sketchTools" style="display:none">
+      <button class="sketch-btn" id="undoBtn">Undo</button>
+      <button class="sketch-btn" id="clearBtn">Clear</button>
+    </div>
+
+    <div id="errorMsg" class="error-msg" style="display:none"></div>
+
+    <!-- Results: Hands (Bloom Garden) -->
+    <div class="result-area" id="resultHands" style="display:none">
+      <div class="bloom-label" id="bloomLabel">Show your hand to plant...</div>
+      <div class="bloom-sub" id="bloomSub">Open palm = full bloom &middot; Fist = seed</div>
+      <button class="bloom-clear" id="clearGardenBtn">Clear Garden</button>
+    </div>
+
+    <!-- Results: Face (Finger Spell) -->
+    <div class="result-area" id="resultFace" style="display:none">
+      <div class="spell-phrase" id="spellPhrase"></div>
+      <div class="spell-guide" id="spellGuide"></div>
+      <div class="spell-status" id="spellStatus">Waiting...</div>
+      <button class="sign-next" id="signNextBtn">Next Phrase &rarr;</button>
+    </div>
+
+    <!-- Results: Sketch (Kaleidoscope) -->
+    <div class="result-area" id="resultSketch" style="display:none">
+      <div class="result-label" id="sketchLabel">Draw to create a mandala</div>
+      <div class="kaleid-tools" id="kaleidTools">
+        <button class="kaleid-color active" data-color="#F472B6" style="background:#F472B6" title="Pink"></button>
+        <button class="kaleid-color" data-color="#38BDF8" style="background:#38BDF8" title="Sky"></button>
+        <button class="kaleid-color" data-color="#A78BFA" style="background:#A78BFA" title="Purple"></button>
+        <button class="kaleid-color" data-color="#4ADE80" style="background:#4ADE80" title="Green"></button>
+        <button class="kaleid-color" data-color="rainbow" style="background:conic-gradient(#F472B6,#FB923C,#FBBF24,#4ADE80,#38BDF8,#A78BFA,#F472B6)" title="Rainbow"></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <div class="container">
+    <p class="footer-note sr">Good design is invisible. Great design is felt.</p>
+    <div class="footer-grid">
+      <div>
+        <div class="footer-block sr">
+          <p class="footer-col-title">Experience</p>
+          <p class="footer-item">Product Designer &amp; Founder</p>
+          <p class="footer-item-sub">Stealth AI Startup &middot; Nov 2024 — Present</p>
+        </div>
+        <div class="footer-block sr">
+          <p class="footer-item">Product Designer</p>
+          <p class="footer-item-sub">Lepal.ai &middot; Sep 2024 — Nov 2024</p>
+        </div>
+        <div class="footer-block sr">
+          <p class="footer-item">Product Designer</p>
+          <p class="footer-item-sub">TAP3D (XR Training) &middot; Mar 2024 — Aug 2024</p>
+        </div>
+        <div class="footer-block sr">
+          <p class="footer-item">Product Designer</p>
+          <p class="footer-item-sub">Project Sidewalk &middot; Sep 2023 — Aug 2024</p>
+        </div>
+      </div>
+      <div>
+        <div class="footer-block sr">
+          <p class="footer-col-title">Get in Touch</p>
+          <p class="footer-text">I'm happy to collaborate! Feel free to reach out via LinkedIn.</p>
+          <a href="https://www.linkedin.com/in/hoyak/" class="footer-link" target="_blank" rel="noopener">LinkedIn &rarr;</a>
+        </div>
+        <div class="footer-block sr">
+          <p class="footer-col-title">Education</p>
+          <p class="footer-item">Master of Human-Computer Interaction + Design</p>
+          <p class="footer-item-sub">University of Washington</p>
+        </div>
+        <div class="footer-block sr">
+          <p class="footer-item">B.S. Fashion Design &amp; Marketing, B.A. Museology</p>
+          <p class="footer-item-sub">Seoul Women's University</p>
+        </div>
+      </div>
+    </div>
+    <span class="footer-copy">Made with Figma, Claude Code, Google Antigravity with GSAP &amp; Tailwind</span>
+  </div>
+</footer>
+
+<div class="cursor-bubble" id="cursorBubble" style="left:-200px;top:-200px">View Project &#128064;</div>
+
+<script src="/js/main.js"></script>
+</body>
+</html>

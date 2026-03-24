@@ -47,18 +47,19 @@ tailwind.config = {
   }
 
   /* TOC */
-  .toc { visibility: hidden; opacity: 0; transform: translateX(-16px); }
-  .toc.visible { visibility: visible; }
-  .toc-link { border-left: 2px solid transparent; transition: color 0.25s, border-color 0.25s; }
-  .toc-link:hover, .toc-link.active { color: #1a1a1a; font-weight: 500; }
-  .toc-link.active { border-left-color: #ea580c; }
-  .toc-link span {
-    background-image: linear-gradient(#1a1a1a, #1a1a1a);
-    background-size: 0% 1px; background-repeat: no-repeat;
-    background-position: left bottom; transition: background-size 0.3s ease; padding-bottom: 2px;
-  }
-  .toc-link:hover span { background-size: 100% 1px; }
-  .toc-link.active span { background-size: 0% 1px; }
+  .toc { position: fixed; top: 50%; left: max(24px, calc(50% - 640px)); transform: translateY(-50%); z-index: 50; width: 144px; visibility: hidden; opacity: 0; }
+  .toc-card { background: rgba(255,255,255,0.72); backdrop-filter: blur(16px) saturate(180%); -webkit-backdrop-filter: blur(16px) saturate(180%); border: 1px solid rgba(0,0,0,0.06); border-radius: 14px; padding: 10px; box-shadow: 0 0 0 0.5px rgba(0,0,0,0.03), 0 1px 3px rgba(0,0,0,0.04), 0 6px 24px rgba(0,0,0,0.06); }
+  .toc-back { display: inline-flex; align-items: center; font-size: 11px; font-weight: 500; letter-spacing: 0.01em; color: #999; text-decoration: none; margin-bottom: 10px; transition: color 0.18s; }
+  .toc-back:hover { color: #1a1a1a; }
+  .toc-links { display: flex; flex-direction: column; gap: 1px; }
+  .toc-link { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #999; text-decoration: none; padding: 6px 10px; border-radius: 8px; transition: color 0.18s, background 0.18s; line-height: 1.3; }
+  .toc-link:hover { color: #1a1a1a; background: rgba(0,0,0,0.03); }
+  .toc-link:active { transform: scale(0.97); }
+  .toc-link.active { color: #1a1a1a; font-weight: 500; background: rgba(234,88,12,0.06); }
+  .toc-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; opacity: 0.2; flex-shrink: 0; transition: all 0.25s cubic-bezier(.19,1,.22,1); }
+  .toc-link:hover .toc-dot { opacity: 0.5; }
+  .toc-link.active .toc-dot { opacity: 1; width: 6px; height: 6px; background: #ea580c; box-shadow: 0 0 0 3px rgba(234,88,12,0.15); }
+  @media (max-width: 1440px) { .toc { display: none; } }
 
   /* Scroll progress */
   .scroll-progress {
@@ -77,6 +78,34 @@ tailwind.config = {
       radial-gradient(ellipse 600px 400px at 15% 25%, rgba(234,88,12,0.05), transparent),
       radial-gradient(ellipse 500px 300px at 75% 55%, rgba(245,158,11,0.04), transparent),
       radial-gradient(ellipse 400px 400px at 50% 90%, rgba(234,88,12,0.03), transparent);
+  }
+
+  /* Hero brand background text + fade */
+  .hero-brand-bg {
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: clamp(120px, 18vw, 300px);
+    font-weight: 800;
+    color: rgba(234,88,12,0.07);
+    letter-spacing: -0.05em;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 1;
+    line-height: 0.85;
+    user-select: none;
+  }
+  .hero-fade {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, rgba(234,88,12,0.15) 0%, rgba(234,88,12,0.06) 30%, transparent 60%);
+    pointer-events: none;
+    z-index: 1;
   }
 
   /* Animations */
@@ -204,16 +233,18 @@ tailwind.config = {
 <script>(function(){var n=document.getElementById('caseNav'),ly=0;window.addEventListener('scroll',function(){var y=window.scrollY;if(y>ly&&y>80)n.classList.add('nav-hidden');else n.classList.remove('nav-hidden');ly=y},{passive:true})})();</script>
 
 <!-- ─── TOC Sidebar ─── -->
-<nav class="toc fixed left-0 top-0 w-56 h-screen px-8 py-12 flex flex-col z-50 bg-white border-r border-gray-100">
-  <a href="#" class="text-sm text-secondary hover:text-primary mb-6 no-underline transition-colors">&larr; Back to Work</a>
-  <div class="flex flex-col gap-1 mt-4">
-    <a href="#hero" class="toc-link text-sm text-secondary py-1.5 pl-3 no-underline" data-section="hero"><span>Overview</span></a>
-    <a href="#context" class="toc-link text-sm text-secondary py-1.5 pl-3 no-underline" data-section="context"><span>The Problem</span></a>
-    <a href="#investigation" class="toc-link text-sm text-secondary py-1.5 pl-3 no-underline" data-section="investigation"><span>Investigation</span></a>
-    <a href="#strategy" class="toc-link text-sm text-secondary py-1.5 pl-3 no-underline" data-section="strategy"><span>Diagram &amp; Strategy</span></a>
-    <a href="#validation" class="toc-link text-sm text-secondary py-1.5 pl-3 no-underline" data-section="validation"><span>Validation</span></a>
-    <a href="#outcome" class="toc-link text-sm text-secondary py-1.5 pl-3 no-underline" data-section="outcome"><span>Outcome</span></a>
-    <a href="#reflection" class="toc-link text-sm text-secondary py-1.5 pl-3 no-underline" data-section="reflection"><span>Reflection</span></a>
+<nav class="toc">
+  <a href="index.html" class="toc-back">&larr; Back to Work</a>
+  <div class="toc-card">
+    <div class="toc-links">
+      <a href="#hero" class="toc-link" data-section="hero"><span class="toc-dot"></span>Overview</a>
+      <a href="#context" class="toc-link" data-section="context"><span class="toc-dot"></span>The Problem</a>
+      <a href="#investigation" class="toc-link" data-section="investigation"><span class="toc-dot"></span>Investigation</a>
+      <a href="#strategy" class="toc-link" data-section="strategy"><span class="toc-dot"></span>Diagram &amp; Strategy</a>
+      <a href="#validation" class="toc-link" data-section="validation"><span class="toc-dot"></span>Validation</a>
+      <a href="#outcome" class="toc-link" data-section="outcome"><span class="toc-dot"></span>Outcome</a>
+      <a href="#reflection" class="toc-link" data-section="reflection"><span class="toc-dot"></span>Reflection</a>
+    </div>
   </div>
 </nav>
 
@@ -222,15 +253,12 @@ tailwind.config = {
 
   <!-- ═══════ HERO ═══════ -->
   <header class="relative overflow-hidden bg-white" id="hero">
-    <!-- Top gradient light beam -->
-    <div id="hero-light" class="absolute top-0 left-0 w-full pointer-events-none" style="height:900px;opacity:1">
-      <div class="absolute inset-0" style="background:linear-gradient(180deg, rgba(234,88,12,0.18) 0%, rgba(245,158,11,0.10) 20%, rgba(251,191,36,0.05) 45%, transparent 80%)"></div>
-      <div class="absolute top-0 left-1/2 -translate-x-1/2" style="width:800px;height:600px;background:radial-gradient(ellipse at 50% 0%, rgba(234,88,12,0.20) 0%, rgba(234,88,12,0.06) 40%, transparent 70%)"></div>
-      <div class="absolute top-0 left-1/2 -translate-x-1/2" style="width:300px;height:400px;background:radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.6) 0%, transparent 55%)"></div>
-    </div>
+    <div class="hero-mesh"></div>
+    <div class="hero-fade"></div>
+    <div class="hero-brand-bg" aria-hidden="true">Cheffy</div>
 
     <!-- 1. Full-width hero visual -->
-    <div class="px-6 lg:px-16 pt-20 pb-6 relative z-10">
+    <div class="px-6 lg:px-16 pt-52 pb-6 relative z-10" style="overflow:visible">
       <div class="max-w-4xl mx-auto opacity-0 hero-badge">
         <div class="rounded-2xl overflow-hidden shadow-lg bg-gray-900 p-8 lg:p-12 border border-gray-800">
           <div class="flex flex-col md:flex-row items-center justify-center gap-6 lg:gap-14">
@@ -284,6 +312,9 @@ tailwind.config = {
             </div>
           </div>
         </div>
+      </div>
+      <div id="hero-light" class="absolute left-0 w-full pointer-events-none" style="top:0;left:0;right:0;height:100%;opacity:1">
+        <div class="absolute inset-0" style="background:linear-gradient(180deg, rgba(234,88,12,0.18) 0%, rgba(245,158,11,0.08) 30%, transparent 60%)"></div>
       </div>
     </div>
 
@@ -490,7 +521,7 @@ tailwind.config = {
   </div>
 
   <!-- ═══════ BODY ═══════ -->
-  <div class="main-body ml-0 lg:ml-56 transition-[margin] duration-500">
+  <div class="main-body">
     <div class="w-full max-w-2xl lg:max-w-3xl xl:max-w-4xl mx-auto px-10 lg:px-16">
 
     <!-- ─── CONTEXT ─── -->
@@ -1500,26 +1531,203 @@ tailwind.config = {
 document.addEventListener('DOMContentLoaded', () => {
   gsap.registerPlugin(ScrollTrigger);
 
-  // ─── Scroll Progress Bar ───
-  gsap.to('.scroll-progress', {
-    scaleX: 1,
-    ease: 'none',
-    scrollTrigger: { trigger: 'body', start: 'top top', end: 'bottom bottom', scrub: 0.3 }
-  });
+  // ─── matchMedia for reduced-motion ───
+  var mm = gsap.matchMedia();
+  mm.add({
+    normal: '(prefers-reduced-motion: no-preference)',
+    reduced: '(prefers-reduced-motion: reduce)'
+  }, function(context) {
+    var reduced = context.conditions.reduced;
 
-  // ─── TOC Sidebar ───
-  const toc = document.querySelector('.toc');
-  ScrollTrigger.create({
-    trigger: '#context',
-    start: 'top 90%',
-    onEnter: () => {
-      toc.classList.add('visible');
-      gsap.to(toc, { opacity: 1, x: 0, duration: 0.5, ease: 'power3.out' });
-    },
-    onLeaveBack: () => {
-      gsap.to(toc, { opacity: 0, x: -16, duration: 0.4, ease: 'power3.in', onComplete: () => toc.classList.remove('visible') });
-    }
-  });
+    // ─── Scroll Progress Bar ─── (scrub-based, user-driven)
+    gsap.to('.scroll-progress', {
+      scaleX: 1,
+      ease: 'none',
+      scrollTrigger: { trigger: 'body', start: 'top top', end: 'bottom bottom', scrub: 0.3 }
+    });
+
+    // ─── TOC Sidebar ───
+    var toc = document.querySelector('.toc');
+    ScrollTrigger.create({
+      trigger: '#context',
+      start: 'top 90%',
+      onEnter: () => {
+        toc.classList.add('visible');
+        gsap.to(toc, { opacity: 1, visibility: 'visible', duration: reduced ? 0 : 0.4, ease: 'power2.out' });
+      },
+      onLeaveBack: () => {
+        gsap.to(toc, { opacity: 0, duration: reduced ? 0 : 0.3, ease: 'power2.in', onComplete: () => { toc.classList.remove('visible'); toc.style.visibility = 'hidden'; } });
+      }
+    });
+
+    // ─── Section Children Stagger Reveal ───
+    document.querySelectorAll('.section').forEach(section => {
+      var children = section.querySelectorAll('.gs-child');
+      gsap.fromTo(children,
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1, y: 0, duration: reduced ? 0 : 0.65, stagger: 0.08, ease: 'power3.out',
+          scrollTrigger: { trigger: section, start: 'top 80%', once: true }
+        }
+      );
+    });
+
+    // ─── Hero Entrance ───
+    var heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+    heroTl
+      .fromTo('.hero-brand-bg', { opacity: 0, scale: 0.92 }, { opacity: 1, scale: 1, duration: reduced ? 0 : 0.8, ease: 'power2.out' })
+      .fromTo('.hero-badge', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: reduced ? 0 : 0.8, stagger: 0.12 }, '-=0.3')
+      .fromTo('.hero-subtitle', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: reduced ? 0 : 0.7, stagger: 0.1 }, '-=0.4');
+
+    // ─── Quick Summary: floating cards ───
+    gsap.fromTo('.summary-float-card',
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: reduced ? 0 : 0.6, stagger: 0.15, ease: 'power3.out',
+        scrollTrigger: { trigger: '#quick-summary-section', start: 'top 80%', once: true }
+      }
+    );
+
+    // ─── Line Reveals ───
+    document.querySelectorAll('.line-reveal').forEach(line => {
+      gsap.to(line, {
+        scaleX: 1, duration: reduced ? 0 : 0.8, ease: 'power3.out',
+        scrollTrigger: { trigger: line, start: 'top 85%', once: true }
+      });
+    });
+
+    // ─── Text Highlight ───
+    document.querySelectorAll('.text-highlight-box').forEach(box => {
+      ScrollTrigger.create({
+        trigger: box,
+        start: 'top 80%',
+        once: true,
+        onEnter: () => box.classList.add('active')
+      });
+    });
+
+    // ─── Stat Counters ───
+    document.querySelectorAll('.stat-number[data-target]').forEach(el => {
+      var target = parseFloat(el.dataset.target);
+      var suffix = el.dataset.suffix || '';
+      var prefix = el.dataset.prefix || '';
+      var obj = { val: 0 };
+      ScrollTrigger.create({
+        trigger: el,
+        start: 'top 85%',
+        once: true,
+        onEnter: () => {
+          gsap.to(obj, {
+            val: target, duration: reduced ? 0 : 1.5, ease: 'power2.out',
+            onUpdate: () => { el.textContent = prefix + Math.round(obj.val) + suffix; }
+          });
+        }
+      });
+    });
+
+    // ─── Noise Bars ───
+    document.querySelectorAll('.noise-bar').forEach((bar, i) => {
+      var h = bar.dataset.h;
+      ScrollTrigger.create({
+        trigger: bar,
+        start: 'top 90%',
+        once: true,
+        onEnter: () => {
+          gsap.to(bar, { height: h + 'px', duration: reduced ? 0 : 0.8, delay: i * 0.1, ease: 'power3.out' });
+        }
+      });
+    });
+
+    // ─── Result Bars ───
+    document.querySelectorAll('.result-bar').forEach((bar, i) => {
+      var w = bar.dataset.width;
+      ScrollTrigger.create({
+        trigger: bar,
+        start: 'top 90%',
+        once: true,
+        onEnter: () => {
+          gsap.to(bar, { width: w + '%', duration: reduced ? 0 : 1, delay: i * 0.15, ease: 'power3.out' });
+        }
+      });
+    });
+
+    // ─── State Diagram Animation ───
+    var diagramNodes = ['#node-voice', '#node-gesture', '#node-and', '#node-proximity', '#node-decision', '#node-default-ui', '#state-arrow', '#node-macro-ui', '#node-visual'];
+    var diagramPaths = ['#path-voice-and', '#path-gesture-and', '#path-and-decision', '#path-proximity-decision', '#path-yes', '#path-no'];
+
+    window._playDiagram = function playDiagram() {
+      // Reset
+      diagramNodes.forEach(id => gsap.set(id, { opacity: 0 }));
+      diagramPaths.forEach(id => {
+        var el = document.querySelector(id);
+        if (el) { el.style.strokeDasharray = '200'; el.style.strokeDashoffset = '200'; }
+      });
+      gsap.set('#label-yes', { opacity: 0 });
+      gsap.set('#label-no', { opacity: 0 });
+
+      var tl = gsap.timeline();
+
+      // Step 1: Trigger nodes appear
+      tl.to('#node-voice', { opacity: 1, duration: reduced ? 0 : 0.4 }, 0)
+        .to('#node-gesture', { opacity: 1, duration: reduced ? 0 : 0.4 }, 0.2);
+
+      // Step 2: Paths to AND gate
+      tl.to('#path-voice-and', { strokeDashoffset: 0, duration: reduced ? 0 : 0.6, ease: 'power2.out' }, 0.5)
+        .to('#path-gesture-and', { strokeDashoffset: 0, duration: reduced ? 0 : 0.6, ease: 'power2.out' }, 0.6)
+        .to('#node-and', { opacity: 1, duration: reduced ? 0 : 0.3 }, 0.9);
+
+      // Step 3: Proximity
+      tl.to('#node-proximity', { opacity: 1, duration: reduced ? 0 : 0.4 }, 1.0)
+        .to('#path-proximity-decision', { strokeDashoffset: 0, duration: reduced ? 0 : 0.8, ease: 'power2.out' }, 1.2);
+
+      // Step 4: AND to decision
+      tl.to('#path-and-decision', { strokeDashoffset: 0, duration: reduced ? 0 : 0.6, ease: 'power2.out' }, 1.3)
+        .to('#node-decision', { opacity: 1, duration: reduced ? 0 : 0.3 }, 1.7);
+
+      // Step 5: YES path + state change
+      tl.to('#path-yes', { strokeDashoffset: 0, duration: reduced ? 0 : 0.4 }, 2.0)
+        .to('#label-yes', { opacity: 1, duration: reduced ? 0 : 0.3 }, 2.1)
+        .to('#node-default-ui', { opacity: 1, duration: reduced ? 0 : 0.3 }, 2.2)
+        .to('#state-arrow', { opacity: 1, duration: reduced ? 0 : 0.3 }, 2.4)
+        .to('#node-macro-ui', { opacity: 1, duration: reduced ? 0 : 0.4, ease: 'back.out(1.5)' }, 2.5)
+        .to('#node-visual', { opacity: 1, duration: reduced ? 0 : 0.4 }, 2.8);
+
+      // Step 6: NO path
+      tl.to('#path-no', { strokeDashoffset: 0, duration: reduced ? 0 : 0.5 }, 2.3)
+        .to('#label-no', { opacity: 1, duration: reduced ? 0 : 0.3 }, 2.6);
+    };
+
+    // Auto-play on scroll
+    ScrollTrigger.create({
+      trigger: '#state-diagram',
+      start: 'top 70%',
+      once: true,
+      onEnter: () => { setTimeout(window._playDiagram, 300); }
+    });
+
+    // ─── Scenario Timeline Animation ───
+    window._playScenario = function playScenario() {
+      var steps = document.querySelectorAll('.scenario-step');
+      steps.forEach(s => { s.style.opacity = '0'; s.style.transform = 'translateY(16px)'; });
+      steps.forEach((step, i) => {
+        gsap.to(step, { opacity: 1, y: 0, duration: reduced ? 0 : 0.5, ease: 'power3.out', delay: i * 0.7 });
+      });
+    };
+
+    ScrollTrigger.create({
+      trigger: '.scenario-step',
+      start: 'top 85%',
+      once: true,
+      onEnter: () => window._playScenario()
+    });
+
+    // ─── Summary Card Open Animation (called from event handler) ───
+    window._animateSummaryCard = function() {
+      gsap.fromTo('#summary-card', { opacity: 0, scale: 0.95, y: 20 }, { opacity: 1, scale: 1, y: 0, duration: reduced ? 0 : 0.4, ease: 'power3.out' });
+    };
+
+  }); // end matchMedia
+
+  // ─── Non-animation code (kept outside matchMedia) ───
 
   function setActiveToc(id) {
     document.querySelectorAll('.toc-link').forEach(l => l.classList.remove('active'));
@@ -1536,32 +1744,6 @@ document.addEventListener('DOMContentLoaded', () => {
       onEnterBack: () => setActiveToc(sec.id),
     });
   });
-
-  // ─── Section Children Stagger Reveal ───
-  document.querySelectorAll('.section').forEach(section => {
-    const children = section.querySelectorAll('.gs-child');
-    gsap.fromTo(children,
-      { opacity: 0, y: 30 },
-      {
-        opacity: 1, y: 0, duration: 0.65, stagger: 0.08, ease: 'power3.out',
-        scrollTrigger: { trigger: section, start: 'top 80%', once: true }
-      }
-    );
-  });
-
-  // ─── Hero Entrance ───
-  const heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-  heroTl
-    .fromTo('.hero-badge', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.8, stagger: 0.12 }, 0.3)
-    .fromTo('.hero-subtitle', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.7, stagger: 0.1 }, '-=0.4');
-
-  // ─── Quick Summary: floating cards ───
-  gsap.fromTo('.summary-float-card',
-    { opacity: 0, y: 20 },
-    { opacity: 1, y: 0, duration: 0.6, stagger: 0.15, ease: 'power3.out',
-      scrollTrigger: { trigger: '#quick-summary-section', start: 'top 80%', once: true }
-    }
-  );
 
   // Summary glow follow mouse
   const summarySection = document.getElementById('quick-summary-section');
@@ -1609,7 +1791,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (magBtn && overlay) {
     magBtn.addEventListener('click', () => {
       overlay.classList.remove('hidden');
-      gsap.fromTo('#summary-card', { opacity: 0, scale: 0.95, y: 20 }, { opacity: 1, scale: 1, y: 0, duration: 0.4, ease: 'power3.out' });
+      if (window._animateSummaryCard) window._animateSummaryCard();
       goSlide(0);
     });
   }
@@ -1630,125 +1812,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // ─── Line Reveals ───
-  document.querySelectorAll('.line-reveal').forEach(line => {
-    gsap.to(line, {
-      scaleX: 1, duration: 0.8, ease: 'power3.out',
-      scrollTrigger: { trigger: line, start: 'top 85%', once: true }
-    });
-  });
-
-  // ─── Text Highlight ───
-  document.querySelectorAll('.text-highlight-box').forEach(box => {
-    ScrollTrigger.create({
-      trigger: box,
-      start: 'top 80%',
-      once: true,
-      onEnter: () => box.classList.add('active')
-    });
-  });
-
-  // ─── Stat Counters ───
-  document.querySelectorAll('.stat-number[data-target]').forEach(el => {
-    const target = parseFloat(el.dataset.target);
-    const suffix = el.dataset.suffix || '';
-    const prefix = el.dataset.prefix || '';
-    const obj = { val: 0 };
-    ScrollTrigger.create({
-      trigger: el,
-      start: 'top 85%',
-      once: true,
-      onEnter: () => {
-        gsap.to(obj, {
-          val: target, duration: 1.5, ease: 'power2.out',
-          onUpdate: () => { el.textContent = prefix + Math.round(obj.val) + suffix; }
-        });
-      }
-    });
-  });
-
-  // ─── Noise Bars ───
-  document.querySelectorAll('.noise-bar').forEach((bar, i) => {
-    const h = bar.dataset.h;
-    ScrollTrigger.create({
-      trigger: bar,
-      start: 'top 90%',
-      once: true,
-      onEnter: () => {
-        gsap.to(bar, { height: h + 'px', duration: 0.8, delay: i * 0.1, ease: 'power3.out' });
-      }
-    });
-  });
-
-  // ─── Result Bars ───
-  document.querySelectorAll('.result-bar').forEach((bar, i) => {
-    const w = bar.dataset.width;
-    ScrollTrigger.create({
-      trigger: bar,
-      start: 'top 90%',
-      once: true,
-      onEnter: () => {
-        gsap.to(bar, { width: w + '%', duration: 1, delay: i * 0.15, ease: 'power3.out' });
-      }
-    });
-  });
-
-  // ─── State Diagram Animation ───
-  const diagramNodes = ['#node-voice', '#node-gesture', '#node-and', '#node-proximity', '#node-decision', '#node-default-ui', '#state-arrow', '#node-macro-ui', '#node-visual'];
-  const diagramPaths = ['#path-voice-and', '#path-gesture-and', '#path-and-decision', '#path-proximity-decision', '#path-yes', '#path-no'];
-
-  function playDiagram() {
-    // Reset
-    diagramNodes.forEach(id => gsap.set(id, { opacity: 0 }));
-    diagramPaths.forEach(id => {
-      const el = document.querySelector(id);
-      if (el) { el.style.strokeDasharray = '200'; el.style.strokeDashoffset = '200'; }
-    });
-    gsap.set('#label-yes', { opacity: 0 });
-    gsap.set('#label-no', { opacity: 0 });
-
-    const tl = gsap.timeline();
-
-    // Step 1: Trigger nodes appear
-    tl.to('#node-voice', { opacity: 1, duration: 0.4 }, 0)
-      .to('#node-gesture', { opacity: 1, duration: 0.4 }, 0.2);
-
-    // Step 2: Paths to AND gate
-    tl.to('#path-voice-and', { strokeDashoffset: 0, duration: 0.6, ease: 'power2.out' }, 0.5)
-      .to('#path-gesture-and', { strokeDashoffset: 0, duration: 0.6, ease: 'power2.out' }, 0.6)
-      .to('#node-and', { opacity: 1, duration: 0.3 }, 0.9);
-
-    // Step 3: Proximity
-    tl.to('#node-proximity', { opacity: 1, duration: 0.4 }, 1.0)
-      .to('#path-proximity-decision', { strokeDashoffset: 0, duration: 0.8, ease: 'power2.out' }, 1.2);
-
-    // Step 4: AND to decision
-    tl.to('#path-and-decision', { strokeDashoffset: 0, duration: 0.6, ease: 'power2.out' }, 1.3)
-      .to('#node-decision', { opacity: 1, duration: 0.3 }, 1.7);
-
-    // Step 5: YES path + state change
-    tl.to('#path-yes', { strokeDashoffset: 0, duration: 0.4 }, 2.0)
-      .to('#label-yes', { opacity: 1, duration: 0.3 }, 2.1)
-      .to('#node-default-ui', { opacity: 1, duration: 0.3 }, 2.2)
-      .to('#state-arrow', { opacity: 1, duration: 0.3 }, 2.4)
-      .to('#node-macro-ui', { opacity: 1, duration: 0.4, ease: 'back.out(1.5)' }, 2.5)
-      .to('#node-visual', { opacity: 1, duration: 0.4 }, 2.8);
-
-    // Step 6: NO path
-    tl.to('#path-no', { strokeDashoffset: 0, duration: 0.5 }, 2.3)
-      .to('#label-no', { opacity: 1, duration: 0.3 }, 2.6);
-  }
-
-  // Auto-play on scroll
-  ScrollTrigger.create({
-    trigger: '#state-diagram',
-    start: 'top 70%',
-    once: true,
-    onEnter: () => { setTimeout(playDiagram, 300); }
-  });
-
   // Replay button
-  document.getElementById('diagram-play-btn').addEventListener('click', playDiagram);
+  document.getElementById('diagram-play-btn').addEventListener('click', () => { if (window._playDiagram) window._playDiagram(); });
+
+  document.getElementById('scenario-replay')?.addEventListener('click', () => { if (window._playScenario) window._playScenario(); });
 });
 
 // ─── Interactive Trigger Simulator ───
@@ -1810,24 +1877,6 @@ function toggleTrigger(type) {
 
   updateSimState();
 }
-
-// ─── Scenario Timeline Animation ───
-function playScenario() {
-  const steps = document.querySelectorAll('.scenario-step');
-  steps.forEach(s => { s.style.opacity = '0'; s.style.transform = 'translateY(16px)'; });
-  steps.forEach((step, i) => {
-    gsap.to(step, { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out', delay: i * 0.7 });
-  });
-}
-
-ScrollTrigger.create({
-  trigger: '.scenario-step',
-  start: 'top 85%',
-  once: true,
-  onEnter: () => playScenario()
-});
-
-document.getElementById('scenario-replay')?.addEventListener('click', () => playScenario());
 
 function updateSimState() {
   const allMet = simState.voice && simState.gesture && simState.proximity;
