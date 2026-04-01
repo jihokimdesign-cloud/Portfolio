@@ -129,28 +129,33 @@
   .exp-inactive-card.refreshing{opacity:0;transform:translateY(4px)}
 
   /* ── Intro ── */
-  .intro-section{padding:180px 0 130px;display:flex;align-items:center;justify-content:center}
-  .intro-main{max-width:940px;margin:0 auto;text-align:center}
-  .intro-main{position:relative}
+  .intro-section{padding:180px 0 130px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+  .intro-main{max-width:940px;margin:0 auto;text-align:center;position:relative}
   .intro-scribble{position:absolute;left:60px;top:-45px;transform:rotate(-4deg);font-family:'Caveat',cursive;font-weight:500;font-size:18px;color:#A1A1A1;line-height:1.3;text-align:left;pointer-events:none;white-space:nowrap;opacity:.8}
   .intro-arrow{display:block;margin-top:2px;margin-left:70px}
-  .intro-label{font-size:11px;font-weight:500;letter-spacing:.04em;color:var(--secondary);margin-bottom:28px;display:inline-block;background:#f0f0f0;padding:6px 16px;border-radius:6px}
-  .intro-text{font-size:clamp(36px,5.5vw,58px);font-weight:600;letter-spacing:-.04em;line-height:1.12;color:var(--ink)}
+  .intro-text{font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(36px,5.5vw,58px);font-weight:600;letter-spacing:-.04em;line-height:1.12;color:var(--ink);text-wrap:balance}
+  .intro-text .intro-serif{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--muted)}
   .intro-text .intro-muted{color:var(--muted)}
-  .intro-avatar{display:inline-block;width:clamp(40px,5vw,56px);height:clamp(40px,5vw,56px);border-radius:6px;overflow:hidden;vertical-align:middle;margin:0 4px;background:#e5e5e5;box-shadow:4px 4px 16px rgba(0,0,0,.3);transition:transform .3s ease}
-  .intro-avatar:hover{transform:rotate(-5deg) scale(1.08)}
+  .intro-text .intro-accent{color:#2563eb}
+  .intro-text .intro-hover{position:relative;cursor:default}
+  .intro-float{position:absolute;pointer-events:none;font-size:28px;opacity:0;transition:opacity .25s,transform .3s cubic-bezier(.34,1.56,.64,1);z-index:10}
+  .intro-hover:hover .intro-float{opacity:1}
+  .intro-avatar{display:inline-block;width:clamp(40px,5vw,56px);height:clamp(40px,5vw,56px);border-radius:8px;overflow:hidden;vertical-align:middle;margin:0 4px;background:#e5e5e5;box-shadow:0 0 0 0.5px rgba(17,24,39,.08),0 1px 3px rgba(17,24,39,.1),0 4px 14px rgba(17,24,39,.12);transition:transform .25s cubic-bezier(.34,1.56,.64,1)}
+  .intro-avatar:hover{transform:rotate(-5deg) scale(1.1)}
   .intro-avatar img{width:100%;height:100%;object-fit:cover;display:block}
   .intro-ai-icon{display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;margin:0 2px;background:#f0f0f0;padding:.15em;border-radius:6px}
   .intro-ai-icon img{display:block}
-  .intro-btns{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:40px}
-  .intro-btn{display:inline-flex;align-items:center;gap:6px;font-family:inherit;font-size:13px;font-weight:500;color:var(--ink);padding:10px 24px;border-radius:100px;border:1px solid rgba(0,0,0,.12);background:transparent;cursor:pointer;transition:all .2s;text-decoration:none}
-  .intro-btn:hover{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.22)}
+  .intro-sub{font-family:'Caveat',cursive;font-size:clamp(16px,2vw,20px);color:var(--muted);margin-top:24px;line-height:1.5}
+  .intro-btns{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:36px}
+  .intro-btn{display:inline-flex;align-items:center;gap:6px;font-family:inherit;font-size:13px;font-weight:500;color:var(--ink);padding:10px 24px;border-radius:100px;border:1px solid rgba(0,0,0,.12);background:transparent;cursor:pointer;transition:all .18s;text-decoration:none}
+  .intro-btn:hover{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.22);box-shadow:0 1px 3px rgba(17,24,39,.06)}
   .intro-btn:active{transform:scale(.97)}
-  .intro-btn.primary{color:#fff;background:#007AFF;border-color:#007AFF}
-  .intro-btn.primary:hover{background:#0066DD;border-color:#0066DD}
+  .intro-btn.primary{color:#fff;background:linear-gradient(to bottom,#0a84ff,#007AFF);border-color:rgba(0,90,220,.2);box-shadow:0 0 0 0.5px rgba(0,90,220,.3),inset 0 1px 0 rgba(255,255,255,.15),0 1px 2px rgba(0,122,255,.2),0 3px 10px rgba(0,122,255,.14)}
+  .intro-btn.primary:hover{background:linear-gradient(to bottom,#0077EE,#0066DD);border-color:rgba(0,90,220,.25);box-shadow:0 0 0 0.5px rgba(0,90,220,.3),inset 0 1px 0 rgba(255,255,255,.15),0 2px 4px rgba(0,122,255,.22),0 6px 20px rgba(0,122,255,.18)}
   .intro-link{font-size:13px;color:var(--muted);margin-top:18px}
-  .intro-link a{color:var(--ink);font-weight:500;text-decoration:none}
+  .intro-link a{color:var(--ink);font-weight:500;text-decoration:none;text-underline-offset:3px}
   .intro-link a:hover{text-decoration:underline}
+  .intro-scribble,.intro-text,.intro-sub,.intro-btns,.intro-link{opacity:0;transform:translateY(16px)}
 
   /* ── Bridge ── */
   .bridge{padding:32px 0 56px}
@@ -335,10 +340,10 @@
           The product designer<br>you've been looking for
           <img class="intro-arrow" src="landingimgs/arrpw.png" alt="" width="56">
         </div>
-        <p class="intro-label">Product Designer @Stealth Startup</p>
         <h1 class="intro-text">
-          I'm <span class="intro-avatar"><img src="landingimgs/image2020.png" alt="Jiho" id="heroAvatar"></span> the designer who turns<br>technical ambiguity and complex <span style="white-space:nowrap">AI <span class="intro-ai-icon"><img src="landingimgs/star.png" alt="AI" style="width:.55em;height:.55em;object-fit:contain"></span></span> into <span class="intro-muted">&lsquo;wow, that was easy&rsquo;</span>
+          I'm <span class="intro-avatar"><img src="landingimgs/image2020.png" alt="Jiho" id="heroAvatar"></span> <span class="intro-serif">the</span> <span class="intro-hover">designer<span class="intro-float" style="top:-40px;left:-10px;transform:rotate(-12deg) scale(.8)">&#x1F3A8;</span><span class="intro-float" style="top:-30px;right:-5px;transform:rotate(15deg) scale(.7)">&#x2728;</span></span> <span class="intro-serif">who turns</span><br><span class="intro-hover intro-accent">technical ambiguity<span class="intro-float" style="top:-38px;left:20%;transform:rotate(-8deg) scale(.8)">&#x1F9E9;</span><span class="intro-float" style="top:-35px;right:15%;transform:rotate(10deg) scale(.75)">&#x1F4A1;</span></span> and complex <span class="intro-hover" style="white-space:nowrap">AI <span class="intro-ai-icon"><img src="landingimgs/star.png" alt="AI" style="width:.55em;height:.55em;object-fit:contain"></span><span class="intro-float" style="top:-40px;left:-15px;transform:rotate(-15deg) scale(.8)">&#x1F916;</span><span class="intro-float" style="top:-32px;right:-20px;transform:rotate(12deg) scale(.75)">&#x1F680;</span></span><br><span class="intro-serif">into</span> <span class="intro-hover intro-muted">&lsquo;wow, that was easy&rsquo;<span class="intro-float" style="top:-38px;left:10%;transform:rotate(-10deg) scale(.8)">&#x1F60D;</span><span class="intro-float" style="top:-35px;right:10%;transform:rotate(8deg) scale(.75)">&#x1F389;</span></span>
         </h1>
+        <p class="intro-sub">I design AI agent experiences that feel human.</p>
         <div class="intro-btns">
           <a href="https://drive.google.com/file/d/1339iKvokajvEe63I9VeepkqOrsxVILGW/view?usp=sharing" class="intro-btn primary" target="_blank" rel="noopener">Resume</a>
           <a href="about.html" class="intro-btn">5min Guide for Recruiters</a>
@@ -733,6 +738,15 @@
    GSAP
    ====================================== */
 gsap.registerPlugin(ScrollTrigger);
+
+/* -- Hero intro entrance -- */
+var heroTl = gsap.timeline({ delay: 0.15 });
+heroTl
+  .to('.intro-text', { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' })
+  .to('.intro-sub', { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' }, '-=0.3')
+  .to('.intro-scribble', { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' }, '-=0.35')
+  .to('.intro-btns', { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' }, '-=0.25')
+  .to('.intro-link', { opacity: 1, y: 0, duration: 0.4, ease: 'power3.out' }, '-=0.2');
 
 gsap.utils.toArray('.sr').forEach(function(el,i){
   gsap.to(el,{opacity:1,y:0,duration:.9,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 90%',once:true},delay:(i%4)*.06});

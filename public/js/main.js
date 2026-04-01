@@ -86,11 +86,12 @@ mm.add({
   /* -- Hero intro entrance -- */
   var introTl = gsap.timeline({ delay: 0.15 });
   introTl
-    .to('.intro-label', { opacity: 1, y: 0, duration: reduced ? 0 : 0.5, ease: 'power3.out' })
-    .to('.intro-text', { opacity: 1, y: 0, duration: reduced ? 0 : 0.7, ease: 'power3.out' }, '-=0.2')
+    .to('.intro-text', { opacity: 1, y: 0, duration: reduced ? 0 : 0.7, ease: 'power3.out' })
+    .to('.intro-sub', { opacity: 1, y: 0, duration: reduced ? 0 : 0.5, ease: 'power3.out' }, '-=0.3')
     .to('.intro-scribble', { opacity: 1, y: 0, duration: reduced ? 0 : 0.5, ease: 'power3.out' }, '-=0.35')
     .to('.intro-btns', { opacity: 1, y: 0, duration: reduced ? 0 : 0.5, ease: 'power3.out' }, '-=0.25')
     .to('.intro-link', { opacity: 1, y: 0, duration: reduced ? 0 : 0.4, ease: 'power3.out' }, '-=0.2');
+
 
   /* -- "Selected Work" label -- */
   gsap.to('.hero-annotation.sr', {
