@@ -120,7 +120,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .intro-section{padding:180px 0 130px;display:flex;align-items:center;justify-content:center;position:relative}
 .intro-main{max-width:940px;margin:0 auto;text-align:center}
 .intro-main{position:relative}
-.intro-scribble{position:absolute;left:100px;top:-100px;transform:rotate(-4deg);font-family:'Caveat',cursive;font-weight:500;font-size:18px;color:#A1A1A1;line-height:1.3;text-align:left;pointer-events:none;white-space:nowrap;opacity:.8}
+.intro-scribble{position:absolute;left:98px;top:-100px;transform:rotate(-4deg);font-family:'Caveat',cursive;font-weight:500;font-size:18px;color:#A1A1A1;line-height:1.3;text-align:left;pointer-events:none;white-space:nowrap;opacity:.8}
 .intro-arrow{display:block;margin-top:2px;margin-left:70px}
 .intro-text{font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(36px,5.5vw,58px);font-weight:600;letter-spacing:-.04em;line-height:1.12;color:var(--ink);text-wrap:balance}
 .intro-text .intro-serif{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--muted)}
