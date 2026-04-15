@@ -178,7 +178,7 @@ export default function About() {
           Hi, I&apos;m Jiho.
         </h2>
         <p className="mt-2 font-mono text-sm tracking-wide text-text-secondary">
-          Product Designer &amp; Researcher &nbsp;·&nbsp; Seeking Full-time roles
+          Product Designer &nbsp;·&nbsp; Seeking Full-time roles
         </p>
       </motion.div>
 
