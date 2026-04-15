@@ -172,7 +172,7 @@ export default function Hero() {
           <div className="flex items-center gap-2 rounded-full border border-success/20 bg-success/10 px-3 py-1">
             <span className="pulse-dot h-2 w-2 rounded-full bg-success" />
             <span className="font-mono text-[11px] text-success">
-              Available for projects
+              Looking for new roles
             </span>
           </div>
         </motion.div>
