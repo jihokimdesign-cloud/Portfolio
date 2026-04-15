@@ -72,9 +72,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <head>
-        <link rel="icon" href="/heart-me.png.png" type="image/png" sizes="any" />
-        <link rel="shortcut icon" href="/heart-me.png.png" type="image/png" />
-        <link rel="apple-touch-icon" href="/heart-me.png.png" />
+        <link rel="icon" href="/favicon.png" type="image/png" sizes="any" />
+        <link rel="shortcut icon" href="/favicon.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/favicon.png" />
       </head>
       <body className={`${manrope.variable} ${dmMono.variable} ${instrumentSerif.variable} antialiased`}>
         <Analytics />
