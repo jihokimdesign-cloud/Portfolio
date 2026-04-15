@@ -42,7 +42,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Jiho Kim, Product Designer",
     description:
-      "Product Designer. Reduced user friction by 40%, boosted engagement by 167%.",
+      "Product Designer who turns technical ambiguity and complex AI into experiences that feel effortless.",
     type: "website",
     locale: "en_US",
     images: [
