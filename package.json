@@ -1,14 +1,37 @@
 {
   "name": "jiho-portfolio",
   "version": "1.0.0",
+  "private": true,
   "description": "Jiho Kim — Product Designer Portfolio",
-  "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node --watch server.js"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "start:legacy": "node server.js",
+    "lint": "eslint"
   },
   "dependencies": {
-    "express": "^4.21.0",
-    "ejs": "^3.1.10"
+    "@anthropic-ai/sdk": "^0.88.0",
+    "@fontsource/dm-mono": "^5.2.7",
+    "@types/matter-js": "^0.20.2",
+    "@vercel/analytics": "^2.0.1",
+    "agentation": "^3.0.2",
+    "framer-motion": "^12.34.2",
+    "lucide-react": "^0.574.0",
+    "matter-js": "^0.20.0",
+    "next": "16.1.6",
+    "openai": "^6.33.0",
+    "react": "19.2.3",
+    "react-dom": "19.2.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.1.6",
+    "tailwindcss": "^4",
+    "typescript": "^5"
   }
 }
