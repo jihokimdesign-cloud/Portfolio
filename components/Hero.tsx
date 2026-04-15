@@ -301,12 +301,12 @@ export default function Hero() {
               <button
                 onClick={() => setTappedBadge(tappedBadge === "dhs" ? null : "dhs")}
                 className="focus:outline-none active:scale-95 transition-transform block"
-                aria-label="Google Coursera UX Certificate, tap for info"
+                aria-label="UW MHCI+D Graduate, tap for info"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="/Google coursera logo.png"
-                  alt="Google Coursera UX Certificate"
+                  src="/UW-logo.png"
+                  alt="UW MHCI+D Graduate"
                   draggable={false}
                   className="h-12 w-auto object-contain"
                 />
@@ -332,10 +332,10 @@ export default function Hero() {
                     </svg>
                     <div className="rounded-2xl bg-white px-3.5 py-2.5" style={{ border: "1px solid #e5e7eb" }}>
                       <p className="font-mono text-[11px] font-semibold leading-snug text-neutral-800">
-                        📜 Google UX Certificate
+                        🎓 UW MHCI+D
                       </p>
                       <p className="mt-0.5 font-mono text-[10px] leading-snug text-neutral-500">
-                        Got certificate for<br />Google Coursera UX course
+                        Graduated from<br />University of Washington MHCI+D
                       </p>
                     </div>
                   </motion.div>
@@ -476,14 +476,14 @@ export default function Hero() {
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/Google coursera logo.png"
-            alt="Google Coursera UX Certificate"
+            src="/UW-logo.png"
+            alt="UW MHCI+D Graduate"
             draggable={false}
             className="w-44"
             style={{ pointerEvents: "none" }}
           />
           <span className="font-mono text-[9px] font-medium tracking-wide text-neutral-400">
-            Google UX Certificate 📜
+            UW MHCI+D Graduate 🎓
           </span>
         </motion.div>
       )}
