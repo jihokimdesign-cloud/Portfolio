@@ -35,7 +35,7 @@ export const TICKER_ITEMS = [
   { name: "Lepal.ai", logo: "/landingimgs/lepal_exp.png" },
   { name: "TAP3D", logo: "/landingimgs/tap_exp.png" },
   { name: "Project Sidewalk", logo: "/landingimgs/sidewalk_exp.png" },
-  { name: "University of Washington", logo: "/landingimgs/image2020.png" },
+  { name: "University of Washington", logo: "/UW-logo.png" },
 ];
 
 export const METRICS = [

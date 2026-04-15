@@ -16,7 +16,7 @@ import ChatBar from "@/components/ChatBar";
 import RecruiterSplash from "@/components/RecruiterSplash";
 import CustomCursor from "@/components/CustomCursor";
 import OnboardingTour from "@/components/OnboardingTour";
-import { Agentation } from "agentation";
+// import { Agentation } from "agentation";
 
 export default function Home() {
   return (
@@ -37,7 +37,7 @@ export default function Home() {
       </main>
       <Footer />
       <ChatBar />
-      <Agentation />
+      {/* <Agentation /> */}
     </RecruiterProvider>
   );
 }
