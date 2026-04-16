@@ -25,7 +25,7 @@ const TESTIMONIALS = [
   },
   {
     name: "Jongtea Lee",
-    role: "Professor",
+    role: "Supervisor",
     company: "Seoul Women's University",
     period: "2023",
     avatar: "/Jongtealee.jpg",
