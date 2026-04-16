@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Design System Component Library</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --canvas: #faf9f7;
+    --surface: #ffffff;
+    --surface-inset: #f5f3f0;
+    --surface-code: #1c1917;
+    --ink: #1c1917;
+    --ink-secondary: #78716c;
+    --ink-tertiary: #a8a29e;
+    --ink-muted: #d6d3d1;
+    --border: rgba(28,25,23,0.07);
+    --border-emphasis: rgba(28,25,23,0.13);
+    --canopy: #16a34a;
+    --canopy-soft: #f0fdf4;
+    --canopy-muted: rgba(22,163,74,0.12);
+    --signal: #ea580c;
+    --signal-soft: #fff7ed;
+    --barrier: #dc2626;
+    --barrier-soft: #fef2f2;
+    --marker-blue: #2563eb;
+    --caution: #ca8a04;
+    --radius-sm: 4px;
+    --radius-md: 6px;
+    --radius-lg: 8px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: var(--canvas);
+    color: var(--ink);
+    width: 960px;
+    height: 600px;
+    overflow: hidden;
+    font-size: 11px;
+    line-height: 1.4;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .app { display: grid; grid-template-columns: 180px 1fr; height: 600px; }
+
+  /* ── Navigation ── */
+  .nav {
+    background: var(--canvas);
+    border-right: 1px solid var(--border);
+    padding: 14px 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .nav-brand {
+    padding: 0 14px 12px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .nav-brand-text {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  .nav-version {
+    font-size: 8.5px;
+    font-weight: 600;
+    background: var(--canopy);
+    color: #fff;
+    padding: 1px 5px;
+    border-radius: 3px;
+    letter-spacing: 0.02em;
+  }
+
+  .nav-group {
+    padding: 10px 14px 3px;
+    font-size: 8.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--ink-tertiary);
+  }
+  .nav-link {
+    padding: 4px 14px 4px 20px;
+    font-size: 11px;
+    color: var(--ink-secondary);
+    cursor: pointer;
+    border-left: 2px solid transparent;
+    font-weight: 450;
+    transition: all 0.1s;
+  }
+  .nav-link:hover { color: var(--ink); background: rgba(0,0,0,0.015); }
+  .nav-link.active {
+    color: var(--canopy);
+    font-weight: 600;
+    border-left-color: var(--canopy);
+    background: var(--canopy-soft);
+  }
+  .nav-footer {
+    margin-top: auto;
+    padding: 10px 14px;
+    border-top: 1px solid var(--border);
+    font-size: 9px;
+    color: var(--ink-tertiary);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .nav-footer::before {
+    content: '';
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--canopy);
+  }
+
+  /* ── Content ── */
+  .content {
+    padding: 18px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    overflow: hidden;
+  }
+
+  .page-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .page-title {
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .page-desc {
+    font-size: 11px;
+    color: var(--ink-secondary);
+    margin-top: 3px;
+  }
+
+  .tab-bar {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .tab {
+    padding: 6px 14px;
+    font-size: 10.5px;
+    font-weight: 500;
+    color: var(--ink-tertiary);
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.1s;
+  }
+  .tab.on {
+    color: var(--canopy);
+    border-bottom-color: var(--canopy);
+    font-weight: 600;
+  }
+
+  /* Component grid */
+  .comp-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  .comp-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .comp-head {
+    padding: 9px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(0,0,0,0.04);
+  }
+  .comp-name {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+  }
+  .a11y-tag {
+    font-size: 8px;
+    font-weight: 600;
+    padding: 2px 5px;
+    border-radius: 3px;
+    letter-spacing: 0.02em;
+  }
+  .a11y-pass { background: var(--canopy-soft); color: var(--canopy); }
+
+  .comp-demo {
+    padding: 16px;
+    background: var(--surface-inset);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    min-height: 72px;
+    flex: 1;
+  }
+
+  .comp-code {
+    padding: 7px 12px;
+    background: var(--surface-code);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    line-height: 1.7;
+    color: #a8a29e;
+    overflow: hidden;
+  }
+  .ct { color: #7dd3fc; }
+  .ca { color: #c4b5fd; }
+  .cv { color: #86efac; }
+  .cc { color: #57534e; }
+
+  /* ── Components ── */
+  .btn {
+    padding: 6px 13px;
+    border-radius: var(--radius-md);
+    font-size: 11px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    letter-spacing: -0.005em;
+    transition: all 0.1s;
+  }
+  .btn-primary { background: var(--canopy); color: #fff; }
+  .btn-secondary {
+    background: var(--surface);
+    color: var(--ink);
+    border: 1px solid var(--border-emphasis);
+    font-weight: 500;
+  }
+  .btn-ghost {
+    background: transparent;
+    color: var(--canopy);
+    font-weight: 500;
+  }
+  .btn-destructive {
+    background: var(--barrier-soft);
+    color: var(--barrier);
+    border: 1px solid rgba(220,38,38,0.12);
+    font-weight: 500;
+  }
+  .btn-sm { padding: 4px 9px; font-size: 10px; }
+
+  .sev-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 600;
+  }
+  .sev-tag::before {
+    content: '';
+    width: 5px; height: 5px;
+    border-radius: 50%;
+  }
+  .st-1 { background: var(--canopy-soft); color: var(--canopy); }
+  .st-1::before { background: var(--canopy); }
+  .st-3 { background: #fefce8; color: var(--caution); }
+  .st-3::before { background: var(--caution); }
+  .st-5 { background: var(--barrier-soft); color: var(--barrier); }
+  .st-5::before { background: var(--barrier); }
+
+  .input-field {
+    padding: 6px 9px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-emphasis);
+    font-size: 11px;
+    font-family: inherit;
+    background: var(--surface-inset);
+    color: var(--ink);
+    font-weight: 450;
+    width: 170px;
+    transition: all 0.12s;
+  }
+  .input-focus {
+    border-color: var(--canopy);
+    box-shadow: 0 0 0 2px var(--canopy-muted);
+    background: var(--surface);
+  }
+
+  .checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--ink-secondary);
+    font-weight: 450;
+  }
+  .cbox {
+    width: 15px; height: 15px;
+    border-radius: var(--radius-sm);
+    border: 1.5px solid var(--border-emphasis);
+    background: var(--surface);
+    display: grid; place-items: center;
+    flex-shrink: 0;
+  }
+  .cbox.checked {
+    background: var(--canopy);
+    border-color: var(--canopy);
+    color: #fff;
+    font-size: 9px;
+    font-weight: 700;
+  }
+
+  /* Mini label card */
+  .mini-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    width: 148px;
+    overflow: hidden;
+  }
+  .mini-card-img {
+    height: 48px;
+    background: linear-gradient(135deg, #d6d3d1, #a8a29e);
+    position: relative;
+  }
+  .mini-pin {
+    position: absolute;
+    bottom: 4px; left: 5px;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--signal);
+    border: 1.5px solid #fff;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+  }
+  .mini-card-body { padding: 5px 7px; }
+  .mini-card-title {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+  }
+  .mini-card-sub {
+    font-size: 8.5px;
+    color: var(--ink-tertiary);
+    margin-top: 0.5px;
+  }
+
+  /* Token swatches */
+  .token-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .token-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .token-swatch {
+    width: 24px; height: 24px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .token-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .token-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    color: var(--ink-tertiary);
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="nav">
+    <div class="nav-brand">
+      <span class="nav-brand-text">Sidewalk DS</span>
+      <span class="nav-version">v2.4</span>
+    </div>
+
+    <div class="nav-group">Foundation</div>
+    <div class="nav-link">Colors</div>
+    <div class="nav-link">Typography</div>
+    <div class="nav-link">Spacing</div>
+    <div class="nav-link">Iconography</div>
+
+    <div class="nav-group">Components</div>
+    <div class="nav-link active">Buttons</div>
+    <div class="nav-link">Inputs</div>
+    <div class="nav-link">Labels & Tags</div>
+    <div class="nav-link">Cards</div>
+    <div class="nav-link">Navigation</div>
+    <div class="nav-link">Modals</div>
+    <div class="nav-link">Map Controls</div>
+
+    <div class="nav-group">Patterns</div>
+    <div class="nav-link">Label Cards</div>
+    <div class="nav-link">Severity System</div>
+    <div class="nav-link">Validation Flow</div>
+
+    <div class="nav-group">Accessibility</div>
+    <div class="nav-link">Focus Management</div>
+    <div class="nav-link">Color Contrast</div>
+    <div class="nav-link">Screen Reader</div>
+
+    <div class="nav-footer">Updated 3 days ago</div>
+  </div>
+
+  <div class="content">
+    <div class="page-head">
+      <div>
+        <div class="page-title">Buttons</div>
+        <div class="page-desc">Interactive controls across the labeling interface. All variants pass WCAG AA.</div>
+      </div>
+    </div>
+
+    <div class="tab-bar">
+      <div class="tab on">Preview</div>
+      <div class="tab">Usage</div>
+      <div class="tab">Accessibility</div>
+      <div class="tab">Tokens</div>
+    </div>
+
+    <div class="comp-grid">
+      <!-- Buttons -->
+      <div class="comp-card">
+        <div class="comp-head">
+          <span class="comp-name">Button Variants</span>
+          <span class="a11y-tag a11y-pass">AA ✓</span>
+        </div>
+        <div class="comp-demo">
+          <button class="btn btn-primary">Label Issue</button>
+          <button class="btn btn-secondary">Skip</button>
+          <button class="btn btn-ghost">View Map</button>
+          <button class="btn btn-destructive">Remove</button>
+        </div>
+        <div class="comp-code">
+          <span class="cc">/* Primary — min contrast 4.6:1 */</span><br>
+          <span class="ct">&lt;Button</span> <span class="ca">variant=</span><span class="cv">"primary"</span><span class="ct">&gt;</span>Label Issue<span class="ct">&lt;/Button&gt;</span>
+        </div>
+      </div>
+
+      <!-- Severity Tags -->
+      <div class="comp-card">
+        <div class="comp-head">
+          <span class="comp-name">Severity Tags</span>
+          <span class="a11y-tag a11y-pass">AA ✓</span>
+        </div>
+        <div class="comp-demo">
+          <span class="sev-tag st-1">Low</span>
+          <span class="sev-tag st-3">Medium</span>
+          <span class="sev-tag st-5">Critical</span>
+        </div>
+        <div class="comp-code">
+          <span class="ct">&lt;SeverityTag</span> <span class="ca">level=</span><span class="cv">{3}</span> <span class="ct">/&gt;</span><br>
+          <span class="cc">/* Dot + label, contrast 4.8:1 */</span>
+        </div>
+      </div>
+
+      <!-- Form Controls -->
+      <div class="comp-card">
+        <div class="comp-head">
+          <span class="comp-name">Form Controls</span>
+          <span class="a11y-tag a11y-pass">AA ✓</span>
+        </div>
+        <div class="comp-demo" style="flex-direction:column;align-items:flex-start;gap:8px">
+          <input class="input-field" value="Chicago, IL" readonly>
+          <input class="input-field input-focus" value="Search labels..." readonly>
+          <div style="display:flex;gap:14px">
+            <div class="checkbox-row"><div class="cbox checked">✓</div> Surface</div>
+            <div class="checkbox-row"><div class="cbox"></div> Signal</div>
+          </div>
+        </div>
+        <div class="comp-code">
+          <span class="cc">/* Focus: 2px canopy ring */</span><br>
+          <span class="ct">&lt;Input</span> <span class="ca">focusRing=</span><span class="cv">"canopy"</span> <span class="ct">/&gt;</span>
+        </div>
+      </div>
+
+      <!-- Label Card + Tokens -->
+      <div class="comp-card">
+        <div class="comp-head">
+          <span class="comp-name">Label Card + Tokens</span>
+          <span class="a11y-tag a11y-pass">AA ✓</span>
+        </div>
+        <div class="comp-demo" style="gap:14px">
+          <div class="mini-card">
+            <div class="mini-card-img"><div class="mini-pin"></div></div>
+            <div class="mini-card-body">
+              <div class="mini-card-title">Surface Problem</div>
+              <div class="mini-card-sub">W Madison St</div>
+            </div>
+          </div>
+          <div class="token-stack">
+            <div class="token-row">
+              <div class="token-swatch" style="background:#16a34a"></div>
+              <div><div class="token-label">--canopy</div><div class="token-val">#16a34a</div></div>
+            </div>
+            <div class="token-row">
+              <div class="token-swatch" style="background:#f0fdf4"></div>
+              <div><div class="token-label">--canopy-soft</div><div class="token-val">#f0fdf4</div></div>
+            </div>
+            <div class="token-row">
+              <div class="token-swatch" style="background:#1c1917"></div>
+              <div><div class="token-label">--ink</div><div class="token-val">#1c1917</div></div>
+            </div>
+            <div class="token-row">
+              <div class="token-swatch" style="background:#faf9f7"></div>
+              <div><div class="token-label">--canvas</div><div class="token-val">#faf9f7</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="comp-code">
+          <span class="ct">&lt;LabelCard</span> <span class="ca">type=</span><span class="cv">"surface"</span> <span class="ca">severity=</span><span class="cv">{4}</span> <span class="ct">/&gt;</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

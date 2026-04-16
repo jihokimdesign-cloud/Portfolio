@@ -1,0 +1,1693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Sidewalk: Scaling Civic Accessibility via a Zero-Defect Design System</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,400;0,500;0,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: {
+        display: ['"Plus Jakarta Sans"', 'sans-serif'],
+        body: ['"DM Sans"', 'sans-serif'],
+      },
+      colors: {
+        primary: '#1a1a1a',
+        secondary: '#6b6b6b',
+        accent: '#16a34a',
+        surface: '#f5f5f5',
+        highlight: '#e74c3c',
+      }
+    }
+  }
+}
+</script>
+<style>
+  * { -webkit-font-smoothing: antialiased; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Manrope', 'DM Sans', sans-serif; } h1, h2, h3 { font-family: 'Instrument Serif', serif; font-weight: 400; }
+
+  .font-display { letter-spacing: -0.02em; font-family: 'Instrument Serif', serif !important; font-weight: 400 !important; }
+  h1, h2, h3 { letter-spacing: -0.025em; }
+  .stat-number, .result-num { letter-spacing: -0.03em; }
+
+  body::before {
+    content: ''; position: fixed; inset: 0; z-index: 100; pointer-events: none;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .toc { position: fixed; top: 50%; left: max(24px, calc(50% - 640px)); transform: translateY(-50%); z-index: 50; width: 144px; visibility: hidden; opacity: 0; }
+  .toc-card { background: rgba(255,255,255,0.72); backdrop-filter: blur(16px) saturate(180%); -webkit-backdrop-filter: blur(16px) saturate(180%); border: 1px solid rgba(0,0,0,0.06); border-radius: 14px; padding: 10px; box-shadow: 0 0 0 0.5px rgba(0,0,0,0.03), 0 1px 3px rgba(0,0,0,0.04), 0 6px 24px rgba(0,0,0,0.06); }
+  .toc-back { display: inline-flex; align-items: center; font-size: 11px; font-weight: 500; letter-spacing: 0.01em; color: #999; text-decoration: none; margin-bottom: 10px; transition: color 0.18s; }
+  .toc-back:hover { color: #1a1a1a; }
+  .toc-links { display: flex; flex-direction: column; gap: 1px; }
+  .toc-link { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #999; text-decoration: none; padding: 6px 10px; border-radius: 8px; transition: color 0.18s, background 0.18s; line-height: 1.3; }
+  .toc-link:hover { color: #1a1a1a; background: rgba(0,0,0,0.03); }
+  .toc-link:active { transform: scale(0.97); }
+  .toc-link.active { color: #1a1a1a; font-weight: 500; background: rgba(22,163,74,0.06); }
+  .toc-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; opacity: 0.2; flex-shrink: 0; transition: all 0.25s cubic-bezier(.19,1,.22,1); }
+  .toc-link:hover .toc-dot { opacity: 0.5; }
+  .toc-link.active .toc-dot { opacity: 1; width: 6px; height: 6px; background: #16a34a; box-shadow: 0 0 0 3px rgba(22,163,74,0.15); }
+  @media (max-width: 1440px) { .toc { display: none; } }
+
+  .img-placeholder { position: relative; overflow: hidden; }
+  .img-placeholder::after {
+    content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    animation: shimmer 3s infinite;
+  }
+  @keyframes shimmer { 0% { left: -100%; } 100% { left: 200%; } }
+
+  .line-reveal { transform-origin: left; transform: scaleX(0); }
+  .gs-child { opacity: 0; transform: translateY(30px); }
+
+  .section-divider { overflow: visible; }
+  .section-divider .divider-line { stroke-dasharray: 1000; stroke-dashoffset: 1000; }
+
+  .floating-dot { position: absolute; border-radius: 50%; opacity: 0; background: #16a34a; }
+
+  .scroll-progress {
+    position: fixed; top: 0; left: 0; height: 3px;
+    background: linear-gradient(90deg, #16a34a, #059669, #16a34a);
+    background-size: 200% 100%;
+    animation: gradient-shift 3s ease infinite;
+    z-index: 200; transform-origin: left; transform: scaleX(0);
+  }
+  @keyframes gradient-shift { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+
+  .parallax-slow { will-change: transform; }
+
+  .hero-mesh {
+    position: absolute; inset: 0; pointer-events: none; z-index: 0;
+    background:
+      radial-gradient(ellipse 600px 400px at 10% 20%, rgba(22,163,74,0.04), transparent),
+      radial-gradient(ellipse 500px 300px at 80% 60%, rgba(5,150,105,0.03), transparent),
+      radial-gradient(ellipse 400px 400px at 50% 100%, rgba(22,163,74,0.02), transparent);
+  }
+
+  .hero-card {
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    transform-style: preserve-3d;
+    will-change: transform;
+  }
+  .hero-card .card-shine {
+    position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(255,255,255,0.25) 0%, transparent 60%);
+    opacity: 0; transition: opacity 0.3s ease;
+    border-radius: inherit;
+  }
+  .hero-card:hover .card-shine { opacity: 1; }
+
+  /* Hero brand background text + fade */
+  .hero-brand-bg {
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: clamp(100px, 14vw, 240px);
+    font-weight: 800;
+    color: rgba(22,163,74,0.07);
+    letter-spacing: -0.05em;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 1;
+    line-height: 0.85;
+    user-select: none;
+  }
+  .hero-fade {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, rgba(22,163,74,0.15) 0%, rgba(22,163,74,0.06) 30%, transparent 60%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .scroll-indicator {
+    position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
+  }
+  @keyframes bounce-soft {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(6px); }
+  }
+  .scroll-indicator svg { animation: bounce-soft 2s ease-in-out infinite; }
+
+  .card-glow { position: relative; overflow: hidden; }
+  .card-glow::before {
+    content: ''; position: absolute; width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(22,163,74,0.08), transparent 70%);
+    border-radius: 50%; pointer-events: none;
+    transform: translate(-50%, -50%);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .card-glow:hover::before { opacity: 1; }
+
+  @keyframes border-glow {
+    0%, 100% { border-color: rgba(22,163,74,0.15); }
+    50% { border-color: rgba(22,163,74,0.35); }
+  }
+  .insight-glow { animation: border-glow 3s ease-in-out infinite; border-width: 1px; border-style: solid; }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+  .float-anim { animation: float 4s ease-in-out infinite; }
+
+  .num-glow { text-shadow: 0 0 30px rgba(22,163,74,0.15); }
+
+  .toc-link span {
+    background-image: linear-gradient(#1a1a1a, #1a1a1a);
+    background-size: 0% 1px;
+    background-repeat: no-repeat;
+    background-position: left bottom;
+    transition: background-size 0.3s ease;
+    padding-bottom: 2px;
+  }
+  .toc-link:hover span { background-size: 100% 1px; }
+  .toc-link.active span { background-size: 0% 1px; }
+
+  .flip-card { position: relative; }
+  .flip-card-inner { position: relative; width: 100%; min-height: 220px; }
+  .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+  .flip-front { position: absolute; inset: 0; z-index: 2; }
+  .flip-back { position: absolute; inset: 0; z-index: 1; }
+
+  .flip-card:hover .flip-front { box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
+  .research-method { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+  .research-method:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+
+  /* Audit progress bar */
+  .audit-bar { transition: width 1.2s ease; }
+</style>
+</head>
+<body class="bg-white text-primary leading-relaxed">
+
+<!-- Scroll progress bar -->
+<div class="scroll-progress"></div>
+<style>.site-nav{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:200;height:52px;background:rgba(255,255,255,.55);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);border:1px solid rgba(255,255,255,.45);border-radius:100px;transition:transform .35s ease,background .35s,border-color .35s,box-shadow .35s;box-shadow:0 0 0 0.5px rgba(0,0,0,.04),0 4px 24px rgba(0,0,0,.06)}.site-nav.nav-hidden{transform:translateX(-50%) translateY(-80px)}.pn-inner{display:flex;align-items:center;justify-content:center;height:100%;padding:0 8px}.pn-icons{display:flex;gap:4px;align-items:center}.pn-div{width:1px;height:20px;background:rgba(0,0,0,.1);margin:0 6px}.pn-a{position:relative;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#999;text-decoration:none;transition:all .2s}.pn-a:hover{color:#111;background:rgba(0,0,0,.05)}.pn-a i{font-size:20px;line-height:1}.pn-tip{position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%) translateY(-4px);opacity:0;pointer-events:none;font-size:11px;font-weight:500;background:#111;color:#fff;padding:5px 12px;border-radius:6px;white-space:nowrap;transition:opacity .2s,transform .2s;letter-spacing:.01em}.pn-tip::after{content:'';position:absolute;bottom:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-bottom-color:#111}.pn-a:hover .pn-tip{opacity:1;transform:translateX(-50%) translateY(0)}</style>
+<nav class="site-nav" id="caseNav"><div class="pn-inner"><div class="pn-icons"><a href="index.html" class="pn-a"><i class="ph ph-house"></i><span class="pn-tip">Home</span></a><a href="index.html#ar-lab" class="pn-a"><i class="ph ph-cube"></i><span class="pn-tip">AR Lab</span></a><a href="index.html#ai-lab" class="pn-a"><i class="ph ph-flask"></i><span class="pn-tip">AI Lab</span></a><a href="about.html" class="pn-a"><i class="ph ph-user"></i><span class="pn-tip">5min Guide</span></a><span class="pn-div"></span><a href="https://drive.google.com/file/d/1339iKvokajvEe63I9VeepkqOrsxVILGW/view?usp=sharing" class="pn-a" target="_blank" rel="noopener"><i class="ph ph-file-text"></i><span class="pn-tip">Resume</span></a><a href="https://www.linkedin.com/in/hoyak/" class="pn-a" target="_blank" rel="noopener"><i class="ph ph-linkedin-logo"></i><span class="pn-tip">LinkedIn</span></a></div></div></nav>
+<script>(function(){var n=document.getElementById('caseNav'),ly=0;window.addEventListener('scroll',function(){var y=window.scrollY;if(y>ly&&y>80)n.classList.add('nav-hidden');else n.classList.remove('nav-hidden');ly=y},{passive:true})})();</script>
+
+<!-- ─── TOC Sidebar ─── -->
+<nav class="toc">
+  <a href="index.html" class="toc-back">&larr; Back to Work</a>
+  <div class="toc-card">
+    <div class="toc-links">
+      <a href="#hero" class="toc-link"><span class="toc-dot"></span>Sidewalk</a>
+      <a href="#context" class="toc-link"><span class="toc-dot"></span>The Challenge</a>
+      <a href="#process" class="toc-link"><span class="toc-dot"></span>Process</a>
+      <a href="#system" class="toc-link"><span class="toc-dot"></span>Design System</a>
+      <a href="#outcome" class="toc-link"><span class="toc-dot"></span>Outcome &amp; Impact</a>
+      <a href="#reflection" class="toc-link"><span class="toc-dot"></span>Reflection</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ─── Main ─── -->
+<div class="main">
+
+  <!-- ═══════ HERO ═══════ -->
+  <header class="relative overflow-hidden bg-white" id="hero">
+    <div class="hero-mesh"></div>
+    <div class="hero-fade"></div>
+    <div class="hero-brand-bg" aria-hidden="true">Sidewalk</div>
+
+    <!-- Hero photo -->
+    <div class="px-6 lg:px-16 pt-52 pb-6 relative z-10" style="overflow:visible">
+      <div class="max-w-5xl mx-auto opacity-0 hero-badge" style="transform:scale(1.1)">
+        <img src="ProjectSidewalk/PS_Mockup.png" alt="Project Sidewalk — Final Product" class="w-full h-auto block" />
+      </div>
+      <div id="hero-light" class="absolute left-0 w-full pointer-events-none" style="top:0;left:0;right:0;height:100%;opacity:1">
+        <div class="absolute inset-0" style="background:linear-gradient(180deg, rgba(22,163,74,0.18) 0%, rgba(74,222,128,0.08) 30%, transparent 60%)"></div>
+      </div>
+    </div>
+
+    <!-- Title -->
+    <div class="px-10 lg:px-20 pt-14 pb-4 text-center relative z-10">
+      <h1 class="hero-subtitle font-display text-[1.75rem] lg:text-[2.5rem] font-semibold leading-[1.12] mx-auto mb-3 opacity-0" style="letter-spacing:-0.03em;max-width:620px">
+        Scaling Civic Accessibility via a Zero-Defect Design System
+      </h1>
+      <p class="hero-subtitle text-sm lg:text-base text-secondary leading-relaxed max-w-lg mx-auto opacity-0">
+        Architecting a WCAG 2.2 AA compliant foundation for 11,000+ users.
+      </p>
+      <a href="https://sidewalk-chicago.cs.washington.edu/" target="_blank" rel="noopener" class="hero-subtitle inline-flex items-center gap-2 mt-6 px-5 py-2.5 bg-primary text-white text-sm font-medium rounded-full opacity-0 transition-all duration-200 hover:opacity-90 hover:shadow-lg" style="text-decoration:none">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        Visit Live Project
+      </a>
+    </div>
+
+    <!-- Scroll hint -->
+    <div class="text-center pt-8 pb-10 relative z-10 opacity-0 hero-badge">
+      <div class="text-[9px] font-bold uppercase tracking-[0.25em] text-secondary/60 mb-5 leading-relaxed">Read the study to learn how<br>a design system transformed civic tech</div>
+      <div id="scroll-arrow" class="inline-block">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10.5" stroke="#16a34a" stroke-width="0.8" opacity="0.25"/><path d="M8.5 10.5l3.5 3 3.5-3" stroke="#16a34a" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+
+    <!-- Badges -->
+    <div class="flex items-center gap-2 flex-wrap justify-center pb-10 opacity-0 hero-badge relative z-10">
+      <span class="inline-flex items-center gap-1.5 bg-accent/5 border border-accent/15 rounded-full px-3 py-1.5 text-xs text-accent font-medium">Lead Product Designer</span>
+      <span class="inline-flex items-center gap-1.5 bg-accent/5 border border-accent/15 rounded-full px-3 py-1.5 text-xs text-accent font-medium">System Architecture</span>
+      <span class="inline-flex items-center gap-1.5 bg-surface border border-gray-200 rounded-full px-3 py-1.5 text-xs text-secondary">12 Months</span>
+      <span class="inline-flex items-center gap-1.5 bg-surface border border-gray-200 rounded-full px-3 py-1.5 text-xs text-secondary">Civic Tech / Open-Source</span>
+    </div>
+
+    <!-- Contributions & Meta -->
+    <!-- 6. Meta strip -->
+    <div class="px-10 lg:px-20 pb-16 relative z-10">
+      <div class="max-w-5xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-8 pt-8 border-t border-gray-100">
+        <div class="meta-group opacity-0">
+          <div class="text-[10px] font-bold uppercase tracking-widest text-accent mb-4">Impact</div>
+          <div class="space-y-4">
+            <div><div class="font-display text-2xl font-semibold leading-none mb-1 stat-number" data-target="350" data-suffix="k+">0k+</div><div class="text-xs text-secondary">Accessibility labels crowdsourced</div></div>
+            <div><div class="font-display text-2xl font-semibold leading-none mb-1 stat-number" data-target="100" data-suffix="%">0%</div><div class="text-xs text-secondary">WCAG 2.2 AA compliance</div></div>
+            <div><div class="font-display text-2xl font-semibold leading-none mb-1 stat-number" data-target="3">0</div><div class="text-xs text-secondary">Teams adopted the system</div></div>
+          </div>
+        </div>
+        <div class="opacity-0 hero-contributions">
+          <div class="text-[10px] font-bold uppercase tracking-widest text-accent mb-4">What I Did <span class="font-normal normal-case tracking-normal text-secondary/40">· Click to jump</span></div>
+          <div class="space-y-3">
+            <a href="#context" class="block text-sm leading-snug no-underline group cursor-pointer"><strong class="group-hover:text-accent transition-colors">Data-informed diagnostics</strong><br><span class="text-secondary text-xs">Hotjar &#x00b7; Community voice &#x00b7; WCAG audit</span></a>
+            <a href="#process" class="block text-sm leading-snug no-underline group cursor-pointer"><strong class="group-hover:text-accent transition-colors">Architected zero-defect system</strong><br><span class="text-secondary text-xs">Token foundation &#x2192; Component library</span></a>
+            <a href="#system" class="block text-sm leading-snug no-underline group cursor-pointer"><strong class="group-hover:text-accent transition-colors">Scaled cross-functional adoption</strong><br><span class="text-secondary text-xs">1 PM &#x00b7; 2 developers &#x00b7; Phased rollout</span></a>
+            <a href="#outcome" class="block text-sm leading-snug no-underline group cursor-pointer"><strong class="group-hover:text-accent transition-colors">Delivered measurable impact</strong><br><span class="text-secondary text-xs">11k+ users &#x00b7; 100% WCAG AA &#x00b7; Zero defects</span></a>
+          </div>
+        </div>
+        <div class="meta-group opacity-0">
+          <div class="text-[10px] font-bold uppercase tracking-widest text-accent mb-4">Team</div>
+          <div class="text-sm leading-relaxed"><strong>1 Product Designer</strong> (me)<br><span class="text-secondary text-xs">System Architecture Lead</span></div>
+          <div class="text-sm leading-relaxed mt-3"><strong>3 Cross-functional partners</strong><br><span class="text-secondary text-xs">1 PM · 2 Developers</span></div>
+        </div>
+        <div class="meta-group opacity-0">
+          <div class="text-[10px] font-bold uppercase tracking-widest text-accent mb-4">Timeline</div>
+          <div class="text-sm leading-relaxed"><strong>12 Months</strong><br><span class="text-secondary text-xs">Civic Accessibility Platform</span></div>
+          <div class="text-sm leading-relaxed mt-3"><strong>Domain</strong><br><span class="text-secondary text-xs">GovTech &#x00b7; Urban Accessibility</span></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══════ QUICK SUMMARY — Interactive CTA ═══════ -->
+  <div class="relative overflow-hidden" id="quick-summary-section" style="min-height:320px">
+    <div class="absolute inset-0 opacity-[0.12]" style="background-image:radial-gradient(circle,#16a34a 0.6px,transparent 0.6px);background-size:28px 28px" id="dot-grid"></div>
+    <div id="summary-glow" class="absolute w-[500px] h-[500px] rounded-full pointer-events-none opacity-0 transition-opacity duration-500" style="background:radial-gradient(circle,rgba(22,163,74,0.08) 0%,transparent 70%);transform:translate(-50%,-50%)"></div>
+    <!-- Floating preview cards -->
+    <div class="absolute inset-0 pointer-events-none" id="floating-cards">
+      <div class="summary-float-card absolute bg-white rounded-xl shadow-lg border border-gray-100 p-3 w-36 opacity-0" style="top:15%;left:8%">
+        <div class="text-xs font-bold text-accent mb-1">350k+</div>
+        <div class="text-[10px] text-secondary">Labels Crowdsourced</div>
+        <div class="mt-1.5 h-1 bg-green-100 rounded-full overflow-hidden"><div class="h-full bg-green-400 rounded-full" style="width:85%"></div></div>
+      </div>
+      <div class="summary-float-card absolute bg-white rounded-xl shadow-lg border border-gray-100 p-3 w-32 opacity-0" style="top:20%;right:10%">
+        <div class="flex items-center gap-1.5 mb-1"><div class="w-1.5 h-1.5 rounded-full bg-accent animate-pulse"></div><div class="text-[10px] font-bold text-accent">WCAG AA</div></div>
+        <div class="h-1 bg-accent/10 rounded w-full mb-0.5"></div>
+        <div class="h-1 bg-accent/5 rounded w-3/4"></div>
+      </div>
+      <div class="summary-float-card absolute bg-white rounded-xl shadow-lg border border-gray-100 p-3 w-28 opacity-0" style="bottom:18%;left:12%">
+        <div class="text-[10px] font-bold mb-1">3 Teams</div>
+        <div class="text-[10px] text-secondary">Adopted</div>
+      </div>
+      <div class="summary-float-card absolute bg-white rounded-xl shadow-lg border border-gray-100 p-3 w-36 opacity-0" style="bottom:15%;right:8%">
+        <div class="text-xs font-bold text-green-600 mb-1">11k+</div>
+        <div class="text-[10px] text-secondary">Users Supported</div>
+        <div class="mt-1.5 h-1 bg-green-100 rounded-full overflow-hidden"><div class="h-full bg-green-400 rounded-full" style="width:100%"></div></div>
+      </div>
+    </div>
+    <!-- Center content -->
+    <div class="relative z-10 flex flex-col items-center justify-center py-20 px-10">
+      <div class="inline-flex items-center gap-2 bg-accent/5 border border-accent/15 rounded-full px-4 py-1.5 mb-4 text-xs text-accent font-medium">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        ~2 min read
+      </div>
+      <h3 class="font-display text-xl lg:text-2xl font-semibold text-primary mb-3 text-center">Short on time?</h3>
+      <p class="text-base text-secondary mb-8 text-center max-w-sm">Get the quick highlights in a visual, swipeable format.</p>
+      <button id="summary-btn" class="summary-magnetic relative inline-flex items-center gap-3 bg-primary text-white rounded-2xl px-10 py-5 shadow-xl hover:shadow-2xl transition-all duration-300 cursor-pointer group overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="relative z-10 group-hover:scale-110 transition-transform"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        <span class="text-base font-semibold relative z-10">Summary Mode</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="relative z-10 group-hover:translate-x-1 transition-transform"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+      <div class="mt-4 flex items-center gap-4 text-xs text-secondary">
+        <span class="flex items-center gap-1">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8L22 12L18 16"/><path d="M6 8L2 12L6 16"/></svg>
+          Swipeable slides
+        </span>
+        <span>&middot;</span>
+        <span>4 key insights</span>
+        <span>&middot;</span>
+        <span>ESC to close</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ SUMMARY OVERLAY ═══════ -->
+  <div id="summary-overlay" class="fixed inset-0 z-[200] hidden">
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" id="summary-backdrop"></div>
+    <div class="absolute inset-x-4 lg:inset-x-[15%] top-[5%] bottom-[5%] bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col" id="summary-card">
+      <button id="summary-close" class="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-surface flex items-center justify-center hover:bg-gray-200 transition-colors cursor-pointer">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+      <div class="flex-1 overflow-hidden relative">
+        <div id="summary-slides" class="flex h-full transition-transform duration-500 ease-out">
+          <!-- Slide 1: Overview -->
+          <div class="w-full flex-shrink-0 flex flex-col lg:flex-row">
+            <div class="flex-1 bg-surface p-8 flex flex-col items-center justify-center">
+              <div class="w-20 h-20 rounded-2xl bg-accent/10 flex items-center justify-center mb-4">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              </div>
+              <div class="font-display text-xl font-bold mb-1">Project Sidewalk</div>
+              <div class="text-sm text-secondary">Civic Tech &middot; Open-Source &middot; Accessibility</div>
+            </div>
+            <div class="flex-1 p-8 flex flex-col justify-center">
+              <div class="font-display text-lg font-semibold mb-4">Project Summary</div>
+              <div class="text-sm text-secondary leading-relaxed mb-6">Architected a production-ready design system adopted across 3 cross-functional teams, eliminating accessibility debt and improving navigation for 11,000+ users.</div>
+              <div class="space-y-3">
+                <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-accent"></span><span class="text-sm"><strong>Role:</strong> Lead Product Designer</span></div>
+                <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-accent"></span><span class="text-sm"><strong>Timeline:</strong> 12 months</span></div>
+                <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-accent"></span><span class="text-sm"><strong>Team:</strong> 1 PM, 2 Devs, 1 Designer</span></div>
+              </div>
+              <div class="mt-6 grid grid-cols-2 gap-3">
+                <div class="bg-surface rounded-lg p-3 text-center border border-gray-100"><div class="font-display text-2xl font-semibold text-accent">11k+</div><div class="text-xs text-secondary">Users supported</div></div>
+                <div class="bg-surface rounded-lg p-3 text-center border border-gray-100"><div class="font-display text-2xl font-semibold text-accent">100%</div><div class="text-xs text-secondary">WCAG compliance</div></div>
+              </div>
+            </div>
+          </div>
+          <!-- Slide 2: Problem -->
+          <div class="w-full flex-shrink-0 flex flex-col lg:flex-row">
+            <div class="flex-1 bg-red-50/50 p-8 flex flex-col justify-center items-center">
+              <div class="text-xs font-bold uppercase tracking-wider text-highlight mb-4">The Challenge</div>
+              <div class="flex items-center gap-3 mb-3">
+                <div class="w-12 h-12 rounded-full bg-red-100 border-2 border-red-300 flex items-center justify-center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e74c3c" stroke-width="2"><path d="M12 8v4M12 16h.01"/></svg></div>
+              </div>
+              <div class="font-display text-lg font-semibold text-center mb-2">Fragmented UI &amp; Accessibility Debt</div>
+              <div class="text-sm text-secondary text-center">Every new feature created more technical debt.</div>
+            </div>
+            <div class="flex-1 p-8 flex flex-col justify-center">
+              <div class="text-xs font-bold uppercase tracking-wider text-accent mb-4">Three Friction Points</div>
+              <div class="space-y-3">
+                <div class="bg-surface rounded-lg p-3 border border-gray-100"><strong class="text-sm">Systemic Inconsistency</strong><div class="text-xs text-secondary mt-1">Varying buttons, labels, interactions across pages</div></div>
+                <div class="bg-surface rounded-lg p-3 border border-gray-100"><strong class="text-sm">Accessibility Irony</strong><div class="text-xs text-secondary mt-1">An accessibility tool that wasn't accessible</div></div>
+                <div class="bg-surface rounded-lg p-3 border border-gray-100"><strong class="text-sm">Engineering Bottleneck</strong><div class="text-xs text-secondary mt-1">Rebuilding UI from scratch each time</div></div>
+              </div>
+            </div>
+          </div>
+          <!-- Slide 3: Process -->
+          <div class="w-full flex-shrink-0 flex flex-col lg:flex-row">
+            <div class="flex-1 bg-accent/5 p-8 flex flex-col justify-center">
+              <div class="text-xs font-bold uppercase tracking-wider text-accent mb-4">Process</div>
+              <div class="font-display text-lg font-semibold mb-4">From Audit to Architecture</div>
+              <div class="space-y-3">
+                <div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-accent text-white flex items-center justify-center text-xs font-bold">1</div><div class="text-sm"><strong>Audit:</strong> Data-Informed Diagnostics</div></div>
+                <div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-bold">2</div><div class="text-sm"><strong>Build:</strong> Zero-Defect System Architecture</div></div>
+                <div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-teal-100 text-teal-700 flex items-center justify-center text-xs font-bold">3</div><div class="text-sm"><strong>Scale:</strong> Cross-Functional Adoption</div></div>
+              </div>
+            </div>
+            <div class="flex-1 p-8 flex flex-col justify-center">
+              <div class="text-xs font-bold uppercase tracking-wider text-accent mb-4">Key Decisions</div>
+              <div class="text-sm text-secondary mb-4">Design tokens mirroring SCSS variables</div>
+              <div class="space-y-3">
+                <div class="flex items-center justify-between bg-surface rounded-lg p-3 border border-gray-100"><span class="text-sm">Color Contrast</span><span class="font-semibold text-green-600">37% &rarr; 100%</span></div>
+                <div class="flex items-center justify-between bg-surface rounded-lg p-3 border border-gray-100"><span class="text-sm">Keyboard Nav</span><span class="font-semibold text-green-600">42% &rarr; 100%</span></div>
+                <div class="flex items-center justify-between bg-surface rounded-lg p-3 border border-gray-100"><span class="text-sm">Screen Reader</span><span class="font-semibold text-green-600">28% &rarr; 100%</span></div>
+              </div>
+            </div>
+          </div>
+          <!-- Slide 4: Outcome -->
+          <div class="w-full flex-shrink-0 flex flex-col lg:flex-row">
+            <div class="flex-1 bg-green-50/50 p-8 flex flex-col justify-center">
+              <div class="text-xs font-bold uppercase tracking-wider text-green-600 mb-4">Outcome</div>
+              <div class="font-display text-lg font-semibold mb-4">Measurable Impact</div>
+              <div class="space-y-3">
+                <div class="flex items-center gap-2"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="text-sm">Zero-defect WCAG 2.2 AA compliance</span></div>
+                <div class="flex items-center gap-2"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="text-sm">Adopted across 3 cross-functional teams</span></div>
+                <div class="flex items-center gap-2"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="text-sm">11,000+ users with improved experience</span></div>
+              </div>
+            </div>
+            <div class="flex-1 p-8 flex flex-col justify-center">
+              <div class="text-xs font-bold uppercase tracking-wider text-accent mb-4">Key Takeaway</div>
+              <blockquote class="font-display text-lg font-medium leading-relaxed mb-6 pl-4 border-l-2 border-accent">A robust design system is not just a style guide&mdash;it is a tool for empowerment.</blockquote>
+              <div class="space-y-2">
+                <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-accent"></span><span class="text-sm">Inclusivity baked into the code, not pixels</span></div>
+                <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-accent"></span><span class="text-sm">Designed for resilience in civic tech</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Navigation -->
+      <div class="flex items-center justify-center gap-4 py-4 border-t border-gray-100">
+        <button id="summary-prev" class="w-10 h-10 rounded-full bg-surface flex items-center justify-center hover:bg-gray-200 transition-colors cursor-pointer disabled:opacity-30" disabled>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </button>
+        <div id="summary-dots" class="flex gap-2">
+          <div class="summary-dot w-3 h-3 rounded-full bg-accent transition-colors cursor-pointer"></div>
+          <div class="summary-dot w-3 h-3 rounded-full bg-gray-300 transition-colors cursor-pointer"></div>
+          <div class="summary-dot w-3 h-3 rounded-full bg-gray-300 transition-colors cursor-pointer"></div>
+          <div class="summary-dot w-3 h-3 rounded-full bg-gray-300 transition-colors cursor-pointer"></div>
+        </div>
+        <button id="summary-next" class="w-10 h-10 rounded-full bg-surface flex items-center justify-center hover:bg-gray-200 transition-colors cursor-pointer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+      <div class="text-center text-xs text-secondary pb-3">Click or swipe through. Click outside to dismiss.</div>
+    </div>
+  </div>
+
+  <div class="flex justify-center">
+    <div class="w-full max-w-3xl px-6 lg:px-8 main-body">
+
+      <!-- ─── CONTEXT / CHALLENGE ─── -->
+      <section class="section py-20 border-b border-gray-200" id="context">
+        <div class="text-xs font-bold uppercase tracking-widest text-accent mb-6 gs-child">Context / Challenge</div>
+        <h2 class="font-display text-2xl lg:text-[1.75rem] font-semibold leading-snug mb-8 max-w-xl xl:max-w-2xl gs-child">Growing Pains &amp; Accessibility Debt</h2>
+        <div class="text-base text-secondary leading-loose max-w-xl xl:max-w-2xl">
+          <p class="mb-5 gs-child">Project Sidewalk is an <strong class="text-primary font-medium">open-source civic platform</strong> that crowdsources urban accessibility data to train machine learning models. With over <strong class="text-primary font-medium">350,000 labels</strong> collected, the platform had proven its value&mdash;but the internal architecture and user experience were brittle.</p>
+          <p class="mb-5 gs-child">I identified three critical friction points holding the platform back:</p>
+        </div>
+
+        <!-- Accessibility debt spectrum -->
+        <div class="my-12 gs-child">
+          <div class="bg-surface rounded-2xl border border-gray-100 p-6 max-w-2xl">
+            <div class="flex items-center justify-between mb-4">
+              <div class="text-[10px] font-bold uppercase tracking-wider text-red-500">Before</div>
+              <div class="text-[10px] font-bold uppercase tracking-wider text-accent">After</div>
+            </div>
+            <div class="relative h-2 bg-gray-100 rounded-full mb-5">
+              <div class="absolute inset-y-0 left-0 bg-gradient-to-r from-red-400 via-amber-400 to-green-500 rounded-full" style="width:100%"></div>
+              <div class="absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-white border-2 border-accent rounded-full shadow-sm" style="left:calc(100% - 8px)"></div>
+            </div>
+            <div class="grid grid-cols-3 gap-4">
+              <div class="text-center">
+                <div class="w-10 h-10 mx-auto rounded-lg bg-red-50 border border-red-100 flex items-center justify-center mb-2">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                </div>
+                <div class="font-display text-xs font-semibold">Inconsistent</div>
+                <div class="text-[10px] text-secondary mt-0.5">4 different button styles</div>
+              </div>
+              <div class="text-center">
+                <div class="w-10 h-10 mx-auto rounded-lg bg-amber-50 border border-amber-100 flex items-center justify-center mb-2">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+                </div>
+                <div class="font-display text-xs font-semibold">Non-compliant</div>
+                <div class="text-[10px] text-secondary mt-0.5">37% contrast failure</div>
+              </div>
+              <div class="text-center">
+                <div class="w-10 h-10 mx-auto rounded-lg bg-green-50 border border-green-100 flex items-center justify-center mb-2">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                </div>
+                <div class="font-display text-xs font-semibold">Zero Defects</div>
+                <div class="text-[10px] text-secondary mt-0.5">100% WCAG AA pass</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="space-y-4 my-10">
+          <!-- Friction 1 -->
+          <div class="bg-surface rounded-xl p-6 border border-gray-200 gs-child">
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 rounded-full bg-red-50 border border-red-200 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e74c3c" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              </div>
+              <div>
+                <div class="font-bold text-sm mb-1">User Drop-off</div>
+                <div class="text-sm text-secondary leading-relaxed">Inconsistent UI and unclear feedback structures caused high abandonment rates in core reporting flows for our 11,000+ volunteers.</div>
+              </div>
+            </div>
+          </div>
+          <!-- Friction 2 -->
+          <div class="bg-surface rounded-xl p-6 border border-gray-200 gs-child">
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 rounded-full bg-red-50 border border-red-200 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e74c3c" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+              </div>
+              <div>
+                <div class="font-bold text-sm mb-1">Engineering Bottleneck</div>
+                <div class="text-sm text-secondary leading-relaxed">The absence of a centralized design system forced developers to rebuild UI components from scratch, leading to severe technical debt and frequent frontend regression bugs.</div>
+              </div>
+            </div>
+          </div>
+          <!-- Friction 3 -->
+          <div class="bg-surface rounded-xl p-6 border border-gray-200 gs-child">
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 rounded-full bg-red-50 border border-red-200 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e74c3c" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+              </div>
+              <div>
+                <div class="font-bold text-sm mb-1">The Accessibility Irony</div>
+                <div class="text-sm text-secondary leading-relaxed">Despite being a tool <em>for</em> accessibility, the platform itself failed to meet basic WCAG standards, inadvertently alienating the very community it aimed to serve.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- WCAG Audit Score Visualization -->
+        <div class="my-10 bg-white rounded-xl border border-gray-200 p-6 lg:p-8 gs-child shadow-sm">
+          <div class="flex items-center justify-between mb-6">
+            <div>
+              <div class="text-sm font-semibold text-primary">WCAG 2.2 AA Compliance Audit</div>
+              <div class="text-xs text-secondary mt-0.5">Initial assessment across core pages &middot; Illustrative</div>
+            </div>
+            <div class="flex items-center gap-4 text-xs text-secondary">
+              <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-green-400"></span>Pass</span>
+              <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-red-400"></span>Fail</span>
+            </div>
+          </div>
+          <!-- Audit bars -->
+          <div class="space-y-4">
+            <div>
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="text-xs font-medium">Color Contrast</span>
+                <span class="text-xs text-red-500 font-medium audit-label" style="opacity:0">37% pass</span>
+              </div>
+              <div class="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
+                <div class="h-full bg-red-400 rounded-full audit-bar" data-width="37%" style="width:0%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="text-xs font-medium">Keyboard Navigation</span>
+                <span class="text-xs text-red-500 font-medium audit-label" style="opacity:0">42% pass</span>
+              </div>
+              <div class="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
+                <div class="h-full bg-red-400 rounded-full audit-bar" data-width="42%" style="width:0%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="text-xs font-medium">Screen Reader</span>
+                <span class="text-xs text-red-500 font-medium audit-label" style="opacity:0">28% pass</span>
+              </div>
+              <div class="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
+                <div class="h-full bg-red-400 rounded-full audit-bar" data-width="28%" style="width:0%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="text-xs font-medium">Focus Indicators</span>
+                <span class="text-xs text-highlight font-medium audit-label" style="opacity:0">51% pass</span>
+              </div>
+              <div class="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
+                <div class="h-full bg-orange-400 rounded-full audit-bar" data-width="51%" style="width:0%"></div>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 flex items-center gap-2 text-xs">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><path d="M12 8v4M12 16h.01"/></svg>
+            <span class="text-red-500 font-medium">Critical gaps identified</span>
+            <span class="text-secondary">&mdash; screen reader support was the weakest area</span>
+          </div>
+          <div class="mt-2 text-[10px] text-secondary/50 italic">* Values are illustrative. Actual audit data is confidential.</div>
+        </div>
+
+        <!-- ★ Stakeholder Alignment -->
+        <div class="mt-16 gs-child">
+          <h3 class="font-display text-xl font-semibold mb-4">Stakeholder Alignment at Scale</h3>
+          <p class="text-base text-secondary leading-loose max-w-xl xl:max-w-2xl mb-8">Redesigning a civic tech platform wasn't just about updating the UI — it required balancing the competing needs of three distinct user groups. A zero-defect design system was the only way to satisfy all of them simultaneously.</p>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-accent/[0.03] border border-accent/10 rounded-xl p-5 transition-shadow duration-200 hover:shadow-md" style="box-shadow:0 0 0 0.5px rgba(22,163,74,0.08),0 1px 2px rgba(17,24,39,0.04)">
+              <div class="flex items-center gap-2.5 mb-4">
+                <div class="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+                <div>
+                  <div class="text-[10px] font-bold uppercase tracking-widest text-accent leading-none">The Mappers</div>
+                  <div class="text-[9px] text-secondary/50 mt-0.5">Citizens &amp; Volunteers</div>
+                </div>
+              </div>
+              <div class="space-y-2">
+                <div class="flex items-start gap-2"><span class="w-1 h-1 rounded-full bg-accent mt-1.5 flex-shrink-0"></span><span class="text-sm text-secondary leading-snug">Map barriers quickly and accurately</span></div>
+                <div class="flex items-start gap-2"><span class="w-1 h-1 rounded-full bg-accent mt-1.5 flex-shrink-0"></span><span class="text-sm text-secondary leading-snug">Low cognitive load, gamified flows</span></div>
+                <div class="flex items-start gap-2"><span class="w-1 h-1 rounded-full bg-accent mt-1.5 flex-shrink-0"></span><span class="text-sm text-secondary leading-snug">WCAG AA compliant interface</span></div>
+              </div>
+            </div>
+            <div class="bg-surface rounded-xl p-5 border border-gray-200 transition-shadow duration-200 hover:shadow-md" style="box-shadow:0 1px 2px rgba(17,24,39,0.04)">
+              <div class="flex items-center gap-2.5 mb-4">
+                <div class="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6b6b6b" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+                <div>
+                  <div class="text-[10px] font-bold uppercase tracking-widest text-secondary leading-none">Data Consumers</div>
+                  <div class="text-[9px] text-secondary/50 mt-0.5">City Planners &amp; Governments</div>
+                </div>
+              </div>
+              <div class="space-y-2">
+                <div class="flex items-start gap-2"><span class="w-1 h-1 rounded-full bg-gray-300 mt-1.5 flex-shrink-0"></span><span class="text-sm text-secondary leading-snug">High data accuracy for planning</span></div>
+                <div class="flex items-start gap-2"><span class="w-1 h-1 rounded-full bg-gray-300 mt-1.5 flex-shrink-0"></span><span class="text-sm text-secondary leading-snug">Standardized reporting formats</span></div>
+                <div class="flex items-start gap-2"><span class="w-1 h-1 rounded-full bg-gray-300 mt-1.5 flex-shrink-0"></span><span class="text-sm text-secondary leading-snug">Reliable UI preventing input errors</span></div>
+              </div>
+            </div>
+            <div class="bg-surface rounded-xl p-5 border border-gray-200 transition-shadow duration-200 hover:shadow-md" style="box-shadow:0 1px 2px rgba(17,24,39,0.04)">
+              <div class="flex items-center gap-2.5 mb-4">
+                <div class="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6b6b6b" stroke-width="1.5"><path d="M16 18l6-6-6-6"/><path d="M8 6l-6 6 6 6"/></svg></div>
+                <div>
+                  <div class="text-[10px] font-bold uppercase tracking-widest text-secondary leading-none">Internal Team</div>
+                  <div class="text-[9px] text-secondary/50 mt-0.5">Engineers &amp; Maintainers</div>
+                </div>
+              </div>
+              <div class="space-y-2">
+                <div class="flex items-start gap-2"><span class="w-1 h-1 rounded-full bg-gray-300 mt-1.5 flex-shrink-0"></span><span class="text-sm text-secondary leading-snug">Scale to 8+ cities without regression</span></div>
+                <div class="flex items-start gap-2"><span class="w-1 h-1 rounded-full bg-gray-300 mt-1.5 flex-shrink-0"></span><span class="text-sm text-secondary leading-snug">Reusable component library</span></div>
+                <div class="flex items-start gap-2"><span class="w-1 h-1 rounded-full bg-gray-300 mt-1.5 flex-shrink-0"></span><span class="text-sm text-secondary leading-snug">Fewer UI-related GitHub issues</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section transition divider -->
+      <div class="flex items-center gap-4 py-6">
+        <div class="flex-1 h-px bg-gray-100"></div>
+        <svg class="section-icon w-8 h-8 text-accent/30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="7" r="1.5"/><path d="M7 10.5h10M12 10.5v5M9 19l3-3.5 3 3.5"/></svg>
+        <div class="flex-1 h-px bg-gray-100"></div>
+      </div>
+
+      <!-- ─── PROCESS ─── -->
+      <section class="section py-20 border-b border-gray-200" id="process">
+        <div class="text-xs font-bold uppercase tracking-widest text-accent mb-6 gs-child">Process</div>
+        <h2 class="font-display text-2xl lg:text-[1.75rem] font-semibold leading-snug mb-8 max-w-xl xl:max-w-2xl gs-child">From Audit to Architecture</h2>
+
+        <!-- Phase 1 -->
+        <div class="text-base text-secondary leading-loose max-w-xl xl:max-w-2xl">
+          <p class="mb-5 gs-child"><strong class="text-primary font-medium text-lg">1. Data-Informed Diagnostics</strong></p>
+          <p class="mb-5 gs-child">Instead of relying on intuition, I audited the existing experience using both <strong class="text-primary font-medium">quantitative and qualitative data</strong> to prioritize high-impact interventions.</p>
+        </div>
+
+        <!-- Research methods -->
+        <div class="my-12 grid grid-cols-3 gap-4 gs-child">
+          <div class="bg-green-50/50 rounded-xl p-6 border border-green-100 research-method">
+            <div class="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center mb-4">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            </div>
+            <div class="font-bold text-sm mb-1.5">Behavioral Analysis</div>
+            <div class="text-xs text-secondary leading-relaxed">Reviewed Hotjar heatmaps and session recordings to pinpoint exact drop-off points, navigational friction, and hesitation markers.</div>
+          </div>
+          <div class="bg-green-50/50 rounded-xl p-6 border border-green-100 research-method">
+            <div class="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center mb-4">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <div class="font-bold text-sm mb-1.5">Community Voice</div>
+            <div class="text-xs text-secondary leading-relaxed">Analyzed GitHub issues and user forum discussions to synthesize and prioritize recurring usability pain points.</div>
+          </div>
+          <div class="bg-green-50/50 rounded-xl p-6 border border-green-100 research-method">
+            <div class="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center mb-4">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            </div>
+            <div class="font-bold text-sm mb-1.5">WCAG 2.2 AA Audit</div>
+            <div class="text-xs text-secondary leading-relaxed">Conducted a rigorous heuristic evaluation of the legacy interface against WCAG standards (e.g., color contrast, keyboard navigation, screen reader support).</div>
+          </div>
+        </div>
+
+        <!-- Hotjar Heatmap — Interactive (confidential) -->
+        <style>
+          @keyframes hotspot-pulse { 0%,100% { transform:translate(-50%,-50%) scale(1); opacity:0.9; } 50% { transform:translate(-50%,-50%) scale(1.5); opacity:0; } }
+          .hm-hotspot { position:absolute; cursor:pointer; z-index:10; }
+          .hm-hotspot .hm-ring { position:absolute; left:50%; top:50%; width:24px; height:24px; border-radius:50%; border:1.5px solid; transform:translate(-50%,-50%); transition:transform 0.2s ease; }
+          .hm-hotspot .hm-pulse { position:absolute; left:50%; top:50%; width:24px; height:24px; border-radius:50%; animation:hotspot-pulse 2s ease-in-out infinite; }
+          .hm-hotspot .hm-tooltip { position:absolute; bottom:calc(100% + 10px); left:50%; transform:translateX(-50%) translateY(6px); opacity:0; pointer-events:none; transition:opacity 0.2s ease, transform 0.2s ease; background:white; border:1px solid rgba(0,0,0,0.1); border-radius:8px; padding:10px 12px; width:200px; box-shadow:0 4px 16px rgba(0,0,0,0.12); }
+          .hm-hotspot.active .hm-tooltip, .hm-hotspot:hover .hm-tooltip { opacity:1; transform:translateX(-50%) translateY(0); pointer-events:auto; }
+          .hm-hotspot.active .hm-ring { transform:translate(-50%,-50%) scale(1.3); }
+          .hm-hotspot.active .hm-pulse { animation:none; opacity:0; }
+          .hm-tab { cursor:pointer; transition:color 0.15s ease; }
+          .hm-tab:hover { color:#4b5563 !important; }
+          .hm-tab.hm-tab-active { color:#111827 !important; font-weight:700; }
+          .hm-layer { transition:opacity 0.4s ease; }
+        </style>
+        <div class="my-10 gs-child">
+          <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden" id="heatmap-widget">
+            <!-- Toolbar -->
+            <div class="flex items-center justify-between px-4 py-2.5 border-b border-gray-100 bg-gray-50/60">
+              <div class="flex items-center gap-2">
+                <div class="flex items-center gap-1">
+                  <div class="w-2.5 h-2.5 rounded-full bg-red-400"></div>
+                  <div class="w-2.5 h-2.5 rounded-full bg-amber-400"></div>
+                  <div class="w-2.5 h-2.5 rounded-full bg-green-400"></div>
+                </div>
+                <div class="text-[10px] text-gray-400 ml-2 font-mono">sidewalks.umd.edu/label</div>
+              </div>
+              <div class="flex items-center gap-3">
+                <div class="hm-tab hm-tab-active text-[9px] uppercase tracking-wider" data-layer="heatmap" style="color:#111827;">Heatmap</div>
+                <div class="hm-tab text-[9px] uppercase tracking-wider" data-layer="clicks" style="color:#9ca3af;">Clicks</div>
+                <div class="hm-tab text-[9px] uppercase tracking-wider" data-layer="scroll" style="color:#9ca3af;">Scroll</div>
+              </div>
+            </div>
+            <!-- Body -->
+            <div class="relative" style="height:360px; background:#f8fafc;">
+              <!-- Interface skeleton -->
+              <div style="position:absolute; left:0; top:0; bottom:0; width:180px; background:#ffffff; border-right:1px solid #e5e7eb;">
+                <div style="padding:14px 12px;">
+                  <div style="width:70%; height:8px; background:#e5e7eb; border-radius:3px; margin-bottom:16px;"></div>
+                  <div style="width:90%; height:6px; background:#f3f4f6; border-radius:2px; margin-bottom:10px;"></div>
+                  <div style="width:80%; height:6px; background:#f3f4f6; border-radius:2px; margin-bottom:10px;"></div>
+                  <div style="width:85%; height:6px; background:#f3f4f6; border-radius:2px; margin-bottom:10px;"></div>
+                  <div style="width:60%; height:6px; background:#f3f4f6; border-radius:2px; margin-bottom:20px;"></div>
+                  <div style="width:90%; height:22px; background:#f3f4f6; border-radius:4px; margin-bottom:6px;"></div>
+                  <div style="width:90%; height:22px; background:#f3f4f6; border-radius:4px; margin-bottom:6px;"></div>
+                  <div style="width:90%; height:22px; background:#f3f4f6; border-radius:4px; margin-bottom:6px;"></div>
+                  <div style="width:90%; height:22px; background:#f3f4f6; border-radius:4px; margin-bottom:6px;"></div>
+                </div>
+              </div>
+              <div style="position:absolute; left:180px; top:0; right:240px; bottom:0; background:#eef2f7;">
+                <svg width="100%" height="100%" style="position:absolute; inset:0; opacity:0.3;">
+                  <line x1="20%" y1="0" x2="20%" y2="100%" stroke="#d1d5db" stroke-width="1"/>
+                  <line x1="50%" y1="0" x2="50%" y2="100%" stroke="#d1d5db" stroke-width="1"/>
+                  <line x1="75%" y1="0" x2="75%" y2="100%" stroke="#d1d5db" stroke-width="1"/>
+                  <line x1="0" y1="30%" x2="100%" y2="30%" stroke="#d1d5db" stroke-width="1"/>
+                  <line x1="0" y1="60%" x2="100%" y2="60%" stroke="#d1d5db" stroke-width="1"/>
+                  <line x1="0" y1="85%" x2="100%" y2="85%" stroke="#d1d5db" stroke-width="1"/>
+                </svg>
+              </div>
+              <div style="position:absolute; right:0; top:0; bottom:0; width:240px; background:#ffffff; border-left:1px solid #e5e7eb;">
+                <div style="padding:12px;">
+                  <div style="width:100%; height:130px; background:#f3f4f6; border-radius:6px; margin-bottom:10px;"></div>
+                  <div style="width:60%; height:6px; background:#e5e7eb; border-radius:2px; margin-bottom:8px;"></div>
+                  <div style="width:80%; height:6px; background:#f3f4f6; border-radius:2px; margin-bottom:16px;"></div>
+                  <div style="display:flex; gap:6px;">
+                    <div style="flex:1; height:26px; background:#f3f4f6; border-radius:4px;"></div>
+                    <div style="flex:1; height:26px; background:#f3f4f6; border-radius:4px;"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- === HEATMAP LAYER === -->
+              <div class="hm-layer" data-layer="heatmap" style="position:absolute; inset:0; pointer-events:none;">
+                <!-- Sidebar low engagement -->
+                <div style="position:absolute; left:40px; top:60px; width:100px; height:80px; background:radial-gradient(ellipse, rgba(59,130,246,0.2) 0%, transparent 70%); filter:blur(8px);"></div>
+                <!-- Map center HIGH -->
+                <div style="position:absolute; left:calc(180px + 30%); top:28%; width:170px; height:150px; background:radial-gradient(ellipse, rgba(239,68,68,0.5) 0%, rgba(245,158,11,0.3) 35%, rgba(234,179,8,0.12) 60%, transparent 85%); border-radius:50%; filter:blur(12px);"></div>
+                <!-- Map MEDIUM -->
+                <div style="position:absolute; left:calc(180px + 50%); top:55%; width:100px; height:90px; background:radial-gradient(ellipse, rgba(245,158,11,0.35) 0%, rgba(234,179,8,0.12) 50%, transparent 80%); border-radius:50%; filter:blur(8px);"></div>
+                <!-- Map LOW -->
+                <div style="position:absolute; left:calc(180px + 8%); top:65%; width:80px; height:70px; background:radial-gradient(ellipse, rgba(59,130,246,0.22) 0%, transparent 75%); border-radius:50%; filter:blur(8px);"></div>
+                <!-- Scattered -->
+                <div style="position:absolute; left:calc(180px + 65%); top:18%; width:50px; height:45px; background:radial-gradient(ellipse, rgba(234,179,8,0.2) 0%, transparent 70%); border-radius:50%; filter:blur(5px);"></div>
+                <!-- Right panel — buttons HIGH -->
+                <div style="position:absolute; right:30px; top:190px; width:180px; height:50px; background:radial-gradient(ellipse, rgba(239,68,68,0.35) 0%, rgba(245,158,11,0.15) 50%, transparent 80%); filter:blur(8px);"></div>
+                <!-- Right panel — image MEDIUM -->
+                <div style="position:absolute; right:50px; top:50px; width:140px; height:100px; background:radial-gradient(ellipse, rgba(245,158,11,0.25) 0%, rgba(234,179,8,0.08) 55%, transparent 80%); filter:blur(10px);"></div>
+              </div>
+
+              <!-- === CLICKS LAYER (hidden by default) === -->
+              <div class="hm-layer" data-layer="clicks" style="position:absolute; inset:0; pointer-events:none; opacity:0;">
+                <!-- Click dots scattered on map -->
+                <svg style="position:absolute; left:180px; top:0; right:240px; bottom:0; width:calc(100% - 420px); height:100%;">
+                  <circle cx="42%" cy="38%" r="3" fill="#ef4444" opacity="0.8"/><circle cx="45%" cy="42%" r="2.5" fill="#ef4444" opacity="0.7"/>
+                  <circle cx="40%" cy="35%" r="2" fill="#ef4444" opacity="0.6"/><circle cx="48%" cy="40%" r="3" fill="#ef4444" opacity="0.8"/>
+                  <circle cx="38%" cy="44%" r="2" fill="#f59e0b" opacity="0.6"/><circle cx="50%" cy="36%" r="2.5" fill="#ef4444" opacity="0.7"/>
+                  <circle cx="44%" cy="46%" r="2" fill="#f59e0b" opacity="0.5"/><circle cx="36%" cy="40%" r="2" fill="#f59e0b" opacity="0.5"/>
+                  <circle cx="55%" cy="58%" r="2.5" fill="#f59e0b" opacity="0.6"/><circle cx="58%" cy="62%" r="2" fill="#f59e0b" opacity="0.5"/>
+                  <circle cx="52%" cy="55%" r="2" fill="#f59e0b" opacity="0.5"/><circle cx="60%" cy="60%" r="1.5" fill="#eab308" opacity="0.4"/>
+                  <circle cx="15%" cy="68%" r="1.5" fill="#3b82f6" opacity="0.4"/><circle cx="12%" cy="72%" r="1.5" fill="#3b82f6" opacity="0.3"/>
+                  <circle cx="70%" cy="22%" r="1.5" fill="#eab308" opacity="0.4"/><circle cx="25%" cy="18%" r="1.5" fill="#3b82f6" opacity="0.3"/>
+                  <circle cx="46%" cy="50%" r="2" fill="#f59e0b" opacity="0.5"/><circle cx="43%" cy="33%" r="2" fill="#ef4444" opacity="0.6"/>
+                </svg>
+                <!-- Clicks on right panel buttons -->
+                <svg style="position:absolute; right:0; top:0; width:240px; height:100%;">
+                  <circle cx="60" cy="200" r="3" fill="#ef4444" opacity="0.8"/><circle cx="80" cy="198" r="2.5" fill="#ef4444" opacity="0.7"/>
+                  <circle cx="140" cy="202" r="3" fill="#ef4444" opacity="0.8"/><circle cx="160" cy="196" r="2.5" fill="#ef4444" opacity="0.7"/>
+                  <circle cx="100" cy="80" r="2" fill="#f59e0b" opacity="0.5"/><circle cx="120" cy="90" r="1.5" fill="#eab308" opacity="0.4"/>
+                </svg>
+                <!-- Click counter overlay -->
+                <div style="position:absolute; left:calc(180px + 38%); top:32%; background:white; border:1px solid rgba(239,68,68,0.3); border-radius:6px; padding:3px 8px; box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+                  <span style="font-size:10px; font-weight:600; color:#dc2626; font-family:monospace;">247 clicks</span>
+                </div>
+                <div style="position:absolute; right:60px; top:188px; background:white; border:1px solid rgba(239,68,68,0.3); border-radius:6px; padding:3px 8px; box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+                  <span style="font-size:10px; font-weight:600; color:#dc2626; font-family:monospace;">183 clicks</span>
+                </div>
+              </div>
+
+              <!-- === SCROLL LAYER (hidden by default) === -->
+              <div class="hm-layer" data-layer="scroll" style="position:absolute; inset:0; pointer-events:none; opacity:0;">
+                <!-- Scroll depth bands -->
+                <div style="position:absolute; left:180px; top:0; right:240px; height:25%; background:rgba(239,68,68,0.12);"></div>
+                <div style="position:absolute; left:180px; top:25%; right:240px; height:25%; background:rgba(245,158,11,0.08);"></div>
+                <div style="position:absolute; left:180px; top:50%; right:240px; height:25%; background:rgba(234,179,8,0.05);"></div>
+                <div style="position:absolute; left:180px; top:75%; right:240px; height:25%; background:rgba(59,130,246,0.04);"></div>
+                <!-- Scroll depth labels -->
+                <div style="position:absolute; left:185px; top:4px; font-size:9px; color:#dc2626; font-family:monospace; font-weight:500;">100% saw this</div>
+                <div style="position:absolute; left:185px; top:26%; font-size:9px; color:#d97706; font-family:monospace; font-weight:500;">78% scrolled here</div>
+                <div style="position:absolute; left:185px; top:51%; font-size:9px; color:#ca8a04; font-family:monospace; font-weight:500;">54% reached</div>
+                <div style="position:absolute; left:185px; top:76%; font-size:9px; color:#2563eb; font-family:monospace; font-weight:500;">31% reached</div>
+                <!-- Fold line -->
+                <div style="position:absolute; left:180px; right:240px; top:25%; height:1px; border-top:1.5px dashed rgba(245,158,11,0.5);"></div>
+              </div>
+
+              <!-- Interactive hotspots (always on top) -->
+              <div class="hm-hotspot" style="left:calc(180px + 42%); top:40%; width:30px; height:30px;" data-finding="map-center">
+                <div class="hm-ring" style="border-color:#ef4444;"></div>
+                <div class="hm-pulse" style="background:rgba(239,68,68,0.3);"></div>
+                <div class="hm-tooltip">
+                  <div style="font-size:10px; font-weight:700; color:#dc2626; margin-bottom:4px;">68% of clicks here</div>
+                  <div style="font-size:9px; color:#6b7280; line-height:1.4;">Users concentrated on map center — struggled to discover labels outside the current viewport.</div>
+                </div>
+              </div>
+              <div class="hm-hotspot" style="left:90px; top:55%; width:30px; height:30px;" data-finding="sidebar">
+                <div class="hm-ring" style="border-color:#f59e0b;"></div>
+                <div class="hm-pulse" style="background:rgba(245,158,11,0.3);"></div>
+                <div class="hm-tooltip" style="left:0; transform:translateX(0) translateY(6px);">
+                  <div style="font-size:10px; font-weight:700; color:#d97706; margin-bottom:4px;">42% drop-off</div>
+                  <div style="font-size:9px; color:#6b7280; line-height:1.4;">Users abandoned sidebar label controls after first attempt. Navigation was unclear.</div>
+                </div>
+              </div>
+              <div class="hm-hotspot" style="right:90px; top:55%; width:30px; height:30px;" data-finding="validation">
+                <div class="hm-ring" style="border-color:#22c55e;"></div>
+                <div class="hm-pulse" style="background:rgba(34,197,94,0.3);"></div>
+                <div class="hm-tooltip" style="left:auto; right:0; transform:translateX(0) translateY(6px);">
+                  <div style="font-size:10px; font-weight:700; color:#16a34a; margin-bottom:4px;">Highest engagement</div>
+                  <div style="font-size:9px; color:#6b7280; line-height:1.4;">Validation buttons had strongest click-through — users understood the core labeling task.</div>
+                </div>
+              </div>
+
+              <!-- Legend + hint -->
+              <div style="position:absolute; left:190px; bottom:10px; display:flex; align-items:center; gap:8px;">
+                <div style="font-size:8px; color:#9ca3af; text-transform:uppercase; letter-spacing:0.05em;">Low</div>
+                <div style="width:80px; height:5px; border-radius:3px; background:linear-gradient(to right, #93c5fd, #fde047, #f87171);"></div>
+                <div style="font-size:8px; color:#9ca3af; text-transform:uppercase; letter-spacing:0.05em;">High</div>
+              </div>
+              <div style="position:absolute; right:250px; bottom:10px; font-size:8px; color:#9ca3af;">Click the pulsing dots to explore findings</div>
+            </div>
+          </div>
+          <div class="text-[10px] text-secondary mt-2.5 text-center italic">Recreated visualization — actual Hotjar data is confidential. Patterns and proportions reflect real findings.</div>
+        </div>
+        <script>
+        (function(){
+          const widget = document.getElementById('heatmap-widget');
+          if(!widget) return;
+          // Tab switching
+          widget.querySelectorAll('.hm-tab').forEach(tab => {
+            tab.addEventListener('click', function(){
+              const layer = this.dataset.layer;
+              widget.querySelectorAll('.hm-tab').forEach(t => { t.classList.remove('hm-tab-active'); t.style.color='#9ca3af'; t.style.fontWeight='500'; });
+              this.classList.add('hm-tab-active'); this.style.color='#111827'; this.style.fontWeight='700';
+              widget.querySelectorAll('.hm-layer').forEach(l => { l.style.opacity = l.dataset.layer === layer ? '1' : '0'; });
+            });
+          });
+          // Hotspot click toggle
+          widget.querySelectorAll('.hm-hotspot').forEach(spot => {
+            spot.addEventListener('click', function(e){
+              e.stopPropagation();
+              const wasActive = this.classList.contains('active');
+              widget.querySelectorAll('.hm-hotspot').forEach(s => s.classList.remove('active'));
+              if(!wasActive) this.classList.add('active');
+            });
+          });
+          // Click outside to close
+          widget.addEventListener('click', function(){ widget.querySelectorAll('.hm-hotspot').forEach(s => s.classList.remove('active')); });
+        })();
+        </script>
+
+        <!-- Phase 2 -->
+        <div class="text-base text-secondary leading-loose max-w-xl xl:max-w-2xl mt-16">
+          <p class="mb-5 gs-child"><strong class="text-primary font-medium text-lg">2. Architecting the System (The &ldquo;Zero-Defect&rdquo; Standard)</strong></p>
+          <p class="mb-5 gs-child">My goal was to shift from delivering polished screens to building <strong class="text-primary font-medium">resilient infrastructure</strong> that enabled sustainable growth.</p>
+        </div>
+
+        <!-- Tokenization & Components — Flip cards -->
+        <div class="text-xs text-secondary text-center mb-4 gs-child">
+          <span class="inline-flex items-center gap-1.5 bg-accent/5 border border-accent/10 rounded-full px-3 py-1">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><path d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5"/></svg>
+            Click each card to learn more
+          </span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-10">
+          <!-- Flip Card 1: Tokenization -->
+          <div class="gs-child" style="perspective:1000px">
+            <div class="flip-card cursor-pointer" onclick="this.classList.toggle('flipped')">
+              <div class="flip-card-inner" style="transform-style:preserve-3d;transition:transform 0.6s">
+                <div class="flip-front rounded-xl p-7 bg-surface border border-gray-200" style="backface-visibility:hidden">
+                  <div class="absolute top-4 right-4">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#d1d5db" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 1v6M12 17v6M4.22 4.22l4.24 4.24M15.54 15.54l4.24 4.24M1 12h6M17 12h6M4.22 19.78l4.24-4.24M15.54 8.46l4.24-4.24"/></svg>
+                  </div>
+                  <div class="text-xs font-bold uppercase tracking-wider text-accent mb-3">Approach</div>
+                  <div class="font-bold text-base mb-2">Tokenization &amp; Semantics</div>
+                  <div class="text-sm text-secondary leading-relaxed italic pr-8">Defined atomic design tokens to establish a &ldquo;Single Source of Truth&rdquo; between design and code.</div>
+                  <div class="mt-4 text-xs text-gray-400 flex items-center gap-1">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/></svg>
+                    click to flip
+                  </div>
+                </div>
+                <div class="flip-back rounded-xl p-7 bg-accent text-white" style="backface-visibility:hidden;transform:rotateY(180deg)">
+                  <div class="text-xs font-bold uppercase tracking-wider text-green-200 mb-3">Detail</div>
+                  <div class="font-bold text-base mb-2">Design &harr; SCSS Parity</div>
+                  <div class="text-sm text-green-100 leading-relaxed">I mapped Figma variables 1:1 with the engineers&rsquo; SCSS variables, eliminating guesswork and friction during handoff.</div>
+                  <div class="mt-4 text-xs text-green-300 flex items-center gap-1">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                    click to flip back
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Flip Card 2: Componentizing -->
+          <div class="gs-child" style="perspective:1000px">
+            <div class="flip-card cursor-pointer" onclick="this.classList.toggle('flipped')">
+              <div class="flip-card-inner" style="transform-style:preserve-3d;transition:transform 0.6s">
+                <div class="flip-front rounded-xl p-7 bg-surface border border-gray-200" style="backface-visibility:hidden">
+                  <div class="absolute top-4 right-4">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#d1d5db" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                  </div>
+                  <div class="text-xs font-bold uppercase tracking-wider text-accent mb-3">Approach</div>
+                  <div class="font-bold text-base mb-2">Accessible by Default</div>
+                  <div class="text-sm text-secondary leading-relaxed italic pr-8">Built a comprehensive, reusable component library with WCAG 2.2 AA compliance baked into its foundation.</div>
+                  <div class="mt-4 text-xs text-gray-400 flex items-center gap-1">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/></svg>
+                    click to flip
+                  </div>
+                </div>
+                <div class="flip-back rounded-xl p-7 bg-accent text-white" style="backface-visibility:hidden;transform:rotateY(180deg)">
+                  <div class="text-xs font-bold uppercase tracking-wider text-green-200 mb-3">Detail</div>
+                  <div class="font-bold text-base mb-2">Compliance Built In</div>
+                  <div class="text-sm text-green-100 leading-relaxed">Any future feature built with these components would inherently meet accessibility standards&mdash;eliminating the need for retroactive WCAG fixes.</div>
+                  <div class="mt-4 text-xs text-green-300 flex items-center gap-1">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                    click to flip back
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Token preview mockup -->
+        <div class="my-10 bg-white rounded-xl border border-gray-200 p-6 lg:p-8 gs-child shadow-sm">
+          <div class="text-sm font-semibold text-primary mb-4">Design Token Mapping</div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <div class="text-xs font-bold text-secondary uppercase tracking-wider mb-3">Design Tokens</div>
+              <div class="space-y-2">
+                <div class="flex items-center gap-2 bg-surface rounded px-3 py-2">
+                  <div class="w-4 h-4 rounded bg-green-600"></div>
+                  <span class="text-xs font-mono">color.primary</span>
+                </div>
+                <div class="flex items-center gap-2 bg-surface rounded px-3 py-2">
+                  <div class="w-4 h-4 rounded bg-gray-700"></div>
+                  <span class="text-xs font-mono">color.text</span>
+                </div>
+                <div class="flex items-center gap-2 bg-surface rounded px-3 py-2">
+                  <div class="w-4 h-4 rounded border border-gray-300" style="background:repeating-linear-gradient(45deg,#f3f4f6,#f3f4f6 2px,white 2px,white 4px)"></div>
+                  <span class="text-xs font-mono">spacing.md = 16px</span>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="text-xs font-bold text-accent uppercase tracking-wider mb-3">SCSS Variables</div>
+              <div class="space-y-2">
+                <div class="bg-gray-900 rounded px-3 py-2">
+                  <span class="text-xs font-mono text-green-400">$color-primary</span><span class="text-xs font-mono text-gray-400">: #16a34a;</span>
+                </div>
+                <div class="bg-gray-900 rounded px-3 py-2">
+                  <span class="text-xs font-mono text-green-400">$color-text</span><span class="text-xs font-mono text-gray-400">: #1a1a1a;</span>
+                </div>
+                <div class="bg-gray-900 rounded px-3 py-2">
+                  <span class="text-xs font-mono text-green-400">$spacing-md</span><span class="text-xs font-mono text-gray-400">: 16px;</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 flex items-center gap-2 text-xs text-accent">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 7h12M8 12h12M8 17h12M4 7h.01M4 12h.01M4 17h.01"/></svg>
+            <span>1:1 parity between design and code &mdash; single source of truth</span>
+          </div>
+        </div>
+
+        <!-- Phase 3 -->
+        <div class="text-base text-secondary leading-loose max-w-xl xl:max-w-2xl mt-16">
+          <p class="mb-5 gs-child"><strong class="text-primary font-medium text-lg">3. Scaling &amp; Cross-Functional Adoption</strong></p>
+          <p class="mb-5 gs-child">A design system is only as successful as its adoption rate. Working tightly alongside <strong class="text-primary font-medium">1 PM and 2 developers</strong>, I treated the system not as static documentation, but as a working contract between design and engineering. Through phased rollouts, comprehensive spec handoffs, and collaborative alignment, I championed the system's integration across the broader organization.</p>
+        </div>
+
+        <div class="my-10 gs-child rounded-xl overflow-hidden border border-gray-200 shadow-sm">
+          <img src="ProjectSidewalk/PS_FinalPRoduct.png" alt="Redesigned Map Interface — Optimized Pathfinding" class="w-full h-auto block" />
+        </div>
+
+        <div class="bg-surface rounded-xl p-8 my-10 gs-child relative overflow-hidden insight-glow">
+          <div class="absolute -right-4 -bottom-4 opacity-5">
+            <svg width="120" height="120" viewBox="0 0 24 24" fill="#16a34a"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+          </div>
+          <div class="text-xs font-bold uppercase tracking-widest text-accent mb-3">Core Design Principle</div>
+          <div class="font-display text-lg lg:text-xl font-semibold leading-snug">Treat design as infrastructure, not surface. Build systems that make compliance automatic and scaling effortless.</div>
+        </div>
+      </section>
+
+      <!-- Section transition divider -->
+      <div class="flex items-center gap-4 py-6">
+        <div class="flex-1 h-px bg-gray-100"></div>
+        <svg class="section-icon w-8 h-8 text-accent/30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        <div class="flex-1 h-px bg-gray-100"></div>
+      </div>
+
+      <!-- ─── DESIGN SYSTEM ─── -->
+      <section class="section py-20 border-b border-gray-200" id="system">
+        <div class="text-xs font-bold uppercase tracking-widest text-accent mb-6 gs-child">Design System</div>
+        <h2 class="font-display text-2xl lg:text-[1.75rem] font-semibold leading-snug mb-8 max-w-xl xl:max-w-2xl gs-child">Before vs. After: The System in Action</h2>
+
+        <div class="text-base text-secondary leading-loose max-w-xl xl:max-w-2xl">
+          <p class="mb-5 gs-child">The design system wasn't just documentation&mdash;it was a <strong class="text-primary font-medium">working contract</strong> between design and engineering. Here's how it transformed the development workflow.</p>
+        </div>
+
+        <!-- Before/After comparison -->
+        <div class="my-10 gs-child">
+          <div class="grid grid-cols-2 gap-4">
+            <div class="bg-white rounded-lg border border-gray-200 p-5">
+              <div class="text-xs font-bold text-secondary uppercase tracking-wider mb-4">Before &mdash; Fragmented</div>
+              <div class="space-y-3">
+                <!-- Mismatched validation buttons -->
+                <div class="flex flex-wrap items-center gap-1.5">
+                  <div class="px-2.5 py-1 rounded-full text-[10px] font-medium bg-red-500 text-white">Incorrect</div>
+                  <div class="px-2.5 py-1 text-[10px] font-medium bg-emerald-700 text-white" style="border-radius:2px">Correct</div>
+                </div>
+                <div class="flex flex-wrap items-center gap-1.5">
+                  <div class="px-2.5 py-1 rounded-md text-[10px] font-medium bg-gray-600 text-white">Not sure</div>
+                  <div class="px-2.5 py-1 rounded text-[10px] font-medium border border-gray-400 text-gray-500 italic">skip</div>
+                </div>
+                <div class="text-xs text-highlight mt-2">Mixed shapes, sizes &amp; naming</div>
+                <!-- Uncoordinated colors -->
+                <div class="mt-3 flex gap-1">
+                  <div class="w-4 h-4 rounded" style="background:#2d8a4e"></div>
+                  <div class="w-4 h-4 rounded" style="background:#1b6b3a"></div>
+                  <div class="w-4 h-4 rounded" style="background:#4ade80"></div>
+                  <div class="w-4 h-4 rounded" style="background:#0f5132"></div>
+                  <div class="w-4 h-4 rounded" style="background:#60a5fa"></div>
+                  <div class="w-4 h-4 rounded" style="background:#f59e0b"></div>
+                </div>
+                <div class="text-xs text-highlight">No semantic token mapping</div>
+                <div class="mt-2 flex gap-1">
+                  <div class="w-3.5 h-3.5 rounded-sm bg-blue-400"></div>
+                  <div class="w-3.5 h-3.5 rounded-full bg-amber-400"></div>
+                  <div class="w-3.5 h-3.5" style="background:#a855f7"></div>
+                  <div class="w-3.5 h-3.5 rounded-lg bg-pink-400"></div>
+                </div>
+                <div class="text-xs text-highlight">Label colors varied per page</div>
+              </div>
+            </div>
+            <div class="bg-white rounded-lg border-2 border-accent/30 p-5">
+              <div class="text-xs font-bold text-accent uppercase tracking-wider mb-4">After &mdash; Systematic</div>
+              <div class="space-y-3">
+                <!-- Validation buttons — actual PS design system -->
+                <div class="flex flex-wrap items-center gap-1.5">
+                  <div class="px-2.5 py-1 rounded text-[10px] font-medium border border-red-300 text-red-500 bg-white" style="border-radius:5px">Validated incorrect</div>
+                  <div class="px-2.5 py-1 rounded text-[10px] font-medium border border-green-400 text-green-600 bg-white" style="border-radius:5px">Validated correct</div>
+                </div>
+                <div class="flex flex-wrap items-center gap-1.5">
+                  <div class="px-2.5 py-1 rounded text-[10px] font-medium border border-gray-300 text-gray-500 bg-white" style="border-radius:5px">Unvalidated</div>
+                  <div class="px-2.5 py-1 rounded text-[10px] font-medium border border-gray-300 text-gray-500 bg-white" style="border-radius:5px">Unsure</div>
+                </div>
+                <div class="text-xs text-accent font-medium">Validation button system &mdash; 4 states, 2 sizes</div>
+                <!-- Brand color tokens -->
+                <div class="mt-3 flex gap-1.5">
+                  <div class="flex flex-col items-center gap-0.5">
+                    <div class="w-5 h-5 rounded" style="background:#3b4963"></div>
+                    <div class="text-[7px] text-gray-400 leading-none">asphalt</div>
+                  </div>
+                  <div class="flex flex-col items-center gap-0.5">
+                    <div class="w-5 h-5 rounded" style="background:#5bb98b"></div>
+                    <div class="text-[7px] text-gray-400 leading-none">pine</div>
+                  </div>
+                  <div class="flex flex-col items-center gap-0.5">
+                    <div class="w-5 h-5 rounded" style="background:#e5cc6e"></div>
+                    <div class="text-[7px] text-gray-400 leading-none">banana</div>
+                  </div>
+                  <div class="flex flex-col items-center gap-0.5">
+                    <div class="w-5 h-5 rounded" style="background:#e8845a"></div>
+                    <div class="text-[7px] text-gray-400 leading-none">orange</div>
+                  </div>
+                </div>
+                <!-- Sidewalk label colors -->
+                <div class="flex flex-wrap gap-1">
+                  <div class="w-3.5 h-3.5 rounded-sm" style="background:#7eb5de" title="Obstacle — blue-300"></div>
+                  <div class="w-3.5 h-3.5 rounded-sm" style="background:#5ab8a0" title="Ped Signal — mint-500"></div>
+                  <div class="w-3.5 h-3.5 rounded-sm" style="background:#dbc350" title="Crosswalk — banana-400"></div>
+                  <div class="w-3.5 h-3.5 rounded-sm" style="background:#e5994a" title="Surface Problem — warning-500"></div>
+                  <div class="w-3.5 h-3.5 rounded-sm" style="background:#a87cc5" title="Sidewalk Needed — purple-500"></div>
+                  <div class="w-3.5 h-3.5 rounded-sm" style="background:#8fb52a" title="Curb Ramp — lime-500"></div>
+                  <div class="w-3.5 h-3.5 rounded-sm" style="background:#db7fac" title="Curb Ramp Needed — pink-500"></div>
+                  <div class="w-3.5 h-3.5 rounded-sm" style="background:#cd3c3c" title="Alert — alert-500"></div>
+                  <div class="w-3.5 h-3.5 rounded-sm" style="background:#a8a8a8" title="Other — gray-300"></div>
+                </div>
+                <div class="text-xs text-accent font-medium">9 semantic label tokens + 4 brand primitives</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- What the system solved -->
+        <div class="my-10 bg-surface rounded-xl p-6 border border-gray-200 gs-child">
+          <div class="text-xs font-bold uppercase tracking-wider text-accent mb-4">What the system solved</div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+              <div class="text-sm font-bold mb-3">Before &mdash; Ad Hoc</div>
+              <div class="space-y-2.5">
+                <div class="flex items-start gap-2">
+                  <div class="w-4 h-4 shrink-0 mt-0.5 rounded border border-red-300 flex items-center justify-center">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                  </div>
+                  <div class="flex-1 text-xs text-gray-400">Components rebuilt from scratch</div>
+                  <span class="shrink-0 text-xs text-highlight">wasted effort</span>
+                </div>
+                <div class="flex items-start gap-2">
+                  <div class="w-4 h-4 shrink-0 mt-0.5 rounded border border-red-300 flex items-center justify-center">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                  </div>
+                  <div class="flex-1 text-xs text-gray-400">WCAG checked manually per page</div>
+                  <span class="shrink-0 text-xs text-highlight">error-prone</span>
+                </div>
+                <div class="flex items-start gap-2">
+                  <div class="w-4 h-4 shrink-0 mt-0.5 rounded border border-red-300 flex items-center justify-center">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                  </div>
+                  <div class="flex-1 text-xs text-gray-400">Inconsistent handoff specs</div>
+                  <span class="shrink-0 text-xs text-highlight">slow cycles</span>
+                </div>
+              </div>
+            </div>
+            <div class="bg-accent/5 rounded-xl border border-accent/20 p-5">
+              <div class="text-sm font-bold text-accent mb-3">After &mdash; Design System</div>
+              <div class="space-y-2.5">
+                <div class="flex items-start gap-2">
+                  <div class="w-4 h-4 shrink-0 mt-0.5 rounded-full bg-accent flex items-center justify-center">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                  </div>
+                  <div class="flex-1 text-xs font-medium">Reusable component library</div>
+                </div>
+                <div class="flex items-start gap-2">
+                  <div class="w-4 h-4 shrink-0 mt-0.5 rounded-full bg-accent flex items-center justify-center">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                  </div>
+                  <div class="flex-1 text-xs font-medium">Accessibility baked into every component</div>
+                </div>
+                <div class="flex items-start gap-2">
+                  <div class="w-4 h-4 shrink-0 mt-0.5 rounded-full bg-accent flex items-center justify-center">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                  </div>
+                  <div class="flex-1 text-xs font-medium">Token-based specs &mdash; zero ambiguity</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Component library preview -->
+        <div class="my-10 bg-white rounded-xl border border-gray-200 p-6 lg:p-8 gs-child shadow-sm">
+          <div class="text-sm font-semibold text-primary mb-1">Component Library Preview</div>
+          <div class="text-xs text-secondary mb-6">All components built with WCAG 2.2 AA compliance &middot; Accessible by default</div>
+          <div class="grid grid-cols-3 gap-4">
+            <div class="bg-surface rounded-lg p-4 text-center">
+              <div class="mb-3">
+                <div class="inline-flex items-center gap-2 px-4 py-2 bg-accent text-white text-xs font-medium rounded-md">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/></svg>
+                  Button
+                </div>
+              </div>
+              <div class="text-[10px] text-secondary">4:5:1 contrast ratio</div>
+            </div>
+            <div class="bg-surface rounded-lg p-4 text-center">
+              <div class="mb-3">
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-300 rounded-md text-xs">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                  Search...
+                </div>
+              </div>
+              <div class="text-[10px] text-secondary">Keyboard accessible</div>
+            </div>
+            <div class="bg-surface rounded-lg p-4 text-center">
+              <div class="mb-3">
+                <div class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-green-100 text-green-700 text-[10px] font-medium rounded-full">
+                  <div class="w-1.5 h-1.5 rounded-full bg-green-500"></div>
+                  Accessible
+                </div>
+              </div>
+              <div class="text-[10px] text-secondary">Screen reader labels</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="my-10 gs-child rounded-xl overflow-hidden border border-gray-200 shadow-sm">
+          <img src="ProjectSidewalk/PS_designsystem_overview.webp" alt="Full Component Library — Design System Documentation" class="w-full h-auto block" />
+        </div>
+      </section>
+
+      <!-- Section transition divider -->
+      <div class="flex items-center gap-4 py-6">
+        <div class="flex-1 h-px bg-gray-100"></div>
+        <svg class="section-icon w-8 h-8 text-accent/30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <div class="flex-1 h-px bg-gray-100"></div>
+      </div>
+
+      <!-- ─── OUTCOME ─── -->
+      <section class="section py-20 border-b border-gray-200" id="outcome">
+        <div class="text-xs font-bold uppercase tracking-widest text-accent mb-6 gs-child">Outcome &amp; Impact</div>
+        <h2 class="font-display text-2xl lg:text-[1.75rem] font-semibold leading-snug mb-8 max-w-xl xl:max-w-2xl gs-child">Outcome &amp; Impact</h2>
+        <div class="text-base text-secondary leading-loose max-w-xl xl:max-w-2xl">
+          <p class="mb-5 gs-child">What began as a UI cleanup evolved into a <strong class="text-primary font-medium">strategic effort to scale a civic tool</strong> through thoughtful, resilient design.</p>
+        </div>
+
+        <!-- Result cards -->
+        <div class="my-10 grid grid-cols-1 md:grid-cols-3 gap-4 gs-child">
+          <div class="bg-green-50 rounded-xl p-6 border border-green-200 text-center">
+            <svg class="mx-auto mb-3" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <div class="font-bold text-sm text-green-700 mb-1">11,000+ Users Supported</div>
+            <div class="text-xs text-secondary">Clearer, more intuitive navigational flows significantly improved contributor task completion rates.</div>
+          </div>
+          <div class="bg-green-50 rounded-xl p-6 border border-green-200 text-center">
+            <svg class="mx-auto mb-3" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <div class="font-bold text-sm text-accent mb-1">100% WCAG 2.2 AA Compliance</div>
+            <div class="text-xs text-secondary">Eliminated legacy accessibility debt, validated by zero violations in automated axe-core audits.</div>
+          </div>
+          <div class="bg-green-50 rounded-xl p-6 border border-green-200 text-center">
+            <svg class="mx-auto mb-3" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="1.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            <div class="font-bold text-sm text-green-700 mb-1">Zero Defects &amp; Faster Velocity</div>
+            <div class="text-xs text-secondary">System adoption across 3 cross-functional teams drastically reduced engineering overhead, accelerated feature delivery, and eliminated UI-related frontend bugs.</div>
+          </div>
+        </div>
+
+        <!-- WCAG Audit — Light report -->
+        <div class="my-10 gs-child rounded-xl overflow-hidden border border-gray-200 shadow-sm bg-white">
+          <!-- Header -->
+          <div class="flex items-center gap-2 px-4 py-2.5 border-b border-gray-100 bg-gray-50/60">
+            <div class="flex gap-1.5">
+              <div class="w-2.5 h-2.5 rounded-full bg-red-400"></div>
+              <div class="w-2.5 h-2.5 rounded-full bg-amber-400"></div>
+              <div class="w-2.5 h-2.5 rounded-full bg-green-400"></div>
+            </div>
+            <div class="text-[10px] text-gray-400 font-mono ml-2">wcag-audit — WCAG 2.2 AA</div>
+          </div>
+          <!-- Body -->
+          <div class="px-5 py-5 font-mono text-[11px] leading-relaxed" style="color:#6b7280;">
+            <div><span style="color:#16a34a;">$</span> <span style="color:#1f2937;">npx axe-core --standard wcag2aa ./components</span></div>
+            <div class="mt-3" style="color:#9ca3af;">Running accessibility audit on 24 components...</div>
+            <div class="mt-4 grid grid-cols-2 gap-x-8 gap-y-3">
+              <!-- Color Contrast -->
+              <div class="flex items-center gap-2">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span style="color:#1f2937;">Color Contrast</span>
+              </div>
+              <div style="color:#16a34a;">0 violations &middot; 4.5:1+ all text</div>
+              <!-- Keyboard -->
+              <div class="flex items-center gap-2">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span style="color:#1f2937;">Keyboard Flow</span>
+              </div>
+              <div style="color:#16a34a;">24/24 components reachable</div>
+              <!-- Screen Reader -->
+              <div class="flex items-center gap-2">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span style="color:#1f2937;">Screen Reader</span>
+              </div>
+              <div style="color:#16a34a;">NVDA + VoiceOver verified</div>
+              <!-- Focus -->
+              <div class="flex items-center gap-2">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span style="color:#1f2937;">Focus Indicators</span>
+              </div>
+              <div style="color:#16a34a;">Visible on all interactive elements</div>
+              <!-- ARIA -->
+              <div class="flex items-center gap-2">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span style="color:#1f2937;">ARIA Labels</span>
+              </div>
+              <div style="color:#16a34a;">All roles &amp; landmarks defined</div>
+              <!-- Touch Targets -->
+              <div class="flex items-center gap-2">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span style="color:#1f2937;">Touch Targets</span>
+              </div>
+              <div style="color:#16a34a;">44px minimum &middot; spacing compliant</div>
+            </div>
+            <div class="mt-5 pt-3" style="border-top:1px solid #f3f4f6;">
+              <span style="color:#16a34a;">&#10003; 6 checks passed</span><span style="color:#d1d5db;"> &middot; </span><span style="color:#ef4444;">0 failed</span><span style="color:#d1d5db;"> &middot; </span><span style="color:#f59e0b;">0 warnings</span>
+            </div>
+            <div class="mt-1" style="color:#9ca3af;">Completed in 2.4s &middot; Standard: WCAG 2.2 AA &middot; Tool: axe-core 4.8</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─── REFLECTION ─── -->
+      <section class="section py-24" id="reflection">
+        <div class="text-xs font-bold uppercase tracking-widest text-accent mb-6 gs-child">Reflection</div>
+        <h2 class="font-display text-2xl lg:text-[1.75rem] font-semibold leading-snug mb-8 max-w-xl xl:max-w-2xl gs-child">Systems Thinking in Civic Tech</h2>
+        <blockquote class="font-display text-lg lg:text-xl font-medium leading-relaxed my-10 pl-6 border-l-[3px] border-accent gs-child relative">
+          A robust design system is not just a style guide&mdash;it is a tool for empowerment that allows developers to move faster and ensures that inclusivity is baked into the code, not just the pixels.
+        </blockquote>
+
+        <div class="my-10 grid grid-cols-1 md:grid-cols-2 gap-4 gs-child">
+          <div class="flex items-start gap-3 p-4 rounded-xl bg-accent/5 border border-accent/10">
+            <div class="w-6 h-6 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="text-xs text-secondary leading-relaxed"><strong class="text-primary">Designing for Resilience</strong> &mdash; This project shifted my perspective from designing for "the happy path" to designing for resilience in open-source and civic tech environments.</div>
+          </div>
+          <div class="flex items-start gap-3 p-4 rounded-xl bg-accent/5 border border-accent/10">
+            <div class="w-6 h-6 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="text-xs text-secondary leading-relaxed"><strong class="text-primary">Infrastructure over Surface</strong> &mdash; By treating design as infrastructure, I enabled 3 cross-functional teams to ship accessible features without extra effort.</div>
+          </div>
+        </div>
+
+        <p class="text-base text-secondary leading-loose max-w-xl xl:max-w-2xl gs-child">This project taught me that in civic tech, a design system isn't a luxury&mdash;it's a <strong class="text-primary font-medium">necessity for scale</strong>. When inclusivity is baked into the system architecture, every new feature inherits those values. The result is a platform where <strong class="text-primary font-medium">accessibility is automatic</strong>, not an afterthought.</p>
+      </section>
+
+      <!-- Footer -->
+      <footer class="py-16 border-t border-gray-200">
+        <div class="flex items-center justify-between mb-8">
+          <div>
+            <div class="font-display text-lg font-semibold mb-1">Project Sidewalk Case Study</div>
+            <div class="text-xs text-secondary">Lead Product Designer &middot; System Architecture</div>
+          </div>
+          <a href="#hero" class="inline-flex items-center gap-2 text-xs text-secondary hover:text-accent transition-colors no-underline group bg-surface rounded-full px-4 py-2 border border-gray-200 hover:border-accent/30">
+            <span>Back to top</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-hover:-translate-y-0.5 transition-transform"><path d="M18 15l-6-6-6 6"/></svg>
+          </a>
+        </div>
+        <div class="flex items-center gap-6 text-xs text-secondary/60">
+          <span>2024</span>
+          <span class="w-px h-3 bg-gray-200"></span>
+          <span>Civic Tech &middot; Open-Source &middot; Accessibility</span>
+        </div>
+      </footer>
+
+    </div>
+  </div>
+</div>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+// ─── Detect reduced motion preference for event-driven animations ───
+var _prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// ─── Number counter (utility used both inside and outside matchMedia) ───
+function animateCounter(el, reduced) {
+  var target = parseFloat(el.dataset.target);
+  var prefix = el.dataset.prefix || '';
+  var suffix = el.dataset.suffix || '';
+  var isDecimal = el.dataset.decimal === 'true';
+  var obj = { val: 0 };
+  gsap.to(obj, {
+    val: target, duration: reduced ? 0 : 1.5, ease: 'power2.out',
+    onUpdate: function() {
+      el.textContent = prefix + (isDecimal ? obj.val.toFixed(2) : Math.round(obj.val)) + suffix;
+    }
+  });
+}
+
+var mm = gsap.matchMedia();
+mm.add({
+  normal: '(prefers-reduced-motion: no-preference)',
+  reduced: '(prefers-reduced-motion: reduce)'
+}, function(context) {
+  var reduced = context.conditions.reduced;
+
+  // ─── Scroll progress bar (scrub-based, user-driven) ───
+  gsap.to('.scroll-progress', {
+    scaleX: 1,
+    ease: 'none',
+    scrollTrigger: { trigger: 'body', start: 'top top', end: 'bottom bottom', scrub: 0.3 }
+  });
+
+  // ─── Hero entrance ───
+  var heroTl = gsap.timeline({ defaults: { ease: 'power3.out' }});
+  heroTl
+    .fromTo('.hero-brand-bg', { opacity: 0, scale: 0.92 }, { opacity: 1, scale: 1, duration: reduced ? 0 : 0.8, ease: 'power2.out' })
+    .fromTo('.hero-badge', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: reduced ? 0 : 0.8, stagger: 0.12 }, '-=0.3')
+    .fromTo('.hero-subtitle', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: reduced ? 0 : 0.7, stagger: 0.1 }, '-=0.5')
+    .fromTo('.hero-contributions', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: reduced ? 0 : 0.6 }, '-=0.3')
+    .fromTo('.meta-group', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: reduced ? 0 : 0.6, stagger: 0.12 }, '-=0.4');
+
+  // ─── Scroll arrow gentle bounce ───
+  gsap.to('#scroll-arrow', {
+    y: 5, duration: reduced ? 0 : 1.2, repeat: reduced ? 0 : -1, yoyo: true, ease: 'sine.inOut'
+  });
+
+  // ─── Audit bar chart animation ───
+  ScrollTrigger.create({
+    trigger: '.audit-bar', start: 'top 85%', once: true,
+    onEnter: function() {
+      document.querySelectorAll('.audit-bar').forEach(function(bar, i) {
+        var targetW = bar.getAttribute('data-width');
+        gsap.to(bar, { width: targetW, duration: reduced ? 0 : 1, delay: i * 0.15, ease: 'power3.out' });
+      });
+      document.querySelectorAll('.audit-label').forEach(function(lbl, i) {
+        gsap.to(lbl, { opacity: 1, duration: reduced ? 0 : 0.3, delay: 0.6 + i * 0.15 });
+      });
+    }
+  });
+
+  // ─── Result bar animation ───
+  ScrollTrigger.create({
+    trigger: '.result-bar', start: 'top 85%', once: true,
+    onEnter: function() {
+      document.querySelectorAll('.result-bar').forEach(function(bar, i) {
+        var targetW = bar.getAttribute('data-width');
+        gsap.to(bar, { width: targetW, duration: reduced ? 0 : 1.2, delay: i * 0.15, ease: 'power3.out' });
+      });
+      document.querySelectorAll('.result-label').forEach(function(lbl, i) {
+        gsap.to(lbl, { opacity: 1, duration: reduced ? 0 : 0.3, delay: 0.8 + i * 0.15 });
+      });
+    }
+  });
+
+  // ─── Hero cards scroll-triggered entrance ───
+  gsap.set('.hero-card', { opacity: 0, y: 40 });
+  ScrollTrigger.create({
+    trigger: '.hero-card', start: 'top 85%', once: true,
+    onEnter: function() {
+      gsap.to('.hero-card', {
+        opacity: 1, y: 0, duration: reduced ? 0 : 0.7, stagger: 0.2, ease: 'power3.out'
+      });
+    }
+  });
+
+  // ─── Hero meta-strip stat counters ───
+  document.querySelectorAll('.meta-group .stat-number').forEach(function(el) {
+    animateCounter(el, reduced);
+  });
+
+  // ─── TOC ───
+  var toc = document.querySelector('.toc');
+  ScrollTrigger.create({
+    trigger: '.main-body', start: 'top 60%',
+    onEnter: function() { gsap.to(toc, { opacity: 1, visibility: 'visible', duration: reduced ? 0 : 0.4, ease: 'power2.out' }); },
+    onLeaveBack: function() { gsap.to(toc, { opacity: 0, duration: reduced ? 0 : 0.3, ease: 'power2.in', onComplete: function() { toc.style.visibility = 'hidden'; } }); }
+  });
+
+  var tocLinks = document.querySelectorAll('.toc-link');
+  document.querySelectorAll('.section').forEach(function(section) {
+    ScrollTrigger.create({
+      trigger: section, start: 'top 30%', end: 'bottom 30%',
+      onEnter: function() { setActive(section.id); },
+      onEnterBack: function() { setActive(section.id); },
+    });
+  });
+  function setActive(id) {
+    tocLinks.forEach(function(link) { link.classList.toggle('active', link.getAttribute('href') === '#' + id); });
+  }
+
+  // ─── Section stagger reveals ───
+  document.querySelectorAll('.section, .pillar').forEach(function(section) {
+    var children = section.querySelectorAll(':scope > .gs-child, :scope > div > .gs-child, :scope > div > div > .gs-child');
+    if (!children.length) return;
+    gsap.fromTo(children,
+      { opacity: 0, y: 30 },
+      { opacity: 1, y: 0, duration: reduced ? 0 : 0.65, stagger: 0.08, ease: 'power3.out',
+        scrollTrigger: { trigger: section, start: 'top 80%' }
+      }
+    );
+  });
+
+  // ─── Body stat counters ───
+  document.querySelectorAll('.main-body .stat-number, .main-body .result-num').forEach(function(el) {
+    ScrollTrigger.create({
+      trigger: el, start: 'top 85%', once: true,
+      onEnter: function() { animateCounter(el, reduced); },
+    });
+  });
+
+  // ─── Image placeholders ───
+  document.querySelectorAll('.main-body .img-placeholder').forEach(function(el) {
+    gsap.fromTo(el,
+      { opacity: 0, y: 30, scale: 0.97 },
+      { opacity: 1, y: 0, scale: 1, duration: reduced ? 0 : 0.7, ease: 'power3.out',
+        scrollTrigger: { trigger: el, start: 'top 85%' }
+      }
+    );
+  });
+
+  // ─── Formula boxes stagger ───
+  gsap.fromTo('.formula-box',
+    { opacity: 0, y: 20, scale: 0.9 },
+    { opacity: 1, y: 0, scale: 1, duration: reduced ? 0 : 0.5, stagger: 0.15, ease: 'back.out(1.4)',
+      scrollTrigger: { trigger: '.formula-box', start: 'top 85%' }
+    }
+  );
+  gsap.fromTo('.formula-arrow',
+    { opacity: 0, x: -10 },
+    { opacity: 1, x: 0, duration: reduced ? 0 : 0.4, stagger: 0.1, delay: 0.3,
+      scrollTrigger: { trigger: '.formula-box', start: 'top 85%' }
+    }
+  );
+
+  // ─── Research method cards ───
+  gsap.fromTo('.research-method',
+    { opacity: 0, x: -20 },
+    { opacity: 1, x: 0, duration: reduced ? 0 : 0.6, stagger: 0.15, ease: 'power3.out',
+      scrollTrigger: { trigger: '.research-method', start: 'top 85%' }
+    }
+  );
+
+  // ─── Section divider icons ───
+  gsap.utils.toArray('.section-icon').forEach(function(icon) {
+    gsap.fromTo(icon,
+      { opacity: 0, rotation: -90, scale: 0.5 },
+      { opacity: 1, rotation: 0, scale: 1, duration: reduced ? 0 : 0.6, ease: 'back.out(2)',
+        scrollTrigger: { trigger: icon, start: 'top 90%' }
+      }
+    );
+  });
+
+  // ─── Flip card entrance animation ───
+  gsap.fromTo('.flip-card',
+    { opacity: 0, y: 20, rotateY: -15 },
+    { opacity: 1, y: 0, rotateY: 0, duration: reduced ? 0 : 0.6, stagger: 0.15, ease: 'power3.out',
+      scrollTrigger: { trigger: '.flip-card', start: 'top 85%' }
+    }
+  );
+
+  // --- Floating preview cards entrance ---
+  ScrollTrigger.create({
+    trigger: '#quick-summary-section', start: 'top 75%', once: true,
+    onEnter: function() {
+      gsap.fromTo('.summary-float-card',
+        { opacity: 0, y: 30, scale: 0.8 },
+        { opacity: 1, y: 0, scale: 1, duration: reduced ? 0 : 0.7, stagger: 0.15, ease: 'back.out(1.7)' }
+      );
+      document.querySelectorAll('.summary-float-card').forEach(function(card, i) {
+        gsap.to(card, {
+          y: '-=8', duration: reduced ? 0 : (2 + i * 0.4), repeat: reduced ? 0 : -1, yoyo: true, ease: 'sine.inOut', delay: i * 0.3
+        });
+      });
+    }
+  });
+
+}); // end mm.add
+
+// ─── Hero cards 3D tilt on hover ───
+document.querySelectorAll('.hero-card').forEach(function(card) {
+  card.addEventListener('mousemove', function(e) {
+    var r = card.getBoundingClientRect();
+    var x = (e.clientX - r.left) / r.width;
+    var y = (e.clientY - r.top) / r.height;
+    var tiltX = (y - 0.5) * -10;
+    var tiltY = (x - 0.5) * 10;
+    card.style.transform = 'perspective(600px) rotateX(' + tiltX + 'deg) rotateY(' + tiltY + 'deg) scale(1.02)';
+    card.style.boxShadow = '0 20px 40px rgba(22,163,74,0.1), 0 8px 16px rgba(0,0,0,0.06)';
+    card.style.setProperty('--mx', (x * 100) + '%');
+    card.style.setProperty('--my', (y * 100) + '%');
+  });
+  card.addEventListener('mouseleave', function() {
+    card.style.transform = '';
+    card.style.boxShadow = '';
+  });
+});
+
+// ═══════════════════════════════════════════
+// INTERACTIVE: Summary Mode Overlay Carousel
+// ═══════════════════════════════════════════
+
+// --- Mouse-follow glow ---
+(function(){
+  var section = document.getElementById('quick-summary-section');
+  var glow = document.getElementById('summary-glow');
+  if(!section || !glow) return;
+  section.addEventListener('mouseenter', function() { glow.style.opacity = '1'; });
+  section.addEventListener('mouseleave', function() { glow.style.opacity = '0'; });
+  section.addEventListener('mousemove', function(e) {
+    var r = section.getBoundingClientRect();
+    glow.style.left = (e.clientX - r.left) + 'px';
+    glow.style.top = (e.clientY - r.top) + 'px';
+  });
+})();
+
+// --- Magnetic button effect ---
+(function(){
+  var btn = document.querySelector('.summary-magnetic');
+  if(!btn) return;
+  btn.addEventListener('mousemove', function(e) {
+    var r = btn.getBoundingClientRect();
+    var x = (e.clientX - r.left - r.width / 2) * 0.15;
+    var y = (e.clientY - r.top - r.height / 2) * 0.15;
+    btn.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+  });
+  btn.addEventListener('mouseleave', function() {
+    gsap.to(btn, { x: 0, y: 0, duration: _prefersReduced ? 0 : 0.4, ease: 'elastic.out(1, 0.4)' });
+    btn.style.transform = '';
+  });
+})();
+
+// --- Carousel logic ---
+(function(){
+  var btn = document.getElementById('summary-btn');
+  var overlay = document.getElementById('summary-overlay');
+  var backdrop = document.getElementById('summary-backdrop');
+  var closeBtn = document.getElementById('summary-close');
+  var slides = document.getElementById('summary-slides');
+  var prevBtn = document.getElementById('summary-prev');
+  var nextBtn = document.getElementById('summary-next');
+  var dots = document.querySelectorAll('.summary-dot');
+  if(!btn || !overlay) return;
+
+  var current = 0;
+  var total = dots.length;
+
+  function goTo(i) {
+    current = Math.max(0, Math.min(total - 1, i));
+    slides.style.transform = 'translateX(-' + (current * 100) + '%)';
+    dots.forEach(function(d, idx) {
+      d.style.backgroundColor = idx === current ? '#16a34a' : '#d1d5db';
+    });
+    prevBtn.disabled = current === 0;
+    nextBtn.style.opacity = current === total - 1 ? '0.3' : '1';
+  }
+
+  function openSummary() {
+    overlay.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    goTo(0);
+    gsap.fromTo('#summary-card', { opacity: 0, scale: 0.92, y: 40 }, { opacity: 1, scale: 1, y: 0, duration: _prefersReduced ? 0 : 0.4, ease: 'power3.out' });
+  }
+
+  function closeSummary() {
+    gsap.to('#summary-card', { opacity: 0, scale: 0.95, y: 20, duration: _prefersReduced ? 0 : 0.25, ease: 'power2.in', onComplete: function() {
+      overlay.classList.add('hidden');
+      document.body.style.overflow = '';
+    }});
+  }
+
+  btn.addEventListener('click', openSummary);
+  closeBtn.addEventListener('click', closeSummary);
+  backdrop.addEventListener('click', closeSummary);
+  prevBtn.addEventListener('click', function() { goTo(current - 1); });
+  nextBtn.addEventListener('click', function() { goTo(current + 1); });
+
+  dots.forEach(function(dot, idx) {
+    dot.addEventListener('click', function() { goTo(idx); });
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if(overlay.classList.contains('hidden')) return;
+    if(e.key === 'Escape') closeSummary();
+    if(e.key === 'ArrowRight') goTo(current + 1);
+    if(e.key === 'ArrowLeft') goTo(current - 1);
+  });
+})();
+</script>
+
+</body>
+</html>

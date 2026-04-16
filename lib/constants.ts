@@ -12,7 +12,7 @@ export const SITE = {
   medium: "",
   portfolio: "#",
   location: "Open to Relocation",
-  resumeUrl: "https://drive.google.com/file/d/1339iKvokajvEe63I9VeepkqOrsxVILGW/view?usp=sharing",
+  resumeUrl: "https://drive.google.com/file/d/1lqlo2l6fnMgX0HX8WQLtgb4yDVCJF4Tr/view?usp=sharing",
 } as const;
 
 export const NAV_LINKS = [
