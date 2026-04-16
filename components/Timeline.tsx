@@ -67,7 +67,7 @@ export default function Timeline() {
           viewport={{ once: true }}
           className="font-mono text-xs font-medium uppercase tracking-widest text-primary"
         >
-          Experience
+          Journey
         </motion.span>
         <motion.h2
           initial={{ opacity: 0, y: 12 }}
