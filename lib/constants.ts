@@ -141,6 +141,16 @@ export const TIMELINE: TimelineItem[] = [
     ],
     color: "#8E60F0",
   },
+  {
+    role: "Product Designer",
+    organization: "Seoul Women's University",
+    period: "Feb 2021 — Jul 2023",
+    points: [
+      "Designed an on-campus learning dashboard for students and faculty, translating complex academic datasets into actionable visualizations",
+      "Partnered with engineering teams to build a scalable and responsive UI system, ensuring design feasibility within technical constraints",
+    ],
+    color: "#F59E0B",
+  },
 ];
 
 export const SKILL_CATEGORIES: SkillCategory[] = [
