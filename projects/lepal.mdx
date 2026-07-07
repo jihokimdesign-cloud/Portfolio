@@ -1,0 +1,294 @@
+---
+title: Lepal
+tags: AI Design · Emotional Design
+description: Designing emotional continuity — beyond chatbot transcripts into genuine journaling
+type: case-study
+
+colorAccent: rgb(139, 92, 246)
+colorLight: rgb(245, 240, 255)
+colorDark: rgb(20, 10, 40)
+colorDarkest: rgb(15, 8, 30)
+colorScheme: dark
+
+nextProject: cheffy
+hidden: false
+
+scope: Sep — Nov 2024
+weight: 9
+---
+
+<FullImage src="/landingimgs/lepal_landing.png" width={1084} height={1084} priority />
+
+-- Most wellness apps speak. Few listen. We built one that does.
+
+As Lead Product Designer at Lepal.ai, I designed an emotionally intelligent journaling companion from 0→1 — shifting the AI from efficiency to empathy to break a critical 72-hour retention wall for Gen Z users.
+
+<StatGrid
+  stats={[
+    { value: "+15%", label: "D7 retention lift", sub: "variant cohort" },
+    { value: "+85%", label: "“Supportive” perception", sub: "post-test survey" },
+    { value: "24→60%", label: "User satisfaction" },
+    { value: "30→45%", label: "Engagement" },
+  ]}
+/>
+
+<Team
+  teammates={[
+    { name: "Jiho Kim", position: "Lead Product Designer" },
+    { name: "Product Manager", position: "Roadmap & Metrics" },
+    { name: "Engineers ×2", position: "Platform" },
+    { name: "ML Engineer", position: "Emotion Classifier" },
+    { name: "Conversation Designer", position: "Tone Copy" },
+    { name: "CTO", position: "Architecture" },
+  ]}
+/>
+
+<ColorShifter background="rgb(245, 240, 255)" color="rgb(20, 10, 40)" />
+
+## What shipped
+
+<LayoutMainContent grid="1/1" extraMargin>
+  <Image src="/lepal_img/Frame 2087325946.png" width={1790} height={1008}>
+    <Caption
+      label="1"
+      title="My Journal"
+      text="A mood-aware journaling flow where the AI reads the room before it responds — the focus of this study."
+      overlay={false}
+      topPadding
+    />
+  </Image>
+  <Image src="/lepal_img/Frame 2087325947.png" width={1790} height={1008}>
+    <Caption
+      label="2"
+      title="A companion, not a chatbot"
+      text="Your spirit levels up with you — daily rituals like Crystal Ball keep the relationship alive between journal entries."
+      overlay={false}
+      topPadding
+    />
+  </Image>
+</LayoutMainContent>
+
+<LayoutMainContent extraMargin>
+  <Image src="/lepal_img/case_study_hero.png" width={2411} height={994}>
+    <Caption
+      label="3"
+      title="The full ecosystem"
+      text="Journaling, daily micro-interactions, and Therapy Planet — topic-driven AI chat for deep dives into burnout or relationships."
+      overlay={false}
+      topPadding
+    />
+  </Image>
+</LayoutMainContent>
+
+While I designed the entire ecosystem, the biggest challenge lay in My Journal, where the AI needed to feel like a supportive companion, not a robot. Getting there is the story of this case study.
+
+<SectionTitle num="01" kicker="The Problem" title="The 72-hour wall" />
+
+Despite a promising beta, data showed strong Day-1 interest but rapid disengagement around the 72-hour mark.
+
+<Bars
+  bars={[
+    { label: "Day 1 — Excited", value: 100, note: "“It actually responded nicely”" },
+    { label: "Day 2 — Lukewarm", value: 68, note: "“Kinda generic”" },
+    { label: "Day 3 — The Wall", value: 31, note: "empathy mismatch", highlight: true },
+    { label: "Day 7 — Gone", value: 14 },
+  ]}
+  caption="Active users by day — a 40% spike in session drop-offs at the wall."
+/>
+
+This is the exchange that was killing us, over and over, on Day 3:
+
+<Transcript
+  messages={[
+    { from: "User, Day 3", text: "I'm wiped after back-to-back labs. Zero energy." },
+    { from: "AI", text: "Got it! Let's do a deep reflection with 5 questions to boost productivity!", tone: "bad" },
+  ]}
+  caption="The drop-off trigger. The user reached out exhausted — and got homework."
+/>
+
+The issue wasn't app performance. The AI was **failing to read the room**. And the team was split on the root cause:
+
+<TradeOff
+  options={[
+    {
+      label: "Engineering",
+      title: "“It's a memory bug.”",
+      text: "Backend wasn't persisting context, causing disjointed conversations.",
+      verdict: "Fix session persistence",
+    },
+    {
+      label: "Design (me)",
+      title: "“It's an empathy gap.”",
+      text: "The AI remembered facts but failed to read feelings. Users didn't feel heard.",
+      verdict: "Redesign tone & interactions",
+      selected: true,
+    },
+  ]}
+/>
+
+Both stories fit the data. Only one of them could be tested with users.
+
+<SectionTitle num="02" kicker="Research" title="Listening to 800 sessions" />
+
+I ran a mixed-method study: five semi-structured interviews with Gen Z graduate students and a 3-day mood diary, analyzing 1,000+ quotes across 800+ sessions. Three patterns kept repeating:
+
+<Barriers
+  items={[
+    {
+      label: "Finding 01",
+      title: "The empathy gap",
+      quote: "It remembers my exam. Not how I felt about it.",
+      text: "The AI retained facts but never read feelings.",
+      solution: "Emotion classifier — four mood states, read from context.",
+    },
+    {
+      label: "Finding 02",
+      title: "Generic tone",
+      quote: "I said I was drained. It gave me productivity tips.",
+      text: "One default register for every emotional state.",
+      solution: "Adaptive tone rules — pacing and structure match the mood.",
+    },
+    {
+      label: "Finding 03",
+      title: "Blank-page freeze",
+      quote: "I don't know what I'm supposed to write.",
+      text: "An empty chat box reads as a test, not an invitation.",
+      solution: "Hybrid starters — guided first run, clean canvas after.",
+    },
+  ]}
+/>
+
+<Insight>
+  Users felt unseen. The AI was offering solutions when they needed validation.
+</Insight>
+
+A backend fix wasn't enough — we needed an emotional overhaul.
+
+<Placeholder
+  label="Fig — Research synthesis, recreated"
+  note="A sanitized recreation of the affinity map or mood-diary synthesis (original artifacts are under NDA). Even an abstracted version — clusters, counts, three finding labels — carries the section."
+  aspect="16/9"
+/>
+
+<SectionTitle num="03" kicker="Strategy" title="Teaching the AI to read the room" />
+
+I reframed the goal from "fixing memory" to "prioritizing empathy before solutions," and collaborated with ML engineers and the PM on an emotion-aware framework: instead of one-size-fits-all replies, the system classifies every input into one of four emotional states — anxious, sad, neutral, positive — and adapts its tone, structure, and pacing to match.
+
+<FullImage
+  src="/lepal_img/The Adaptive Tone Framework — how the system classifies emotion and adjusts responses.png"
+  width={3585}
+  height={1000}
+  caption="The Adaptive Tone Framework — how the system classifies emotion and adjusts responses"
+/>
+
+<Flow
+  nodes={[
+    { label: "Input", title: "“Just got back from meeting my advisor.”", note: "reads neutral to a keyword filter" },
+    { label: "Context", title: "LLM checks emotional history", note: "recent entries show high anxiety" },
+    { label: "Classified", title: "Anxious", note: "one of four core states" },
+    { label: "Response", title: "Calm & Validating", note: "acknowledge → tiny step → soft close", state: "result" },
+  ]}
+  caption="Context over keywords — the same sentence gets a different response depending on the user's emotional history."
+/>
+
+Same user, same exhaustion — here's what Day 3 sounds like after the framework:
+
+<Transcript
+  messages={[
+    { from: "User, Day 3", text: "I'm wiped after back-to-back labs. Zero energy." },
+    { from: "AI", text: "That sounds really draining. No reflection tonight — want to just tell me the one thing that took the most out of you?", tone: "good" },
+  ]}
+  caption="Classified anxious-fatigued → Calm & Validating: acknowledge, one tiny step, soft close."
+/>
+
+<SectionTitle num="04" kicker="Design" title="Two decisions that made it feel human" />
+
+### Decision 01 — The thinking indicator
+
+Even with an empathetic tone, instant responses felt robotic. We needed a cue that implied care, not loading.
+
+<TradeOff
+  options={[
+    {
+      label: "A",
+      title: "Generic indicator",
+      text: "“Generating response...” — clear system status, easy to build.",
+      verdict: "Too functional. Feels like waiting for a server, not a friend.",
+    },
+    {
+      label: "B",
+      title: "Typing dots",
+      text: "“Thinking...” — mimics human behavior.",
+      verdict: "Feels like a companion is thinking about what you said.",
+      selected: true,
+    },
+  ]}
+/>
+
+I shipped the dots with variable latency — 1–1.5s for light check-ins, up to 2–3s for heavy emotional sharing — shifting perception from "the app is downloading a reply" to "someone is thinking about me."
+
+<BeforeAfter
+  before="/lepal_img/lepal_before.png"
+  after="/lepal_img/lepal_after.png"
+  width={620}
+  height={465}
+  beforeLabel="Before"
+  afterLabel="After"
+  caption="Generic instant response vs. the tone-adaptive thinking indicator with variable latency."
+/>
+
+### Decision 02 — The blank page dilemma
+
+Users froze at an empty chat box, but permanent FAQ guidance clutters the chat and biases input. The hybrid: contextual starters on first run only ("My head is a mess from labs and assignments 🤯"), fading out once a user engages, with a discreet "i" button as the safety net.
+
+<LayoutMainContent extraMargin>
+  <Image src="/lepal_img/lepal_after2.png" width={1240} height={466}>
+    <Caption
+      label="4"
+      title="Guided, then out of the way"
+      text="New users get onboarding, returning users get a clean canvas — and the Tone Framework gets authentic data."
+      overlay={false}
+      topPadding
+    />
+  </Image>
+</LayoutMainContent>
+
+Neither decision was mine to ship alone — both meant convincing people whose instincts said the opposite.
+
+<SectionTitle num="05" kicker="Collaboration" title="“Latency isn't lag — it's listening”" />
+
+When I proposed variable latency, the lead engineer pushed back: **"You want us to add artificial latency?"** The line above was my answer — but it only landed because we tested it. Against an instant-reply control, the 1.5–3s variant scored significantly higher on "feeling heard" with **zero complaints about speed**. Variable latency shipped as a feature, not a bug.
+
+The same pattern resolved the "friction vs. data" debate with the PM: starters on for new users, off for returning ones, FAQ button as the safety net. Retention protected, data quality intact.
+
+The Tone Framework became the team's shared language — design owned tone rules, engineering owned latency logic, the PM owned metrics, the conversation designer owned empathy markers.
+
+<Placeholder
+  label="Fig — The framework as shared artifact"
+  note="The Tone Framework doc/FigJam annotated with each discipline's ownership area — or a workshop photo. This is the collaboration proof-shot."
+  aspect="16/9"
+/>
+
+<Quote who="Lead Engineer" title="Lepal.ai">
+  I didn't see it as a UX problem until she reframed latency as listening.
+</Quote>
+
+<SectionTitle num="06" kicker="Outcome" title="From productivity tool to companion" />
+
+We ran a pre-launch A/B test: the original productivity-driven tone as control, the emotion-aware framework as variant. The variant won on every measure — retention, engagement, satisfaction, and how "supportive" users rated the AI — and shipped in the launched mobile app.
+
+<Placeholder
+  label="Fig — Control vs. variant"
+  note="The two test conditions side by side: the same user message answered in productivity tone vs. emotion-aware tone, with the survey deltas."
+  aspect="2/1"
+/>
+
+<SectionTitle num="07" kicker="Reflection" title="What I learned" />
+
+-- Good product design is about designing relationships.
+
+I aligned Engineering's need for logic with Design's need for empathy by building a shared framework they could both contribute to — conflict became co-creation. And success wasn't about adding more tools: a smaller, warmer feature set won over a larger, colder one.
+
+The best AI products don't just process language — they understand context, respect emotion, and create space for human vulnerability.
+
+<Spacer />

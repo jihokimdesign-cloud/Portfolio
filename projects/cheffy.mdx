@@ -1,0 +1,207 @@
+---
+title: Cheffy
+tags: Interaction Design · Adaptive UI
+description: When voice and gestures fail, the screen adapts to your elbow
+type: case-study
+
+colorAccent: rgb(234, 88, 12)
+colorLight: rgb(255, 247, 237)
+colorDark: rgb(30, 20, 10)
+colorDarkest: rgb(20, 12, 5)
+colorScheme: dark
+
+nextProject: sidewalk
+hidden: false
+
+scope: Pre-Launch
+weight: 7
+---
+
+<FullImage src="/landingimgs/cheffy_landing.png" width={1084} height={1084} priority />
+
+-- When voice and gestures fail, the screen adapts to your elbow.
+
+Recipe video apps assume clean, dry fingers. In reality, users are elbow-deep in flour, raw meat, or wet ingredients. As Interaction Designer and Prototyper, I designed a multi-signal adaptive UI that detects when cooks can't use standard inputs — and switches itself to elbow-operable targets.
+
+<StatGrid
+  stats={[
+    { value: "−91%", label: "Hand-wash interruptions", sub: "6.2 → 0.5 per recipe" },
+    { value: "−78%", label: "Step transition time", sub: "15.2s → 3.3s" },
+    { value: "97%", label: "Elbow-tap success rate" },
+    { value: "+34%", label: "Recipe completion" },
+  ]}
+/>
+
+<Team
+  teammates={[
+    { name: "Jiho Kim", position: "Interaction Designer & Prototyper" },
+    { name: "Tools", position: "Figma · ProtoPie · TensorFlow Lite · Swift" },
+  ]}
+/>
+
+<ColorShifter background="rgb(255, 247, 237)" color="rgb(30, 20, 10)" />
+
+## What shipped — try it
+
+The product itself is confidential (stealth mode), so here's the core interaction, rebuilt for this page. Lean in:
+
+<ElbowDemo />
+
+That switch — from standard controls to one elbow-sized target in 400ms — is the whole product. The rest of this study is how we got there.
+
+<SectionTitle num="01" kicker="The Problem" title="Wash, dry, tap, repeat" />
+
+72% of cooking-video users pause to wash their hands before tapping "Next." Every interaction costs a wash → dry → tap → resume cycle — **12–18 seconds per step transition**. And the obvious fallback fails exactly when it's needed most:
+
+<Transcript
+  messages={[
+    { from: "Cook, hands in flour", text: "Hey, next step" },
+    { from: "Voice assistant", text: "Sorry, I didn't catch that. Try again?", tone: "bad" },
+  ]}
+  caption="Range hood at 72dB — 22dB past the point where voice recognition holds up."
+/>
+
+<Flow
+  nodes={[
+    { label: "Voice", title: "“Hey, next step”", note: "failed · 72dB ambient noise", state: "fail" },
+    { label: "Gesture", title: "Waves flour-covered hand", note: "confidence 34% · occluded", state: "fail" },
+    { label: "Manual", title: "Stop → wash → dry → tap", note: "+15s wasted", state: "result" },
+  ]}
+  caption="The input failure cascade — every fallback ends in a hand-wash."
+/>
+
+I audited NYT Cooking, Tasty, and Paprika — the failure is structural, not a missing feature:
+
+<Barriers
+  items={[
+    {
+      label: "Audit 01",
+      title: "Touch fails",
+      text: "Tiny arrows and swipe carousels — precise micro-interactions become a physical barrier for coated hands.",
+      solution: "One elbow-scale macro target instead of precision taps.",
+    },
+    {
+      label: "Audit 02",
+      title: "Voice fails",
+      text: "“Next step” breaks against sizzling pans, running water, and blenders — high error rates, high frustration.",
+      solution: "Treat voice failure as a signal, not a dead end.",
+    },
+    {
+      label: "The gap",
+      title: "Nobody designs for the mess",
+      text: "Users need control without clean hands or a silent room — and nothing on the market offers it.",
+      solution: "An interface that adapts itself when inputs degrade.",
+    },
+  ]}
+/>
+
+<SectionTitle num="02" kicker="Research" title="36 hours in twelve kitchens" />
+
+<List>
+  <ListItem label="Inquiry">12 home cooks observed in-kitchen across 3-hour sessions — 36 hours recorded.</ListItem>
+  <ListItem label="Sensors">Proximity and ambient noise across cooking phases — 2,400+ data points.</ListItem>
+  <ListItem label="Diary">7-day logging of "moments I wanted to tap but couldn't" — 84 entries.</ListItem>
+</List>
+
+<Bars
+  bars={[
+    { label: "Idle", value: 35, display: "35dB" },
+    { label: "Prep", value: 45, display: "45dB" },
+    { label: "Chopping", value: 55, display: "55dB" },
+    { label: "Sauté", value: 65, display: "65dB" },
+    { label: "Range hood on", value: 72, display: "72dB", note: "voice already failing", highlight: true },
+    { label: "Frying", value: 80, display: "80dB" },
+  ]}
+  caption="Kitchen noise by cooking phase. Voice recognition degrades past ~50dB — most of active cooking happens above it."
+/>
+
+<Placeholder
+  label="Fig — In-kitchen observation"
+  note="A still from the contextual inquiry sessions: cook mid-recipe, device propped on counter, hands occupied. Anonymized/cropped is fine — the mess is the point."
+  aspect="16/9"
+/>
+
+Voice failed most during the noisiest phases — exactly when hands-free control mattered most. Gesture confidence collapsed with flour, mitts, or utensils in hand. But the most surprising finding was behavioral: **nine of twelve participants** were already trying to tap with their elbows. The 44px targets were just too small for it to work.
+
+<Insight>
+  The users had already designed the solution. We just had to build an interface big enough for it.
+</Insight>
+
+<SectionTitle num="03" kicker="The System" title="An interface that listens to failure" />
+
+The design responds to failure instead of demanding new behavior. A multi-signal AND-gate watches three conditions — only when all three trip does the UI switch:
+
+<Flow
+  nodes={[
+    { label: "Trigger 1", title: "Voice input failed", state: "fail" },
+    { label: "Trigger 2", title: "Gesture confidence < 40%", state: "fail" },
+    { label: "Sensor", title: "Proximity < 30cm", state: "pass" },
+    { label: "State change", title: "Elbow-Bump Mode", note: "bottom 50% becomes one giant target", state: "result" },
+  ]}
+  separator="+"
+  caption="The AND-gate — two failed inputs plus an approaching user. Any single signal alone changes nothing."
+/>
+
+Four design decisions shaped the final system, each driven by a failure observed in the field:
+
+<List>
+  <ListItem label="AND-gate">A single trigger produced 23% false positives; requiring all three dropped it under 3%.</ListItem>
+  <ListItem label="120× target">We measured real elbow contact areas (4.2 × 6.8cm) before sizing the half-screen zone.</ListItem>
+  <ListItem label="Overlay">An 85% gradient keeps the recipe visible beneath the button — users never lose their place.</ListItem>
+  <ListItem label="Auto-revert">8 seconds without proximity reverts to standard controls; double-tap force-exits.</ListItem>
+</List>
+
+<SectionTitle num="04" kicker="Validation" title="Testing with flour-covered hands" />
+
+A controlled study with 18 participants cooking real recipes — the same 8-step recipe twice, standard UI vs. adaptive mode. Hand-wash interruptions fell from 6.2 to 0.5 per recipe, transitions dropped from 15.2s to 3.3s, and elbow taps landed 97% of the time.
+
+<Placeholder
+  label="Fig — Elbow-bump, mid-test"
+  note="A participant actually elbow-tapping the half-screen target with flour-covered hands. The single most persuasive image this study could have."
+  aspect="16/9"
+/>
+
+<Quote who="P7" title="Home cook, 3 years experience">
+  I literally forgot I was using my elbow after the second step.
+</Quote>
+
+<Quote who="P12" title="Cooking instructor">
+  The big button appearing when I got close was like the phone reading my mind.
+</Quote>
+
+<SectionTitle num="05" kicker="Outcome" title="From concept to shipped feature" />
+
+After three rounds of prototyping, the adaptive mode shipped to a 500-user beta over four weeks. Removing the hand-wash friction didn't just save time — it changed how people finished recipes:
+
+<List>
+  <ListItem label="+34%">Recipe completion rate.</ListItem>
+  <ListItem label="+22%">Session duration.</ListItem>
+  <ListItem label="+41%">7-day return rate.</ListItem>
+  <ListItem label="97.2%">Trigger accuracy, with mode-switch latency under 400ms.</ListItem>
+</List>
+
+<SectionTitle num="06" kicker="Reflection" title="Failure is an input" />
+
+-- The real breakthrough came from listening to what's already failing.
+
+<TradeOff
+  options={[
+    {
+      label: "Old approach",
+      title: "Add more input modalities",
+      text: "Stack voice, gesture, gaze, touch — hope one works.",
+      verdict: "Each new layer adds latency, false positives, and user confusion.",
+    },
+    {
+      label: "New approach",
+      title: "Listen to failures, then adapt",
+      text: "Failure signals are the input. Two failed modalities plus proximity means the system already knows what to do.",
+      verdict: "Zero new learning curve.",
+      selected: true,
+    },
+  ]}
+/>
+
+The pattern isn't kitchen-specific. A living room where the remote is lost and voice is misheard, an industrial floor where gloves block touch and machinery kills voice — any environment where hands, voice, or attention are compromised benefits from the same AND-gate logic. It's now my default.
+
+<Spacer />

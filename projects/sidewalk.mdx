@@ -1,0 +1,226 @@
+---
+title: Project Sidewalk
+tags: Design System · Accessibility
+description: A zero-defect design system for civic accessibility mapping at scale
+type: case-study
+
+colorAccent: rgb(22, 163, 74)
+colorLight: rgb(240, 253, 244)
+colorDark: rgb(10, 30, 15)
+colorDarkest: rgb(5, 20, 10)
+colorScheme: dark
+
+nextProject: tap3d
+hidden: false
+
+scope: Sep 2023 — Aug 2024
+weight: 8
+---
+
+<FullImage src="/landingimgs/sidewalk_landing.png" width={2208} height={1104} priority />
+
+-- An accessibility tool that wasn't accessible. I rebuilt its foundations.
+
+Project Sidewalk is an open-source civic platform that crowdsources urban accessibility data to train machine learning models. With over 350,000 labels collected, it had proven its value — but the architecture and experience underneath were brittle. I architected the zero-defect, WCAG 2.2 AA design system now adopted across three cross-functional teams.
+
+<StatGrid
+  stats={[
+    { value: "350k+", label: "Labels crowdsourced" },
+    { value: "100%", label: "WCAG 2.2 AA compliance", sub: "zero axe-core violations" },
+    { value: "3", label: "Teams adopted the system" },
+    { value: "11k+", label: "Users supported" },
+  ]}
+/>
+
+<Team
+  teammates={[
+    { name: "Jiho Kim", position: "Product Designer, System Architecture" },
+    { name: "Product Manager", position: "Rollout & Prioritization" },
+    { name: "Developers ×2", position: "Frontend Integration" },
+  ]}
+/>
+
+<ColorShifter background="rgb(240, 253, 244)" color="rgb(10, 30, 15)" />
+
+## What shipped
+
+<LayoutMainContent extraMargin>
+  <Image src="/ProjectSidewalk/PS_Mockup.png" width={4340} height={2860}>
+    <Caption
+      label="1"
+      title="The redesigned platform"
+      text="Clearer labeling flows and navigation, in production for volunteers across 8+ cities."
+      overlay={false}
+      topPadding
+    />
+  </Image>
+</LayoutMainContent>
+
+<LayoutMainContent extraMargin>
+  <Image src="/ProjectSidewalk/PS_FinalPRoduct.png" width={3456} height={2234}>
+    <Caption
+      label="2"
+      title="Map navigation, rebuilt"
+      text="Optimized pathfinding for the core exploration experience — where 68% of clicks happen."
+      overlay={false}
+      topPadding
+    />
+  </Image>
+</LayoutMainContent>
+
+The screens are the visible part. The real deliverable is the system underneath them — and the reason it had to exist is where this story starts.
+
+<SectionTitle num="01" kicker="The Problem" title="An accessibility tool that failed WCAG" />
+
+I identified three critical friction points holding the platform back:
+
+<Barriers
+  items={[
+    {
+      label: "Friction 01",
+      title: "User drop-off",
+      text: "Inconsistent UI and unclear feedback caused high abandonment in core reporting flows.",
+      solution: "One selection model and feedback pattern across every flow.",
+    },
+    {
+      label: "Friction 02",
+      title: "Engineering bottleneck",
+      text: "No centralized system — developers rebuilt UI from scratch, shipping regression bugs.",
+      solution: "A reusable component library treated as a working contract.",
+    },
+    {
+      label: "Friction 03",
+      title: "The accessibility irony",
+      text: "A tool for accessibility that failed WCAG itself — alienating the community it serves.",
+      solution: "AA compliance baked into every component's foundation.",
+    },
+  ]}
+/>
+
+An initial WCAG 2.2 AA audit made the debt concrete:
+
+<Bars
+  bars={[
+    { label: "Color contrast", value: 37, display: "37% pass" },
+    { label: "Keyboard navigation", value: 42, display: "42% pass" },
+    { label: "Screen reader", value: 28, display: "28% pass", note: "weakest area", highlight: true },
+    { label: "Focus indicators", value: 51, display: "51% pass" },
+  ]}
+  caption="Initial WCAG 2.2 AA assessment across core pages. Values are illustrative — actual audit data is confidential."
+/>
+
+<Insight>
+  The tool built to map accessibility barriers had become one.
+</Insight>
+
+<SectionTitle num="02" kicker="Alignment" title="Three user groups, one system" />
+
+Redesigning a civic platform meant balancing competing needs simultaneously:
+
+<List>
+  <ListItem label="Mappers">Citizens & volunteers — label barriers quickly, low cognitive load, compliant interface.</ListItem>
+  <ListItem label="Consumers">City planners & governments — data accuracy, standardized reporting, error-proof UI.</ListItem>
+  <ListItem label="Internal">Engineers & maintainers — scale to 8+ cities without regressions, fewer UI bugs.</ListItem>
+</List>
+
+A zero-defect design system was the only way to satisfy all three at once.
+
+<SectionTitle num="03" kicker="Process" title="Design as infrastructure" />
+
+<Flow
+  nodes={[
+    { label: "1 — Audit", title: "Data-informed diagnostics", note: "Hotjar · community voice · WCAG audit" },
+    { label: "2 — Build", title: "Zero-defect architecture", note: "tokens → component library" },
+    { label: "3 — Scale", title: "Cross-functional adoption", note: "phased rollout across 3 teams", state: "result" },
+  ]}
+/>
+
+### 01 — Diagnose with data, not intuition
+
+Hotjar heatmaps and session recordings pinpointed drop-off moments; GitHub issues and forum threads surfaced recurring pain; a heuristic WCAG evaluation scored the legacy interface. The behavioral data was decisive — **68% of clicks concentrated on the map center** while labels outside the viewport went undiscovered, and **42% of users abandoned the sidebar controls** after one attempt.
+
+<LayoutMainContent extraMargin>
+  <Image src="/ProjectSidewalk/mockup-map-labeling.png" width={1950} height={1230}>
+    <Caption
+      label="5"
+      title="The labeling interface, rethought"
+      text="Filters, validation states, and severity in one sidebar; label cards and the live map share one selection model."
+      overlay={false}
+      topPadding
+    />
+  </Image>
+</LayoutMainContent>
+
+### 02 — Tokens as a single source of truth
+
+I mapped Figma variables 1:1 with the engineers' SCSS variables — `color.primary` to `$color-primary`, `spacing.md` to `$spacing-md` — eliminating guesswork during handoff.
+
+<LayoutMainContent extraMargin>
+  <Image src="/ProjectSidewalk/PS_designsystem_token.webp" width={4096} height={1826}>
+    <Caption
+      label="3"
+      title="Design ↔ SCSS parity"
+      text="Every token exists identically in design and code — one source of truth, zero ambiguity."
+      overlay={false}
+      topPadding
+    />
+  </Image>
+</LayoutMainContent>
+
+On that foundation I built the component library with **WCAG 2.2 AA baked in** — any future feature built from these components inherently complies. Accessibility stopped being a task and became a property of the system.
+
+<LayoutMainContent extraMargin>
+  <Image src="/ProjectSidewalk/PS_designsystem_overview.webp" width={1400} height={1212}>
+    <Caption
+      label="4"
+      title="The component library"
+      text="Validation buttons in 4 states and 2 sizes, 9 semantic label tokens, 4 brand primitives."
+      overlay={false}
+      topPadding
+    />
+  </Image>
+</LayoutMainContent>
+
+<LayoutMainContent extraMargin>
+  <Image src="/ProjectSidewalk/mockup-component-library.png" width={2480} height={1240}>
+    <Caption
+      label="6"
+      title="Living documentation"
+      text="Every component page pairs the preview with usage, accessibility notes, and the exact tokens — AA compliance is checked per variant."
+      overlay={false}
+      topPadding
+    />
+  </Image>
+</LayoutMainContent>
+
+### 03 — A working contract, not documentation
+
+A design system is only as successful as its adoption rate. Working tightly with one PM and two developers, I ran phased rollouts with comprehensive spec handoffs — treating the system as a contract between design and engineering rather than a style guide nobody reads.
+
+<SectionTitle num="04" kicker="Impact" title="What zero-defect bought us" />
+
+<LayoutMainContent extraMargin>
+  <Image src="/ProjectSidewalk/mockup-wcag-dashboard.png" width={2480} height={1200}>
+    <Caption
+      label="7"
+      title="The audit, passing"
+      text="48/48 criteria, 34/34 components, zero violations — six legacy issues resolved, none remaining."
+      overlay={false}
+      topPadding
+    />
+  </Image>
+</LayoutMainContent>
+
+<List>
+  <ListItem label="11k+">Users supported — clearer navigation significantly improved contributor task completion.</ListItem>
+  <ListItem label="100%">WCAG 2.2 AA — zero violations in automated axe-core audits across all 24 components.</ListItem>
+  <ListItem label="3 teams">Adopted the system — faster delivery, and UI-related frontend bugs eliminated.</ListItem>
+</List>
+
+<SectionTitle num="05" kicker="Reflection" title="Systems thinking in civic tech" />
+
+-- A design system is not a style guide — it's a tool for empowerment.
+
+This project shifted my perspective from designing for the happy path to designing for resilience in open-source and civic environments. When inclusivity lives in the system architecture, every new feature inherits those values — accessibility becomes automatic instead of an afterthought.
+
+<Spacer />
