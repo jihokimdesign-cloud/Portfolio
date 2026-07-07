@@ -44,6 +44,8 @@ import Insight from "../../components/ProjectView/Insight";
 import Transcript from "../../components/ProjectView/Transcript";
 import Placeholder from "../../components/ProjectView/Placeholder";
 import Barriers from "../../components/ProjectView/Barriers";
+import ToneDemo from "../../components/ProjectView/ToneDemo";
+import SystemDemo from "../../components/ProjectView/SystemDemo";
 import {
   Header2,
   Header3,
@@ -166,6 +168,8 @@ export default function Post({
                     Transcript,
                     Placeholder,
                     Barriers,
+                    ToneDemo,
+                    SystemDemo,
                   }}
                 />
               </main>
