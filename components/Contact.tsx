@@ -441,7 +441,7 @@ export default function Contact() {
             {/* Summary */}
             <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, color: "#111", marginBottom: 6 }}>
               <span style={{ color: "#555" }}>Total Experience</span>
-              <span style={{ fontWeight: 600 }}>2+ Years</span>
+              <span style={{ fontWeight: 600 }}>5+ Years</span>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, color: "#111" }}>
               <span style={{ color: "#555" }}>Satisfaction</span>
