@@ -77,7 +77,7 @@ const Flow = ({ nodes, separator = "→", caption }: Props) => {
         ))}
       </div>
       {caption && (
-        <div className="text-sm opacity-40 mt-4 max-w-[50ch]">{caption}</div>
+        <div className="text-sm opacity-60 mt-4 max-w-[50ch]">{caption}</div>
       )}
     </div>
   );

@@ -48,7 +48,7 @@ const Transcript = ({ messages, caption }: Props) => {
                 delay: index * 0.25,
               }}
             >
-              <div className="text-xs uppercase tracking-[.14em] font-bold opacity-40 mb-1 px-1">
+              <div className="text-xs uppercase tracking-[.14em] font-bold opacity-60 mb-1 px-1">
                 {message.from}
               </div>
               <div
@@ -69,7 +69,7 @@ const Transcript = ({ messages, caption }: Props) => {
         })}
       </div>
       {caption && (
-        <div className="text-sm opacity-40 mt-4 max-w-[50ch]">{caption}</div>
+        <div className="text-sm opacity-60 mt-4 max-w-[50ch]">{caption}</div>
       )}
     </div>
   );

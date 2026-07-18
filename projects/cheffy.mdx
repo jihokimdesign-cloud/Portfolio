@@ -13,7 +13,7 @@ colorScheme: dark
 nextProject: sidewalk
 hidden: false
 
-scope: Pre-Launch
+scope: 8 Weeks · Pre-Launch
 weight: 7
 ---
 
@@ -21,20 +21,20 @@ weight: 7
 
 -- When voice and gestures fail, the screen adapts to your elbow.
 
-Recipe video apps assume clean, dry fingers. In reality, users are elbow-deep in flour, raw meat, or wet ingredients. As Interaction Designer and Prototyper, I designed a multi-signal adaptive UI that detects when cooks can't use standard inputs — and switches itself to elbow-operable targets.
+Recipe video apps assume clean, dry fingers. In reality, users are elbow-deep in flour, raw meat, or wet ingredients. As Founding Designer leading interaction and AI prototyping, I designed a multi-signal adaptive UI that detects when cooks can't use standard inputs — and switches itself to elbow-operable targets.
 
 <StatGrid
   stats={[
     { value: "−91%", label: "Hand-wash interruptions", sub: "6.2 → 0.5 per recipe" },
     { value: "−78%", label: "Step transition time", sub: "15.2s → 3.3s" },
-    { value: "97%", label: "Elbow-tap success rate" },
-    { value: "+34%", label: "Recipe completion" },
+    { value: "97%", label: "Elbow-tap success rate", sub: "18-user controlled study" },
+    { value: "+34%", label: "Recipe completion", sub: "500-user beta · 4 weeks" },
   ]}
 />
 
 <Team
   teammates={[
-    { name: "Jiho Kim", position: "Interaction Designer & Prototyper" },
+    { name: "Jiho Kim", position: "Founding Designer — Interaction & AI Prototyping" },
     { name: "Tools", position: "Figma · ProtoPie · TensorFlow Lite · Swift" },
   ]}
 />
@@ -115,11 +115,17 @@ I audited NYT Cooking, Tasty, and Paprika — the failure is structural, not a m
   caption="Kitchen noise by cooking phase. Voice recognition degrades past ~50dB — most of active cooking happens above it."
 />
 
-<Placeholder
-  label="Fig — In-kitchen observation"
-  note="A still from the contextual inquiry sessions: cook mid-recipe, device propped on counter, hands occupied. Anonymized/cropped is fine — the mess is the point."
-  aspect="16/9"
-/>
+<LayoutMainContent extraMargin>
+  <Video src="/project-assets/cheffy/cheffy-kitchen-observation.mp4" width={1344} height={768} seekOnScroll={false}>
+    <Caption
+      label="Field"
+      title="Mid-recipe, hands unusable"
+      text="Recreated from the contextual-inquiry sessions: recipe propped on the counter, hands coated, the next step one impossible tap away."
+      overlay={false}
+      topPadding
+    />
+  </Video>
+</LayoutMainContent>
 
 Voice failed most during the noisiest phases — exactly when hands-free control mattered most. Gesture confidence collapsed with flour, mitts, or utensils in hand. But the most surprising finding was behavioral: **nine of twelve participants** were already trying to tap with their elbows. The 44px targets were just too small for it to work.
 
@@ -142,24 +148,71 @@ The design responds to failure instead of demanding new behavior. A multi-signal
   caption="The AND-gate — two failed inputs plus an approaching user. Any single signal alone changes nothing."
 />
 
-Four design decisions shaped the final system, each driven by a failure observed in the field:
+### Decision 01 — Why three signals, not one
+
+The first prototype switched modes on proximity alone — and it was unusable. Leaning in to read a step, checking the pan, reaching past the tablet: nearly one in four activations was false, and every false switch taught users to distrust the mode. It took three prototype rounds to earn the gate:
+
+<TradeOff
+  options={[
+    {
+      label: "Round 1",
+      title: "Proximity alone",
+      text: "Switch the moment the user comes within 30cm — simplest to build, instant response.",
+      verdict: "23% false activations. The UI flipped every time someone leaned in just to read.",
+    },
+    {
+      label: "Round 3",
+      title: "The AND-gate",
+      text: "Voice failed + gesture confidence below 40% + proximity under 30cm. All three, or nothing.",
+      verdict: "Under 3% false activations. The UI changes only when the user demonstrably can't use standard inputs.",
+      selected: true,
+    },
+  ]}
+/>
+
+The gate is conservative on purpose: a missed activation costs one hand-wash, but a false one costs trust in the whole mode.
+
+### Decision 02 — Sizing for a body part nobody designs for
+
+Touch guidelines assume an 8–12mm fingertip. An elbow lands as a 40–60mm blob, with far less aim — so before sizing anything, we measured real elbow contact areas (4.2 × 6.8cm) and forearm approach angles. That's why the target is the entire bottom half of the screen rather than a bigger button: roughly 120× the area of a standard 44px target, reachable without looking.
+
+Two more decisions rounded out the system:
 
 <List>
-  <ListItem label="AND-gate">A single trigger produced 23% false positives; requiring all three dropped it under 3%.</ListItem>
-  <ListItem label="120× target">We measured real elbow contact areas (4.2 × 6.8cm) before sizing the half-screen zone.</ListItem>
   <ListItem label="Overlay">An 85% gradient keeps the recipe visible beneath the button — users never lose their place.</ListItem>
   <ListItem label="Auto-revert">8 seconds without proximity reverts to standard controls; double-tap force-exits.</ListItem>
 </List>
 
+<Placeholder
+  label="Fig — The trigger logic across three prototype rounds"
+  note="Three frames side by side: what triggered the switch in each round, and what changed after watching it fail. Cropped ProtoPie frames or Figma snapshots work — this is the process proof-shot."
+  aspect="2/1"
+/>
+
 <SectionTitle num="04" kicker="Validation" title="Testing with flour-covered hands" />
 
-A controlled study with 18 participants cooking real recipes — the same 8-step recipe twice, standard UI vs. adaptive mode. Hand-wash interruptions fell from 6.2 to 0.5 per recipe, transitions dropped from 15.2s to 3.3s, and elbow taps landed 97% of the time.
+A controlled study with 18 participants cooking real recipes: hand-wash interruptions fell from 6.2 to 0.5 per recipe, transitions dropped from 15.2s to 3.3s, and elbow taps landed 97% of the time.
 
-<Placeholder
-  label="Fig — Elbow-bump, mid-test"
-  note="A participant actually elbow-tapping the half-screen target with flour-covered hands. The single most persuasive image this study could have."
-  aspect="16/9"
+<MethodNote
+  title="How the study was designed"
+  items={[
+    { label: "Design", text: "Within-subjects: each of the 18 participants cooked the same 8-step recipe twice — once on the standard UI, once with adaptive mode." },
+    { label: "Control", text: "Current best practice: standard 44px touch targets, voice commands, wash-to-tap fallback." },
+    { label: "Measured", text: "Hand-wash interruptions per recipe, step-transition time, and elbow-tap success on the macro target." },
+  ]}
 />
+
+<LayoutMainContent extraMargin>
+  <Video src="/project-assets/cheffy/cheffy-elbow-bump.mp4" width={1344} height={768} seekOnScroll={false}>
+    <Caption
+      label="Mid-test"
+      title="One target, no washing"
+      text="Recreated from the usability sessions — dough-covered hands and the oversized target that takes a bump instead of a fingertip."
+      overlay={false}
+      topPadding
+    />
+  </Video>
+</LayoutMainContent>
 
 <Quote who="P7" title="Home cook, 3 years experience">
   I literally forgot I was using my elbow after the second step.
@@ -179,6 +232,15 @@ After three rounds of prototyping, the adaptive mode shipped to a 500-user beta 
   <ListItem label="+41%">7-day return rate.</ListItem>
   <ListItem label="97.2%">Trigger accuracy, with mode-switch latency under 400ms.</ListItem>
 </List>
+
+<MethodNote
+  title="Where the beta numbers come from"
+  items={[
+    { label: "Rollout", text: "500-user beta group tracked over four weeks, after the third prototype round." },
+    { label: "Accuracy", text: "97.2% trigger accuracy against a 2.8% false-activation rate — logged automatically from live mode-switch events during the beta." },
+    { label: "Latency", text: "Default-to-macro transition under 400ms — fast enough that users read it as the phone anticipating them, not reacting." },
+  ]}
+/>
 
 <SectionTitle num="06" kicker="Reflection" title="Failure is an input" />
 
@@ -202,6 +264,8 @@ After three rounds of prototyping, the adaptive mode shipped to a 500-user beta 
   ]}
 />
 
-The pattern isn't kitchen-specific. A living room where the remote is lost and voice is misheard, an industrial floor where gloves block touch and machinery kills voice — any environment where hands, voice, or attention are compromised benefits from the same AND-gate logic. It's now my default.
+The pattern isn't kitchen-specific. A living room where the remote is lost and voice is misheard, an industrial floor where gloves block touch and machinery kills voice — any environment where hands, voice, or attention are compromised benefits from the same AND-gate logic.
+
+-- Context is the best input. When everything else fails, the system already knows what to do — that's now my default.
 
 <Spacer />

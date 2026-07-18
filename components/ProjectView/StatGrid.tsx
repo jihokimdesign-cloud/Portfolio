@@ -78,7 +78,7 @@ const StatItem = ({
       </div>
       <div className="text-sm mt-2 opacity-60 leading-tight">{stat.label}</div>
       {stat.sub && (
-        <div className="text-sm opacity-40 leading-tight mt-1">{stat.sub}</div>
+        <div className="text-sm opacity-60 leading-tight mt-1">{stat.sub}</div>
       )}
     </motion.div>
   );

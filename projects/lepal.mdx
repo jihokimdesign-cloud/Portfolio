@@ -27,8 +27,8 @@ As Lead Product Designer at Lepal.ai, I designed an emotionally intelligent jour
   stats={[
     { value: "+15%", label: "D7 retention lift", sub: "variant cohort" },
     { value: "+85%", label: "“Supportive” perception", sub: "post-test survey" },
-    { value: "24→60%", label: "User satisfaction" },
-    { value: "30→45%", label: "Engagement" },
+    { value: "24→60%", label: "User satisfaction", sub: "control → variant" },
+    { value: "30→45%", label: "Engagement", sub: "control → variant" },
   ]}
 />
 
@@ -191,6 +191,15 @@ I reframed the goal from "fixing memory" to "prioritizing empathy before solutio
   caption="Context over keywords — the same sentence gets a different response depending on the user's emotional history."
 />
 
+Each state carries its own response spec — not just word choice, but structure and pacing. This is what the conversation designer and I wrote templates against:
+
+<List>
+  <ListItem label="Anxious">Calm & Validating — acknowledge → tiny step → soft close. Short sentences, minimal exclamations.</ListItem>
+  <ListItem label="Sad">Warm & Gentle — sit with the feeling before offering anything.</ListItem>
+  <ListItem label="Neutral">Curious & Open — invite more, don't assume a mood.</ListItem>
+  <ListItem label="Positive">Celebratory & Affirming — match the energy, reinforce the win.</ListItem>
+</List>
+
 Here's the framework itself — pick a message and watch it read the room. Notice the pause: heavier emotions get a longer, more deliberate "thinking" delay before the reply.
 
 <ToneDemo />
@@ -253,6 +262,15 @@ Neither decision was mine to ship alone — both meant convincing people whose i
 
 When I proposed variable latency, the lead engineer pushed back: **"You want us to add artificial latency?"** The line above was my answer — but it only landed because we tested it. Against an instant-reply control, the 1.5–3s variant scored significantly higher on "feeling heard" with **zero complaints about speed**. Variable latency shipped as a feature, not a bug.
 
+<MethodNote
+  title="How the latency claim was tested"
+  items={[
+    { label: "Ceiling", text: "Set before testing: intentional delay builds trust, excessive lag breaks it — so latency was capped at a 3-second maximum, scaled by emotional weight below that." },
+    { label: "Conditions", text: "Control: instant replies under 100ms — the engineering position. Variant: 1.5–3s variable latency with the thinking indicator." },
+    { label: "Measured", text: "Post-session “feeling heard” score, plus any complaint mentioning speed. The variant scored significantly higher; speed complaints: zero." },
+  ]}
+/>
+
 The same pattern resolved the "friction vs. data" debate with the PM: starters on for new users, off for returning ones, FAQ button as the safety net. Retention protected, data quality intact.
 
 The Tone Framework became the team's shared language — design owned tone rules, engineering owned latency logic, the PM owned metrics, the conversation designer owned empathy markers.
@@ -270,6 +288,15 @@ The Tone Framework became the team's shared language — design owned tone rules
 <SectionTitle num="06" kicker="Outcome" title="From productivity tool to companion" />
 
 We ran a pre-launch A/B test: the original productivity-driven tone as control, the emotion-aware framework as variant. The variant won on every measure — retention, engagement, satisfaction, and how "supportive" users rated the AI — and shipped in the launched mobile app.
+
+<MethodNote
+  title="How the A/B test was designed"
+  items={[
+    { label: "Conditions", text: "Same product, one difference: the control kept the original productivity-driven tone; the variant ran the full emotion-aware framework — classifier, tone rules, variable latency." },
+    { label: "Measured", text: "D7 retention on the variant cohort (+15%), engagement (30% → 45%), satisfaction (24% → 60%), and “supportive” perception from a post-test survey (+85%)." },
+    { label: "Ownership", text: "The PM owned success metrics and test design — the same shared-framework split that ran through the whole project." },
+  ]}
+/>
 
 <Placeholder
   label="Fig — Control vs. variant"

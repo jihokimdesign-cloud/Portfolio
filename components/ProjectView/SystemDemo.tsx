@@ -4,46 +4,45 @@ import { AnimationConfig } from "../AnimationConfig";
 
 // A living specimen of the Sidewalk validation-button system —
 // click a state to inspect its tokens and the compliance it inherits.
+// The specimen is skinned as the product renders it (white pills with
+// colored state icons on a card, matching the published filter panel);
+// the token readout stays editorial so it reads as case-study voiceover.
 interface Spec {
   name: string;
   token: string;
   hex: string;
   contrast: string;
-  style: React.CSSProperties;
+  glyph: string;
 }
 
 const SPECS: Spec[] = [
   {
-    name: "Validated correct",
+    name: "Validate correct",
     token: "--canopy",
     hex: "#16a34a",
     contrast: "4.8:1",
-    style: { backgroundColor: "#16a34a", color: "#ffffff" },
+    glyph: "✓",
   },
   {
-    name: "Validated incorrect",
+    name: "Validate incorrect",
     token: "--brick",
     hex: "#b91c1c",
     contrast: "6.4:1",
-    style: { backgroundColor: "#b91c1c", color: "#ffffff" },
+    glyph: "✕",
   },
   {
     name: "Unsure",
     token: "--amber-deep",
     hex: "#92600a",
     contrast: "5.1:1",
-    style: { backgroundColor: "#fef3c7", color: "#92600a" },
+    glyph: "?",
   },
   {
     name: "Unvalidated",
     token: "--ink",
     hex: "#1c1917",
     contrast: "15.2:1",
-    style: {
-      backgroundColor: "transparent",
-      color: "inherit",
-      boxShadow: "inset 0 0 0 1.5px currentColor",
-    },
+    glyph: "⋯",
   },
 ];
 
@@ -67,23 +66,38 @@ const SystemDemo = () => {
       </div>
 
       <div className="grid md:grid-cols-[3fr_2fr] gap-4 mt-4">
-        {/* specimen */}
-        <div className="rounded-xl ring-1 ring-current ring-opacity-15 p-6 flex flex-wrap items-center gap-3">
-          {SPECS.map((spec, index) => (
-            <button
-              key={index}
-              onClick={() => setActive(spec)}
-              className={`px-4 rounded-lg text-sm font-medium min-h-[44px] transition-transform focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current ${
-                active.name === spec.name ? "scale-105" : "opacity-90"
-              }`}
-              style={spec.style}
-            >
-              {spec.name}
-            </button>
-          ))}
+        {/* specimen — product voice */}
+        <div className="rounded-xl bg-white p-6 shadow-md text-[#1c1917]">
+          <div className="text-sm font-semibold opacity-70">Validations</div>
+          <div className="flex flex-wrap items-center gap-3 mt-4">
+            {SPECS.map((spec, index) => (
+              <button
+                key={index}
+                onClick={() => setActive(spec)}
+                className={`flex items-center gap-2 px-3.5 rounded-lg text-sm font-medium min-h-[44px] bg-white transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current ${
+                  active.name === spec.name ? "scale-105 shadow-sm" : ""
+                }`}
+                style={{
+                  boxShadow:
+                    active.name === spec.name
+                      ? `inset 0 0 0 2px ${spec.hex}`
+                      : "inset 0 0 0 1px rgba(28,25,23,.18)",
+                }}
+              >
+                <span
+                  className="w-[18px] h-[18px] rounded-full flex items-center justify-center text-[11px] leading-none text-white shrink-0"
+                  style={{ backgroundColor: spec.hex }}
+                  aria-hidden
+                >
+                  {spec.glyph}
+                </span>
+                {spec.name}
+              </button>
+            ))}
+          </div>
         </div>
 
-        {/* token readout */}
+        {/* token readout — editorial voice */}
         <motion.div
           key={active.name}
           className="rounded-xl ring-1 ring-current ring-opacity-40 p-5 text-sm leading-relaxed"
@@ -114,9 +128,10 @@ const SystemDemo = () => {
         </motion.div>
       </div>
 
-      <div className="text-sm opacity-40 mt-4 max-w-[50ch]">
-        Every state resolves to one token, mirrored 1:1 in SCSS — compliance is inherited,
-        not re-checked per feature.
+      <div className="text-sm opacity-60 mt-4 max-w-[50ch]">
+        The buttons render exactly as the product ships them — every state
+        resolves to one token, mirrored 1:1 in SCSS, so compliance is
+        inherited, not re-checked per feature.
       </div>
     </div>
   );

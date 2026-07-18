@@ -25,10 +25,10 @@ TAP3D prepares workers for advanced manufacturing roles across VR and Web. As th
 
 <StatGrid
   stats={[
-    { value: "+38%", label: "Issue resolution rate" },
-    { value: "+25%", label: "Task start rate" },
-    { value: "n = 24", label: "WoZ simulation users" },
-    { value: "6 mo", label: "End-to-end ownership" },
+    { value: "+38%", label: "Issue resolution rate", sub: "33% → 71% in the WoZ study" },
+    { value: "+25%", label: "Task start rate", sub: "38% → 63% in the WoZ study" },
+    { value: "+33%", label: "Next-step acceptance", sub: "25% → 58% in the WoZ study" },
+    { value: "6 mo", label: "End-to-end ownership", sub: "sole designer, 6 partners" },
   ]}
 />
 
@@ -86,14 +86,11 @@ Internal data revealed a significant lag in the training completion cycle — di
 
 <Bars
   bars={[
-    { label: "Module 1", value: 92 },
-    { label: "Module 2", value: 74 },
-    { label: "Module 3", value: 41, note: "sharp drop-off", highlight: true },
-    { label: "Module 4", value: 28 },
-    { label: "Module 5", value: 19 },
-    { label: "Review", value: 12 },
+    { label: "Module 1", value: 92, note: "nearly everyone starts" },
+    { label: "Module 3", value: 41, note: "the cliff", highlight: true },
+    { label: "Review", value: 12, note: "almost nobody arrives" },
   ]}
-  caption="Training completion by module, monthly cohort analysis. Values are illustrative — actual data is confidential."
+  caption="Training completion, monthly cohort analysis. Values are illustrative — actual data is confidential."
 />
 
 The quantitative data showed where learners dropped off. It couldn't show why.
@@ -143,6 +140,15 @@ I conducted nine in-depth interviews and affinity-mapped 200+ coded quotes aroun
 <Insight>
   Learners weren't lazy — starting felt expensive. Every barrier was a cost the design could remove.
 </Insight>
+
+<MethodNote
+  title="How the barriers were found and ranked"
+  items={[
+    { label: "Sample", text: "9 in-depth interviews with active learners — scripts co-planned with the PM, who also scheduled participant access." },
+    { label: "Synthesis", text: "200+ quotes coded and affinity-mapped; findings presented at weekly engineering syncs to align on problem framing before proposing any solutions." },
+    { label: "Ranking", text: "Barriers prioritized jointly with the PM by severity × frequency — that ranking is what scoped the MVP down to a checklist." },
+  ]}
+/>
 
 <SectionTitle num="03" kicker="Strategy" title="Ship fast, prove more later" />
 
@@ -209,6 +215,16 @@ For a **Wizard of Oz simulation with 24 users**, I played the agent's backend in
   caption="The WoZ setup — a working AI experience, no AI required."
 />
 
+Playing the backend meant every reply the "AI" sent was typed by hand — which is how the recommendation script got tuned line by line. The pattern that survived: one action, one reason, one timebox.
+
+<Transcript
+  messages={[
+    { from: "Learner", text: "I have so much to do, but I don't know what to do first.", tone: "bad" },
+    { from: "“AI” — me, backstage", text: "Here's a 5-min safety check — it prevents the setup errors that stall people in Module 2. Do this one now.", tone: "good" },
+  ]}
+  caption="A WoZ exchange, recreated from session notes. Suggestions without the one-line rationale got ignored; with it, they got started."
+/>
+
 <Placeholder
   label="Fig — WoZ session in progress"
   note="A photo from a simulation session: participant on the platform, operator station out of view. Anonymize participant faces."
@@ -221,7 +237,51 @@ For a **Wizard of Oz simulation with 24 users**, I played the agent's backend in
   <ListItem label="25→58%">Next-step acceptance — weekly summaries pair progress with one concrete suggestion.</ListItem>
 </List>
 
-The simulation also caught a design flaw live: users added checklist items but didn't start them, because oldest-first sorting buried anything new. I flipped to newest-first with a "New" indicator between test rounds — task starts jumped immediately.
+<MethodNote
+  title="How the simulation was run"
+  items={[
+    { label: "Setup", text: "24 learners used the “agent” on the real platform, doing real training tasks, believing it was live. Sessions ran in rounds so fixes could ship between them." },
+    { label: "Operator", text: "Me, backstage in real time — reading uploaded recordings, drafting instructor handoffs, picking each next-step recommendation by hand." },
+    { label: "Observers", text: "The PM watched sessions live, logging conversion events and hesitations; QA flagged failure patterns invisible from the operator seat." },
+    { label: "Measured", text: "Conversion on the three target flows — issue handoff, task start, next-step acceptance — compared against the same flows without the agent." },
+  ]}
+/>
+
+### Decision 01 — The sort order that buried the product
+
+Mid-simulation, the task-start numbers stalled in a strange way: users were adding checklist items but never starting them. Watching sessions live with the PM, we found the culprit — the list sorted oldest-first, an LMS default nobody had questioned, so the task a learner just added landed at the bottom. The core loop — add a task, do the task — was being defeated by a sort order.
+
+<TradeOff
+  options={[
+    {
+      label: "As tested",
+      title: "Oldest-first",
+      text: "Chronological, the platform default — finish what you started first.",
+      verdict: "Users added items, then never started them. Anything new sat buried below the fold.",
+    },
+    {
+      label: "Between rounds",
+      title: "Newest-first + “New”",
+      text: "The task you just added is the first thing you see, flagged with a “New” indicator.",
+      verdict: "Task starts jumped immediately in the next round — part of the 38% → 63% lift.",
+      selected: true,
+    },
+  ]}
+/>
+
+This is the argument for simulating with rounds instead of a one-shot test: the flaw was caught, fixed, and re-validated inside the same study — before a line of production code existed.
+
+<LayoutMainContent extraMargin>
+  <Image src="/TAPimgs/TAP3D_checklist_UI.png" width={2136} height={516}>
+    <Caption
+      label="6"
+      title="The fix, shipped between rounds"
+      text="Newest-first sorting with a “new” indicator — the change that came straight out of watching WoZ session behavior, not a critique."
+      overlay={false}
+      topPadding
+    />
+  </Image>
+</LayoutMainContent>
 
 <SectionTitle num="05" kicker="Outcome" title="The CFO said yes" />
 
@@ -242,6 +302,18 @@ I presented AI Agent screens side-by-side against MVP screens to Engineering, th
 />
 
 We rolled out the agent immediately after the VR AI integration wrapped. I then pitched that a consistent AI experience creates job-ready talent efficiently — and that localizing for workforce-demand markets is key to scale. The CFO agreed; **Chinese localization is now in progress**.
+
+<LayoutMainContent extraMargin>
+  <Image src="/TAPimgs/TAP_case_hero_pic.png" width={4943} height={3206}>
+    <Caption
+      label="7"
+      title="One system, every surface"
+      text="The agent as it rolled out — the same AI layer across the web dashboard, weekly reports, and the VR headset."
+      overlay={false}
+      topPadding
+    />
+  </Image>
+</LayoutMainContent>
 
 <Placeholder
   label="Fig — CN localization in progress"
@@ -270,7 +342,7 @@ Pre-launch simulation wasn't common there before this project — proving its va
 <LayoutMainContent extraMargin>
   <Image src="/TAPimgs/TAP3D_Zoom.png" width={2014} height={999}>
     <Caption
-      label="6"
+      label="8"
       title="The pitch"
       text="Presenting WoZ simulation results to the C-suite for AI rollout approval."
       overlay={false}
