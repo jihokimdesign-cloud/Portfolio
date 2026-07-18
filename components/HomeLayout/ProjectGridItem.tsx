@@ -26,7 +26,6 @@ type Props = {
   projectInfo: ProjectInfo;
   projectRow: number;
   isWide: boolean;
-  bentoClass: string;
   cardHeight: number;
   firstRowHeight: number;
   topOffset: number;
@@ -46,7 +45,6 @@ const ProjectGridItem = ({
   cardHeight,
   topOffset,
   isWide,
-  bentoClass,
   isFirstItem,
   shouldHideTitles,
 }: Props) => {
@@ -144,10 +142,14 @@ const ProjectGridItem = ({
   }, [isHovering, isFirstItem]);
   return (
     <motion.div
-      className={`h-full ${bentoClass}`}
+      style={{
+        gridColumnStart: isWide ? 1 : "auto",
+        gridColumnEnd: isWide ? 3 : "auto",
+        height: cardHeight,
+      }}
     >
-      <ReactiveTapArea className="h-full">
-        <div className="relative h-full">
+      <ReactiveTapArea>
+        <div className="relative">
           {/* rainbow bloom behind the card (soft halo) */}
           <div
             aria-hidden
@@ -174,15 +176,15 @@ const ProjectGridItem = ({
           />
         <motion.div
           ref={containerRef}
-          className="relative h-full overflow-hidden rounded-xl"
+          className="relative h-[50vw] overflow-hidden rounded-xl"
           style={{
+            height: cardHeight,
             backgroundColor: INACTIVE_BG_COLOR,
           }}
         >
           <Link
             href={`projects/${projectInfo.slug}`}
             scroll={false}
-            className="block h-full"
             onMouseEnter={() => setIsHovering(true)}
             onMouseLeave={() => setIsHovering(false)}
           >
@@ -195,14 +197,16 @@ const ProjectGridItem = ({
                 duration: AnimationConfig.NORMAL,
                 ease: AnimationConfig.EASING_DRAMATIC,
               }}
-              className="h-full"
             >
               {(!isFirstItem || !hasVideo) && (
                 <Image
                   src={getProjectCover(projectInfo.slug)}
                   width={582}
                   height={767}
-                  className="h-full w-full object-cover object-center"
+                  className={
+                    isFirstItem ? "w-full object-cover object-center" : "w-full "
+                  }
+                  style={isFirstItem ? { height: cardHeight } : undefined}
                   alt={""}
                   onLoad={() => setIsImageLoaded(true)}
                 />
@@ -213,7 +217,7 @@ const ProjectGridItem = ({
                   disablePictureInPicture
                   style={{
                     opacity: isHovering || isFirstItem ? 1 : 0,
-                    height: "100%",
+                    height: cardHeight,
                   }}
                   ref={videoRef}
                   src={projectInfo.previewVideo}

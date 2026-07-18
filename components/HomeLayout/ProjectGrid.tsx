@@ -92,7 +92,13 @@ const ProjectGrid = ({ projects, heroOffset }: Props) => {
       {/*     Selected Works */}
       {/*   </motion.div> */}
       {/* </div> */}
-      <div className="bento-grid" ref={gridBeginRef}>
+      <div
+        className="grid gap-2 w-full"
+        ref={gridBeginRef}
+        style={{
+          gridTemplateColumns: isTwoColumns ? "1fr 1fr" : "1fr",
+        }}
+      >
         {filteredProjectList.map((project, index) => {
           const projectInfo = getProjectInfo(project.meta);
           const projectStyle = getProjectStyle(project.meta);
@@ -100,10 +106,6 @@ const ProjectGrid = ({ projects, heroOffset }: Props) => {
           const currentRow = isTwoColumns
             ? Math.floor((index + rowOffset) / 2)
             : index;
-
-          // bento composition via plain CSS classes in globals.css —
-          // correct on first paint, no Tailwind-JIT or hydration dependency
-          const bentoClass = index <= 3 ? `bento-pos-${index}` : "";
 
           return (
             <ProjectGridItem
@@ -115,7 +117,6 @@ const ProjectGrid = ({ projects, heroOffset }: Props) => {
               projectStyle={projectStyle}
               projectInfo={projectInfo}
               topOffset={topOffset}
-              bentoClass={bentoClass}
               isWide={shouldEmphasiseFirst && index === 0}
               isFirstItem={index === 0}
               key={index}
