@@ -14,8 +14,9 @@ import { useEffect, useState } from "react";
 import { initGA, logEvent, logPageView } from "../lib/analytics";
 import dynamic from "next/dynamic";
 
-const ChatBar = dynamic(() => import("../components/ChatBar"), { ssr: false });
-const RecruiterSplash = dynamic(() => import("../components/RecruiterSplash"), { ssr: false });
+const ChatWidget = dynamic(() => import("../components/ChatWidget"), {
+  ssr: false,
+});
 
 const IMAGE_PRELOAD_LIST: string[] = [
   "/_next/image?url=%2Flandingimgs%2Ftap_landing.png&w=3840&q=75",
@@ -25,7 +26,7 @@ const IMAGE_PRELOAD_LIST: string[] = [
 ];
 
 function MyApp({ Component, pageProps, router }: AppProps) {
-  const isRouteHome = router.asPath === "/";
+  const isRouteHome = router.pathname === "/";
   const isAllImagesLoaded = useImagePreload(IMAGE_PRELOAD_LIST);
 
   useEffect(() => {
@@ -104,8 +105,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
             </HomeScrollPositionContextProvider>
           </WindowDimensionContextProvider>
         </HistoryProvider>
-        <RecruiterSplash />
-        <ChatBar />
+        {isRouteHome && <ChatWidget />}
       </RecruiterProvider>
       {/* <!-- Default Statcounter code for portfolio https://alvinn.design --> */}
       {/* <script type="text/javascript">
