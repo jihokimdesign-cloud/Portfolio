@@ -4,7 +4,6 @@ import { motion, transform } from "framer-motion";
 import { AnimationConfig } from "../AnimationConfig";
 import { ExternalLink } from "../Layouts/ExternalLink";
 import debounce from "../../lib/debounce";
-import { PenTool, Sparkles, Boxes, FlaskConical } from "lucide-react";
 import { useContainerScroll } from "../ScrollContainer/ScrollContainer";
 import { useWindowDimension } from "../../hooks/useWindowDimension";
 import fluidFont from "../../lib/fluidFont";
@@ -180,65 +179,40 @@ const HomeLayout = ({ projects }: Props) => {
         >
           Current toolkit
         </h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-10 max-w-5xl">
+        <div className="flex flex-wrap gap-2.5 max-w-5xl">
           {[
-            {
-              label: "Design",
-              Icon: PenTool,
-              items: [
-                "Figma",
-                "ProtoPie",
-                "Design systems",
-                "Interaction design",
-              ],
-            },
-            {
-              label: "AI & prototyping",
-              Icon: Sparkles,
-              items: [
-                "Claude Code",
-                "Cursor",
-                "Prompt engineering",
-                "LLM prototyping",
-              ],
-            },
-            {
-              label: "Spatial & multimodal",
-              Icon: Boxes,
-              items: [
-                "Unity",
-                "ShapesXR",
-                "AR/VR prototyping",
-                "Voice & gesture UI",
-              ],
-            },
-            {
-              label: "Research & quality",
-              Icon: FlaskConical,
-              items: [
-                "Usability testing",
-                "A/B testing",
-                "Contextual inquiry",
-                "WCAG 2.2 AA",
-              ],
-            },
-          ].map((group) => (
-            <div key={group.label}>
-              <div
-                className="mb-3 flex items-center gap-2 text-[13px] tracking-wide"
-                style={{ color: "var(--fg-muted)" }}
-              >
-                <group.Icon size={14} strokeWidth={1.75} aria-hidden />
-                {group.label}
-              </div>
-              <ul
-                className="flex flex-col gap-1.5 text-sm md:text-[15px] leading-snug"
-                style={{ color: "var(--fg-secondary)" }}
-              >
-                {group.items.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
+            { name: "Figma", src: "/logos tools/free-figma-logo-icon-svg-download-png-8630394.webp" },
+            { name: "Claude", src: "/logos tools/Claude-ai-icon.svg.png" },
+            { name: "Framer", src: "/logos tools/framer.avif" },
+            { name: "Webflow", src: "/logos tools/6699096cdd45ad7b198bbc43_partner-webflow.png" },
+            { name: "Adobe XD", src: "/logos tools/Adobe_XD_CC_icon.svg.png" },
+            { name: "Photoshop", src: "/logos tools/Adobe_Photoshop_CC_icon.svg.png" },
+            { name: "Illustrator", src: "/logos tools/Adobe_Illustrator_CC_icon.svg.png" },
+            { name: "After Effects", src: "/logos tools/Adobe_After_Effects_CC_icon.svg.png" },
+            { name: "Miro", src: "/logos tools/Miro.png" },
+            { name: "Hotjar", src: "/logos tools/Hotjar.png" },
+            { name: "Google Analytics", src: "/logos tools/Google analytics.png" },
+            { name: "React", src: "/logos tools/React-icon.svg.png" },
+            { name: "Colab", src: "/logos tools/Colab.png" },
+            { name: "Docker", src: "/logos tools/docker.png" },
+            { name: "QGIS", src: "/logos tools/qgis.png" },
+          ].map((tool) => (
+            <div
+              key={tool.name}
+              className="flex items-center gap-2 rounded-full px-3.5 py-2 text-sm"
+              style={{
+                color: "var(--fg-secondary)",
+                border: "1px solid var(--hairline)",
+              }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={tool.src}
+                alt=""
+                aria-hidden
+                className="h-[18px] w-[18px] object-contain"
+              />
+              {tool.name}
             </div>
           ))}
         </div>

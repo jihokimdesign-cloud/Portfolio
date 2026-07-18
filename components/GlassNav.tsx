@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { SITE } from "../lib/constants";
 import ThemeToggle from "./ThemeToggle";
+import SignatureMark from "./SignatureMark";
 
 const FONT_STACK =
   '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif';
@@ -49,9 +50,10 @@ export default function GlassNav() {
       >
         <Link
           href="/"
-          className="rounded-full px-3 py-1 text-[13px] font-semibold transition-opacity hover:opacity-70"
+          aria-label="Jiho Kim — home"
+          className="rounded-full px-3 py-0.5 transition-opacity hover:opacity-70"
         >
-          Jiho Kim
+          <SignatureMark height={26} />
         </Link>
         <span
           className="mx-1 h-4 w-px"

@@ -137,6 +137,33 @@ body {
   }
 }
 
+/* ── Bento grid (landing Selected works) ──────────────────────── */
+.bento-grid {
+  display: grid;
+  width: 100%;
+  gap: 10px;
+  grid-template-columns: 1fr;
+  grid-auto-rows: 72vw;
+}
+@media (min-width: 640px) {
+  .bento-grid {
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 42vh;
+  }
+  .bento-pos-0 {
+    grid-area: 1 / 1 / 3 / 3;
+  }
+  .bento-pos-1 {
+    grid-area: 1 / 3 / 2 / 4;
+  }
+  .bento-pos-2 {
+    grid-area: 2 / 3 / 3 / 4;
+  }
+  .bento-pos-3 {
+    grid-area: 3 / 1 / 4 / 4;
+  }
+}
+
 /* ── Rainbow hover stroke (project tiles) ─────────────────────── */
 @property --rainbow-angle {
   syntax: "<angle>";

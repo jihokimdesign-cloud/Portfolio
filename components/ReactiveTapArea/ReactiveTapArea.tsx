@@ -64,6 +64,7 @@ const ReactiveTapArea = ({
       }}
     >
       <motion.div
+        className="h-full"
         style={{
           transformPerspective: `100vw`,
           translateZ: "0vw",
