@@ -9,8 +9,18 @@ export default function ThemeToggle({ inline = false }: { inline?: boolean }) {
   const [theme, setTheme] = useState<"dark" | "light">("dark");
 
   useEffect(() => {
-    const current = document.documentElement.dataset.theme;
-    if (current === "light" || current === "dark") setTheme(current);
+    const read = () => {
+      const current = document.documentElement.dataset.theme;
+      if (current === "light" || current === "dark") setTheme(current);
+    };
+    read();
+    // stay in sync when the theme is changed elsewhere (bento ModeSwitch)
+    const mo = new MutationObserver(read);
+    mo.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
+    return () => mo.disconnect();
   }, []);
 
   const toggle = () => {

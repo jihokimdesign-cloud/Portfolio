@@ -137,6 +137,11 @@ body {
   }
 }
 
+[role="switch"]:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
 /* ── Typewriter caret (landing bento) ─────────────────────────── */
 @keyframes caret-blink {
   0%,

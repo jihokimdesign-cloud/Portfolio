@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import ThemeToggle from "../ThemeToggle";
+import ModeSwitch from "../ModeSwitch";
 import GlobeCard from "./GlobeCard";
 import { SITE } from "../../lib/constants";
 
@@ -36,6 +36,31 @@ const cardStyle: React.CSSProperties = {
 const labelStyle: React.CSSProperties = {
   color: "var(--fg-muted)",
 };
+
+/* ModeSwitch bound to the site theme; stays in sync with the nav toggle */
+function ThemeModeSwitch() {
+  const [dark, setDark] = useState(true);
+
+  useEffect(() => {
+    const read = () =>
+      setDark(document.documentElement.dataset.theme !== "light");
+    read();
+    const mo = new MutationObserver(read);
+    mo.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
+    return () => mo.disconnect();
+  }, []);
+
+  const apply = (d: boolean) => {
+    const next = d ? "dark" : "light";
+    document.documentElement.dataset.theme = next;
+    localStorage.setItem("theme", next);
+  };
+
+  return <ModeSwitch checked={dark} onChange={apply} width={56} />;
+}
 
 /* "I am a designer.|" — looping typewriter */
 function Typewriter() {
@@ -366,7 +391,7 @@ export default function LandingBento() {
         <div className="text-[13px]" style={labelStyle}>
           Appearance
         </div>
-        <ThemeToggle inline />
+        <ThemeModeSwitch />
       </div>
     </div>
   );
