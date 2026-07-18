@@ -66,6 +66,7 @@ export const EmailLink = ({
       >
         <motion.img
           className="mr-[.05em] inline-block h-[.8em] w-[.8em]"
+          style={{ filter: "var(--icon-filter)" }}
           src={icon[state]}
           alt={alt}
           variants={HomeLinkIconAnimation}

@@ -5,6 +5,12 @@ import { useContainerScroll } from "../components/ScrollContainer/ScrollContaine
 import { getAllPostSlugs, getPostBySlug } from "../lib/projects";
 import { NextSeo } from "next-seo";
 import HomeLayout from "../components/HomeLayout/HomeLayout";
+import dynamic from "next/dynamic";
+import Head from "next/head";
+
+const GlassNav = dynamic(() => import("../components/GlassNav"), {
+  ssr: false,
+});
 
 export const getStaticProps: GetStaticProps = () => {
   const allProjectsSlugs = getAllPostSlugs();
@@ -58,6 +64,18 @@ const Home: NextPage = ({
 
   return (
     <>
+      <Head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=TikTok+Sans:wght@400;500&display=swap"
+          rel="stylesheet"
+        />
+      </Head>
       <NextSeo
         title={`Jiho Kim — Product Designer`}
         description={`Product designer who turns technical ambiguity and complex AI into experiences that feel effortless. Currently building AI agent experiences at a stealth startup.`}
@@ -70,6 +88,7 @@ const Home: NextPage = ({
         projects={projects}
       /> */}
       <HomeLayout projects={projects} />
+      <GlassNav />
     </>
   );
 };

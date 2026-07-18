@@ -4,12 +4,11 @@ import { motion, transform } from "framer-motion";
 import { AnimationConfig } from "../AnimationConfig";
 import { ExternalLink } from "../Layouts/ExternalLink";
 import debounce from "../../lib/debounce";
+import { PenTool, Sparkles, Boxes, FlaskConical } from "lucide-react";
 import { useContainerScroll } from "../ScrollContainer/ScrollContainer";
 import { useWindowDimension } from "../../hooks/useWindowDimension";
 import fluidFont from "../../lib/fluidFont";
 import { breakpoints } from "../../hooks/useBreakpoints";
-import { HomeLink } from "./HomeLink";
-import { EmailLink } from "./EmailLink";
 
 type Props = {
   projects: any[];
@@ -40,8 +39,13 @@ const HomeLayout = ({ projects }: Props) => {
 
   return (
     <motion.div
-      style={{ transformOrigin: transformOrigin }}
-      className="grid lg:grid-cols-3 grid-flow-dense gap-4 mx-6 text-cyan-50"
+      style={{
+        transformOrigin: transformOrigin,
+        color: "var(--fg)",
+        fontFamily:
+          '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
+      }}
+      className="flex flex-col gap-4 mx-6 pt-24 pb-10"
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{
         opacity: 1,
@@ -62,9 +66,9 @@ const HomeLayout = ({ projects }: Props) => {
         },
       }}
     >
-      <div className="lg:col-start-3">
+      <div>
         <motion.div
-          className={`sticky top-0 py-4 flex flex-col h-[500px] lg:h-screen`}
+          className={`py-10 md:py-16 flex flex-col md:flex-row md:items-end gap-10 md:gap-16`}
           initial={{ opacity: 0, scale: 0.97 }}
           style={{
             transformOrigin: "center left",
@@ -81,7 +85,7 @@ const HomeLayout = ({ projects }: Props) => {
         >
           <motion.div
             // className="text-xl sm:text-2xl lg:text-4xl font-light tracking-[-.047em] lg:leading-[1.08em] "
-            className={`text-xl sm:text-2xl 2xl:text-4xl font-light tracking-[-.047em] sm:leading-[1.3em] 2xl:leading-[1.15em] gap-[1em] flex flex-col`}
+            className={`flex-1 max-w-[44rem] text-xl sm:text-2xl 2xl:text-4xl font-medium tracking-[-.02em] leading-[1.4em] sm:leading-[1.4em] 2xl:leading-[1.3em] gap-[1em] flex flex-col`}
             initial={{ opacity: 0 }}
             animate={{
               opacity: 1,
@@ -92,22 +96,20 @@ const HomeLayout = ({ projects }: Props) => {
               },
             }}
           >
-            <p>Jiho Kim is a product designer who turns technical ambiguity and complex AI into experiences that feel effortless.</p>
-            <p>
-              She bridges design and engineering — prototyping with code, grounding decisions in research, and shipping work that holds up across every user type.
-            </p>
-            <p>
-              Currently building AI agent experiences at a stealth startup. Always open to a good conversation{" "}
-              <EmailLink email={"jihokimdesign@gmail.com"} />
-            </p>
-            <p>
-              Connect on{" "}
-              <HomeLink
-                icon={"icon/icon-linkedin.svg"}
-                href={"https://www.linkedin.com/in/hoyak/"}
-              >
-                LinkedIn
-              </HomeLink>
+            <p
+              style={{
+                fontFamily: '"TikTok Sans", Inter, sans-serif',
+                fontWeight: 400,
+                fontSize: "clamp(34px, 4.5vw, 60px)",
+                lineHeight: 1,
+                letterSpacing: "-0.025em",
+                color: "var(--title)",
+                margin: 0,
+              }}
+              className="w-full"
+            >
+              <span className="block">Designer of AI that listens.</span>
+              <span className="block mt-2">Builder who ships with it.</span>
             </p>
           </motion.div>
           {/* <motion.div
@@ -124,7 +126,7 @@ const HomeLayout = ({ projects }: Props) => {
           >
             Previously: Daybreak Studio and Dossier Creative
           </motion.div> */}
-          <div className="text-sm md:text-base mt-auto opacity-70">
+          <div className="text-sm md:text-base opacity-70 w-full md:w-96 md:shrink-0 md:ml-auto">
             {/* <ExternalLink
               href={"https://read.cv/alvinleung"}
               icon={"icon/icon-cv.svg"}
@@ -164,7 +166,97 @@ const HomeLayout = ({ projects }: Props) => {
           </div>
         </motion.div>
       </div>
-      <div className="lg:col-span-2  mb-4">
+      <div className="mb-8">
+        <h2
+          className="text-3xl md:text-[40px]"
+          style={{
+            fontFamily: '"TikTok Sans", Inter, sans-serif',
+            fontWeight: 400,
+            lineHeight: 1,
+            letterSpacing: "-0.025em",
+            color: "var(--title)",
+            margin: "40px 0 32px",
+          }}
+        >
+          Current toolkit
+        </h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-10 max-w-5xl">
+          {[
+            {
+              label: "Design",
+              Icon: PenTool,
+              items: [
+                "Figma",
+                "ProtoPie",
+                "Design systems",
+                "Interaction design",
+              ],
+            },
+            {
+              label: "AI & prototyping",
+              Icon: Sparkles,
+              items: [
+                "Claude Code",
+                "Cursor",
+                "Prompt engineering",
+                "LLM prototyping",
+              ],
+            },
+            {
+              label: "Spatial & multimodal",
+              Icon: Boxes,
+              items: [
+                "Unity",
+                "ShapesXR",
+                "AR/VR prototyping",
+                "Voice & gesture UI",
+              ],
+            },
+            {
+              label: "Research & quality",
+              Icon: FlaskConical,
+              items: [
+                "Usability testing",
+                "A/B testing",
+                "Contextual inquiry",
+                "WCAG 2.2 AA",
+              ],
+            },
+          ].map((group) => (
+            <div key={group.label}>
+              <div
+                className="mb-3 flex items-center gap-2 text-[13px] tracking-wide"
+                style={{ color: "var(--fg-muted)" }}
+              >
+                <group.Icon size={14} strokeWidth={1.75} aria-hidden />
+                {group.label}
+              </div>
+              <ul
+                className="flex flex-col gap-1.5 text-sm md:text-[15px] leading-snug"
+                style={{ color: "var(--fg-secondary)" }}
+              >
+                {group.items.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="mb-4">
+        <h2
+          className="mb-8 mt-10 text-3xl md:text-[40px]"
+          style={{
+            fontFamily: '"TikTok Sans", Inter, sans-serif',
+            fontWeight: 400,
+            lineHeight: 1,
+            letterSpacing: "-0.025em",
+            color: "var(--title)",
+            margin: "40px 0 32px",
+          }}
+        >
+          Selected work(s)
+        </h2>
         <ProjectGrid heroOffset={HERO_OFFSET} projects={projects} />
       </div>
     </motion.div>

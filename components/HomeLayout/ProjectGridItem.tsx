@@ -142,7 +142,6 @@ const ProjectGridItem = ({
   }, [isHovering, isFirstItem]);
   return (
     <motion.div
-      className="sticky top-4 overflow-hidden"
       style={{
         gridColumnStart: isWide ? 1 : "auto",
         gridColumnEnd: isWide ? 3 : "auto",
@@ -150,11 +149,36 @@ const ProjectGridItem = ({
       }}
     >
       <ReactiveTapArea>
+        <div className="relative">
+          {/* rainbow bloom behind the card (soft halo) */}
+          <div
+            aria-hidden
+            className="rainbow-ring pointer-events-none absolute -inset-[2px] rounded-[13px]"
+            style={{
+              filter: "blur(10px)",
+              opacity: isHovering ? 0.45 : 0,
+              transition: "opacity .35s ease",
+            }}
+          />
+          {/* crisp 2px rainbow stroke */}
+          <div
+            aria-hidden
+            className="rainbow-ring pointer-events-none absolute -inset-[1px] rounded-[13px]"
+            style={{
+              padding: "1px",
+              WebkitMask:
+                "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+              WebkitMaskComposite: "xor",
+              maskComposite: "exclude",
+              opacity: isHovering ? 1 : 0,
+              transition: "opacity .35s ease",
+            }}
+          />
         <motion.div
           ref={containerRef}
           className="relative h-[50vw] overflow-hidden rounded-xl"
           style={{
-            height: boxHeight,
+            height: cardHeight,
             backgroundColor: INACTIVE_BG_COLOR,
           }}
         >
@@ -166,9 +190,6 @@ const ProjectGridItem = ({
           >
             <motion.div
               initial={{ opacity: 0 }}
-              style={{
-                y: parallaxY,
-              }}
               animate={{
                 opacity: !isLoading ? 1 : 0,
               }}
@@ -212,7 +233,6 @@ const ProjectGridItem = ({
               className="absolute top-0 left-0 right-0 mx-4 my-3 text-sm lg:text-base tracking-tight grid grid-cols-2"
               style={{
                 color: projectStyle.getTextColor(),
-                opacity: headingOpacity,
               }}
             >
               <motion.div
@@ -246,6 +266,7 @@ const ProjectGridItem = ({
             </motion.div>
           </Link>
         </motion.div>
+        </div>
       </ReactiveTapArea>
     </motion.div>
   );

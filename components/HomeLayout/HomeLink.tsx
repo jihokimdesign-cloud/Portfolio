@@ -40,6 +40,7 @@ export const HomeLink = ({
     >
       <Image
         className="mr-[.05em] inline-block h-[.8em] w-[.8em]"
+        style={{ filter: "var(--icon-filter)" }}
         src={icon}
         width={24}
         height={24}
