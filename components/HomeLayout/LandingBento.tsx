@@ -309,20 +309,15 @@ export default function LandingBento() {
           {TOOLBOX.map((tool) => (
             <div
               key={tool.name}
-              className="flex items-center gap-2 rounded-full px-3 py-1.5 text-[13px]"
-              style={{
-                color: "var(--fg-secondary)",
-                border: "1px solid var(--hairline)",
-              }}
+              title={tool.name}
+              className="flex h-11 w-11 items-center justify-center"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={tool.src}
-                alt=""
-                aria-hidden
-                className="h-4 w-4 object-contain"
+                alt={tool.name}
+                className="h-7 w-7 object-contain"
               />
-              {tool.name}
             </div>
           ))}
         </div>
