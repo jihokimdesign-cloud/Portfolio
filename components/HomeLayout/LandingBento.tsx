@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import ThemeToggle from "../ThemeToggle";
+import GlobeCard from "./GlobeCard";
 import { SITE } from "../../lib/constants";
 
 const PRIMARY = "#0071e3";
@@ -323,44 +324,49 @@ export default function LandingBento() {
         </div>
       </div>
 
-      {/* ── contact + mode ── */}
-      <div className="flex flex-col gap-2.5">
-        <div className="flex-1 p-6" style={cardStyle}>
-          <div className="text-[13px]" style={labelStyle}>
-            Contact
-          </div>
-          <div className="mt-3 flex flex-wrap gap-2">
-            <button
-              onClick={copyNumber}
-              className="rounded-full px-3.5 py-1.5 text-[13px] transition-colors"
-              style={{
-                border: "1px solid var(--hairline)",
-                color: copied ? "var(--link)" : "var(--fg-secondary)",
-              }}
-            >
-              {copied ? "Copied ✓" : "Copy number"}
-            </button>
-            <a
-              href={`mailto:${SITE.email}`}
-              className="rounded-full px-3.5 py-1.5 text-[13px]"
-              style={{
-                border: "1px solid var(--hairline)",
-                color: "var(--fg-secondary)",
-              }}
-            >
-              Email me
-            </a>
-          </div>
+      {/* ── globe (Worldspan-style) ── */}
+      <div className="md:row-span-2 min-h-[280px]">
+        <GlobeCard />
+      </div>
+
+      {/* ── contact ── */}
+      <div className="p-6" style={cardStyle}>
+        <div className="text-[13px]" style={labelStyle}>
+          Contact
         </div>
-        <div
-          className="flex items-center justify-between px-6 py-4"
-          style={cardStyle}
-        >
-          <div className="text-[13px]" style={labelStyle}>
-            Appearance
-          </div>
-          <ThemeToggle inline />
+        <div className="mt-3 flex flex-wrap gap-2">
+          <button
+            onClick={copyNumber}
+            className="rounded-full px-3.5 py-1.5 text-[13px] transition-colors"
+            style={{
+              border: "1px solid var(--hairline)",
+              color: copied ? "var(--link)" : "var(--fg-secondary)",
+            }}
+          >
+            {copied ? "Copied ✓" : "Copy number"}
+          </button>
+          <a
+            href={`mailto:${SITE.email}`}
+            className="rounded-full px-3.5 py-1.5 text-[13px]"
+            style={{
+              border: "1px solid var(--hairline)",
+              color: "var(--fg-secondary)",
+            }}
+          >
+            Email me
+          </a>
         </div>
+      </div>
+
+      {/* ── mode switch ── */}
+      <div
+        className="flex items-center justify-between px-6 py-4"
+        style={cardStyle}
+      >
+        <div className="text-[13px]" style={labelStyle}>
+          Appearance
+        </div>
+        <ThemeToggle inline />
       </div>
     </div>
   );
