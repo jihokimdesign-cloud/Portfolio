@@ -32,7 +32,7 @@ type Props = {
 
 export default function GlobeCard({
   label = "Postcards from",
-  markerColor = [0, 0.44, 0.89], // DESIGN.md primary #0071e3
+  markerColor = [0.976, 0.439, 0.188], // #F97030 — Jiho's pick
   rotateSpeed = 0.004,
   facingThreshold = 0.35,
 }: Props) {
