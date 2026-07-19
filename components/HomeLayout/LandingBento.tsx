@@ -241,12 +241,13 @@ export default function LandingBento() {
         <div>
           {/* 오렌지 점(파비콘과 동일) + 이름/타이틀, 그 아래 구분선 */}
           <div className="flex items-center gap-3">
+            {/* 이름(text-lg, 28px) + 타이틀(text-sm, 20px) 높이에 맞춘 48px */}
             <span
               aria-hidden
               className="shrink-0"
               style={{
-                width: 12,
-                height: 12,
+                width: 48,
+                height: 48,
                 borderRadius: "50%",
                 background: "#F97030",
               }}
