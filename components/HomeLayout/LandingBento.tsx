@@ -37,7 +37,7 @@ const labelStyle: React.CSSProperties = {
 };
 
 /* ModeSwitch bound to the site theme; stays in sync with the nav toggle */
-function ThemeModeSwitch() {
+function ThemeModeSwitch({ width = 56 }: { width?: number | string }) {
   const [dark, setDark] = useState(true);
 
   useEffect(() => {
@@ -58,7 +58,7 @@ function ThemeModeSwitch() {
     localStorage.setItem("theme", next);
   };
 
-  return <ModeSwitch checked={dark} onChange={apply} width={56} />;
+  return <ModeSwitch checked={dark} onChange={apply} width={width} />;
 }
 
 /* "I am a designer.|" — looping typewriter */
@@ -348,15 +348,12 @@ export default function LandingBento() {
         <ContactCard />
       </div>
 
-      {/* ── mode switch ── */}
-      <div
-        className="flex items-center justify-between px-6 py-4"
-        style={cardStyle}
-      >
+      {/* ── mode switch — 박스 없이 텍스트 + 셀 폭만큼 큰 버튼 ── */}
+      <div className="flex flex-col gap-3 px-6 py-4">
         <div className="text-[13px]" style={labelStyle}>
           Appearance
         </div>
-        <ThemeModeSwitch />
+        <ThemeModeSwitch width="100%" />
       </div>
     </div>
   );

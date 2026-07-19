@@ -7,7 +7,7 @@ type Props = {
   checked?: boolean; // controlled
   defaultChecked?: boolean; // uncontrolled initial (true = dark)
   onChange?: (dark: boolean) => void;
-  width?: number; // px; height is width/2
+  width?: number | string; // px 또는 "100%" — height는 항상 width/2 (2:1)
 };
 
 export default function ModeSwitch({
@@ -25,11 +25,13 @@ export default function ModeSwitch({
     onChange?.(next);
   };
 
+  // 라이트 모드 썸은 글로브 마커와 같은 오렌지(#F97030) + 흰 해
   const tokens = {
     bg: "var(--canvas)",
     border: "var(--hairline)",
     icon: "var(--fg)",
-    thumbBg: isDark ? "rgb(40, 40, 40)" : "rgb(255, 255, 255)",
+    sunIcon: "rgb(255, 255, 255)",
+    thumbBg: isDark ? "rgb(40, 40, 40)" : "#F97030",
   };
 
   // container 2:1, 4% padding → thumb 92% tall; left transitions 4% ↔ 50%
@@ -81,7 +83,7 @@ export default function ModeSwitch({
         {/* sun — light mode */}
         <IconLayer visible={!isDark} rotate={isDark ? -90 : 0}>
           <svg viewBox="0 0 24 24" width="60%" height="60%" fill="none">
-            <circle cx="12" cy="12" r="4.6" fill={tokens.icon} />
+            <circle cx="12" cy="12" r="4.6" fill={tokens.sunIcon} />
             {Array.from({ length: 8 }).map((_, i) => {
               const a = (i * Math.PI) / 4;
               const x1 = 12 + Math.cos(a) * 7.4;
@@ -95,7 +97,7 @@ export default function ModeSwitch({
                   y1={y1}
                   x2={x2}
                   y2={y2}
-                  stroke={tokens.icon}
+                  stroke={tokens.sunIcon}
                   strokeWidth="1.8"
                   strokeLinecap="round"
                 />

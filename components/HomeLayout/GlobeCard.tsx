@@ -3,13 +3,13 @@
 import { useEffect, useRef, useState } from "react";
 import createGlobe from "cobe";
 
-type City = { name: string; lat: number; lng: number; size?: number };
+type City = { name: string; lat: number; lng: number };
 
 const CITIES: City[] = [
-  { name: "Seattle", lat: 47.61, lng: -122.33, size: 0.1 },
-  { name: "Seoul", lat: 37.57, lng: 126.98, size: 0.08 },
-  { name: "Tokyo", lat: 35.68, lng: 139.69, size: 0.07 },
-  { name: "New York", lat: 40.71, lng: -74.01, size: 0.07 },
+  { name: "Seattle", lat: 47.61, lng: -122.33 },
+  { name: "Seoul", lat: 37.57, lng: 126.98 },
+  { name: "Tokyo", lat: 35.68, lng: 139.69 },
+  { name: "New York", lat: 40.71, lng: -74.01 },
 ];
 
 // phi at which a longitude faces the viewer (from cobe's locationToAngles)
@@ -33,7 +33,7 @@ type Props = {
 export default function GlobeCard({
   label = "Postcards from",
   markerColor = [0.976, 0.439, 0.188], // #F97030 — Jiho's pick
-  rotateSpeed = 0.004,
+  rotateSpeed = 0.002, // Xiang: 0.4/200 per frame
   facingThreshold = 0.35,
 }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -81,25 +81,28 @@ export default function GlobeCard({
     const init = () => {
       if (globe || width === 0) return;
 
+      // Xiang의 실제 번들에서 추출한 config. 단, 색은 테마 분기:
+      // Xiang의 회색 구체(baseColor .2)는 밝은 카드 전용 — 다크 카드에선
+      // 배경에 묻혀 안 보인다(d6e49788에서 잡았던 그 버그).
       globe = createGlobe(canvas, {
         devicePixelRatio: 2,
         width: width * 2,
         height: width * 2,
         phi: 0,
-        theta: 0.25,
-        dark: isDark ? 1 : 0,
-        diffuse: isDark ? 1.2 : 0.4,
-        mapSamples: 16000,
-        mapBrightness: isDark ? 6 : 1.2,
-        // dark: bright dots on a dark sphere — visible on a dark card
-        // (the old dark-gray baseColor sank into the background)
-        baseColor: [1, 1, 1],
-        markerColor,
+        theta: 0.06,
+        dark: 1,
+        diffuse: isDark ? 1.2 : 1.32,
+        mapSamples: 10877,
+        mapBrightness: isDark ? 6 : 12,
+        baseColor: isDark ? [1, 1, 1] : [0.2, 0.2, 0.2],
         glowColor: isDark ? [0.3, 0.3, 0.3] : [1, 1, 1],
+        markerColor,
         markers: CITIES.map((c) => ({
           location: [c.lat, c.lng],
-          size: c.size ?? 0.07,
+          size: 0.12,
         })),
+        scale: 0.875,
+        offset: [0, 0],
         onRender: (state) => {
           // auto-rotate unless dragging (reduced motion: still, drag allowed)
           if (pointerStart.current === null && !reducedMotion.current) {
@@ -173,9 +176,14 @@ export default function GlobeCard({
       style={{
         backgroundColor: "var(--surface)",
         border: "1px solid var(--hairline)",
-        borderRadius: 18,
+        borderRadius: 12,
+        boxShadow: isDark
+          ? "rgba(0,0,0,0.35) 0px 0.36px 1.23px -1px, rgba(0,0,0,0.35) 0px 1.37px 4.67px -2px, rgba(0,0,0,0.25) 0px 6px 20.4px -3px"
+          : "rgba(0,0,0,0.07) 0px 0.36px 1.23px -1px, rgba(0,0,0,0.07) 0px 1.37px 4.67px -2px, rgba(0,0,0,0.05) 0px 6px 20.4px -3px",
+        flex: "1 1 100%",
         width: "100%",
         height: "100%",
+        aspectRatio: "1 / 1", // 단독 사용 시 fallback — 그리드가 높이를 주면 무시됨
         overflow: "hidden",
         position: "relative",
         willChange: "transform",
@@ -186,8 +194,9 @@ export default function GlobeCard({
     >
       <div
         style={{
-          width: "85%",
+          aspectRatio: "0.94 / 1",
           height: "100%",
+          width: "85%",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -226,11 +235,11 @@ export default function GlobeCard({
       <div
         style={{
           position: "absolute",
-          top: 14,
-          left: 18,
+          top: 12,
+          left: 16,
           color: "var(--fg-muted)",
-          fontSize: 13,
-          lineHeight: "15px",
+          fontSize: 12,
+          lineHeight: "14px",
           whiteSpace: "pre",
         }}
       >
@@ -241,21 +250,23 @@ export default function GlobeCard({
       <div
         style={{
           position: "absolute",
-          bottom: 14,
+          bottom: 12,
           left: 0,
           width: "100%",
           height: 17,
           display: "flex",
+          flexDirection: "row",
           alignItems: "center",
           justifyContent: "center",
+          gap: 10,
           overflow: "hidden",
         }}
       >
         <div
           style={{
             color: "var(--fg-muted)",
-            fontSize: 12,
-            lineHeight: "14px",
+            fontSize: 11,
+            lineHeight: "13px",
             transition: "opacity 200ms, transform 200ms",
             opacity: activeCity ? 1 : 0,
             transform: activeCity ? "translateY(0)" : "translateY(4px)",

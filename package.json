@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "clsx": "^2.1.1",
-    "cobe": "^2.0.1",
+    "cobe": "^0.6.5",
     "framer-motion": "^7.2.1",
     "gray-matter": "^4.0.3",
     "lucide-react": "^0.574.0",

@@ -117,26 +117,23 @@ export default function ContactCard({
         ) : null}
       </div>
 
-      {/* 우상단 화살표 — hover 시 대각선으로 살짝 이동 */}
+      {/* 우상단 화살표 — HUGE. hover 시 대각선으로 살짝 이동 */}
       <svg
-        viewBox="0 0 24 24"
-        width="16"
-        height="16"
+        viewBox="0 0 48 48"
+        width="72"
+        height="72"
         style={{
           position: "absolute",
-          top: 14,
-          right: 14,
-          transform: hovered ? "translate(2px, -2px)" : "translate(0, 0)",
+          top: 10,
+          right: 10,
+          color: "var(--fg-muted)",
+          transform: hovered ? "translate(4px, -4px)" : "translate(0, 0)",
           transition: "transform 200ms ease",
         }}
       >
         <path
-          d="M7 17 17 7 M9 7h8v8"
-          stroke="var(--fg-muted)"
-          strokeWidth="1.6"
-          fill="none"
-          strokeLinecap="round"
-          strokeLinejoin="round"
+          d="M38.9127 6.09229H17.2853C16.733 6.09229 16.2853 6.54 16.2853 7.09229V11.076C16.2853 11.6346 16.7429 12.0849 17.3014 12.0759L31.9248 11.84L7.09298 36.6694C6.70242 37.06 6.7024 37.6932 7.09294 38.0837L9.9213 40.9121C10.3118 41.3026 10.945 41.3026 11.3356 40.912L36.1648 16.08L35.9291 30.7036C35.9201 31.2621 36.3704 31.7197 36.929 31.7197H40.9127C41.465 31.7197 41.9127 31.272 41.9127 30.7197V9.09229C41.9127 7.43543 40.5696 6.09229 38.9127 6.09229Z"
+          fill="currentColor"
         />
       </svg>
 
