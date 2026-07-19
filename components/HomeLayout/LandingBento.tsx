@@ -201,8 +201,8 @@ function AnalogClock({ size = 116 }: { size?: number }) {
   );
 }
 
-/* live local clock */
-function Clock() {
+/* live local time — 바이오 박스 하단에 들어가는 텍스트 블록 */
+function TimeBlock() {
   const [now, setNow] = useState<Date | null>(null);
 
   useEffect(() => {
@@ -222,27 +222,19 @@ function Clock() {
   const timeStr = now ? now.toLocaleTimeString("en-US", { hour12: false }) : "";
 
   return (
-    <div className="flex h-full items-center gap-6 p-6">
-      <AnalogClock />
-      <div className="flex h-full flex-col justify-between py-1">
-        <div className="text-[13px]" style={labelStyle}>
-          Seattle, WA
-        </div>
-        <div>
-          <div className="text-sm" style={{ color: "var(--fg-secondary)" }}>
-            {dateStr}
-          </div>
-          <div
-            className="mt-1 text-3xl tabular-nums"
-            style={{
-              fontFamily: TITLE_FONT,
-              letterSpacing: "-0.025em",
-              color: "var(--title)",
-            }}
-          >
-            {timeStr}
-          </div>
-        </div>
+    <div>
+      <div className="text-[13px]" style={labelStyle}>
+        Seattle, WA · {dateStr}
+      </div>
+      <div
+        className="mt-1 text-3xl tabular-nums"
+        style={{
+          fontFamily: TITLE_FONT,
+          letterSpacing: "-0.025em",
+          color: "var(--title)",
+        }}
+      >
+        {timeStr}
       </div>
     </div>
   );
@@ -286,11 +278,14 @@ export default function LandingBento() {
           thrive on pushing boundaries, testing early, and proving decisions
           with data.
         </p>
+        <div className="mt-auto pt-8">
+          <TimeBlock />
+        </div>
       </div>
 
-      {/* ── clock ── */}
-      <div style={cardStyle}>
-        <Clock />
+      {/* ── clock — 박스 없이 시계만 ── */}
+      <div className="flex items-center justify-center">
+        <AnalogClock size={150} />
       </div>
 
       {/* ── currently at ── */}

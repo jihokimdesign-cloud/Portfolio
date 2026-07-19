@@ -81,6 +81,9 @@ export default function GlobeCard({
     const init = () => {
       if (globe || width === 0) return;
 
+      // cobe 0.6은 WebGL 컨텍스트가 없으면 그냥 throw한다(v2와 달리
+      // 가드 없음) — 글로브 하나 때문에 페이지 전체가 죽지 않게 감싼다.
+      try {
       // Xiang의 실제 번들에서 추출한 config. 단, 색은 테마 분기:
       // Xiang의 회색 구체(baseColor .2)는 밝은 카드 전용 — 다크 카드에선
       // 배경에 묻혀 안 보인다(d6e49788에서 잡았던 그 버그).
@@ -129,6 +132,9 @@ export default function GlobeCard({
           }
         },
       });
+      } catch {
+        return; // WebGL 없음 — 카드는 비워두고 페이지는 살린다
+      }
 
       // mount fade-in
       canvas.style.opacity = "0";
