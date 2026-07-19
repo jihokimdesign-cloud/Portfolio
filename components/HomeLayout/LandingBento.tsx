@@ -1,9 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import ModeSwitch from "../ModeSwitch";
 import GlobeCard from "./GlobeCard";
 import ContactCard from "./ContactCard";
-
-const PRIMARY = "#0071e3";
 
 const TITLE_FONT = '"TikTok Sans", Inter, sans-serif';
 const ROLES = ["designer.", "builder.", "prototyper.", "founder."];
@@ -98,106 +96,6 @@ function Typewriter() {
         |
       </span>
     </span>
-  );
-}
-
-/* analog watch face — smooth-sweep arms driven outside React render */
-function AnalogClock({ size = 116 }: { size?: number }) {
-  const hourRef = useRef<SVGGElement>(null);
-  const minRef = useRef<SVGGElement>(null);
-  const secRef = useRef<SVGGElement>(null);
-
-  useEffect(() => {
-    let raf: number;
-    const tick = () => {
-      const d = new Date();
-      const s = d.getSeconds() + d.getMilliseconds() / 1000;
-      const m = d.getMinutes() + s / 60;
-      const h = (d.getHours() % 12) + m / 60;
-      if (secRef.current)
-        secRef.current.style.transform = `rotate(${s * 6}deg)`;
-      if (minRef.current)
-        minRef.current.style.transform = `rotate(${m * 6}deg)`;
-      if (hourRef.current)
-        hourRef.current.style.transform = `rotate(${h * 30}deg)`;
-      raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, []);
-
-  const armStyle: React.CSSProperties = {
-    transformOrigin: "50% 50%",
-  };
-
-  return (
-    <svg
-      viewBox="0 0 100 100"
-      width={size}
-      height={size}
-      aria-hidden
-      className="shrink-0"
-    >
-      {/* dial */}
-      <circle
-        cx="50"
-        cy="50"
-        r="48"
-        fill="none"
-        stroke="var(--hairline)"
-        strokeWidth="1.5"
-      />
-      {Array.from({ length: 60 }).map((_, i) => (
-        <line
-          key={i}
-          x1="50"
-          y1={i % 5 === 0 ? 6 : 8.5}
-          x2="50"
-          y2="11.5"
-          stroke={i % 5 === 0 ? "var(--fg)" : "var(--fg-muted)"}
-          strokeWidth={i % 5 === 0 ? 2 : 0.8}
-          strokeLinecap="round"
-          transform={`rotate(${i * 6} 50 50)`}
-          opacity={i % 5 === 0 ? 0.9 : 0.45}
-        />
-      ))}
-      {/* arms */}
-      <g ref={hourRef} style={armStyle}>
-        <line
-          x1="50"
-          y1="52"
-          x2="50"
-          y2="30"
-          stroke="var(--fg)"
-          strokeWidth="3.4"
-          strokeLinecap="round"
-        />
-      </g>
-      <g ref={minRef} style={armStyle}>
-        <line
-          x1="50"
-          y1="53"
-          x2="50"
-          y2="17"
-          stroke="var(--fg)"
-          strokeWidth="2"
-          strokeLinecap="round"
-        />
-      </g>
-      <g ref={secRef} style={armStyle}>
-        <line
-          x1="50"
-          y1="58"
-          x2="50"
-          y2="13"
-          stroke={PRIMARY}
-          strokeWidth="1"
-          strokeLinecap="round"
-        />
-      </g>
-      <circle cx="50" cy="50" r="2.6" fill={PRIMARY} />
-      <circle cx="50" cy="50" r="1" fill="var(--surface)" />
-    </svg>
   );
 }
 
@@ -348,11 +246,6 @@ export default function LandingBento() {
       {/* ── globe (Worldspan-style) ── */}
       <div className="md:row-span-2 min-h-[280px]">
         <GlobeCard />
-      </div>
-
-      {/* ── clock — 박스 없이 시계만 ── */}
-      <div className="flex min-h-[280px] items-center justify-center">
-        <AnalogClock size={150} />
       </div>
 
       {/* ── mode switch — 박스 없이 텍스트 + 셀 폭만큼 큰 버튼 ── */}
