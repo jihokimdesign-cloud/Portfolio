@@ -325,8 +325,8 @@ export default function LandingBento() {
         </div>
       </div>
 
-      {/* ── toolkit chips ── */}
-      <div className="md:col-span-2 p-6" style={cardStyle}>
+      {/* ── toolkit chips — 박스가 내용 높이만큼만 (그리드 stretch 해제) ── */}
+      <div className="md:col-span-2 self-start p-6" style={cardStyle}>
         <div className="flex flex-wrap gap-2">
           {TOOLBOX.map((tool) => (
             <div
