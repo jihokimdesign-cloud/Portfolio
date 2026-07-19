@@ -1,12 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import ModeSwitch from "../ModeSwitch";
 import GlobeCard from "./GlobeCard";
-import { SITE } from "../../lib/constants";
+import ContactCard from "./ContactCard";
 
 const PRIMARY = "#0071e3";
 
 const TITLE_FONT = '"TikTok Sans", Inter, sans-serif';
-const PHONE_DISPLAY = "206.291.2567";
 const ROLES = ["designer.", "builder.", "prototyper.", "founder."];
 
 const TOOLBOX = [
@@ -250,16 +249,6 @@ function Clock() {
 }
 
 export default function LandingBento() {
-  const [copied, setCopied] = useState(false);
-
-  const copyNumber = async () => {
-    try {
-      await navigator.clipboard.writeText(PHONE_DISPLAY);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1800);
-    } catch {}
-  };
-
   return (
     <div className="grid grid-cols-1 gap-2.5 py-10 md:grid-cols-3 md:py-14">
       {/* ── identity / typewriter / bio ── */}
@@ -354,33 +343,9 @@ export default function LandingBento() {
         <GlobeCard />
       </div>
 
-      {/* ── contact ── */}
-      <div className="p-6" style={cardStyle}>
-        <div className="text-[13px]" style={labelStyle}>
-          Contact
-        </div>
-        <div className="mt-3 flex flex-wrap gap-2">
-          <button
-            onClick={copyNumber}
-            className="rounded-full px-3.5 py-1.5 text-[13px] transition-colors"
-            style={{
-              border: "1px solid var(--hairline)",
-              color: copied ? "var(--link)" : "var(--fg-secondary)",
-            }}
-          >
-            {copied ? "Copied ✓" : "Copy number"}
-          </button>
-          <a
-            href={`mailto:${SITE.email}`}
-            className="rounded-full px-3.5 py-1.5 text-[13px]"
-            style={{
-              border: "1px solid var(--hairline)",
-              color: "var(--fg-secondary)",
-            }}
-          >
-            Email me
-          </a>
-        </div>
+      {/* ── contact (photo-reveal card) ── */}
+      <div className="min-h-[280px]">
+        <ContactCard />
       </div>
 
       {/* ── mode switch ── */}
