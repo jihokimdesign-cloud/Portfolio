@@ -135,7 +135,7 @@ export default function LandingBento() {
   return (
     <div className="grid grid-cols-1 gap-2.5 py-10 md:grid-cols-3 md:py-14">
       {/* ── identity / typewriter / bio ── */}
-      <div className="md:col-span-2 md:row-span-2 p-7 flex flex-col" style={cardStyle}>
+      <div className="md:col-span-2 p-7 flex flex-col" style={cardStyle}>
         <div>
           {/* 오렌지 점(파비콘과 동일) + 이름/타이틀, 그 아래 구분선 */}
           <div className="flex items-center gap-3">
@@ -198,15 +198,7 @@ export default function LandingBento() {
         <ContactCard />
       </div>
 
-      {/* ── mode switch — 컨택트 아래 오른쪽 열, 박스 없이 ── */}
-      <div className="flex flex-col justify-center gap-3 px-6 py-4">
-        <div className="text-[13px]" style={labelStyle}>
-          Mode switch
-        </div>
-        <ThemeModeSwitch width="100%" />
-      </div>
-
-      {/* ── 하단 밴드 왼쪽: 툴킷 스트립 + Currently at (구멍 없이 글로브 높이에 맞물림) ── */}
+      {/* ── 하단 밴드 왼쪽: 툴킷 스트립 + (Currently at | 모드 스위치) ── */}
       <div className="md:col-span-2 flex flex-col gap-2.5">
         <div className="p-6" style={cardStyle}>
           <div className="flex flex-wrap gap-2">
@@ -226,28 +218,36 @@ export default function LandingBento() {
             ))}
           </div>
         </div>
-        {/* ── currently at ── */}
-        <div className="flex-1 p-6" style={cardStyle}>
-          <div className="text-[13px]" style={labelStyle}>
-            Currently at
+        {/* ── currently at | mode switch — 나란히 ── */}
+        <div className="grid flex-1 grid-cols-1 gap-2.5 md:grid-cols-2">
+          <div className="p-6" style={cardStyle}>
+            <div className="text-[13px]" style={labelStyle}>
+              Currently at
+            </div>
+            <div
+              className="mt-2 text-xl"
+              style={{ fontFamily: TITLE_FONT, color: "var(--title)" }}
+            >
+              Stealth AI Startup
+            </div>
+            <div className="text-sm" style={{ color: "var(--fg-secondary)" }}>
+              Founding Designer · 2024—present
+            </div>
+            <div
+              className="mt-4 flex flex-col gap-1 text-[13px]"
+              style={labelStyle}
+            >
+              <span>Lepal.ai · 2024</span>
+              <span>TAP3D (XR Training) · 2024</span>
+              <span>Project Sidewalk · 2023–2024</span>
+              <span>Seoul Women&apos;s University · 2021–2023</span>
+            </div>
           </div>
-          <div
-            className="mt-2 text-xl"
-            style={{ fontFamily: TITLE_FONT, color: "var(--title)" }}
-          >
-            Stealth AI Startup
-          </div>
-          <div className="text-sm" style={{ color: "var(--fg-secondary)" }}>
-            Founding Designer · 2024—present
-          </div>
-          <div
-            className="mt-4 flex flex-col gap-1 text-[13px]"
-            style={labelStyle}
-          >
-            <span>Lepal.ai · 2024</span>
-            <span>TAP3D (XR Training) · 2024</span>
-            <span>Project Sidewalk · 2023–2024</span>
-            <span>Seoul Women&apos;s University · 2021–2023</span>
+          <div className="flex flex-col justify-center gap-3 px-6 py-4">
+            <div className="text-[13px]" style={labelStyle}>
+              Mode switch
+            </div>
+            <ThemeModeSwitch width="100%" />
           </div>
         </div>
       </div>
