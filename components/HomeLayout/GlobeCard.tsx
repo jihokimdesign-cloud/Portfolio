@@ -31,7 +31,7 @@ type Props = {
 };
 
 export default function GlobeCard({
-  label = "Postcards from",
+  label = "Worldspan",
   markerColor = [0.976, 0.439, 0.188], // #F97030 — Jiho's pick
   rotateSpeed = 0.002, // Xiang: 0.4/200 per frame
   facingThreshold = 0.35,

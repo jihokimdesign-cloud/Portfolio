@@ -222,18 +222,11 @@ function TimeBlock() {
   const timeStr = now ? now.toLocaleTimeString("en-US", { hour12: false }) : "";
 
   return (
-    <div>
+    <div className="flex items-baseline justify-between">
       <div className="text-[13px]" style={labelStyle}>
         Seattle, WA · {dateStr}
       </div>
-      <div
-        className="mt-1 text-3xl tabular-nums"
-        style={{
-          fontFamily: TITLE_FONT,
-          letterSpacing: "-0.025em",
-          color: "var(--title)",
-        }}
-      >
+      <div className="text-[13px] tabular-nums" style={labelStyle}>
         {timeStr}
       </div>
     </div>
