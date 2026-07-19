@@ -71,67 +71,81 @@ export default function GlobeCard({
       "(prefers-reduced-motion: reduce)"
     ).matches;
 
-    let width = 0;
-    const onResize = () => {
-      width = canvas.offsetWidth;
-    };
-    window.addEventListener("resize", onResize);
-    onResize();
-
     let currentFacing: string | null = null;
+    let width = 0;
+    let globe: ReturnType<typeof createGlobe> | null = null;
 
-    const globe = createGlobe(canvas, {
-      devicePixelRatio: 2,
-      width: width * 2,
-      height: width * 2,
-      phi: 0,
-      theta: 0.25,
-      dark: isDark ? 1 : 0,
-      diffuse: isDark ? 1.2 : 3,
-      mapSamples: 16000,
-      mapBrightness: isDark ? 6 : 1.2,
-      baseColor: isDark ? [0.3, 0.3, 0.3] : [1, 1, 1],
-      markerColor,
-      glowColor: isDark ? [0.6, 0.6, 0.6] : [1, 1, 1],
-      markers: CITIES.map((c) => ({
-        location: [c.lat, c.lng],
-        size: c.size ?? 0.07,
-      })),
-      onRender: (state) => {
-        // auto-rotate unless dragging (reduced motion: still, drag allowed)
-        if (pointerStart.current === null && !reducedMotion.current) {
-          phiRef.current += rotateSpeed;
-        }
-        const phi = phiRef.current + pointerDelta.current;
-        state.phi = phi;
-        state.width = width * 2;
-        state.height = width * 2;
+    // Guard against the 0-width init race: creating the globe before layout
+    // settles bakes in a 0x0 canvas. Only create once a real size exists;
+    // afterwards onRender keeps dimensions fresh.
+    const init = () => {
+      if (globe || width === 0) return;
 
-        // nearest city within ±threshold of front-facing
-        let facing: string | null = null;
-        let best = facingThreshold;
-        for (const c of CITIES) {
-          const d = angDist(phi, lngToPhi(c.lng));
-          if (d < best) {
-            best = d;
-            facing = c.name;
+      globe = createGlobe(canvas, {
+        devicePixelRatio: 2,
+        width: width * 2,
+        height: width * 2,
+        phi: 0,
+        theta: 0.25,
+        dark: isDark ? 1 : 0,
+        diffuse: isDark ? 1.2 : 0.4,
+        mapSamples: 16000,
+        mapBrightness: isDark ? 6 : 1.2,
+        // dark: bright dots on a dark sphere — visible on a dark card
+        // (the old dark-gray baseColor sank into the background)
+        baseColor: [1, 1, 1],
+        markerColor,
+        glowColor: isDark ? [0.3, 0.3, 0.3] : [1, 1, 1],
+        markers: CITIES.map((c) => ({
+          location: [c.lat, c.lng],
+          size: c.size ?? 0.07,
+        })),
+        onRender: (state) => {
+          // auto-rotate unless dragging (reduced motion: still, drag allowed)
+          if (pointerStart.current === null && !reducedMotion.current) {
+            phiRef.current += rotateSpeed;
           }
-        }
-        if (facing !== currentFacing) {
-          currentFacing = facing;
-          setActiveCity(facing);
-        }
-      },
-    });
+          const phi = phiRef.current + pointerDelta.current;
+          state.phi = phi;
+          state.width = width * 2;
+          state.height = width * 2;
 
-    // mount fade-in
-    canvas.style.opacity = "0";
-    canvas.style.transition = "opacity 600ms ease";
-    requestAnimationFrame(() => (canvas.style.opacity = "1"));
+          // nearest city within ±threshold of front-facing
+          let facing: string | null = null;
+          let best = facingThreshold;
+          for (const c of CITIES) {
+            const d = angDist(phi, lngToPhi(c.lng));
+            if (d < best) {
+              best = d;
+              facing = c.name;
+            }
+          }
+          if (facing !== currentFacing) {
+            currentFacing = facing;
+            setActiveCity(facing);
+          }
+        },
+      });
+
+      // mount fade-in
+      canvas.style.opacity = "0";
+      canvas.style.transition = "opacity 600ms ease";
+      requestAnimationFrame(() => (canvas.style.opacity = "1"));
+    };
+
+    // ResizeObserver instead of window resize: catches initial 0-width,
+    // container resizes, and breakpoint changes
+    const ro = new ResizeObserver(() => {
+      width = canvas.offsetWidth;
+      init();
+    });
+    ro.observe(canvas);
+    width = canvas.offsetWidth;
+    init();
 
     return () => {
-      window.removeEventListener("resize", onResize);
-      globe.destroy();
+      ro.disconnect();
+      globe?.destroy();
     };
   }, [isDark, markerColor, rotateSpeed, facingThreshold]);
 
