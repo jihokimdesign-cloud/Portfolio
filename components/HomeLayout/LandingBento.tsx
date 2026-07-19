@@ -239,15 +239,34 @@ export default function LandingBento() {
       {/* ── identity / typewriter / bio ── */}
       <div className="md:col-span-2 md:row-span-2 p-7 flex flex-col" style={cardStyle}>
         <div>
+          {/* 오렌지 점(파비콘과 동일) + 이름/타이틀, 그 아래 구분선 */}
+          <div className="flex items-center gap-3">
+            <span
+              aria-hidden
+              className="shrink-0"
+              style={{
+                width: 12,
+                height: 12,
+                borderRadius: "50%",
+                background: "#F97030",
+              }}
+            />
+            <div>
+              <div
+                className="text-lg"
+                style={{ fontFamily: TITLE_FONT, color: "var(--title)" }}
+              >
+                Jiho Kim
+              </div>
+              <div className="text-sm" style={labelStyle}>
+                Product Designer
+              </div>
+            </div>
+          </div>
           <div
-            className="text-lg"
-            style={{ fontFamily: TITLE_FONT, color: "var(--title)" }}
-          >
-            Jiho Kim
-          </div>
-          <div className="text-sm" style={labelStyle}>
-            Product Designer
-          </div>
+            className="mt-5"
+            style={{ borderTop: "1px solid var(--hairline)" }}
+          />
         </div>
         <div
           className="mt-8 text-4xl md:text-[56px]"
