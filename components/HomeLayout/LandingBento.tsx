@@ -295,9 +295,9 @@ export default function LandingBento() {
         </div>
       </div>
 
-      {/* ── clock — 박스 없이 시계만 ── */}
-      <div className="flex items-center justify-center">
-        <AnalogClock size={150} />
+      {/* ── contact (photo-reveal card) ── */}
+      <div className="min-h-[280px]">
+        <ContactCard />
       </div>
 
       {/* ── currently at ── */}
@@ -350,9 +350,9 @@ export default function LandingBento() {
         <GlobeCard />
       </div>
 
-      {/* ── contact (photo-reveal card) ── */}
-      <div className="min-h-[280px]">
-        <ContactCard />
+      {/* ── clock — 박스 없이 시계만 ── */}
+      <div className="flex min-h-[280px] items-center justify-center">
+        <AnalogClock size={150} />
       </div>
 
       {/* ── mode switch — 박스 없이 텍스트 + 셀 폭만큼 큰 버튼 ── */}
