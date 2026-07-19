@@ -351,7 +351,7 @@ export default function LandingBento() {
       {/* ── mode switch — 박스 없이 텍스트 + 셀 폭만큼 큰 버튼 ── */}
       <div className="flex flex-col gap-3 px-6 py-4">
         <div className="text-[13px]" style={labelStyle}>
-          Appearance
+          Mode switch
         </div>
         <ThemeModeSwitch width="100%" />
       </div>

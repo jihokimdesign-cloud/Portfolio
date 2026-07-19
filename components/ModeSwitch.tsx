@@ -25,13 +25,13 @@ export default function ModeSwitch({
     onChange?.(next);
   };
 
-  // 라이트 모드 썸은 글로브 마커와 같은 오렌지(#F97030) + 흰 해
+  // 라이트: 민무늬 오렌지 점(#F97030, 글로브 마커와 동일).
+  // 다크: 배경 원 없이 달만 크게.
   const tokens = {
     bg: "var(--canvas)",
     border: "var(--hairline)",
     icon: "var(--fg)",
-    sunIcon: "rgb(255, 255, 255)",
-    thumbBg: isDark ? "rgb(40, 40, 40)" : "#F97030",
+    thumbBg: isDark ? "transparent" : "#F97030",
   };
 
   // container 2:1, 4% padding → thumb 92% tall; left transitions 4% ↔ 50%
@@ -74,41 +74,15 @@ export default function ModeSwitch({
           aspectRatio: "1 / 1",
           borderRadius: "50%",
           backgroundColor: tokens.thumbBg,
-          boxShadow: "rgba(0,0,0,0.1) 0px 2px 4px",
+          boxShadow: isDark ? "none" : "rgba(0,0,0,0.1) 0px 2px 4px",
           overflow: "hidden",
           transition:
             "left 350ms cubic-bezier(0.34, 1.3, 0.5, 1), background-color 300ms",
         }}
       >
-        {/* sun — light mode */}
-        <IconLayer visible={!isDark} rotate={isDark ? -90 : 0}>
-          <svg viewBox="0 0 24 24" width="60%" height="60%" fill="none">
-            <circle cx="12" cy="12" r="4.6" fill={tokens.sunIcon} />
-            {Array.from({ length: 8 }).map((_, i) => {
-              const a = (i * Math.PI) / 4;
-              const x1 = 12 + Math.cos(a) * 7.4;
-              const y1 = 12 + Math.sin(a) * 7.4;
-              const x2 = 12 + Math.cos(a) * 10;
-              const y2 = 12 + Math.sin(a) * 10;
-              return (
-                <line
-                  key={i}
-                  x1={x1}
-                  y1={y1}
-                  x2={x2}
-                  y2={y2}
-                  stroke={tokens.sunIcon}
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                />
-              );
-            })}
-          </svg>
-        </IconLayer>
-
-        {/* moon — circle minus circle via mask */}
+        {/* moon — circle minus circle via mask; 라이트 모드에선 오렌지 점만 */}
         <IconLayer visible={isDark} rotate={isDark ? 0 : 90}>
-          <svg viewBox="0 0 85 85" width="62%" height="62%">
+          <svg viewBox="0 0 85 85" width="92%" height="92%">
             <defs>
               <mask id="mode-switch-moon-mask">
                 <rect width="85" height="85" fill="white" />
