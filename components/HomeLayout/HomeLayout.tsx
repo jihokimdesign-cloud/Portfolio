@@ -45,7 +45,7 @@ const HomeLayout = ({ projects }: Props) => {
         fontFamily:
           '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
       }}
-      className="mx-auto flex w-full max-w-6xl flex-col gap-4 px-6 pt-10 pb-10"
+      className="mx-auto flex w-full max-w-6xl flex-col gap-4 px-6 pt-[43px] pb-10"
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{
         opacity: 1,
