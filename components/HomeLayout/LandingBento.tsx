@@ -223,37 +223,39 @@ export default function LandingBento() {
         </div>
       </div>
 
-      {/* ── toolkit chips — 박스가 내용 높이만큼만 (그리드 stretch 해제) ── */}
-      <div className="md:col-span-2 self-start p-6" style={cardStyle}>
-        <div className="flex flex-wrap gap-2">
-          {TOOLBOX.map((tool) => (
-            <div
-              key={tool.name}
-              title={tool.name}
-              className="flex h-11 w-11 items-center justify-center"
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={tool.src}
-                alt={tool.name}
-                className="h-7 w-7 object-contain"
-              />
-            </div>
-          ))}
+      {/* ── 하단 밴드 왼쪽: 툴킷 스트립 + 모드 스위치 스택 (구멍 없이 글로브 높이에 맞물림) ── */}
+      <div className="md:col-span-2 flex flex-col gap-2.5">
+        <div className="p-6" style={cardStyle}>
+          <div className="flex flex-wrap gap-2">
+            {TOOLBOX.map((tool) => (
+              <div
+                key={tool.name}
+                title={tool.name}
+                className="flex h-11 w-11 items-center justify-center"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={tool.src}
+                  alt={tool.name}
+                  className="h-7 w-7 object-contain"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="flex flex-1 flex-col justify-center gap-3 px-6 py-4">
+          <div className="text-[13px]" style={labelStyle}>
+            Mode switch
+          </div>
+          <div className="w-full max-w-[440px]">
+            <ThemeModeSwitch width="100%" />
+          </div>
         </div>
       </div>
 
       {/* ── globe (Worldspan-style) ── */}
-      <div className="md:row-span-2 min-h-[280px]">
+      <div className="min-h-[280px]">
         <GlobeCard />
-      </div>
-
-      {/* ── mode switch — 박스 없이 텍스트 + 셀 폭만큼 큰 버튼 ── */}
-      <div className="flex flex-col gap-3 px-6 py-4">
-        <div className="text-[13px]" style={labelStyle}>
-          Mode switch
-        </div>
-        <ThemeModeSwitch width="100%" />
       </div>
     </div>
   );
