@@ -169,6 +169,21 @@ export default function ChatWidget() {
     return () => window.removeEventListener("jiho-chat-open", onOpen);
   }, [send, dismissHint]);
 
+  // 나브 토글 ↔ 패널 내부 모드 전환 양방향 동기화
+  useEffect(() => {
+    const onMode = (e: Event) =>
+      setIsRecruiter(Boolean((e as CustomEvent).detail?.recruiter));
+    window.addEventListener("jiho-chat-mode", onMode);
+    return () => window.removeEventListener("jiho-chat-mode", onMode);
+  }, []);
+  useEffect(() => {
+    window.dispatchEvent(
+      new CustomEvent("jiho-chat-mode-changed", {
+        detail: { recruiter: isRecruiter },
+      })
+    );
+  }, [isRecruiter]);
+
   if (!mounted) return null;
 
   return createPortal(

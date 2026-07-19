@@ -12,10 +12,6 @@ const GlassNav = dynamic(() => import("../components/GlassNav"), {
   ssr: false,
 });
 
-const RecruiterNav = dynamic(() => import("../components/RecruiterNav"), {
-  ssr: false,
-});
-
 export const getStaticProps: GetStaticProps = () => {
   const allProjectsSlugs = getAllPostSlugs();
   return {
@@ -93,7 +89,6 @@ const Home: NextPage = ({
       /> */}
       <HomeLayout projects={projects} />
       <GlassNav />
-      <RecruiterNav />
     </>
   );
 };

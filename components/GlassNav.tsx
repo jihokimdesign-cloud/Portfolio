@@ -2,6 +2,7 @@ import Link from "next/link";
 import { SITE } from "../lib/constants";
 import ThemeToggle from "./ThemeToggle";
 import SignatureMark from "./SignatureMark";
+import RecruiterNav from "./RecruiterNav";
 
 const FONT_STACK =
   '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif';
@@ -10,7 +11,7 @@ const FONT_STACK =
 export default function GlassNav() {
   return (
     <nav
-      className="fixed inset-x-0 top-4 z-[150] flex justify-center px-4"
+      className="fixed inset-x-0 top-4 z-[150] flex justify-center gap-2 px-4"
       style={{ fontFamily: FONT_STACK }}
     >
       {/* displacement map for the liquid-glass edge refraction */}
@@ -92,6 +93,7 @@ export default function GlassNav() {
         />
         <ThemeToggle inline />
       </div>
+      <RecruiterNav />
     </nav>
   );
 }
