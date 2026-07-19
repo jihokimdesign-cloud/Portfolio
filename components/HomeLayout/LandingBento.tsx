@@ -201,7 +201,10 @@ export default function LandingBento() {
       {/* ── 하단 밴드 왼쪽: 툴킷 스트립 + (Currently at | 모드 스위치) ── */}
       <div className="md:col-span-2 flex flex-col gap-2.5">
         <div className="p-6" style={cardStyle}>
-          <div className="flex flex-wrap gap-2">
+          <div className="text-[13px]" style={labelStyle}>
+            Current toolkit
+          </div>
+          <div className="mt-3 flex flex-wrap gap-2">
             {TOOLBOX.map((tool) => (
               <div
                 key={tool.name}
