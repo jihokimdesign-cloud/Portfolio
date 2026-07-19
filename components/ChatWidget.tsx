@@ -139,6 +139,36 @@ export default function ChatWidget() {
     [loading, isRecruiter]
   );
 
+  // 히어로(#landing-hero)가 보이는 동안엔 플로팅 챗 바가 대신 떠 있으니
+  // FAB/힌트 숨김 — 히어로를 지나면 지금처럼 우하단 플로팅으로 나타난다
+  const [heroBarInView, setHeroBarInView] = useState(false);
+  useEffect(() => {
+    if (!mounted) return;
+    const el = document.getElementById("landing-hero");
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => setHeroBarInView(entry.isIntersecting),
+      { threshold: 0.1 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [mounted]);
+
+  // 히어로 입력 클릭/제출 → 패널을 히어로 바 위 중앙에 열고, 질문이 있으면 바로 전송
+  const [fromHero, setFromHero] = useState(false);
+  useEffect(() => {
+    const onOpen = (e: Event) => {
+      dismissHint();
+      const detail = (e as CustomEvent).detail;
+      setFromHero(detail?.source === "hero");
+      if (detail?.mode === "recruiter") setIsRecruiter(true);
+      setIsOpen(true);
+      if (detail?.message) send(detail.message);
+    };
+    window.addEventListener("jiho-chat-open", onOpen);
+    return () => window.removeEventListener("jiho-chat-open", onOpen);
+  }, [send, dismissHint]);
+
   if (!mounted) return null;
 
   return createPortal(
@@ -155,11 +185,13 @@ export default function ChatWidget() {
               ease: AnimationConfig.EASING,
             }}
             style={{
-              transformOrigin: "bottom right",
+              transformOrigin: fromHero ? "bottom center" : "bottom right",
               boxShadow: "0 24px 60px rgba(0,0,0,.35)",
               background: SURFACE,
             }}
-            className="fixed bottom-24 right-5 z-[201] flex w-[min(24rem,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-[18px]"
+            className={`fixed bottom-24 z-[201] flex w-[min(24rem,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-[18px] ${
+              fromHero ? "inset-x-0 mx-auto" : "right-5"
+            }`}
           >
             {/* header */}
             <div
@@ -168,12 +200,12 @@ export default function ChatWidget() {
             >
               <div>
                 <div className="text-[15px] font-semibold">
-                  {isRecruiter ? "Job match" : "Ask Jiho's AI"}
+                  {isRecruiter ? "Job match" : "Chat with Jiho's AI"}
                 </div>
                 <div className="mt-0.5 text-[13px]" style={{ color: MUTED }}>
                   {isRecruiter
                     ? "Paste a job description — I'll assess the fit."
-                    : "Anything about my work, process, or experience."}
+                    : "Ask anything about my work, skills, or experience"}
                 </div>
               </div>
               <button
@@ -333,7 +365,7 @@ export default function ChatWidget() {
                 className="mt-2 text-[12px] transition-colors"
                 style={{ color: LINK_LIGHT }}
               >
-                {isRecruiter ? "← Back to chat" : "Recruiter? Try job match →"}
+                {isRecruiter ? "← Back to chat" : "Recruiter →"}
               </button>
             </div>
           </motion.div>
@@ -342,7 +374,7 @@ export default function ChatWidget() {
 
       {/* ── First-visit hint label ── */}
       <AnimatePresence>
-        {showHint && !isOpen && (
+        {showHint && !isOpen && !heroBarInView && (
           <motion.button
             initial={{ opacity: 0, x: 16 }}
             animate={{ opacity: 1, x: 0 }}
@@ -370,28 +402,30 @@ export default function ChatWidget() {
         )}
       </AnimatePresence>
 
-      {/* ── Floating icon ── */}
-      <button
-        onClick={() => {
-          dismissHint();
-          setIsOpen((v) => !v);
-        }}
-        aria-label={isOpen ? "Close chat" : "Chat with Jiho's AI"}
-        className="fixed bottom-6 right-5 z-[201] flex h-12 w-12 items-center justify-center rounded-full text-white transition-all hover:scale-105"
-        style={{
-          background: PRIMARY,
-          boxShadow: "0 8px 24px rgba(0,113,227,.45)",
-        }}
-      >
-        {showHint && !isOpen && (
-          <span
-            className="absolute inset-0 animate-ping rounded-full"
-            style={{ background: `${PRIMARY}40` }}
-            aria-hidden
-          />
-        )}
-        {isOpen ? <X size={18} /> : <MessageCircle size={18} />}
-      </button>
+      {/* ── Floating icon — 히어로 입력이 화면에 있는 동안엔 숨김 ── */}
+      {!heroBarInView && (
+        <button
+          onClick={() => {
+            dismissHint();
+            setIsOpen((v) => !v);
+          }}
+          aria-label={isOpen ? "Close chat" : "Chat with Jiho's AI"}
+          className="fixed bottom-6 right-5 z-[201] flex h-12 w-12 items-center justify-center rounded-full text-white transition-all hover:scale-105"
+          style={{
+            background: PRIMARY,
+            boxShadow: "0 8px 24px rgba(0,113,227,.45)",
+          }}
+        >
+          {showHint && !isOpen && (
+            <span
+              className="absolute inset-0 animate-ping rounded-full"
+              style={{ background: `${PRIMARY}40` }}
+              aria-hidden
+            />
+          )}
+          {isOpen ? <X size={18} /> : <MessageCircle size={18} />}
+        </button>
+      )}
     </div>,
     document.body
   );
