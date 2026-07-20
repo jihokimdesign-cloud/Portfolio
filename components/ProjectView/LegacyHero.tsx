@@ -18,15 +18,24 @@ export default function LegacyHero({ projectInfo, coverImage }: Props) {
   const logo = BRAND_LOGO[projectInfo.slug];
   return (
     <div className="mx-4 mt-2 lg:mx-8">
-      {/* 커버 이미지 — 넉넉한 높이 */}
+      {/* 히어로 — HTML(heroHtml) 또는 커버 이미지. 넉넉한 높이 */}
       <div className="relative overflow-hidden rounded-[1.25rem]">
         <div className="relative h-[86vh] min-h-[540px] w-full">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={coverImage}
-            alt={projectInfo.title}
-            className="absolute inset-0 h-full w-full object-cover"
-          />
+          {projectInfo.heroHtml ? (
+            <iframe
+              src={projectInfo.heroHtml}
+              title={projectInfo.title}
+              scrolling="no"
+              className="absolute inset-0 h-full w-full border-0"
+            />
+          ) : (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={coverImage}
+              alt={projectInfo.title}
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+          )}
         </div>
       </div>
 

@@ -6,6 +6,7 @@ export interface ProjectInfo {
   scope: string;
   previewVideo: string;
   thumbHtml?: string; // 애니메이션 HTML 썸네일 (iframe으로 프리뷰)
+  heroHtml?: string; // 히어로를 이미지 대신 HTML로 (iframe)
   hidden: boolean;
 }
 
@@ -18,6 +19,7 @@ export function getProjectInfo(meta: any): ProjectInfo {
     description: meta.description,
     previewVideo: meta.previewVideo,
     thumbHtml: meta.thumbHtml ?? null,
+    heroHtml: meta.heroHtml ?? null,
     hidden: meta.hidden,
   };
 }
