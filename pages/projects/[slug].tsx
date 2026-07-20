@@ -1,6 +1,6 @@
 import { MDXRemote } from "next-mdx-remote";
 import Head from "next/head";
-import NextLink from "next/link";
+import LegacyEmbed from "../../components/ProjectView/LegacyEmbed";
 import { serialize } from "next-mdx-remote/serialize";
 import { GetStaticProps, InferGetStaticPropsType, GetStaticPaths } from "next";
 import { getAllPostSlugs, getPostBySlug } from "../../lib/projects";
@@ -112,46 +112,6 @@ export default function Post({
   const nextProjectStyle = getProjectStyle(nextProjectMeta);
   const nextProjectInfo = getProjectInfo(nextProjectMeta);
 
-  // 옛 라이브 사이트 케이스 스터디 통째 서빙 — 자체 Tailwind/GSAP/나브가
-  // 들어있는 완결 HTML이라 iframe으로 그대로 (타일 전환은 페이드로 유지)
-  if (meta.legacyHtml) {
-    return (
-      <>
-        <NextSeo
-          title={`${projectInfo.title} — Jiho Kim`}
-          description={`${projectInfo.description}`}
-        />
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1, transition: { duration: 0.4 } }}
-          exit={{ opacity: 0, transition: { duration: 0.2 } }}
-          className="fixed inset-0 z-40"
-          style={{ background: "#ffffff" }}
-        >
-          <iframe
-            src={meta.legacyHtml}
-            title={projectInfo.title}
-            className="h-full w-full border-0"
-          />
-        </motion.div>
-        <NextLink href="/" scroll={false} legacyBehavior>
-          <a
-            aria-label="Back to home"
-            className="fixed left-5 top-5 z-50 flex h-10 w-10 items-center justify-center rounded-full text-[#111]"
-            style={{
-              background: "rgba(255,255,255,.75)",
-              backdropFilter: "blur(20px)",
-              border: "1px solid rgba(0,0,0,.08)",
-              boxShadow: "0 4px 16px rgba(0,0,0,.1)",
-            }}
-          >
-            ✕
-          </a>
-        </NextLink>
-      </>
-    );
-  }
-
   return (
     <>
       <NextSeo
@@ -198,6 +158,21 @@ export default function Post({
                 }grid grid-cols-6 gap-x-4 mx-6 2xl:mx-16 md:text-xl -tracking-[.016em]`}
                 style={{ "--accent": projectStyle.accent } as React.CSSProperties}
               >
+                {/* legacyHtml: 옛 케이스 스터디 본문을 셸(히어로/넥스트 푸터)
+                    사이에 끼움 — 전환은 리디자인 그대로 */}
+                {meta.legacyHtml ? (
+                  <>
+                    {meta.heroImage && (
+                      <FullImage
+                        src={meta.heroImage}
+                        width={meta.heroWidth ?? 2208}
+                        height={meta.heroHeight ?? 1104}
+                        priority
+                      />
+                    )}
+                    <LegacyEmbed src={meta.legacyHtml} />
+                  </>
+                ) : (
                 <MDXRemote
                   {...source}
                   components={{
@@ -236,6 +211,7 @@ export default function Post({
                     SystemDemo,
                   }}
                 />
+                )}
               </main>
             </ProjectView>
           </EditableContextProvider>
