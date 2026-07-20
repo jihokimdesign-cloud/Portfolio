@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Project Sidewalk: Scaling Civic Accessibility via a Zero-Defect Design System</title>
+<title>Project Sidewalk: Making Accessibility Automatic</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css">
 <script src="https://cdn.tailwindcss.com"></script>
@@ -191,6 +191,7 @@ tailwind.config = {
 </style>
 <script>window.ScrollTrigger={create:function(c){try{if(c){if(c.onEnter)c.onEnter();if(c.animation&&c.animation.play)c.animation.play()}}catch(e){}return{kill:function(){}}},refresh:function(){},update:function(){},getAll:function(){return[]},batch:function(){return[]},matchMedia:function(){},killAll:function(){}};</script>
 <style>.gs-child{opacity:1 !important;transform:none !important}.opacity-0{opacity:1 !important}.hero-badge{transform:none !important}#quick-summary-section,#summary-overlay{display:none !important}</style>
+<style>.flip-card{pointer-events:none}.flip-card-inner{transform:none !important}.flip-front,.flip-back{position:static !important;transform:none !important;backface-visibility:visible !important}.flip-back{margin-top:10px}</style>
 </head>
 <body class="bg-white text-primary leading-relaxed">
 
@@ -220,12 +221,7 @@ tailwind.config = {
     </div>
 
     <!-- Scroll hint -->
-    <div class="text-center pt-8 pb-10 relative z-10 opacity-0 hero-badge">
-      <div class="text-[9px] font-bold uppercase tracking-[0.25em] text-secondary/60 mb-5 leading-relaxed">Read the study to learn how<br>a design system transformed civic tech</div>
-      <div id="scroll-arrow" class="inline-block">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10.5" stroke="#16a34a" stroke-width="0.8" opacity="0.25"/><path d="M8.5 10.5l3.5 3 3.5-3" stroke="#16a34a" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </div>
-    </div>
+    
 
     <!-- Badges -->
     <div class="flex items-center gap-2 flex-wrap justify-center pb-10 opacity-0 hero-badge relative z-10">
@@ -242,23 +238,23 @@ tailwind.config = {
         <div class="meta-group opacity-0">
           <div class="text-[10px] font-bold uppercase tracking-widest text-accent mb-4">Impact</div>
           <div class="space-y-4">
-            <div><div class="font-display text-2xl font-semibold leading-none mb-1 stat-number" data-target="350" data-suffix="k+">350k+</div><div class="text-xs text-secondary">Accessibility labels crowdsourced</div></div>
-            <div><div class="font-display text-2xl font-semibold leading-none mb-1 stat-number" data-target="100" data-suffix="%">100%</div><div class="text-xs text-secondary">WCAG 2.2 AA compliance</div></div>
-            <div><div class="font-display text-2xl font-semibold leading-none mb-1 stat-number" data-target="3">3</div><div class="text-xs text-secondary">Teams adopted the system</div></div>
+            <div><div class="font-display text-2xl font-semibold leading-none mb-1">37% &rarr; 100%</div><div class="text-xs text-secondary">contrast pass rate (axe-core, 24 components)</div></div>
+            <div><div class="font-display text-2xl font-semibold leading-none mb-1">3 teams</div><div class="text-xs text-secondary">adopted the system with zero added a11y effort</div></div>
+            <div><div class="font-display text-2xl font-semibold leading-none mb-1">0 &rarr; 1</div><div class="text-xs text-secondary">reusable component library, WCAG 2.2 AA by default</div></div>
           </div>
         </div>
         <div class="opacity-0 hero-contributions">
           <div class="text-[10px] font-bold uppercase tracking-widest text-accent mb-4">What I Did <span class="font-normal normal-case tracking-normal text-secondary/40">· Click to jump</span></div>
           <div class="space-y-3">
             <a href="#context" class="block text-sm leading-snug no-underline group cursor-pointer"><strong class="group-hover:text-accent transition-colors">Data-informed diagnostics</strong><br><span class="text-secondary text-xs">Hotjar &#x00b7; Community voice &#x00b7; WCAG audit</span></a>
-            <a href="#process" class="block text-sm leading-snug no-underline group cursor-pointer"><strong class="group-hover:text-accent transition-colors">Architected zero-defect system</strong><br><span class="text-secondary text-xs">Token foundation &#x2192; Component library</span></a>
+            <a href="#process" class="block text-sm leading-snug no-underline group cursor-pointer"><strong class="group-hover:text-accent transition-colors">Architected accessible-by-default system</strong><br><span class="text-secondary text-xs">Token foundation &#x2192; Component library</span></a>
             <a href="#system" class="block text-sm leading-snug no-underline group cursor-pointer"><strong class="group-hover:text-accent transition-colors">Scaled cross-functional adoption</strong><br><span class="text-secondary text-xs">1 PM &#x00b7; 2 developers &#x00b7; Phased rollout</span></a>
-            <a href="#outcome" class="block text-sm leading-snug no-underline group cursor-pointer"><strong class="group-hover:text-accent transition-colors">Delivered measurable impact</strong><br><span class="text-secondary text-xs">11k+ users &#x00b7; 100% WCAG AA &#x00b7; Zero defects</span></a>
+            <a href="#outcome" class="block text-sm leading-snug no-underline group cursor-pointer"><strong class="group-hover:text-accent transition-colors">Delivered measurable impact</strong><br><span class="text-secondary text-xs">11k+ users &#x00b7; 0 axe-core violations</span></a>
           </div>
         </div>
         <div class="meta-group opacity-0">
           <div class="text-[10px] font-bold uppercase tracking-widest text-accent mb-4">Team</div>
-          <div class="text-sm leading-relaxed"><strong>1 Product Designer</strong> (me)<br><span class="text-secondary text-xs">System Architecture Lead</span></div>
+          <div class="text-sm leading-relaxed"><strong>Lead Product Designer</strong> (me)<br><span class="text-secondary text-xs">System Architecture Lead</span></div>
           <div class="text-sm leading-relaxed mt-3"><strong>3 Cross-functional partners</strong><br><span class="text-secondary text-xs">1 PM · 2 Developers</span></div>
         </div>
         <div class="meta-group opacity-0">
@@ -381,7 +377,7 @@ tailwind.config = {
               <div class="font-display text-lg font-semibold mb-4">From Audit to Architecture</div>
               <div class="space-y-3">
                 <div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-accent text-white flex items-center justify-center text-xs font-bold">1</div><div class="text-sm"><strong>Audit:</strong> Data-Informed Diagnostics</div></div>
-                <div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-bold">2</div><div class="text-sm"><strong>Build:</strong> Zero-Defect System Architecture</div></div>
+                <div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-bold">2</div><div class="text-sm"><strong>Build:</strong> Accessible-by-Default System Architecture</div></div>
                 <div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-teal-100 text-teal-700 flex items-center justify-center text-xs font-bold">3</div><div class="text-sm"><strong>Scale:</strong> Cross-Functional Adoption</div></div>
               </div>
             </div>
@@ -401,7 +397,7 @@ tailwind.config = {
               <div class="text-xs font-bold uppercase tracking-wider text-green-600 mb-4">Outcome</div>
               <div class="font-display text-lg font-semibold mb-4">Measurable Impact</div>
               <div class="space-y-3">
-                <div class="flex items-center gap-2"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="text-sm">Zero-defect WCAG 2.2 AA compliance</span></div>
+                <div class="flex items-center gap-2"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="text-sm">0 violations in axe-core audits, verified with NVDA + VoiceOver</span></div>
                 <div class="flex items-center gap-2"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="text-sm">Adopted across 3 cross-functional teams</span></div>
                 <div class="flex items-center gap-2"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="text-sm">11,000+ users with improved experience</span></div>
               </div>
@@ -444,7 +440,7 @@ tailwind.config = {
         <div class="text-xs font-bold uppercase tracking-widest text-accent mb-6 gs-child">Context / Challenge</div>
         <h2 class="font-display text-2xl lg:text-[1.75rem] font-semibold leading-snug mb-8 max-w-xl xl:max-w-2xl gs-child">Growing Pains &amp; Accessibility Debt</h2>
         <div class="text-base text-secondary leading-loose max-w-xl xl:max-w-2xl">
-          <p class="mb-5 gs-child">Project Sidewalk is an <strong class="text-primary font-medium">open-source civic platform</strong> that crowdsources urban accessibility data to train machine learning models. With over <strong class="text-primary font-medium">350,000 labels</strong> collected, the platform had proven its value&mdash;but the internal architecture and user experience were brittle.</p>
+          <p class="mb-5 gs-child">Project Sidewalk is an <strong class="text-primary font-medium">open-source civic platform</strong> that crowdsources urban accessibility data to train machine learning models. With <strong class="text-primary font-medium">350,000+ crowdsourced accessibility labels</strong> serving <strong class="text-primary font-medium">11,000+ volunteers</strong>, the platform had proven its value&mdash;but the internal architecture and user experience were brittle.</p>
           <p class="mb-5 gs-child">I identified three critical friction points holding the platform back:</p>
         </div>
 
@@ -478,8 +474,8 @@ tailwind.config = {
                 <div class="w-10 h-10 mx-auto rounded-lg bg-green-50 border border-green-100 flex items-center justify-center mb-2">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                 </div>
-                <div class="font-display text-xs font-semibold">Zero Defects</div>
-                <div class="text-[10px] text-secondary mt-0.5">100% WCAG AA pass</div>
+                <div class="font-display text-xs font-semibold">0 axe-core violations</div>
+                <div class="text-[10px] text-secondary mt-0.5">verified with NVDA + VoiceOver</div>
               </div>
             </div>
           </div>
@@ -586,7 +582,7 @@ tailwind.config = {
         <!-- ★ Stakeholder Alignment -->
         <div class="mt-16 gs-child">
           <h3 class="font-display text-xl font-semibold mb-4">Stakeholder Alignment at Scale</h3>
-          <p class="text-base text-secondary leading-loose max-w-xl xl:max-w-2xl mb-8">Redesigning a civic tech platform wasn't just about updating the UI — it required balancing the competing needs of three distinct user groups. A zero-defect design system was the only way to satisfy all of them simultaneously.</p>
+          <p class="text-base text-secondary leading-loose max-w-xl xl:max-w-2xl mb-8">Redesigning a civic tech platform wasn't just about updating the UI — it required balancing the competing needs of three distinct user groups. An accessible-by-default design system was the only way to satisfy all of them simultaneously.</p>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div class="bg-accent/[0.03] border border-accent/10 rounded-xl p-5 transition-shadow duration-200 hover:shadow-md" style="box-shadow:0 0 0 0.5px rgba(22,163,74,0.08),0 1px 2px rgba(17,24,39,0.04)">
               <div class="flex items-center gap-2.5 mb-4">
@@ -877,17 +873,12 @@ tailwind.config = {
 
         <!-- Phase 2 -->
         <div class="text-base text-secondary leading-loose max-w-xl xl:max-w-2xl mt-16">
-          <p class="mb-5 gs-child"><strong class="text-primary font-medium text-lg">2. Architecting the System (The &ldquo;Zero-Defect&rdquo; Standard)</strong></p>
+          <p class="mb-5 gs-child"><strong class="text-primary font-medium text-lg">2. Architecting the System (Accessible by Default)</strong></p>
           <p class="mb-5 gs-child">My goal was to shift from delivering polished screens to building <strong class="text-primary font-medium">resilient infrastructure</strong> that enabled sustainable growth.</p>
         </div>
 
         <!-- Tokenization & Components — Flip cards -->
-        <div class="text-xs text-secondary text-center mb-4 gs-child">
-          <span class="inline-flex items-center gap-1.5 bg-accent/5 border border-accent/10 rounded-full px-3 py-1">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><path d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5"/></svg>
-            Click each card to learn more
-          </span>
-        </div>
+        
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-10">
           <!-- Flip Card 1: Tokenization -->
           <div class="gs-child" style="perspective:1000px">
@@ -900,19 +891,13 @@ tailwind.config = {
                   <div class="text-xs font-bold uppercase tracking-wider text-accent mb-3">Approach</div>
                   <div class="font-bold text-base mb-2">Tokenization &amp; Semantics</div>
                   <div class="text-sm text-secondary leading-relaxed italic pr-8">Defined atomic design tokens to establish a &ldquo;Single Source of Truth&rdquo; between design and code.</div>
-                  <div class="mt-4 text-xs text-gray-400 flex items-center gap-1">
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/></svg>
-                    click to flip
-                  </div>
+                  
                 </div>
                 <div class="flip-back rounded-xl p-7 bg-accent text-white" style="backface-visibility:hidden;transform:rotateY(180deg)">
                   <div class="text-xs font-bold uppercase tracking-wider text-green-200 mb-3">Detail</div>
                   <div class="font-bold text-base mb-2">Design &harr; SCSS Parity</div>
                   <div class="text-sm text-green-100 leading-relaxed">I mapped Figma variables 1:1 with the engineers&rsquo; SCSS variables, eliminating guesswork and friction during handoff.</div>
-                  <div class="mt-4 text-xs text-green-300 flex items-center gap-1">
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
-                    click to flip back
-                  </div>
+                  
                 </div>
               </div>
             </div>
@@ -928,19 +913,13 @@ tailwind.config = {
                   <div class="text-xs font-bold uppercase tracking-wider text-accent mb-3">Approach</div>
                   <div class="font-bold text-base mb-2">Accessible by Default</div>
                   <div class="text-sm text-secondary leading-relaxed italic pr-8">Built a comprehensive, reusable component library with WCAG 2.2 AA compliance baked into its foundation.</div>
-                  <div class="mt-4 text-xs text-gray-400 flex items-center gap-1">
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/></svg>
-                    click to flip
-                  </div>
+                  
                 </div>
                 <div class="flip-back rounded-xl p-7 bg-accent text-white" style="backface-visibility:hidden;transform:rotateY(180deg)">
                   <div class="text-xs font-bold uppercase tracking-wider text-green-200 mb-3">Detail</div>
                   <div class="font-bold text-base mb-2">Compliance Built In</div>
                   <div class="text-sm text-green-100 leading-relaxed">Any future feature built with these components would inherently meet accessibility standards&mdash;eliminating the need for retroactive WCAG fixes.</div>
-                  <div class="mt-4 text-xs text-green-300 flex items-center gap-1">
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
-                    click to flip back
-                  </div>
+                  
                 </div>
               </div>
             </div>
@@ -1109,62 +1088,6 @@ tailwind.config = {
           </div>
         </div>
 
-        <!-- What the system solved -->
-        <div class="my-10 bg-surface rounded-xl p-6 border border-gray-200 gs-child">
-          <div class="text-xs font-bold uppercase tracking-wider text-accent mb-4">What the system solved</div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
-              <div class="text-sm font-bold mb-3">Before &mdash; Ad Hoc</div>
-              <div class="space-y-2.5">
-                <div class="flex items-start gap-2">
-                  <div class="w-4 h-4 shrink-0 mt-0.5 rounded border border-red-300 flex items-center justify-center">
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                  </div>
-                  <div class="flex-1 text-xs text-gray-400">Components rebuilt from scratch</div>
-                  <span class="shrink-0 text-xs text-highlight">wasted effort</span>
-                </div>
-                <div class="flex items-start gap-2">
-                  <div class="w-4 h-4 shrink-0 mt-0.5 rounded border border-red-300 flex items-center justify-center">
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                  </div>
-                  <div class="flex-1 text-xs text-gray-400">WCAG checked manually per page</div>
-                  <span class="shrink-0 text-xs text-highlight">error-prone</span>
-                </div>
-                <div class="flex items-start gap-2">
-                  <div class="w-4 h-4 shrink-0 mt-0.5 rounded border border-red-300 flex items-center justify-center">
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                  </div>
-                  <div class="flex-1 text-xs text-gray-400">Inconsistent handoff specs</div>
-                  <span class="shrink-0 text-xs text-highlight">slow cycles</span>
-                </div>
-              </div>
-            </div>
-            <div class="bg-accent/5 rounded-xl border border-accent/20 p-5">
-              <div class="text-sm font-bold text-accent mb-3">After &mdash; Design System</div>
-              <div class="space-y-2.5">
-                <div class="flex items-start gap-2">
-                  <div class="w-4 h-4 shrink-0 mt-0.5 rounded-full bg-accent flex items-center justify-center">
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
-                  </div>
-                  <div class="flex-1 text-xs font-medium">Reusable component library</div>
-                </div>
-                <div class="flex items-start gap-2">
-                  <div class="w-4 h-4 shrink-0 mt-0.5 rounded-full bg-accent flex items-center justify-center">
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
-                  </div>
-                  <div class="flex-1 text-xs font-medium">Accessibility baked into every component</div>
-                </div>
-                <div class="flex items-start gap-2">
-                  <div class="w-4 h-4 shrink-0 mt-0.5 rounded-full bg-accent flex items-center justify-center">
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
-                  </div>
-                  <div class="flex-1 text-xs font-medium">Token-based specs &mdash; zero ambiguity</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
         <!-- Component library preview -->
         <div class="my-10 bg-white rounded-xl border border-gray-200 p-6 lg:p-8 gs-child shadow-sm">
           <div class="text-sm font-semibold text-primary mb-1">Component Library Preview</div>
@@ -1229,13 +1152,13 @@ tailwind.config = {
           </div>
           <div class="bg-green-50 rounded-xl p-6 border border-green-200 text-center">
             <svg class="mx-auto mb-3" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-            <div class="font-bold text-sm text-accent mb-1">100% WCAG 2.2 AA Compliance</div>
+            <div class="font-bold text-sm text-accent mb-1">0 violations in axe-core audits, verified manually with NVDA + VoiceOver</div>
             <div class="text-xs text-secondary">Eliminated legacy accessibility debt, validated by zero violations in automated axe-core audits.</div>
           </div>
           <div class="bg-green-50 rounded-xl p-6 border border-green-200 text-center">
             <svg class="mx-auto mb-3" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="1.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-            <div class="font-bold text-sm text-green-700 mb-1">Zero Defects &amp; Faster Velocity</div>
-            <div class="text-xs text-secondary">System adoption across 3 cross-functional teams drastically reduced engineering overhead, accelerated feature delivery, and eliminated UI-related frontend bugs.</div>
+            <div class="font-bold text-sm text-green-700 mb-1">Fewer regressions, faster delivery</div>
+            <div class="text-xs text-secondary">System adoption across 3 cross-functional teams drastically reduced engineering overhead, accelerated feature delivery, and sharply reduced UI-related frontend bugs.</div>
           </div>
         </div>
 
