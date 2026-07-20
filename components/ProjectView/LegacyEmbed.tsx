@@ -6,6 +6,33 @@ import { useEffect, useRef, useState } from "react";
 export default function LegacyEmbed({ src }: { src: string }) {
   const ref = useRef<HTMLIFrameElement>(null);
   const [height, setHeight] = useState(1200);
+  const [dark, setDark] = useState(false);
+
+  // 사이트 테마를 iframe 문서에 주입 (embed의 html[data-theme=dark] CSS가 반응)
+  useEffect(() => {
+    const iframe = ref.current;
+    if (!iframe) return;
+    const apply = () => {
+      const theme =
+        document.documentElement.dataset.theme === "light" ? "light" : "dark";
+      setDark(theme === "dark");
+      try {
+        const doc = iframe.contentDocument;
+        if (doc?.documentElement) doc.documentElement.dataset.theme = theme;
+      } catch {}
+    };
+    apply();
+    iframe.addEventListener("load", apply);
+    const mo = new MutationObserver(apply);
+    mo.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
+    return () => {
+      iframe.removeEventListener("load", apply);
+      mo.disconnect();
+    };
+  }, [src]);
 
   useEffect(() => {
     const iframe = ref.current;
@@ -36,7 +63,11 @@ export default function LegacyEmbed({ src }: { src: string }) {
         title="Case study"
         scrolling="no"
         className="w-full border-0"
-        style={{ height, display: "block", background: "#ffffff" }}
+        style={{
+          height,
+          display: "block",
+          background: dark ? "#0e0e10" : "#ffffff",
+        }}
       />
     </div>
   );
