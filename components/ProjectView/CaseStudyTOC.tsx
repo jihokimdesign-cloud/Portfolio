@@ -26,6 +26,7 @@ export default function CaseStudyTOC() {
   const [sections, setSections] = useState<Section[]>([]);
   const [active, setActive] = useState(0);
   const [progress, setProgress] = useState(0); // 0..1 전체 스크롤 진행
+  const [visible, setVisible] = useState(false); // 히어로 지난 뒤 표시
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
   const scrollerRef = useRef<HTMLElement | null>(null);
 
@@ -99,6 +100,8 @@ export default function CaseStudyTOC() {
       setActive(cur);
       const max = scroller.scrollHeight - scroller.clientHeight;
       setProgress(max > 0 ? Math.min(1, scroller.scrollTop / max) : 0);
+      // 히어로를 지나 본문에 들어오면 뜬다
+      setVisible(scroller.scrollTop > window.innerHeight * 0.75);
     };
     const scroller = scrollerRef.current || window;
     const target: any = scrollerRef.current || window;
@@ -136,10 +139,16 @@ export default function CaseStudyTOC() {
 
   return createPortal(
     <div style={{ fontFamily: FONT_STACK }}>
-      {/* 좌측 섹션 내비 (넓은 화면만) */}
+      {/* 좌측 섹션 내비 (넓은 화면만) — 본문 진입 후 페이드인 */}
       <nav
         className="fixed left-6 top-1/2 z-[140] hidden -translate-y-1/2 flex-col gap-3 xl:flex"
         aria-label="Sections"
+        style={{
+          opacity: visible ? 1 : 0,
+          pointerEvents: visible ? "auto" : "none",
+          transform: `translateY(-50%) translateX(${visible ? 0 : -8}px)`,
+          transition: "opacity .35s ease, transform .35s ease",
+        }}
       >
         {sections.map((s, i) => (
           <button
@@ -157,10 +166,14 @@ export default function CaseStudyTOC() {
         ))}
       </nav>
 
-      {/* 우측 미니맵 */}
+      {/* 우측 미니맵 — 본문 진입 후 페이드인 */}
       <div
         className="fixed right-4 top-1/2 z-[140] hidden -translate-y-1/2 flex-col items-end gap-1 md:flex"
         aria-hidden
+        style={{
+          opacity: visible ? 1 : 0,
+          transition: "opacity .35s ease",
+        }}
       >
         {rows.map((r, i) => {
           const near = Math.abs(r.sec - active) === 0;

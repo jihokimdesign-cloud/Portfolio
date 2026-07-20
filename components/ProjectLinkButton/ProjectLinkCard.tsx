@@ -68,9 +68,8 @@ const ProjectLinkCard = ({
           <motion.a
             className="block h-[64em] rounded-tl-[1.25rem] rounded-tr-[1.25rem] relative cursor-pointer overflow-hidden"
             style={{
-              backgroundColor: "var(--canvas)",
+              backgroundColor: "transparent",
               color: "var(--fg)",
-              borderTop: "1px solid var(--hairline)",
             }}
             onClickCapture={handleClick}
             ref={linkRef}

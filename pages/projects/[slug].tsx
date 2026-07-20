@@ -119,7 +119,7 @@ export default function Post({
   // 테마에서 흰 본문 위아래로 어두운 띠가 생김 → 크롬을 테마 토큰으로 중립화
   const themeChrome = (s: typeof projectStyle) =>
     meta.legacyHtml
-      ? { ...s, getBgColor: () => "var(--canvas)", getTextColor: () => "var(--fg)" }
+      ? { ...s, getBgColor: () => "transparent", getTextColor: () => "var(--fg)" }
       : s;
   const shellStyle = themeChrome(projectStyle);
   const shellNextStyle = themeChrome(nextProjectStyle);
