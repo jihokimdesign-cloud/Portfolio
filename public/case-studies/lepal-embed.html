@@ -197,6 +197,7 @@ tailwind.config = {
 <script>window.ScrollTrigger={create:function(c){try{if(c){if(c.onEnter)c.onEnter();if(c.animation&&c.animation.play)c.animation.play()}}catch(e){}return{kill:function(){}}},refresh:function(){},update:function(){},getAll:function(){return[]},batch:function(){return[]},matchMedia:function(){},killAll:function(){}};</script>
 <style>.gs-child{opacity:1 !important;transform:none !important}.opacity-0{opacity:1 !important}.hero-badge{transform:none !important}#quick-summary-section,#summary-overlay{display:none !important}</style>
 <style>#speed-slider{pointer-events:none !important}</style>
+<style>#speed-replay,[id^='speed-'] button{display:none !important}</style>
 </head>
 <body class="bg-white text-primary leading-relaxed">
 
@@ -234,7 +235,7 @@ tailwind.config = {
         <div class="meta-group opacity-0">
           <div class="text-[10px] font-bold uppercase tracking-widest text-accent mb-4">Impact</div>
           <div class="space-y-4">
-            <div><div class="font-display text-2xl font-semibold leading-none mb-1 stat-number" data-target="15" data-prefix="+" data-suffix="%">+15%</div><div class="text-xs text-secondary">D7 retention lift</div></div>
+            <div><div class="font-display text-2xl font-semibold leading-none mb-1 stat-number" data-target="15" data-prefix="+" data-suffix="%">+15%</div><div class="text-xs text-secondary">D7 retention &mdash; sustained past the 72-hour wall</div></div>
             <div><div class="font-display text-2xl font-semibold leading-none mb-1 stat-number" data-target="85" data-suffix="%">85%</div><div class="text-xs text-secondary">rated the AI &ldquo;supportive&rdquo; (post-test survey)</div></div>
             <div><div class="font-display text-2xl font-semibold leading-none mb-1 stat-number" data-target="60" data-suffix="%">60%</div><div class="text-xs text-secondary">User satisfaction (from 24%)</div></div>
           </div>
@@ -272,7 +273,7 @@ tailwind.config = {
     <div class="absolute inset-0 pointer-events-none" id="floating-cards">
       <div class="summary-float-card absolute bg-white rounded-xl shadow-lg border border-gray-100 p-3 w-36 opacity-0" style="top:15%;left:8%">
         <div class="text-xs font-bold text-accent mb-1">+15%</div>
-        <div class="text-[10px] text-secondary">D7 Retention Lift</div>
+        <div class="text-[10px] text-secondary">D7 Retention &mdash; Sustained Past the 72-Hour Wall</div>
         <div class="mt-1.5 h-1 bg-green-100 rounded-full overflow-hidden"><div class="h-full bg-green-400 rounded-full" style="width:65%"></div></div>
       </div>
       <div class="summary-float-card absolute bg-white rounded-xl shadow-lg border border-gray-100 p-3 w-32 opacity-0" style="top:20%;right:10%">
@@ -1377,7 +1378,7 @@ tailwind.config = {
           </div>
           <div class="bg-green-50 rounded-xl p-5 border border-green-200 text-center">
             <div class="font-display text-3xl font-semibold text-green-600 stat-number" data-prefix="+" data-target="15" data-suffix="%">+15%</div>
-            <div class="text-xs text-secondary mt-2">D7 retention lift</div>
+            <div class="text-xs text-secondary mt-2">D7 retention &mdash; sustained past the 72-hour wall</div>
             <div class="text-[10px] text-green-600 mt-1">variant cohort</div>
           </div>
           <div class="bg-green-50 rounded-xl p-5 border border-green-200 text-center">
@@ -1697,7 +1698,7 @@ gsap.utils.toArray('.section-icon').forEach(icon => {
   // Auto-play on scroll
   ScrollTrigger.create({
     trigger: '#speed-slider', start: 'top 80%', once: true,
-    onEnter: () => { setTimeout(playDemo, 500); }
+    onEnter: () => {}
   });
 })();
 
