@@ -1,7 +1,7 @@
-"use client";
 
-import { useRecruiter } from "@/lib/recruiter-context";
-import { cn } from "@/lib/utils";
+
+import { useRecruiter } from "../contexts/recruiter-context";
+import { cn } from "../lib/utils";
 
 interface RecruiterToggleProps {
   size?: "sm" | "md";

@@ -1,7 +1,7 @@
-"use client";
+
 
 import { useEffect, useState, useCallback } from "react";
-import { useRecruiter } from "@/lib/recruiter-context";
+import { useRecruiter } from "../contexts/recruiter-context";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles as SparkleIcon } from "lucide-react";
 import Image from "next/image";

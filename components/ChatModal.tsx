@@ -1,4 +1,4 @@
-"use client";
+
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -10,15 +10,15 @@ import {
   AlertCircle,
   Sparkles,
 } from "lucide-react";
-import { useRecruiter } from "@/lib/recruiter-context";
+import { useRecruiter } from "../contexts/recruiter-context";
 import RecruiterToggle from "./RecruiterToggle";
 import {
   QUICK_ACTIONS_GENERAL,
   QUICK_ACTIONS_RECRUITER,
   SKILL_PILLS,
-} from "@/lib/constants";
-import { cn } from "@/lib/utils";
-import type { ChatResponse } from "@/types";
+} from "../lib/constants";
+import { cn } from "../lib/utils";
+import type { ChatResponse } from "../types";
 
 interface ChatModalProps {
   isOpen: boolean;
