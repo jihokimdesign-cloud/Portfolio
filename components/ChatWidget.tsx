@@ -2,7 +2,11 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, X, ArrowUp } from "lucide-react";
-import { QUICK_ACTIONS_GENERAL } from "../lib/constants";
+import {
+  QUICK_ACTIONS_GENERAL,
+  QUICK_ACTIONS_RECRUITER,
+  SKILL_PILLS,
+} from "../lib/constants";
 import type { ChatResponse } from "../types";
 import { AnimationConfig } from "./AnimationConfig";
 
@@ -51,6 +55,7 @@ export default function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [showHint, setShowHint] = useState(false);
   const [isRecruiter, setIsRecruiter] = useState(false);
+  const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [followUps, setFollowUps] = useState<string[]>([]);
@@ -109,6 +114,7 @@ export default function ChatWidget() {
           body: JSON.stringify({
             message: text,
             mode: isRecruiter ? "recruiter" : "general",
+            selectedSkills: isRecruiter ? selectedSkills : [],
           }),
         });
         if (!res.ok) throw new Error();
@@ -136,8 +142,13 @@ export default function ChatWidget() {
         setLoading(false);
       }
     },
-    [loading, isRecruiter]
+    [loading, isRecruiter, selectedSkills]
   );
+
+  const toggleSkill = (skill: string) =>
+    setSelectedSkills((prev) =>
+      prev.includes(skill) ? prev.filter((s) => s !== skill) : [...prev, skill]
+    );
 
   // 히어로(#landing-hero)가 보이는 동안엔 플로팅 챗 바가 대신 떠 있으니
   // FAB/힌트 숨김 — 히어로를 지나면 지금처럼 우하단 플로팅으로 나타난다
@@ -214,12 +225,20 @@ export default function ChatWidget() {
               style={{ borderBottom: `1px solid ${HAIRLINE}` }}
             >
               <div>
-                <div className="text-[15px] font-semibold">
-                  {isRecruiter ? "Job match" : "Chat with Jiho's AI"}
+                <div className="flex items-center gap-2 text-[15px] font-semibold">
+                  {isRecruiter ? "AI Job Match Analysis" : "Chat with Jiho's AI"}
+                  {isRecruiter && (
+                    <span
+                      className="rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide"
+                      style={{ background: `${PRIMARY}14`, color: PRIMARY }}
+                    >
+                      Recruiter
+                    </span>
+                  )}
                 </div>
                 <div className="mt-0.5 text-[13px]" style={{ color: MUTED }}>
                   {isRecruiter
-                    ? "Paste a job description — I'll assess the fit."
+                    ? "Paste a job description to see how I match"
                     : "Ask anything about my work, skills, or experience"}
                 </div>
               </div>
@@ -239,21 +258,59 @@ export default function ChatWidget() {
               className="flex max-h-[45vh] min-h-[180px] flex-col gap-2.5 overflow-y-auto px-4 py-4 text-[14px] leading-relaxed"
             >
               {messages.length === 0 && !loading && (
-                <div className="flex flex-wrap gap-1.5">
-                  {QUICK_ACTIONS_GENERAL.map((a) => (
-                    <button
-                      key={a.label}
-                      onClick={() => send(a.prompt)}
-                      className="rounded-full px-3 py-1.5 text-[12px] transition-colors"
-                      style={{
-                        border: `1px solid ${HAIRLINE}`,
-                        color: LINK_LIGHT,
-                      }}
-                    >
-                      {a.label}
-                    </button>
-                  ))}
-                </div>
+                <>
+                  {isRecruiter && (
+                    <div>
+                      <div
+                        className="mb-2 text-[11px] font-semibold uppercase tracking-wide"
+                        style={{ color: MUTED }}
+                      >
+                        Highlight Specific Skills (Optional)
+                      </div>
+                      <div className="flex flex-wrap gap-1.5">
+                        {SKILL_PILLS.map((skill) => {
+                          const active = selectedSkills.includes(skill);
+                          return (
+                            <button
+                              key={skill}
+                              onClick={() => toggleSkill(skill)}
+                              aria-pressed={active}
+                              className="rounded-full px-3 py-1.5 text-[12px] transition-colors"
+                              style={
+                                active
+                                  ? { background: PRIMARY, color: "#fff" }
+                                  : {
+                                      border: `1px solid ${HAIRLINE}`,
+                                      color: MUTED,
+                                    }
+                              }
+                            >
+                              {skill}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                  <div className="flex flex-wrap gap-1.5">
+                    {(isRecruiter
+                      ? QUICK_ACTIONS_RECRUITER
+                      : QUICK_ACTIONS_GENERAL
+                    ).map((a) => (
+                      <button
+                        key={a.label}
+                        onClick={() => send(a.prompt)}
+                        className="rounded-full px-3 py-1.5 text-[12px] transition-colors"
+                        style={{
+                          border: `1px solid ${HAIRLINE}`,
+                          color: LINK_LIGHT,
+                        }}
+                      >
+                        {a.label}
+                      </button>
+                    ))}
+                  </div>
+                </>
               )}
 
               {messages.map((msg, i) =>
