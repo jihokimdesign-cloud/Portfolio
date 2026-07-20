@@ -1,6 +1,7 @@
 import { MDXRemote } from "next-mdx-remote";
 import Head from "next/head";
 import LegacyEmbed from "../../components/ProjectView/LegacyEmbed";
+import CaseStudyNav from "../../components/ProjectView/CaseStudyNav";
 import { serialize } from "next-mdx-remote/serialize";
 import { GetStaticProps, InferGetStaticPropsType, GetStaticPaths } from "next";
 import { getAllPostSlugs, getPostBySlug } from "../../lib/projects";
@@ -226,6 +227,7 @@ export default function Post({
           </EditableContextProvider>
         </ColorShifterContextProvider>
       </VideoHoverContextProvider>
+      {meta.legacyHtml && <CaseStudyNav />}
     </>
   );
 }
