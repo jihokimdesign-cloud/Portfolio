@@ -1,4 +1,5 @@
 import { MDXRemote } from "next-mdx-remote";
+import Head from "next/head";
 import { serialize } from "next-mdx-remote/serialize";
 import { GetStaticProps, InferGetStaticPropsType, GetStaticPaths } from "next";
 import { getAllPostSlugs, getPostBySlug } from "../../lib/projects";
@@ -116,6 +117,21 @@ export default function Post({
         title={`${projectInfo.title} — Jiho Kim`}
         description={`${projectInfo.description}`}
       />
+      {/* 라이브 사이트 타입 (fontTheme: live) — DM Sans 본문 + Plus Jakarta 헤딩 */}
+      {meta.fontTheme === "live" && (
+        <Head>
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link
+            rel="preconnect"
+            href="https://fonts.gstatic.com"
+            crossOrigin="anonymous"
+          />
+          <link
+            href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
+            rel="stylesheet"
+          />
+        </Head>
+      )}
       <VideoHoverContextProvider>
         <ColorShifterContextProvider
           initialColor={projectStyle.getTextColor()}
@@ -131,9 +147,14 @@ export default function Post({
               slugTitleMap={slugTitleMap}
             >
               {/* <h1 className="text-6xl">{meta.title}</h1> */}
-              <ProjectHeader projectInfo={projectInfo} />
+              <ProjectHeader
+                projectInfo={projectInfo}
+                invertLogo={!projectStyle.isDarkColorScheme}
+              />
               <main
-                className="grid grid-cols-6 gap-x-4 mx-6 2xl:mx-16 md:text-xl -tracking-[.016em]"
+                className={`${
+                  meta.fontTheme === "live" ? "live-type " : ""
+                }grid grid-cols-6 gap-x-4 mx-6 2xl:mx-16 md:text-xl -tracking-[.016em]`}
                 style={{ "--accent": projectStyle.accent } as React.CSSProperties}
               >
                 <MDXRemote

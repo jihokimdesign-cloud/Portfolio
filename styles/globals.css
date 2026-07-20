@@ -328,3 +328,14 @@ a {
     display: none;
   }
 }
+
+/* ── fontTheme: live — 라이브 사이트(jihokim.me) 케이스 스터디 타입 ────── */
+.live-type {
+  font-family: "DM Sans", -apple-system, sans-serif;
+  letter-spacing: 0;
+}
+.live-type h2,
+.live-type h3 {
+  font-family: "Plus Jakarta Sans", "DM Sans", sans-serif;
+  letter-spacing: -0.01em;
+}
