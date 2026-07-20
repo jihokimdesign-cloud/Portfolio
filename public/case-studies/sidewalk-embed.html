@@ -7,6 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css">
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script>
 tailwind.config = {
   theme: {
@@ -188,7 +189,8 @@ tailwind.config = {
   /* Audit progress bar */
   .audit-bar { transition: width 1.2s ease; }
 </style>
-<style>.gs-child{opacity:1 !important;transform:none !important}.opacity-0{opacity:1 !important}.hero-badge{transform:none !important}</style>
+<script>window.ScrollTrigger={create:function(){return{kill:function(){}}},refresh:function(){},update:function(){},getAll:function(){return[]},batch:function(){return[]},matchMedia:function(){},killAll:function(){}};</script>
+<style>.gs-child{opacity:1 !important;transform:none !important}.opacity-0{opacity:1 !important}.hero-badge{transform:none !important}#quick-summary-section,#summary-overlay{display:none !important}</style>
 </head>
 <body class="bg-white text-primary leading-relaxed">
 
@@ -268,7 +270,177 @@ tailwind.config = {
     </div>
   </header>
 
-  <section class="section py-20 border-b border-gray-200" id="context">
+  <!-- ═══════ QUICK SUMMARY — Interactive CTA ═══════ -->
+  <div class="relative overflow-hidden" id="quick-summary-section" style="min-height:320px">
+    <div class="absolute inset-0 opacity-[0.12]" style="background-image:radial-gradient(circle,#16a34a 0.6px,transparent 0.6px);background-size:28px 28px" id="dot-grid"></div>
+    <div id="summary-glow" class="absolute w-[500px] h-[500px] rounded-full pointer-events-none opacity-0 transition-opacity duration-500" style="background:radial-gradient(circle,rgba(22,163,74,0.08) 0%,transparent 70%);transform:translate(-50%,-50%)"></div>
+    <!-- Floating preview cards -->
+    <div class="absolute inset-0 pointer-events-none" id="floating-cards">
+      <div class="summary-float-card absolute bg-white rounded-xl shadow-lg border border-gray-100 p-3 w-36 opacity-0" style="top:15%;left:8%">
+        <div class="text-xs font-bold text-accent mb-1">350k+</div>
+        <div class="text-[10px] text-secondary">Labels Crowdsourced</div>
+        <div class="mt-1.5 h-1 bg-green-100 rounded-full overflow-hidden"><div class="h-full bg-green-400 rounded-full" style="width:85%"></div></div>
+      </div>
+      <div class="summary-float-card absolute bg-white rounded-xl shadow-lg border border-gray-100 p-3 w-32 opacity-0" style="top:20%;right:10%">
+        <div class="flex items-center gap-1.5 mb-1"><div class="w-1.5 h-1.5 rounded-full bg-accent animate-pulse"></div><div class="text-[10px] font-bold text-accent">WCAG AA</div></div>
+        <div class="h-1 bg-accent/10 rounded w-full mb-0.5"></div>
+        <div class="h-1 bg-accent/5 rounded w-3/4"></div>
+      </div>
+      <div class="summary-float-card absolute bg-white rounded-xl shadow-lg border border-gray-100 p-3 w-28 opacity-0" style="bottom:18%;left:12%">
+        <div class="text-[10px] font-bold mb-1">3 Teams</div>
+        <div class="text-[10px] text-secondary">Adopted</div>
+      </div>
+      <div class="summary-float-card absolute bg-white rounded-xl shadow-lg border border-gray-100 p-3 w-36 opacity-0" style="bottom:15%;right:8%">
+        <div class="text-xs font-bold text-green-600 mb-1">11k+</div>
+        <div class="text-[10px] text-secondary">Users Supported</div>
+        <div class="mt-1.5 h-1 bg-green-100 rounded-full overflow-hidden"><div class="h-full bg-green-400 rounded-full" style="width:100%"></div></div>
+      </div>
+    </div>
+    <!-- Center content -->
+    <div class="relative z-10 flex flex-col items-center justify-center py-20 px-10">
+      <div class="inline-flex items-center gap-2 bg-accent/5 border border-accent/15 rounded-full px-4 py-1.5 mb-4 text-xs text-accent font-medium">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        ~2 min read
+      </div>
+      <h3 class="font-display text-xl lg:text-2xl font-semibold text-primary mb-3 text-center">Short on time?</h3>
+      <p class="text-base text-secondary mb-8 text-center max-w-sm">Get the quick highlights in a visual, swipeable format.</p>
+      <button id="summary-btn" class="summary-magnetic relative inline-flex items-center gap-3 bg-primary text-white rounded-2xl px-10 py-5 shadow-xl hover:shadow-2xl transition-all duration-300 cursor-pointer group overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="relative z-10 group-hover:scale-110 transition-transform"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        <span class="text-base font-semibold relative z-10">Summary Mode</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="relative z-10 group-hover:translate-x-1 transition-transform"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+      <div class="mt-4 flex items-center gap-4 text-xs text-secondary">
+        <span class="flex items-center gap-1">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8L22 12L18 16"/><path d="M6 8L2 12L6 16"/></svg>
+          Swipeable slides
+        </span>
+        <span>&middot;</span>
+        <span>4 key insights</span>
+        <span>&middot;</span>
+        <span>ESC to close</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ SUMMARY OVERLAY ═══════ -->
+  <div id="summary-overlay" class="fixed inset-0 z-[200] hidden">
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" id="summary-backdrop"></div>
+    <div class="absolute inset-x-4 lg:inset-x-[15%] top-[5%] bottom-[5%] bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col" id="summary-card">
+      <button id="summary-close" class="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-surface flex items-center justify-center hover:bg-gray-200 transition-colors cursor-pointer">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+      <div class="flex-1 overflow-hidden relative">
+        <div id="summary-slides" class="flex h-full transition-transform duration-500 ease-out">
+          <!-- Slide 1: Overview -->
+          <div class="w-full flex-shrink-0 flex flex-col lg:flex-row">
+            <div class="flex-1 bg-surface p-8 flex flex-col items-center justify-center">
+              <div class="w-20 h-20 rounded-2xl bg-accent/10 flex items-center justify-center mb-4">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              </div>
+              <div class="font-display text-xl font-bold mb-1">Project Sidewalk</div>
+              <div class="text-sm text-secondary">Civic Tech &middot; Open-Source &middot; Accessibility</div>
+            </div>
+            <div class="flex-1 p-8 flex flex-col justify-center">
+              <div class="font-display text-lg font-semibold mb-4">Project Summary</div>
+              <div class="text-sm text-secondary leading-relaxed mb-6">Architected a production-ready design system adopted across 3 cross-functional teams, eliminating accessibility debt and improving navigation for 11,000+ users.</div>
+              <div class="space-y-3">
+                <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-accent"></span><span class="text-sm"><strong>Role:</strong> Lead Product Designer</span></div>
+                <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-accent"></span><span class="text-sm"><strong>Timeline:</strong> 12 months</span></div>
+                <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-accent"></span><span class="text-sm"><strong>Team:</strong> 1 PM, 2 Devs, 1 Designer</span></div>
+              </div>
+              <div class="mt-6 grid grid-cols-2 gap-3">
+                <div class="bg-surface rounded-lg p-3 text-center border border-gray-100"><div class="font-display text-2xl font-semibold text-accent">11k+</div><div class="text-xs text-secondary">Users supported</div></div>
+                <div class="bg-surface rounded-lg p-3 text-center border border-gray-100"><div class="font-display text-2xl font-semibold text-accent">100%</div><div class="text-xs text-secondary">WCAG compliance</div></div>
+              </div>
+            </div>
+          </div>
+          <!-- Slide 2: Problem -->
+          <div class="w-full flex-shrink-0 flex flex-col lg:flex-row">
+            <div class="flex-1 bg-red-50/50 p-8 flex flex-col justify-center items-center">
+              <div class="text-xs font-bold uppercase tracking-wider text-highlight mb-4">The Challenge</div>
+              <div class="flex items-center gap-3 mb-3">
+                <div class="w-12 h-12 rounded-full bg-red-100 border-2 border-red-300 flex items-center justify-center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e74c3c" stroke-width="2"><path d="M12 8v4M12 16h.01"/></svg></div>
+              </div>
+              <div class="font-display text-lg font-semibold text-center mb-2">Fragmented UI &amp; Accessibility Debt</div>
+              <div class="text-sm text-secondary text-center">Every new feature created more technical debt.</div>
+            </div>
+            <div class="flex-1 p-8 flex flex-col justify-center">
+              <div class="text-xs font-bold uppercase tracking-wider text-accent mb-4">Three Friction Points</div>
+              <div class="space-y-3">
+                <div class="bg-surface rounded-lg p-3 border border-gray-100"><strong class="text-sm">Systemic Inconsistency</strong><div class="text-xs text-secondary mt-1">Varying buttons, labels, interactions across pages</div></div>
+                <div class="bg-surface rounded-lg p-3 border border-gray-100"><strong class="text-sm">Accessibility Irony</strong><div class="text-xs text-secondary mt-1">An accessibility tool that wasn't accessible</div></div>
+                <div class="bg-surface rounded-lg p-3 border border-gray-100"><strong class="text-sm">Engineering Bottleneck</strong><div class="text-xs text-secondary mt-1">Rebuilding UI from scratch each time</div></div>
+              </div>
+            </div>
+          </div>
+          <!-- Slide 3: Process -->
+          <div class="w-full flex-shrink-0 flex flex-col lg:flex-row">
+            <div class="flex-1 bg-accent/5 p-8 flex flex-col justify-center">
+              <div class="text-xs font-bold uppercase tracking-wider text-accent mb-4">Process</div>
+              <div class="font-display text-lg font-semibold mb-4">From Audit to Architecture</div>
+              <div class="space-y-3">
+                <div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-accent text-white flex items-center justify-center text-xs font-bold">1</div><div class="text-sm"><strong>Audit:</strong> Data-Informed Diagnostics</div></div>
+                <div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-bold">2</div><div class="text-sm"><strong>Build:</strong> Zero-Defect System Architecture</div></div>
+                <div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-teal-100 text-teal-700 flex items-center justify-center text-xs font-bold">3</div><div class="text-sm"><strong>Scale:</strong> Cross-Functional Adoption</div></div>
+              </div>
+            </div>
+            <div class="flex-1 p-8 flex flex-col justify-center">
+              <div class="text-xs font-bold uppercase tracking-wider text-accent mb-4">Key Decisions</div>
+              <div class="text-sm text-secondary mb-4">Design tokens mirroring SCSS variables</div>
+              <div class="space-y-3">
+                <div class="flex items-center justify-between bg-surface rounded-lg p-3 border border-gray-100"><span class="text-sm">Color Contrast</span><span class="font-semibold text-green-600">37% &rarr; 100%</span></div>
+                <div class="flex items-center justify-between bg-surface rounded-lg p-3 border border-gray-100"><span class="text-sm">Keyboard Nav</span><span class="font-semibold text-green-600">42% &rarr; 100%</span></div>
+                <div class="flex items-center justify-between bg-surface rounded-lg p-3 border border-gray-100"><span class="text-sm">Screen Reader</span><span class="font-semibold text-green-600">28% &rarr; 100%</span></div>
+              </div>
+            </div>
+          </div>
+          <!-- Slide 4: Outcome -->
+          <div class="w-full flex-shrink-0 flex flex-col lg:flex-row">
+            <div class="flex-1 bg-green-50/50 p-8 flex flex-col justify-center">
+              <div class="text-xs font-bold uppercase tracking-wider text-green-600 mb-4">Outcome</div>
+              <div class="font-display text-lg font-semibold mb-4">Measurable Impact</div>
+              <div class="space-y-3">
+                <div class="flex items-center gap-2"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="text-sm">Zero-defect WCAG 2.2 AA compliance</span></div>
+                <div class="flex items-center gap-2"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="text-sm">Adopted across 3 cross-functional teams</span></div>
+                <div class="flex items-center gap-2"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="text-sm">11,000+ users with improved experience</span></div>
+              </div>
+            </div>
+            <div class="flex-1 p-8 flex flex-col justify-center">
+              <div class="text-xs font-bold uppercase tracking-wider text-accent mb-4">Key Takeaway</div>
+              <blockquote class="font-display text-lg font-medium leading-relaxed mb-6 pl-4 border-l-2 border-accent">A robust design system is not just a style guide&mdash;it is a tool for empowerment.</blockquote>
+              <div class="space-y-2">
+                <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-accent"></span><span class="text-sm">Inclusivity baked into the code, not pixels</span></div>
+                <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-accent"></span><span class="text-sm">Designed for resilience in civic tech</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Navigation -->
+      <div class="flex items-center justify-center gap-4 py-4 border-t border-gray-100">
+        <button id="summary-prev" class="w-10 h-10 rounded-full bg-surface flex items-center justify-center hover:bg-gray-200 transition-colors cursor-pointer disabled:opacity-30" disabled>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </button>
+        <div id="summary-dots" class="flex gap-2">
+          <div class="summary-dot w-3 h-3 rounded-full bg-accent transition-colors cursor-pointer"></div>
+          <div class="summary-dot w-3 h-3 rounded-full bg-gray-300 transition-colors cursor-pointer"></div>
+          <div class="summary-dot w-3 h-3 rounded-full bg-gray-300 transition-colors cursor-pointer"></div>
+          <div class="summary-dot w-3 h-3 rounded-full bg-gray-300 transition-colors cursor-pointer"></div>
+        </div>
+        <button id="summary-next" class="w-10 h-10 rounded-full bg-surface flex items-center justify-center hover:bg-gray-200 transition-colors cursor-pointer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+      <div class="text-center text-xs text-secondary pb-3">Click or swipe through. Click outside to dismiss.</div>
+    </div>
+  </div>
+
+  <div class="flex justify-center">
+    <div class="w-full max-w-3xl px-6 lg:px-8 main-body">
+
+      <!-- ─── CONTEXT / CHALLENGE ─── -->
+      <section class="section py-20 border-b border-gray-200" id="context">
         <div class="text-xs font-bold uppercase tracking-widest text-accent mb-6 gs-child">Context / Challenge</div>
         <h2 class="font-display text-2xl lg:text-[1.75rem] font-semibold leading-snug mb-8 max-w-xl xl:max-w-2xl gs-child">Growing Pains &amp; Accessibility Debt</h2>
         <div class="text-base text-secondary leading-loose max-w-xl xl:max-w-2xl">
@@ -1177,6 +1349,317 @@ tailwind.config = {
   </div>
 </div>
 
+<script>
+/* ScrollTrigger stubbed for embed */
+
+// ─── Detect reduced motion preference for event-driven animations ───
+var _prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// ─── Number counter (utility used both inside and outside matchMedia) ───
+function animateCounter(el, reduced) {
+  var target = parseFloat(el.dataset.target);
+  var prefix = el.dataset.prefix || '';
+  var suffix = el.dataset.suffix || '';
+  var isDecimal = el.dataset.decimal === 'true';
+  var obj = { val: 0 };
+  gsap.to(obj, {
+    val: target, duration: reduced ? 0 : 1.5, ease: 'power2.out',
+    onUpdate: function() {
+      el.textContent = prefix + (isDecimal ? obj.val.toFixed(2) : Math.round(obj.val)) + suffix;
+    }
+  });
+}
+
+var mm = gsap.matchMedia();
+mm.add({
+  normal: '(prefers-reduced-motion: no-preference)',
+  reduced: '(prefers-reduced-motion: reduce)'
+}, function(context) {
+  var reduced = context.conditions.reduced;
+
+  // ─── Scroll progress bar (scrub-based, user-driven) ───
+  gsap.to('.scroll-progress', {
+    scaleX: 1,
+    ease: 'none',
+    scrollTrigger: { trigger: 'body', start: 'top top', end: 'bottom bottom', scrub: 0.3 }
+  });
+
+  // ─── Hero entrance ───
+  var heroTl = gsap.timeline({ defaults: { ease: 'power3.out' }});
+  heroTl
+    .fromTo('.hero-brand-bg', { opacity: 0, scale: 0.92 }, { opacity: 1, scale: 1, duration: reduced ? 0 : 0.8, ease: 'power2.out' })
+    .fromTo('.hero-badge', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: reduced ? 0 : 0.8, stagger: 0.12 }, '-=0.3')
+    .fromTo('.hero-subtitle', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: reduced ? 0 : 0.7, stagger: 0.1 }, '-=0.5')
+    .fromTo('.hero-contributions', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: reduced ? 0 : 0.6 }, '-=0.3')
+    .fromTo('.meta-group', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: reduced ? 0 : 0.6, stagger: 0.12 }, '-=0.4');
+
+  // ─── Scroll arrow gentle bounce ───
+  gsap.to('#scroll-arrow', {
+    y: 5, duration: reduced ? 0 : 1.2, repeat: reduced ? 0 : -1, yoyo: true, ease: 'sine.inOut'
+  });
+
+  // ─── Audit bar chart animation ───
+  ScrollTrigger.create({
+    trigger: '.audit-bar', start: 'top 85%', once: true,
+    onEnter: function() {
+      document.querySelectorAll('.audit-bar').forEach(function(bar, i) {
+        var targetW = bar.getAttribute('data-width');
+        gsap.to(bar, { width: targetW, duration: reduced ? 0 : 1, delay: i * 0.15, ease: 'power3.out' });
+      });
+      document.querySelectorAll('.audit-label').forEach(function(lbl, i) {
+        gsap.to(lbl, { opacity: 1, duration: reduced ? 0 : 0.3, delay: 0.6 + i * 0.15 });
+      });
+    }
+  });
+
+  // ─── Result bar animation ───
+  ScrollTrigger.create({
+    trigger: '.result-bar', start: 'top 85%', once: true,
+    onEnter: function() {
+      document.querySelectorAll('.result-bar').forEach(function(bar, i) {
+        var targetW = bar.getAttribute('data-width');
+        gsap.to(bar, { width: targetW, duration: reduced ? 0 : 1.2, delay: i * 0.15, ease: 'power3.out' });
+      });
+      document.querySelectorAll('.result-label').forEach(function(lbl, i) {
+        gsap.to(lbl, { opacity: 1, duration: reduced ? 0 : 0.3, delay: 0.8 + i * 0.15 });
+      });
+    }
+  });
+
+  // ─── Hero cards scroll-triggered entrance ───
+  gsap.set('.hero-card', { opacity: 0, y: 40 });
+  ScrollTrigger.create({
+    trigger: '.hero-card', start: 'top 85%', once: true,
+    onEnter: function() {
+      gsap.to('.hero-card', {
+        opacity: 1, y: 0, duration: reduced ? 0 : 0.7, stagger: 0.2, ease: 'power3.out'
+      });
+    }
+  });
+
+  // ─── Hero meta-strip stat counters ───
+  document.querySelectorAll('.meta-group .stat-number').forEach(function(el) {
+    animateCounter(el, reduced);
+  });
+
+  // ─── TOC ───
+  var toc = document.querySelector('.toc');
+  ScrollTrigger.create({
+    trigger: '.main-body', start: 'top 60%',
+    onEnter: function() { gsap.to(toc, { opacity: 1, visibility: 'visible', duration: reduced ? 0 : 0.4, ease: 'power2.out' }); },
+    onLeaveBack: function() { gsap.to(toc, { opacity: 0, duration: reduced ? 0 : 0.3, ease: 'power2.in', onComplete: function() { toc.style.visibility = 'hidden'; } }); }
+  });
+
+  var tocLinks = document.querySelectorAll('.toc-link');
+  document.querySelectorAll('.section').forEach(function(section) {
+    ScrollTrigger.create({
+      trigger: section, start: 'top 30%', end: 'bottom 30%',
+      onEnter: function() { setActive(section.id); },
+      onEnterBack: function() { setActive(section.id); },
+    });
+  });
+  function setActive(id) {
+    tocLinks.forEach(function(link) { link.classList.toggle('active', link.getAttribute('href') === '#' + id); });
+  }
+
+  // ─── Section stagger reveals ───
+  document.querySelectorAll('.section, .pillar').forEach(function(section) {
+    var children = section.querySelectorAll(':scope > .gs-child, :scope > div > .gs-child, :scope > div > div > .gs-child');
+    if (!children.length) return;
+    gsap.fromTo(children,
+      { opacity: 0, y: 30 },
+      { opacity: 1, y: 0, duration: reduced ? 0 : 0.65, stagger: 0.08, ease: 'power3.out',
+        scrollTrigger: { trigger: section, start: 'top 80%' }
+      }
+    );
+  });
+
+  // ─── Body stat counters ───
+  document.querySelectorAll('.main-body .stat-number, .main-body .result-num').forEach(function(el) {
+    ScrollTrigger.create({
+      trigger: el, start: 'top 85%', once: true,
+      onEnter: function() { animateCounter(el, reduced); },
+    });
+  });
+
+  // ─── Image placeholders ───
+  document.querySelectorAll('.main-body .img-placeholder').forEach(function(el) {
+    gsap.fromTo(el,
+      { opacity: 0, y: 30, scale: 0.97 },
+      { opacity: 1, y: 0, scale: 1, duration: reduced ? 0 : 0.7, ease: 'power3.out',
+        scrollTrigger: { trigger: el, start: 'top 85%' }
+      }
+    );
+  });
+
+  // ─── Formula boxes stagger ───
+  gsap.fromTo('.formula-box',
+    { opacity: 0, y: 20, scale: 0.9 },
+    { opacity: 1, y: 0, scale: 1, duration: reduced ? 0 : 0.5, stagger: 0.15, ease: 'back.out(1.4)',
+      scrollTrigger: { trigger: '.formula-box', start: 'top 85%' }
+    }
+  );
+  gsap.fromTo('.formula-arrow',
+    { opacity: 0, x: -10 },
+    { opacity: 1, x: 0, duration: reduced ? 0 : 0.4, stagger: 0.1, delay: 0.3,
+      scrollTrigger: { trigger: '.formula-box', start: 'top 85%' }
+    }
+  );
+
+  // ─── Research method cards ───
+  gsap.fromTo('.research-method',
+    { opacity: 0, x: -20 },
+    { opacity: 1, x: 0, duration: reduced ? 0 : 0.6, stagger: 0.15, ease: 'power3.out',
+      scrollTrigger: { trigger: '.research-method', start: 'top 85%' }
+    }
+  );
+
+  // ─── Section divider icons ───
+  gsap.utils.toArray('.section-icon').forEach(function(icon) {
+    gsap.fromTo(icon,
+      { opacity: 0, rotation: -90, scale: 0.5 },
+      { opacity: 1, rotation: 0, scale: 1, duration: reduced ? 0 : 0.6, ease: 'back.out(2)',
+        scrollTrigger: { trigger: icon, start: 'top 90%' }
+      }
+    );
+  });
+
+  // ─── Flip card entrance animation ───
+  gsap.fromTo('.flip-card',
+    { opacity: 0, y: 20, rotateY: -15 },
+    { opacity: 1, y: 0, rotateY: 0, duration: reduced ? 0 : 0.6, stagger: 0.15, ease: 'power3.out',
+      scrollTrigger: { trigger: '.flip-card', start: 'top 85%' }
+    }
+  );
+
+  // --- Floating preview cards entrance ---
+  ScrollTrigger.create({
+    trigger: '#quick-summary-section', start: 'top 75%', once: true,
+    onEnter: function() {
+      gsap.fromTo('.summary-float-card',
+        { opacity: 0, y: 30, scale: 0.8 },
+        { opacity: 1, y: 0, scale: 1, duration: reduced ? 0 : 0.7, stagger: 0.15, ease: 'back.out(1.7)' }
+      );
+      document.querySelectorAll('.summary-float-card').forEach(function(card, i) {
+        gsap.to(card, {
+          y: '-=8', duration: reduced ? 0 : (2 + i * 0.4), repeat: reduced ? 0 : -1, yoyo: true, ease: 'sine.inOut', delay: i * 0.3
+        });
+      });
+    }
+  });
+
+}); // end mm.add
+
+// ─── Hero cards 3D tilt on hover ───
+document.querySelectorAll('.hero-card').forEach(function(card) {
+  card.addEventListener('mousemove', function(e) {
+    var r = card.getBoundingClientRect();
+    var x = (e.clientX - r.left) / r.width;
+    var y = (e.clientY - r.top) / r.height;
+    var tiltX = (y - 0.5) * -10;
+    var tiltY = (x - 0.5) * 10;
+    card.style.transform = 'perspective(600px) rotateX(' + tiltX + 'deg) rotateY(' + tiltY + 'deg) scale(1.02)';
+    card.style.boxShadow = '0 20px 40px rgba(22,163,74,0.1), 0 8px 16px rgba(0,0,0,0.06)';
+    card.style.setProperty('--mx', (x * 100) + '%');
+    card.style.setProperty('--my', (y * 100) + '%');
+  });
+  card.addEventListener('mouseleave', function() {
+    card.style.transform = '';
+    card.style.boxShadow = '';
+  });
+});
+
+// ═══════════════════════════════════════════
+// INTERACTIVE: Summary Mode Overlay Carousel
+// ═══════════════════════════════════════════
+
+// --- Mouse-follow glow ---
+(function(){
+  var section = document.getElementById('quick-summary-section');
+  var glow = document.getElementById('summary-glow');
+  if(!section || !glow) return;
+  section.addEventListener('mouseenter', function() { glow.style.opacity = '1'; });
+  section.addEventListener('mouseleave', function() { glow.style.opacity = '0'; });
+  section.addEventListener('mousemove', function(e) {
+    var r = section.getBoundingClientRect();
+    glow.style.left = (e.clientX - r.left) + 'px';
+    glow.style.top = (e.clientY - r.top) + 'px';
+  });
+})();
+
+// --- Magnetic button effect ---
+(function(){
+  var btn = document.querySelector('.summary-magnetic');
+  if(!btn) return;
+  btn.addEventListener('mousemove', function(e) {
+    var r = btn.getBoundingClientRect();
+    var x = (e.clientX - r.left - r.width / 2) * 0.15;
+    var y = (e.clientY - r.top - r.height / 2) * 0.15;
+    btn.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+  });
+  btn.addEventListener('mouseleave', function() {
+    gsap.to(btn, { x: 0, y: 0, duration: _prefersReduced ? 0 : 0.4, ease: 'elastic.out(1, 0.4)' });
+    btn.style.transform = '';
+  });
+})();
+
+// --- Carousel logic ---
+(function(){
+  var btn = document.getElementById('summary-btn');
+  var overlay = document.getElementById('summary-overlay');
+  var backdrop = document.getElementById('summary-backdrop');
+  var closeBtn = document.getElementById('summary-close');
+  var slides = document.getElementById('summary-slides');
+  var prevBtn = document.getElementById('summary-prev');
+  var nextBtn = document.getElementById('summary-next');
+  var dots = document.querySelectorAll('.summary-dot');
+  if(!btn || !overlay) return;
+
+  var current = 0;
+  var total = dots.length;
+
+  function goTo(i) {
+    current = Math.max(0, Math.min(total - 1, i));
+    slides.style.transform = 'translateX(-' + (current * 100) + '%)';
+    dots.forEach(function(d, idx) {
+      d.style.backgroundColor = idx === current ? '#16a34a' : '#d1d5db';
+    });
+    prevBtn.disabled = current === 0;
+    nextBtn.style.opacity = current === total - 1 ? '0.3' : '1';
+  }
+
+  function openSummary() {
+    overlay.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    goTo(0);
+    gsap.fromTo('#summary-card', { opacity: 0, scale: 0.92, y: 40 }, { opacity: 1, scale: 1, y: 0, duration: _prefersReduced ? 0 : 0.4, ease: 'power3.out' });
+  }
+
+  function closeSummary() {
+    gsap.to('#summary-card', { opacity: 0, scale: 0.95, y: 20, duration: _prefersReduced ? 0 : 0.25, ease: 'power2.in', onComplete: function() {
+      overlay.classList.add('hidden');
+      document.body.style.overflow = '';
+    }});
+  }
+
+  btn.addEventListener('click', openSummary);
+  closeBtn.addEventListener('click', closeSummary);
+  backdrop.addEventListener('click', closeSummary);
+  prevBtn.addEventListener('click', function() { goTo(current - 1); });
+  nextBtn.addEventListener('click', function() { goTo(current + 1); });
+
+  dots.forEach(function(dot, idx) {
+    dot.addEventListener('click', function() { goTo(idx); });
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if(overlay.classList.contains('hidden')) return;
+    if(e.key === 'Escape') closeSummary();
+    if(e.key === 'ArrowRight') goTo(current + 1);
+    if(e.key === 'ArrowLeft') goTo(current - 1);
+  });
+})();
+</script>
 
 </body>
 </html>

@@ -7,6 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css">
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script>
 tailwind.config = {
   theme: {
@@ -221,7 +222,8 @@ tailwind.config = {
   }
   .insight-glow { animation: border-glow 3s ease-in-out infinite; border-width: 1px; border-style: solid; }
 </style>
-<style>.gs-child{opacity:1 !important;transform:none !important}.opacity-0{opacity:1 !important}.hero-badge{transform:none !important}</style>
+<script>window.ScrollTrigger={create:function(){return{kill:function(){}}},refresh:function(){},update:function(){},getAll:function(){return[]},batch:function(){return[]},matchMedia:function(){},killAll:function(){}};</script>
+<style>.gs-child{opacity:1 !important;transform:none !important}.opacity-0{opacity:1 !important}.hero-badge{transform:none !important}#quick-summary-section,#summary-overlay{display:none !important}</style>
 </head>
 <body class="bg-white text-primary leading-relaxed">
 
@@ -335,7 +337,165 @@ tailwind.config = {
     </div>
   </header>
 
-  <section class="section py-20 border-b border-gray-200" id="context">
+  <!-- ═══════ QUICK SUMMARY — Interactive CTA ═══════ -->
+  <div class="relative overflow-hidden" id="quick-summary-section" style="min-height:320px">
+    <!-- Dot grid background -->
+    <div class="absolute inset-0 opacity-[0.12]" style="background-image:radial-gradient(circle,#ea580c 0.6px,transparent 0.6px);background-size:28px 28px" id="dot-grid"></div>
+    <!-- Mouse-follow glow -->
+    <div id="summary-glow" class="absolute w-[500px] h-[500px] rounded-full pointer-events-none opacity-0 transition-opacity duration-500" style="background:radial-gradient(circle,rgba(234,88,12,0.08) 0%,transparent 70%);transform:translate(-50%,-50%)"></div>
+    <!-- Floating preview cards -->
+    <div class="absolute inset-0 pointer-events-none" id="floating-cards">
+      <div class="summary-float-card absolute bg-white rounded-xl shadow-lg border border-gray-100 p-3 w-36 opacity-0" style="top:15%;left:8%">
+        <div class="text-xs font-bold text-accent mb-1">-91%</div>
+        <div class="text-[10px] text-secondary">Hand-wash interruptions</div>
+        <div class="mt-1.5 h-1 bg-green-100 rounded-full overflow-hidden"><div class="h-full bg-green-400 rounded-full" style="width:91%"></div></div>
+      </div>
+      <div class="summary-float-card absolute bg-white rounded-xl shadow-lg border border-gray-100 p-3 w-36 opacity-0" style="top:60%;left:5%">
+        <div class="text-xs font-bold text-accent mb-1">-78%</div>
+        <div class="text-[10px] text-secondary">Step transition time</div>
+        <div class="mt-1.5 h-1 bg-orange-100 rounded-full overflow-hidden"><div class="h-full bg-accent rounded-full" style="width:78%"></div></div>
+      </div>
+      <div class="summary-float-card absolute bg-white rounded-xl shadow-lg border border-gray-100 p-3 w-36 opacity-0" style="top:20%;right:6%">
+        <div class="text-xs font-bold text-accent mb-1">97%</div>
+        <div class="text-[10px] text-secondary">Elbow-tap success rate</div>
+        <div class="mt-1.5 h-1 bg-green-100 rounded-full overflow-hidden"><div class="h-full bg-green-400 rounded-full" style="width:97%"></div></div>
+      </div>
+      <div class="summary-float-card absolute bg-white rounded-xl shadow-lg border border-gray-100 p-3 w-36 opacity-0" style="top:65%;right:8%">
+        <div class="text-xs font-bold text-success mb-1">+34%</div>
+        <div class="text-[10px] text-secondary">Recipe completion</div>
+        <div class="mt-1.5 h-1 bg-green-100 rounded-full overflow-hidden"><div class="h-full bg-green-400 rounded-full" style="width:84%"></div></div>
+      </div>
+    </div>
+    <!-- Center CTA -->
+    <div class="relative z-10 flex flex-col items-center justify-center py-20 px-10">
+      <div class="inline-flex items-center gap-2 bg-accent/5 border border-accent/15 rounded-full px-4 py-1.5 mb-4 text-xs text-accent font-medium">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        ~2 min read
+      </div>
+      <h3 class="font-display text-xl lg:text-2xl font-semibold text-primary mb-3 text-center">Short on time?</h3>
+      <p class="text-base text-secondary mb-8 text-center max-w-sm">Get the quick highlights in a visual, swipeable format.</p>
+      <button id="summary-btn" class="summary-magnetic relative inline-flex items-center gap-3 bg-primary text-white rounded-2xl px-10 py-5 shadow-xl hover:shadow-2xl transition-all duration-300 cursor-pointer group overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+        <svg class="w-5 h-5 relative z-10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        <span class="text-base font-semibold relative z-10">Summary Mode</span>
+        <svg class="w-4 h-4 relative z-10 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+      <div class="mt-4 flex items-center gap-4 text-xs text-secondary">
+        <span>Swipeable slides</span><span class="text-gray-300">&middot;</span><span>4 key insights</span><span class="text-gray-300">&middot;</span><span>ESC to close</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Summary overlay / carousel -->
+  <div id="summary-overlay" class="fixed inset-0 z-[200] hidden">
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" id="summary-backdrop"></div>
+    <div class="absolute inset-x-4 lg:inset-x-[15%] top-[5%] bottom-[5%] bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col" id="summary-card">
+      <button id="summary-close" class="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-surface flex items-center justify-center hover:bg-gray-200 transition-colors cursor-pointer">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+      <div class="flex-1 overflow-hidden relative">
+        <div id="summary-slides" class="flex h-full transition-transform duration-500 ease-out">
+          <!-- Slide 1: Overview -->
+          <div class="w-full flex-shrink-0 flex flex-col lg:flex-row">
+            <div class="flex-1 bg-surface p-8 flex flex-col items-center justify-center">
+              <div class="w-20 h-20 rounded-2xl bg-accent/10 flex items-center justify-center mb-4">
+                <span class="text-3xl">📱</span>
+              </div>
+              <div class="font-display text-xl font-bold mb-1">ProxiPlay</div>
+              <div class="text-sm text-secondary">Adaptive Cooking UI &middot; IoT</div>
+            </div>
+            <div class="flex-1 p-8 flex flex-col justify-center">
+              <div class="font-display text-lg font-semibold mb-4">Project Summary</div>
+              <div class="text-sm text-secondary leading-relaxed mb-6">Designed a multi-signal adaptive UI that detects when cooks can't use standard inputs, automatically switching to large elbow-operable touch targets.</div>
+              <div class="space-y-3">
+                <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-accent"></span><span class="text-sm"><strong>Role:</strong> Interaction Designer &amp; Prototyper</span></div>
+                <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-accent"></span><span class="text-sm"><strong>Timeline:</strong> 8 weeks</span></div>
+                <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-accent"></span><span class="text-sm"><strong>Methods:</strong> Contextual inquiry, sensor analysis, A/B testing</span></div>
+              </div>
+              <div class="mt-6 grid grid-cols-2 gap-3">
+                <div class="bg-surface rounded-lg p-3 text-center border border-gray-100"><div class="font-display text-2xl font-semibold text-accent">-91%</div><div class="text-xs text-secondary">Hand-wash interrupts</div></div>
+                <div class="bg-surface rounded-lg p-3 text-center border border-gray-100"><div class="font-display text-2xl font-semibold text-accent">97%</div><div class="text-xs text-secondary">Elbow-tap accuracy</div></div>
+              </div>
+            </div>
+          </div>
+          <!-- Slide 2: Problem -->
+          <div class="w-full flex-shrink-0 flex flex-col lg:flex-row">
+            <div class="flex-1 bg-red-50 p-8 flex flex-col items-center justify-center">
+              <div class="w-20 h-20 rounded-2xl bg-red-100 flex items-center justify-center mb-4"><span class="text-3xl">🧑‍🍳</span></div>
+              <div class="font-display text-xl font-bold mb-1">The Problem</div>
+              <div class="text-sm text-secondary">Input failure in the kitchen</div>
+            </div>
+            <div class="flex-1 p-8 flex flex-col justify-center">
+              <div class="font-display text-lg font-semibold mb-4">Why can't cooks tap their screens?</div>
+              <div class="space-y-3 text-sm text-secondary leading-relaxed">
+                <div class="flex gap-2"><span class="text-highlight font-bold">72%</span> wash hands before every tap interaction</div>
+                <div class="flex gap-2"><span class="text-highlight font-bold">68%</span> voice command failure rate during active cooking</div>
+                <div class="flex gap-2"><span class="text-highlight font-bold">&lt;40%</span> gesture confidence with flour-covered hands</div>
+                <div class="flex gap-2"><span class="text-highlight font-bold">15s</span> wasted per step transition (wash &rarr; dry &rarr; tap)</div>
+              </div>
+            </div>
+          </div>
+          <!-- Slide 3: Strategy -->
+          <div class="w-full flex-shrink-0 flex flex-col lg:flex-row">
+            <div class="flex-1 bg-amber-50 p-8 flex flex-col items-center justify-center">
+              <div class="w-20 h-20 rounded-2xl bg-amber-100 flex items-center justify-center mb-4"><span class="text-3xl">⚡</span></div>
+              <div class="font-display text-xl font-bold mb-1">Strategy</div>
+              <div class="text-sm text-secondary">Multi-signal state machine</div>
+            </div>
+            <div class="flex-1 p-8 flex flex-col justify-center">
+              <div class="font-display text-lg font-semibold mb-4">AND-gate trigger pattern</div>
+              <div class="space-y-4 text-sm">
+                <div class="bg-red-50 rounded-lg p-3 border border-red-100"><strong class="text-highlight">Trigger 1:</strong> Voice input failed</div>
+                <div class="bg-red-50 rounded-lg p-3 border border-red-100"><strong class="text-highlight">Trigger 2:</strong> Gesture confidence &lt; 40%</div>
+                <div class="bg-amber-50 rounded-lg p-3 border border-amber-100"><strong class="text-warning">Sensor:</strong> Front camera proximity &lt; 30cm</div>
+                <div class="bg-green-50 rounded-lg p-3 border border-green-200"><strong class="text-success">Result:</strong> UI switches to 50% screen macro button</div>
+              </div>
+            </div>
+          </div>
+          <!-- Slide 4: Outcome -->
+          <div class="w-full flex-shrink-0 flex flex-col lg:flex-row">
+            <div class="flex-1 bg-green-50 p-8 flex flex-col items-center justify-center">
+              <div class="w-20 h-20 rounded-2xl bg-green-100 flex items-center justify-center mb-4"><span class="text-3xl">🎯</span></div>
+              <div class="font-display text-xl font-bold mb-1">Outcome</div>
+              <div class="text-sm text-secondary">Validated with 18 participants</div>
+            </div>
+            <div class="flex-1 p-8 flex flex-col justify-center">
+              <div class="font-display text-lg font-semibold mb-4">Key Results</div>
+              <div class="grid grid-cols-2 gap-3">
+                <div class="bg-surface rounded-lg p-4 text-center border border-gray-100"><div class="font-display text-2xl font-semibold text-success">-91%</div><div class="text-xs text-secondary mt-1">Hand-wash interruptions</div></div>
+                <div class="bg-surface rounded-lg p-4 text-center border border-gray-100"><div class="font-display text-2xl font-semibold text-success">-78%</div><div class="text-xs text-secondary mt-1">Step transition time</div></div>
+                <div class="bg-surface rounded-lg p-4 text-center border border-gray-100"><div class="font-display text-2xl font-semibold text-accent">97%</div><div class="text-xs text-secondary mt-1">Elbow-tap success</div></div>
+                <div class="bg-surface rounded-lg p-4 text-center border border-gray-100"><div class="font-display text-2xl font-semibold text-accent">+34%</div><div class="text-xs text-secondary mt-1">Recipe completion</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Navigation -->
+      <div class="flex items-center justify-center gap-4 py-4 border-t border-gray-100">
+        <button id="summary-prev" class="w-10 h-10 rounded-full bg-surface flex items-center justify-center hover:bg-gray-200 transition-colors cursor-pointer disabled:opacity-30" disabled>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>
+        </button>
+        <div id="summary-dots" class="flex gap-2">
+          <div class="summary-dot w-3 h-3 rounded-full bg-accent transition-colors cursor-pointer"></div>
+          <div class="summary-dot w-3 h-3 rounded-full bg-gray-300 transition-colors cursor-pointer"></div>
+          <div class="summary-dot w-3 h-3 rounded-full bg-gray-300 transition-colors cursor-pointer"></div>
+          <div class="summary-dot w-3 h-3 rounded-full bg-gray-300 transition-colors cursor-pointer"></div>
+        </div>
+        <button id="summary-next" class="w-10 h-10 rounded-full bg-surface flex items-center justify-center hover:bg-gray-200 transition-colors cursor-pointer">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+      <div class="text-center text-xs text-secondary pb-3">Click or use arrow keys. Click outside to dismiss.</div>
+    </div>
+  </div>
+
+  <!-- ═══════ BODY ═══════ -->
+  <div class="main-body">
+    <div class="w-full max-w-2xl lg:max-w-3xl xl:max-w-4xl mx-auto px-10 lg:px-16">
+
+    <!-- ─── CONTEXT ─── -->
+    <section class="section py-20 border-b border-gray-200" id="context">
       <div class="gs-child">
         <p class="text-xs font-bold uppercase tracking-widest text-accent mb-6">The Problem</p>
         <h2 class="font-display text-2xl lg:text-[1.75rem] font-semibold leading-snug mb-8 max-w-xl xl:max-w-2xl">72% of cooking video users pause to wash hands before tapping "Next"</h2>
@@ -1404,6 +1564,386 @@ tailwind.config = {
 </div>
 
 <!-- ─── SCRIPTS ─── -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  /* ScrollTrigger stubbed for embed */
+
+  // ─── matchMedia for reduced-motion ───
+  var mm = gsap.matchMedia();
+  mm.add({
+    normal: '(prefers-reduced-motion: no-preference)',
+    reduced: '(prefers-reduced-motion: reduce)'
+  }, function(context) {
+    var reduced = context.conditions.reduced;
+
+    // ─── Scroll Progress Bar ─── (scrub-based, user-driven)
+    gsap.to('.scroll-progress', {
+      scaleX: 1,
+      ease: 'none',
+      scrollTrigger: { trigger: 'body', start: 'top top', end: 'bottom bottom', scrub: 0.3 }
+    });
+
+    // ─── TOC Sidebar ───
+    var toc = document.querySelector('.toc');
+    ScrollTrigger.create({
+      trigger: '#context',
+      start: 'top 90%',
+      onEnter: () => {
+        toc.classList.add('visible');
+        gsap.to(toc, { opacity: 1, visibility: 'visible', duration: reduced ? 0 : 0.4, ease: 'power2.out' });
+      },
+      onLeaveBack: () => {
+        gsap.to(toc, { opacity: 0, duration: reduced ? 0 : 0.3, ease: 'power2.in', onComplete: () => { toc.classList.remove('visible'); toc.style.visibility = 'hidden'; } });
+      }
+    });
+
+    // ─── Section Children Stagger Reveal ───
+    document.querySelectorAll('.section').forEach(section => {
+      var children = section.querySelectorAll('.gs-child');
+      gsap.fromTo(children,
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1, y: 0, duration: reduced ? 0 : 0.65, stagger: 0.08, ease: 'power3.out',
+          scrollTrigger: { trigger: section, start: 'top 80%', once: true }
+        }
+      );
+    });
+
+    // ─── Hero Entrance ───
+    var heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+    heroTl
+      .fromTo('.hero-brand-bg', { opacity: 0, scale: 0.92 }, { opacity: 1, scale: 1, duration: reduced ? 0 : 0.8, ease: 'power2.out' })
+      .fromTo('.hero-badge', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: reduced ? 0 : 0.8, stagger: 0.12 }, '-=0.3')
+      .fromTo('.hero-subtitle', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: reduced ? 0 : 0.7, stagger: 0.1 }, '-=0.4');
+
+    // ─── Quick Summary: floating cards ───
+    gsap.fromTo('.summary-float-card',
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: reduced ? 0 : 0.6, stagger: 0.15, ease: 'power3.out',
+        scrollTrigger: { trigger: '#quick-summary-section', start: 'top 80%', once: true }
+      }
+    );
+
+    // ─── Line Reveals ───
+    document.querySelectorAll('.line-reveal').forEach(line => {
+      gsap.to(line, {
+        scaleX: 1, duration: reduced ? 0 : 0.8, ease: 'power3.out',
+        scrollTrigger: { trigger: line, start: 'top 85%', once: true }
+      });
+    });
+
+    // ─── Text Highlight ───
+    document.querySelectorAll('.text-highlight-box').forEach(box => {
+      ScrollTrigger.create({
+        trigger: box,
+        start: 'top 80%',
+        once: true,
+        onEnter: () => box.classList.add('active')
+      });
+    });
+
+    // ─── Stat Counters ───
+    document.querySelectorAll('.stat-number[data-target]').forEach(el => {
+      var target = parseFloat(el.dataset.target);
+      var suffix = el.dataset.suffix || '';
+      var prefix = el.dataset.prefix || '';
+      var obj = { val: 0 };
+      ScrollTrigger.create({
+        trigger: el,
+        start: 'top 85%',
+        once: true,
+        onEnter: () => {
+          gsap.to(obj, {
+            val: target, duration: reduced ? 0 : 1.5, ease: 'power2.out',
+            onUpdate: () => { el.textContent = prefix + Math.round(obj.val) + suffix; }
+          });
+        }
+      });
+    });
+
+    // ─── Noise Bars ───
+    document.querySelectorAll('.noise-bar').forEach((bar, i) => {
+      var h = bar.dataset.h;
+      ScrollTrigger.create({
+        trigger: bar,
+        start: 'top 90%',
+        once: true,
+        onEnter: () => {
+          gsap.to(bar, { height: h + 'px', duration: reduced ? 0 : 0.8, delay: i * 0.1, ease: 'power3.out' });
+        }
+      });
+    });
+
+    // ─── Result Bars ───
+    document.querySelectorAll('.result-bar').forEach((bar, i) => {
+      var w = bar.dataset.width;
+      ScrollTrigger.create({
+        trigger: bar,
+        start: 'top 90%',
+        once: true,
+        onEnter: () => {
+          gsap.to(bar, { width: w + '%', duration: reduced ? 0 : 1, delay: i * 0.15, ease: 'power3.out' });
+        }
+      });
+    });
+
+    // ─── State Diagram Animation ───
+    var diagramNodes = ['#node-voice', '#node-gesture', '#node-and', '#node-proximity', '#node-decision', '#node-default-ui', '#state-arrow', '#node-macro-ui', '#node-visual'];
+    var diagramPaths = ['#path-voice-and', '#path-gesture-and', '#path-and-decision', '#path-proximity-decision', '#path-yes', '#path-no'];
+
+    window._playDiagram = function playDiagram() {
+      // Reset
+      diagramNodes.forEach(id => gsap.set(id, { opacity: 0 }));
+      diagramPaths.forEach(id => {
+        var el = document.querySelector(id);
+        if (el) { el.style.strokeDasharray = '200'; el.style.strokeDashoffset = '200'; }
+      });
+      gsap.set('#label-yes', { opacity: 0 });
+      gsap.set('#label-no', { opacity: 0 });
+
+      var tl = gsap.timeline();
+
+      // Step 1: Trigger nodes appear
+      tl.to('#node-voice', { opacity: 1, duration: reduced ? 0 : 0.4 }, 0)
+        .to('#node-gesture', { opacity: 1, duration: reduced ? 0 : 0.4 }, 0.2);
+
+      // Step 2: Paths to AND gate
+      tl.to('#path-voice-and', { strokeDashoffset: 0, duration: reduced ? 0 : 0.6, ease: 'power2.out' }, 0.5)
+        .to('#path-gesture-and', { strokeDashoffset: 0, duration: reduced ? 0 : 0.6, ease: 'power2.out' }, 0.6)
+        .to('#node-and', { opacity: 1, duration: reduced ? 0 : 0.3 }, 0.9);
+
+      // Step 3: Proximity
+      tl.to('#node-proximity', { opacity: 1, duration: reduced ? 0 : 0.4 }, 1.0)
+        .to('#path-proximity-decision', { strokeDashoffset: 0, duration: reduced ? 0 : 0.8, ease: 'power2.out' }, 1.2);
+
+      // Step 4: AND to decision
+      tl.to('#path-and-decision', { strokeDashoffset: 0, duration: reduced ? 0 : 0.6, ease: 'power2.out' }, 1.3)
+        .to('#node-decision', { opacity: 1, duration: reduced ? 0 : 0.3 }, 1.7);
+
+      // Step 5: YES path + state change
+      tl.to('#path-yes', { strokeDashoffset: 0, duration: reduced ? 0 : 0.4 }, 2.0)
+        .to('#label-yes', { opacity: 1, duration: reduced ? 0 : 0.3 }, 2.1)
+        .to('#node-default-ui', { opacity: 1, duration: reduced ? 0 : 0.3 }, 2.2)
+        .to('#state-arrow', { opacity: 1, duration: reduced ? 0 : 0.3 }, 2.4)
+        .to('#node-macro-ui', { opacity: 1, duration: reduced ? 0 : 0.4, ease: 'back.out(1.5)' }, 2.5)
+        .to('#node-visual', { opacity: 1, duration: reduced ? 0 : 0.4 }, 2.8);
+
+      // Step 6: NO path
+      tl.to('#path-no', { strokeDashoffset: 0, duration: reduced ? 0 : 0.5 }, 2.3)
+        .to('#label-no', { opacity: 1, duration: reduced ? 0 : 0.3 }, 2.6);
+    };
+
+    // Auto-play on scroll
+    ScrollTrigger.create({
+      trigger: '#state-diagram',
+      start: 'top 70%',
+      once: true,
+      onEnter: () => { setTimeout(window._playDiagram, 300); }
+    });
+
+    // ─── Scenario Timeline Animation ───
+    window._playScenario = function playScenario() {
+      var steps = document.querySelectorAll('.scenario-step');
+      steps.forEach(s => { s.style.opacity = '0'; s.style.transform = 'translateY(16px)'; });
+      steps.forEach((step, i) => {
+        gsap.to(step, { opacity: 1, y: 0, duration: reduced ? 0 : 0.5, ease: 'power3.out', delay: i * 0.7 });
+      });
+    };
+
+    ScrollTrigger.create({
+      trigger: '.scenario-step',
+      start: 'top 85%',
+      once: true,
+      onEnter: () => window._playScenario()
+    });
+
+    // ─── Summary Card Open Animation (called from event handler) ───
+    window._animateSummaryCard = function() {
+      gsap.fromTo('#summary-card', { opacity: 0, scale: 0.95, y: 20 }, { opacity: 1, scale: 1, y: 0, duration: reduced ? 0 : 0.4, ease: 'power3.out' });
+    };
+
+  }); // end matchMedia
+
+  // ─── Non-animation code (kept outside matchMedia) ───
+
+  function setActiveToc(id) {
+    document.querySelectorAll('.toc-link').forEach(l => l.classList.remove('active'));
+    const link = document.querySelector(`.toc-link[data-section="${id}"]`);
+    if (link) link.classList.add('active');
+  }
+
+  document.querySelectorAll('.section').forEach(sec => {
+    ScrollTrigger.create({
+      trigger: sec,
+      start: 'top 50%',
+      end: 'bottom 50%',
+      onEnter: () => setActiveToc(sec.id),
+      onEnterBack: () => setActiveToc(sec.id),
+    });
+  });
+
+  // Summary glow follow mouse
+  const summarySection = document.getElementById('quick-summary-section');
+  const summaryGlow = document.getElementById('summary-glow');
+  if (summarySection && summaryGlow) {
+    summarySection.addEventListener('mousemove', e => {
+      const rect = summarySection.getBoundingClientRect();
+      summaryGlow.style.left = (e.clientX - rect.left) + 'px';
+      summaryGlow.style.top = (e.clientY - rect.top) + 'px';
+      summaryGlow.style.opacity = '1';
+    });
+    summarySection.addEventListener('mouseleave', () => { summaryGlow.style.opacity = '0'; });
+  }
+
+  // Magnetic button
+  const magBtn = document.getElementById('summary-btn');
+  if (magBtn) {
+    magBtn.addEventListener('mousemove', e => {
+      const r = magBtn.getBoundingClientRect();
+      const dx = e.clientX - (r.left + r.width/2);
+      const dy = e.clientY - (r.top + r.height/2);
+      magBtn.style.transform = `translate(${dx*0.15}px, ${dy*0.15}px)`;
+    });
+    magBtn.addEventListener('mouseleave', () => { magBtn.style.transform = ''; });
+  }
+
+  // ─── Summary Carousel ───
+  const overlay = document.getElementById('summary-overlay');
+  const slides = document.getElementById('summary-slides');
+  const dots = document.querySelectorAll('.summary-dot');
+  const prevBtn = document.getElementById('summary-prev');
+  const nextBtn = document.getElementById('summary-next');
+  let curSlide = 0;
+  const totalSlides = 4;
+
+  function goSlide(i) {
+    curSlide = Math.max(0, Math.min(i, totalSlides - 1));
+    slides.style.transform = `translateX(-${curSlide * 100}%)`;
+    dots.forEach((d, idx) => d.classList.toggle('bg-accent', idx === curSlide));
+    dots.forEach((d, idx) => { if(idx !== curSlide) d.classList.add('bg-gray-300'); else d.classList.remove('bg-gray-300'); });
+    prevBtn.disabled = curSlide === 0;
+    nextBtn.style.opacity = curSlide === totalSlides - 1 ? '0.3' : '1';
+  }
+
+  if (magBtn && overlay) {
+    magBtn.addEventListener('click', () => {
+      overlay.classList.remove('hidden');
+      if (window._animateSummaryCard) window._animateSummaryCard();
+      goSlide(0);
+    });
+  }
+  if (document.getElementById('summary-close')) {
+    document.getElementById('summary-close').addEventListener('click', () => overlay.classList.add('hidden'));
+  }
+  if (document.getElementById('summary-backdrop')) {
+    document.getElementById('summary-backdrop').addEventListener('click', () => overlay.classList.add('hidden'));
+  }
+  if (prevBtn) prevBtn.addEventListener('click', () => goSlide(curSlide - 1));
+  if (nextBtn) nextBtn.addEventListener('click', () => goSlide(curSlide + 1));
+  dots.forEach((d, i) => d.addEventListener('click', () => goSlide(i)));
+  document.addEventListener('keydown', e => {
+    if (overlay && !overlay.classList.contains('hidden')) {
+      if (e.key === 'ArrowRight') goSlide(curSlide + 1);
+      if (e.key === 'ArrowLeft') goSlide(curSlide - 1);
+      if (e.key === 'Escape') overlay.classList.add('hidden');
+    }
+  });
+
+  // Replay button
+  document.getElementById('diagram-play-btn').addEventListener('click', () => { if (window._playDiagram) window._playDiagram(); });
+
+  document.getElementById('scenario-replay')?.addEventListener('click', () => { if (window._playScenario) window._playScenario(); });
+});
+
+// ─── Interactive Trigger Simulator ───
+const simState = { voice: false, gesture: false, proximity: false };
+
+function toggleTrigger(type) {
+  simState[type] = !simState[type];
+
+  if (type === 'voice') {
+    const el = document.getElementById('sim-voice');
+    const bar = document.getElementById('sim-voice-bar');
+    const label = document.getElementById('sim-voice-label');
+    if (simState.voice) {
+      el.classList.add('triggered');
+      bar.style.width = '15%';
+      bar.className = bar.className.replace('bg-gray-300', 'bg-red-400');
+      label.textContent = 'FAILED — Noise too high';
+    } else {
+      el.classList.remove('triggered');
+      bar.style.width = '100%';
+      bar.className = bar.className.replace('bg-red-400', 'bg-gray-300');
+      label.textContent = 'Click to simulate failure';
+    }
+  }
+
+  if (type === 'gesture') {
+    const el = document.getElementById('sim-gesture');
+    const bar = document.getElementById('sim-gesture-bar');
+    const label = document.getElementById('sim-gesture-label');
+    if (simState.gesture) {
+      el.classList.add('triggered');
+      bar.style.width = '34%';
+      bar.className = bar.className.replace('bg-green-400', 'bg-red-400');
+      label.textContent = 'Confidence: 34% — Below threshold';
+    } else {
+      el.classList.remove('triggered');
+      bar.style.width = '85%';
+      bar.className = bar.className.replace('bg-red-400', 'bg-green-400');
+      label.textContent = 'Click to drop below 40%';
+    }
+  }
+
+  if (type === 'proximity') {
+    const el = document.getElementById('sim-proximity');
+    const bar = document.getElementById('sim-proximity-bar');
+    const label = document.getElementById('sim-proximity-label');
+    if (simState.proximity) {
+      el.classList.add('detected');
+      bar.style.width = '90%';
+      bar.className = bar.className.replace('bg-gray-300', 'bg-amber-400');
+      label.textContent = 'Detected: 18cm — User leaning in';
+    } else {
+      el.classList.remove('detected');
+      bar.style.width = '0%';
+      bar.className = bar.className.replace('bg-amber-400', 'bg-gray-300');
+      label.textContent = 'Click to detect < 30cm';
+    }
+  }
+
+  updateSimState();
+}
+
+function updateSimState() {
+  const allMet = simState.voice && simState.gesture && simState.proximity;
+  const stateEl = document.getElementById('sim-state');
+  const stateText = document.getElementById('sim-state-text');
+  const stateDot = document.getElementById('sim-dot');
+  const macroOverlay = document.getElementById('sim-macro-overlay');
+  const defaultControls = document.getElementById('sim-default-controls');
+
+  if (allMet) {
+    stateEl.classList.add('active-state');
+    stateEl.classList.remove('bg-gray-100', 'text-secondary');
+    stateDot.classList.remove('bg-gray-400');
+    stateDot.classList.add('bg-white');
+    stateText.textContent = '⚡ Elbow-Bump Mode Active';
+    macroOverlay.style.opacity = '1';
+    macroOverlay.classList.add('elbow-btn-enter');
+    defaultControls.style.opacity = '0.2';
+  } else {
+    stateEl.classList.remove('active-state');
+    stateEl.classList.add('bg-gray-100', 'text-secondary');
+    stateDot.classList.add('bg-gray-400');
+    stateDot.classList.remove('bg-white');
+    stateText.textContent = 'Default UI Active';
+    macroOverlay.style.opacity = '0';
+    macroOverlay.classList.remove('elbow-btn-enter');
+    defaultControls.style.opacity = '1';
+  }
+}
+</script>
 
 </body>
 </html>

@@ -7,6 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css">
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script>
 tailwind.config = {
   theme: {
@@ -193,7 +194,8 @@ tailwind.config = {
     100% { transform: scale(1.8); opacity: 0; }
   }
 </style>
-<style>.gs-child{opacity:1 !important;transform:none !important}.opacity-0{opacity:1 !important}.hero-badge{transform:none !important}</style>
+<script>window.ScrollTrigger={create:function(){return{kill:function(){}}},refresh:function(){},update:function(){},getAll:function(){return[]},batch:function(){return[]},matchMedia:function(){},killAll:function(){}};</script>
+<style>.gs-child{opacity:1 !important;transform:none !important}.opacity-0{opacity:1 !important}.hero-badge{transform:none !important}#quick-summary-section,#summary-overlay{display:none !important}</style>
 </head>
 <body class="bg-white text-primary leading-relaxed">
 
@@ -259,7 +261,175 @@ tailwind.config = {
     </div>
   </header>
 
-  <section class="section py-20 border-b border-gray-200" id="context">
+  <!-- ═══════ QUICK SUMMARY — Interactive CTA ═══════ -->
+  <div class="relative overflow-hidden" id="quick-summary-section" style="min-height:320px">
+    <!-- Animated dot grid -->
+    <div class="absolute inset-0 opacity-[0.12]" style="background-image:radial-gradient(circle,#8b5cf6 0.6px,transparent 0.6px);background-size:28px 28px" id="dot-grid"></div>
+    <!-- Mouse-follow radial glow -->
+    <div id="summary-glow" class="absolute w-[500px] h-[500px] rounded-full pointer-events-none opacity-0 transition-opacity duration-500" style="background:radial-gradient(circle,rgba(139,92,246,0.08) 0%,transparent 70%);transform:translate(-50%,-50%)"></div>
+    <!-- Floating preview cards -->
+    <div class="absolute inset-0 pointer-events-none" id="floating-cards">
+      <div class="summary-float-card absolute bg-white rounded-xl shadow-lg border border-gray-100 p-3 w-36 opacity-0" style="top:15%;left:8%">
+        <div class="text-xs font-bold text-accent mb-1">+15%</div>
+        <div class="text-[10px] text-secondary">D7 Retention Lift</div>
+        <div class="mt-1.5 h-1 bg-green-100 rounded-full overflow-hidden"><div class="h-full bg-green-400 rounded-full" style="width:65%"></div></div>
+      </div>
+      <div class="summary-float-card absolute bg-white rounded-xl shadow-lg border border-gray-100 p-3 w-32 opacity-0" style="top:20%;right:10%">
+        <div class="flex items-center gap-1.5 mb-1"><div class="w-1.5 h-1.5 rounded-full bg-accent animate-pulse"></div><div class="text-[10px] font-bold text-accent">Tone Framework</div></div>
+        <div class="h-1 bg-accent/10 rounded w-full mb-0.5"></div>
+        <div class="h-1 bg-accent/5 rounded w-3/4"></div>
+      </div>
+      <div class="summary-float-card absolute bg-white rounded-xl shadow-lg border border-gray-100 p-3 w-28 opacity-0" style="bottom:18%;left:12%">
+        <div class="text-[10px] font-bold mb-1">+85%</div>
+        <div class="text-[10px] text-secondary">"Supportive"</div>
+      </div>
+      <div class="summary-float-card absolute bg-white rounded-xl shadow-lg border border-gray-100 p-3 w-36 opacity-0" style="bottom:15%;right:8%">
+        <div class="text-xs font-bold text-green-600 mb-1">24→60%</div>
+        <div class="text-[10px] text-secondary">Satisfaction</div>
+        <div class="mt-1.5 h-1 bg-green-100 rounded-full overflow-hidden"><div class="h-full bg-green-400 rounded-full" style="width:60%"></div></div>
+      </div>
+    </div>
+    <!-- Center content -->
+    <div class="relative z-10 flex flex-col items-center justify-center py-20 px-10">
+      <div class="inline-flex items-center gap-2 bg-accent/5 border border-accent/15 rounded-full px-4 py-1.5 mb-4 text-xs text-accent font-medium">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        ~2 min read
+      </div>
+      <h3 class="font-display text-xl lg:text-2xl font-semibold text-primary mb-3 text-center">Short on time?</h3>
+      <p class="text-base text-secondary mb-8 text-center max-w-sm">Get the quick highlights in a visual, swipeable format.</p>
+      <!-- Magnetic button -->
+      <button id="summary-btn" class="summary-magnetic relative inline-flex items-center gap-3 bg-primary text-white rounded-2xl px-10 py-5 shadow-xl hover:shadow-2xl transition-all duration-300 cursor-pointer group overflow-hidden">
+        <!-- Shine effect -->
+        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="relative z-10 group-hover:scale-110 transition-transform"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        <span class="text-base font-semibold relative z-10">Summary Mode</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="relative z-10 group-hover:translate-x-1 transition-transform"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+      <div class="mt-4 flex items-center gap-4 text-xs text-secondary">
+        <span class="flex items-center gap-1">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8L22 12L18 16"/><path d="M6 8L2 12L6 16"/></svg>
+          Swipeable slides
+        </span>
+        <span>·</span>
+        <span>4 key insights</span>
+        <span>·</span>
+        <span>ESC to close</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ SUMMARY OVERLAY ═══════ -->
+  <div id="summary-overlay" class="fixed inset-0 z-[300] flex items-center justify-center hidden">
+    <div id="summary-backdrop" class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+    <div id="summary-card" class="relative bg-white rounded-2xl shadow-2xl w-[90vw] max-w-3xl max-h-[80vh] overflow-hidden flex flex-col">
+      <button id="summary-close" class="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-surface flex items-center justify-center hover:bg-gray-200 transition-colors cursor-pointer">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+      <div class="flex-1 overflow-hidden relative">
+        <div id="summary-slides" class="flex h-full transition-transform duration-500 ease-out">
+          <!-- Slide 1 -->
+          <div class="w-full flex-shrink-0 flex flex-col lg:flex-row">
+            <div class="flex-1 bg-surface p-8 flex flex-col items-center justify-center">
+              <div class="w-20 h-20 rounded-2xl bg-accent/10 flex items-center justify-center mb-4">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              </div>
+              <div class="font-display text-xl font-bold mb-1">Lepal.ai</div>
+              <div class="text-sm text-secondary">AI Mental Wellness Companion</div>
+            </div>
+            <div class="flex-1 p-8 flex flex-col justify-center">
+              <div class="font-display text-lg font-semibold mb-4">Project Summary</div>
+              <div class="text-sm text-secondary leading-relaxed mb-6">Designed an emotionally intelligent wellness chatbot from 0→1, shifting from efficiency to empathy to break a critical 72-hour retention wall for Gen Z users.</div>
+              <div class="space-y-3">
+                <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-accent"></span><span class="text-sm"><strong>Role:</strong> Lead Product Designer (0→1)</span></div>
+                <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-accent"></span><span class="text-sm"><strong>Timeline:</strong> 12 weeks</span></div>
+                <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-accent"></span><span class="text-sm"><strong>Team:</strong> 5 Cross-functional partners</span></div>
+              </div>
+            </div>
+          </div>
+          <!-- Slide 2 -->
+          <div class="w-full flex-shrink-0 flex flex-col lg:flex-row">
+            <div class="flex-1 bg-red-50/50 p-8 flex flex-col justify-center items-center">
+              <div class="text-xs font-bold uppercase tracking-wider text-highlight mb-4">The Problem</div>
+              <div class="w-12 h-12 rounded-full bg-red-100 border-2 border-red-300 flex items-center justify-center mb-3"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e74c3c" stroke-width="2"><path d="M12 8v4M12 16h.01"/></svg></div>
+              <div class="font-display text-lg font-semibold text-center mb-2">The 72-Hour Wall</div>
+              <div class="text-sm text-secondary text-center">Users felt "unseen" — the AI offered solutions when they needed validation.</div>
+            </div>
+            <div class="flex-1 p-8 flex flex-col justify-center">
+              <div class="text-xs font-bold uppercase tracking-wider text-accent mb-4">Research</div>
+              <div class="text-sm text-secondary leading-relaxed mb-4">5 interviews · 3-day mood diary · 1,000+ quotes · 800+ sessions</div>
+              <div class="space-y-3">
+                <div class="bg-surface rounded-lg p-3 border border-gray-100"><strong class="text-sm">Empathy Gap</strong><div class="text-xs text-secondary mt-1">AI remembered facts but failed to read feelings</div></div>
+                <div class="bg-surface rounded-lg p-3 border border-gray-100"><strong class="text-sm">Generic Tone</strong><div class="text-xs text-secondary mt-1">"Productivity tips" when user was emotionally drained</div></div>
+                <div class="bg-surface rounded-lg p-3 border border-gray-100"><strong class="text-sm">Blank Page</strong><div class="text-xs text-secondary mt-1">Users didn't know how to start journaling</div></div>
+              </div>
+            </div>
+          </div>
+          <!-- Slide 3 -->
+          <div class="w-full flex-shrink-0 flex flex-col lg:flex-row">
+            <div class="flex-1 bg-accent/5 p-8 flex flex-col justify-center">
+              <div class="text-xs font-bold uppercase tracking-wider text-accent mb-4">Strategy</div>
+              <div class="font-display text-lg font-semibold mb-4">Adaptive Tone Framework</div>
+              <div class="space-y-3">
+                <div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-accent text-white flex items-center justify-center text-xs font-bold">1</div><div class="text-sm"><strong>Emotion Classifier:</strong> 4 mood states</div></div>
+                <div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-violet-200 text-violet-700 flex items-center justify-center text-xs font-bold">2</div><div class="text-sm"><strong>Typing Indicators:</strong> Authenticity over speed</div></div>
+                <div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-fuchsia-100 text-fuchsia-700 flex items-center justify-center text-xs font-bold">3</div><div class="text-sm"><strong>Hybrid Starters:</strong> Solve blank page anxiety</div></div>
+              </div>
+            </div>
+            <div class="flex-1 p-8 flex flex-col justify-center">
+              <div class="text-xs font-bold uppercase tracking-wider text-accent mb-4">Core Insight</div>
+              <blockquote class="font-display text-lg font-medium leading-relaxed mb-6 pl-4 border-l-2 border-accent">Prioritize empathy before solutions.</blockquote>
+              <div class="space-y-2">
+                <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-accent"></span><span class="text-sm">Reframed "memory bug" as "empathy gap"</span></div>
+                <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-accent"></span><span class="text-sm">Built emotion-aware AI framework with ML team</span></div>
+              </div>
+            </div>
+          </div>
+          <!-- Slide 4 -->
+          <div class="w-full flex-shrink-0 flex flex-col lg:flex-row">
+            <div class="flex-1 bg-green-50/50 p-8 flex flex-col justify-center">
+              <div class="text-xs font-bold uppercase tracking-wider text-green-600 mb-4">Outcome</div>
+              <div class="font-display text-lg font-semibold mb-4">Measurable Impact</div>
+              <div class="space-y-3">
+                <div class="flex items-center gap-2"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="text-sm">85% increase in "supportive" perception</span></div>
+                <div class="flex items-center gap-2"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="text-sm">15% D7 retention lift</span></div>
+                <div class="flex items-center gap-2"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="text-sm">30% → 45% engagement, 24% → 60% satisfaction</span></div>
+              </div>
+            </div>
+            <div class="flex-1 p-8 flex flex-col justify-center">
+              <div class="text-xs font-bold uppercase tracking-wider text-accent mb-4">Key Takeaway</div>
+              <blockquote class="font-display text-lg font-medium leading-relaxed mb-6 pl-4 border-l-2 border-accent">Good product design is about designing relationships.</blockquote>
+              <div class="space-y-2">
+                <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-accent"></span><span class="text-sm">Conflict → Collaboration with Engineering</span></div>
+                <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-accent"></span><span class="text-sm">Rituals over features</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center justify-center gap-4 py-4 border-t border-gray-100">
+        <button id="summary-prev" class="w-10 h-10 rounded-full bg-surface flex items-center justify-center hover:bg-gray-200 transition-colors cursor-pointer disabled:opacity-30" disabled>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </button>
+        <div id="summary-dots" class="flex gap-2">
+          <div class="summary-dot w-3 h-3 rounded-full bg-accent transition-colors cursor-pointer"></div>
+          <div class="summary-dot w-3 h-3 rounded-full bg-gray-300 transition-colors cursor-pointer"></div>
+          <div class="summary-dot w-3 h-3 rounded-full bg-gray-300 transition-colors cursor-pointer"></div>
+          <div class="summary-dot w-3 h-3 rounded-full bg-gray-300 transition-colors cursor-pointer"></div>
+        </div>
+        <button id="summary-next" class="w-10 h-10 rounded-full bg-surface flex items-center justify-center hover:bg-gray-200 transition-colors cursor-pointer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+      <div class="text-center text-xs text-secondary pb-3">Click or swipe through. Click outside to dismiss.</div>
+    </div>
+  </div>
+
+  <!-- ═══════ BODY ═══════ -->
+  <div class="main-body">
+    <div class="w-full max-w-2xl lg:max-w-3xl xl:max-w-4xl mx-auto px-10 lg:px-16">
+
+      <!-- ─── OVERVIEW ─── -->
+      <section class="section py-20 border-b border-gray-200" id="context">
         <div class="text-xs font-bold uppercase tracking-widest text-accent mb-6 gs-child">Overview</div>
         <h2 class="font-display text-2xl lg:text-[1.75rem] font-semibold leading-snug mb-8 max-w-xl xl:max-w-2xl gs-child">Why We Built Lepal.ai</h2>
         <div class="text-base text-secondary leading-loose max-w-xl xl:max-w-2xl">
@@ -1528,6 +1698,474 @@ tailwind.config = {
   </div>
 </div>
 
+<script>
+/* ScrollTrigger stubbed for embed */
+
+var mm = gsap.matchMedia();
+mm.add({
+  normal: '(prefers-reduced-motion: no-preference)',
+  reduced: '(prefers-reduced-motion: reduce)'
+}, function(context) {
+  var reduced = context.conditions.reduced;
+
+// ─── Scroll progress ───
+gsap.to('.scroll-progress', {
+  scaleX: 1, ease: 'none',
+  scrollTrigger: { trigger: 'body', start: 'top top', end: 'bottom bottom', scrub: 0.3 }
+});
+
+// ─── Hero entrance ───
+const heroTl = gsap.timeline({ defaults: { ease: 'power3.out' }});
+heroTl
+  .fromTo('.hero-brand-bg', { opacity: 0, scale: 0.92 }, { opacity: 1, scale: 1, duration: reduced ? 0 : 0.8, ease: 'power2.out' })
+  .fromTo('.hero-badge', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: reduced ? 0 : 0.8, stagger: 0.12 }, '-=0.3')
+  .fromTo('.hero-subtitle', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: reduced ? 0 : 0.7, stagger: 0.1 }, '-=0.5')
+  .fromTo('.meta-group', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: reduced ? 0 : 0.6, stagger: 0.12 }, '-=0.4');
+
+gsap.to('#scroll-arrow', { y: 5, duration: reduced ? 0 : 1.2, repeat: reduced ? 0 : -1, yoyo: true, ease: 'sine.inOut' });
+
+// ─── TOC ───
+const toc = document.querySelector('.toc');
+ScrollTrigger.create({
+  trigger: '.main-body', start: 'top 60%',
+  onEnter: () => gsap.to(toc, { opacity: 1, visibility: 'visible', duration: reduced ? 0 : 0.4, ease: 'power2.out' }),
+  onLeaveBack: () => gsap.to(toc, { opacity: 0, duration: reduced ? 0 : 0.3, ease: 'power2.in', onComplete: () => { toc.style.visibility = 'hidden'; } })
+});
+const tocLinks = document.querySelectorAll('.toc-link');
+document.querySelectorAll('.section').forEach(section => {
+  ScrollTrigger.create({
+    trigger: section, start: 'top 30%', end: 'bottom 30%',
+    onEnter: () => setActive(section.id),
+    onEnterBack: () => setActive(section.id),
+  });
+});
+function setActive(id) {
+  tocLinks.forEach(link => link.classList.toggle('active', link.getAttribute('href') === '#' + id));
+}
+
+// ─── Section stagger reveals ───
+document.querySelectorAll('.section').forEach(section => {
+  const children = section.querySelectorAll(':scope > .gs-child, :scope > div > .gs-child, :scope > div > div > .gs-child');
+  if (!children.length) return;
+  gsap.fromTo(children,
+    { opacity: 0, y: 30 },
+    { opacity: 1, y: 0, duration: reduced ? 0 : 0.65, stagger: 0.08, ease: 'power3.out',
+      scrollTrigger: { trigger: section, start: 'top 80%' }
+    }
+  );
+});
+
+// ─── Number counter ───
+function animateCounter(el) {
+  const target = parseFloat(el.dataset.target);
+  const prefix = el.dataset.prefix || '';
+  const suffix = el.dataset.suffix || '';
+  const obj = { val: 0 };
+  gsap.to(obj, {
+    val: target, duration: reduced ? 0 : 1.5, ease: 'power2.out',
+    onUpdate: () => { el.textContent = prefix + Math.round(obj.val) + suffix; }
+  });
+}
+document.querySelectorAll('.stat-number').forEach(el => {
+  ScrollTrigger.create({ trigger: el, start: 'top 85%', once: true, onEnter: () => animateCounter(el) });
+});
+
+// ─── Section divider icons ───
+gsap.utils.toArray('.section-icon').forEach(icon => {
+  gsap.fromTo(icon, { opacity: 0, rotation: -90, scale: 0.5 },
+    { opacity: 1, rotation: 0, scale: 1, duration: reduced ? 0 : 0.6, ease: 'back.out(2)', scrollTrigger: { trigger: icon, start: 'top 90%' } });
+});
+
+// ═══════════════════════════════════════════
+// INTERACTION 1: 72-Hour Timeline Animation
+// ═══════════════════════════════════════════
+(function(){
+  const fill = document.getElementById('timeline-fill');
+  const entries = document.querySelectorAll('.timeline-entry');
+  if(!fill || !entries.length) return;
+  ScrollTrigger.create({
+    trigger: '#timeline-fill', start: 'top 80%', once: true,
+    onEnter: () => {
+      fill.style.height = '100%';
+      entries.forEach((entry, i) => {
+        gsap.to(entry, { opacity: entry.classList.contains('opacity-40') ? 0.4 : 1, x: 0, duration: reduced ? 0 : 0.6, delay: i * 0.4, ease: 'power3.out' });
+      });
+    }
+  });
+})();
+
+// ═══════════════════════════════════════════
+// INTERACTION 2: Live Emotion Classifier
+// ═══════════════════════════════════════════
+(function(){
+  const input = document.getElementById('classifier-input');
+  const btn = document.getElementById('classifier-btn');
+  const result = document.getElementById('classifier-result');
+  if(!input || !btn) return;
+
+  const moods = {
+    anxious: {
+      keywords: ['anxious','anxiety','worried','stress','stressed','nervous','overwhelm','wiped','exhausted','tired','drained','panic','scared','fear','tense','pressure','deadline'],
+      emoji: '😰', state: 'Anxious', tone: 'Calm & Validating',
+      bg: 'bg-amber-50', border: 'border-amber-200', textColor: 'text-amber-700',
+      structure: 'Acknowledge emotion → Tiny step → Soft close',
+      markers: 'Short sentences, minimal exclamations, gentle language',
+      response: "That sounds really exhausting. It's okay to feel drained — you don't have to push through right now. Want to just sit with this for a moment?"
+    },
+    sad: {
+      keywords: ['sad','down','depressed','lonely','crying','cry','hurt','lost','empty','hopeless','broken','grief','miss','pain','unhappy','rough'],
+      emoji: '😢', state: 'Sad', tone: 'Warm & Gentle',
+      bg: 'bg-blue-50', border: 'border-blue-200', textColor: 'text-blue-700',
+      structure: 'Validate feelings → Sit with them → Gentle invitation',
+      markers: 'Warm language, no silver-lining, patient pacing',
+      response: "I hear you. Some days are just heavy, and that's okay. You don't need to fix anything right now. I'm here if you want to talk or just want some company."
+    },
+    positive: {
+      keywords: ['great','amazing','happy','excited','good','wonderful','fantastic','awesome','love','proud','celebrate','promotion','won','success','best','accomplished','workout','achievement'],
+      emoji: '😊', state: 'Positive', tone: 'Celebratory & Affirming',
+      bg: 'bg-green-50', border: 'border-green-200', textColor: 'text-green-700',
+      structure: 'Mirror excitement → Affirm → Explore the win',
+      markers: 'Energetic language, affirmation, curiosity about details',
+      response: "That's incredible! You should feel really proud of yourself. Tell me more — what was the moment that felt best?"
+    },
+    neutral: {
+      keywords: ['okay','fine','normal','nothing','meh','alright','usual','regular','whatever','just','ordinary'],
+      emoji: '😐', state: 'Neutral', tone: 'Curious & Open',
+      bg: 'bg-gray-50', border: 'border-gray-200', textColor: 'text-gray-700',
+      structure: 'Show interest → Open-ended question → Explore gently',
+      markers: 'Warm curiosity, open questions, no assumptions',
+      response: "Thanks for sharing. Sometimes \"normal\" days have interesting layers. What's been on your mind today, even just a little?"
+    }
+  };
+
+  function classify(text) {
+    const lower = text.toLowerCase();
+    let bestMood = 'neutral';
+    let bestScore = 0;
+    for (const [mood, data] of Object.entries(moods)) {
+      let score = 0;
+      data.keywords.forEach(kw => { if (lower.includes(kw)) score++; });
+      if (score > bestScore) { bestScore = score; bestMood = mood; }
+    }
+    return moods[bestMood];
+  }
+
+  function runClassifier() {
+    const text = input.value.trim();
+    if (!text) return;
+    const mood = classify(text);
+    result.classList.remove('hidden');
+
+    // Reset all steps
+    document.querySelectorAll('#classifier-result [id^="cr-step"], .cr-arrow, #cr-tone-card').forEach(el => {
+      el.style.opacity = '0';
+    });
+
+    // Animate pipeline step by step
+    const truncated = text.length > 30 ? text.substring(0, 30) + '...' : text;
+    document.getElementById('cr-input-text').textContent = truncated;
+    document.getElementById('cr-mood-tag').textContent = mood.emoji + ' ' + mood.state;
+    document.getElementById('cr-tone-text').textContent = mood.tone;
+
+    gsap.to('#cr-step1', { opacity: 1, duration: reduced ? 0 : 0.3, delay: 0.1 });
+    gsap.to(document.querySelectorAll('.cr-arrow')[0], { opacity: 1, duration: reduced ? 0 : 0.2, delay: 0.4 });
+    gsap.to('#cr-step2', { opacity: 1, duration: reduced ? 0 : 0.3, delay: 0.6 });
+    gsap.to(document.querySelectorAll('.cr-arrow')[1], { opacity: 1, duration: reduced ? 0 : 0.2, delay: 0.9 });
+    gsap.to('#cr-step3', { opacity: 1, duration: reduced ? 0 : 0.3, delay: 1.1 });
+    gsap.to(document.querySelectorAll('.cr-arrow')[2], { opacity: 1, duration: reduced ? 0 : 0.2, delay: 1.4 });
+    gsap.to('#cr-step4', { opacity: 1, duration: reduced ? 0 : 0.3, delay: 1.6 });
+
+    // Tone card
+    const card = document.getElementById('cr-tone-card');
+    card.className = 'rounded-xl p-5 border opacity-0 ' + mood.bg + ' ' + mood.border;
+    document.getElementById('cr-emoji').textContent = mood.emoji;
+    document.getElementById('cr-state-label').textContent = mood.state;
+    document.getElementById('cr-state-label').className = 'text-xs font-bold uppercase tracking-wider ' + mood.textColor;
+    document.getElementById('cr-tone-label').textContent = mood.tone;
+    document.getElementById('cr-structure').textContent = mood.structure;
+    document.getElementById('cr-markers').textContent = mood.markers;
+    document.getElementById('cr-response').textContent = mood.response;
+    gsap.to(card, { opacity: 1, duration: reduced ? 0 : 0.5, delay: 2 });
+  }
+
+  btn.addEventListener('click', runClassifier);
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') runClassifier(); });
+
+  // Quick try buttons
+  document.querySelectorAll('.classifier-try').forEach(tryBtn => {
+    tryBtn.addEventListener('click', () => {
+      input.value = tryBtn.dataset.text;
+      runClassifier();
+    });
+  });
+})();
+
+// ═══════════════════════════════════════════
+// INTERACTION 3: Response Speed Slider
+// ═══════════════════════════════════════════
+(function(){
+  const slider = document.getElementById('speed-slider');
+  const label = document.getElementById('speed-label');
+  const dots = document.getElementById('speed-dots');
+  const response = document.getElementById('speed-response');
+  const replay = document.getElementById('speed-replay');
+  if(!slider) return;
+
+  function getSpeedLabel(val) {
+    if (val < 0.3) return '0s — Instant (robotic)';
+    if (val < 0.8) return val.toFixed(1) + 's — Quick';
+    if (val < 1.5) return val.toFixed(1) + 's — Natural';
+    if (val < 2.5) return val.toFixed(1) + 's — Thoughtful';
+    return val.toFixed(1) + 's — Deeply thoughtful';
+  }
+
+  slider.addEventListener('input', () => {
+    label.textContent = getSpeedLabel(parseFloat(slider.value));
+  });
+
+  function playDemo() {
+    dots.classList.remove('hidden');
+    response.classList.add('hidden');
+    const delay = parseFloat(slider.value) * 1000;
+    if (delay < 100) {
+      dots.classList.add('hidden');
+      response.classList.remove('hidden');
+    } else {
+      setTimeout(() => {
+        dots.classList.add('hidden');
+        response.classList.remove('hidden');
+        gsap.fromTo(response, { opacity: 0, y: 5 }, { opacity: 1, y: 0, duration: reduced ? 0 : 0.3 });
+      }, delay);
+    }
+  }
+
+  replay.addEventListener('click', playDemo);
+
+  // Auto-play on scroll
+  ScrollTrigger.create({
+    trigger: '#speed-slider', start: 'top 80%', once: true,
+    onEnter: () => { setTimeout(playDemo, 500); }
+  });
+})();
+
+// ═══════════════════════════════════════════
+// INTERACTION 4: First-run vs Returning Toggle
+// ═══════════════════════════════════════════
+// INTERACTION 4: FAQ "i" Button Toggle
+// ═══════════════════════════════════════════
+(function(){
+  const btn = document.getElementById('faq-i-btn');
+  const panel = document.getElementById('faq-panel');
+  if(!btn || !panel) return;
+
+  let isOpen = true; // FAQ is visible by default
+
+  btn.addEventListener('click', () => {
+    isOpen = !isOpen;
+    if (isOpen) {
+      panel.style.maxHeight = '300px';
+      panel.style.opacity = '1';
+      panel.style.paddingTop = '16px';
+      panel.style.paddingBottom = '16px';
+      btn.classList.add('bg-accent','text-white');
+      btn.classList.remove('bg-gray-100','text-secondary');
+    } else {
+      panel.style.maxHeight = '0';
+      panel.style.opacity = '0';
+      panel.style.paddingTop = '0';
+      panel.style.paddingBottom = '0';
+      btn.classList.remove('bg-accent','text-white');
+      btn.classList.add('bg-gray-100','text-secondary');
+    }
+  });
+})();
+
+// ═══════════════════════════════════════════
+// INTERACTION 5: Chat Mood Simulator
+// ═══════════════════════════════════════════
+(function(){
+  const messages = document.getElementById('chat-messages');
+  const badge = document.getElementById('chat-mood-badge');
+  const btns = document.querySelectorAll('.chat-mood-btn');
+  if(!messages) return;
+
+  const conversations = {
+    anxious: {
+      user: "I'm wiped after back-to-back labs. Zero energy.",
+      oldResponse: "Got it! Let's do a deep reflection with 5 questions to boost productivity!",
+      newResponse: "That sounds really exhausting. Back-to-back labs are no joke. You don't have to do anything right now — even just showing up here took energy.",
+      moodColor: 'bg-amber-100 text-amber-700',
+      moodLabel: '😰 Anxious → Calm & Validating'
+    },
+    sad: {
+      user: "I feel really alone today. Nobody checked in on me.",
+      oldResponse: "Try reaching out to friends! Here are 5 ways to build social connections.",
+      newResponse: "I'm sorry you're feeling that way. Feeling unseen is really painful. I'm here with you right now, and I'm glad you shared that.",
+      moodColor: 'bg-blue-100 text-blue-700',
+      moodLabel: '😢 Sad → Warm & Gentle'
+    },
+    neutral: {
+      user: "Just had a regular day. Nothing special happened.",
+      oldResponse: "Great! Let's set some goals for tomorrow to make it more productive!",
+      newResponse: "Thanks for checking in. Sometimes ordinary days have quiet moments worth noticing. Was there anything, even small, that caught your attention today?",
+      moodColor: 'bg-gray-200 text-gray-700',
+      moodLabel: '😐 Neutral → Curious & Open'
+    },
+    positive: {
+      user: "I just finished my workout and got a promotion today!!",
+      oldResponse: "Nice! Don't forget to log your exercise. Here's a habit tracker template.",
+      newResponse: "That's amazing!! A workout AND a promotion?! You're absolutely crushing it. Tell me more — how did the promotion happen?",
+      moodColor: 'bg-green-100 text-green-700',
+      moodLabel: '😊 Positive → Celebratory'
+    }
+  };
+
+  btns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const mood = btn.dataset.mood;
+      const conv = conversations[mood];
+
+      // Clear messages
+      messages.innerHTML = '';
+
+      // User message
+      const userDiv = document.createElement('div');
+      userDiv.className = 'flex justify-end mb-3';
+      userDiv.innerHTML = '<div class="bg-accent text-white text-sm px-4 py-2.5 rounded-2xl rounded-br-md max-w-[80%]">' + conv.user + '</div>';
+      messages.appendChild(userDiv);
+
+      // Show badge
+      badge.className = 'ml-auto text-[10px] rounded-full px-2.5 py-1 ' + conv.moodColor;
+      badge.textContent = conv.moodLabel;
+      badge.classList.remove('hidden');
+
+      // Old response (crossed out)
+      setTimeout(() => {
+        const oldDiv = document.createElement('div');
+        oldDiv.className = 'flex items-start gap-2 mb-2 opacity-0';
+        oldDiv.innerHTML = '<div class="w-7 h-7 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></div><div><div class="text-[9px] text-red-400 font-bold uppercase tracking-wider mb-1">Old Response (generic)</div><div class="bg-red-50 text-sm px-4 py-2.5 rounded-2xl rounded-bl-md text-red-400 line-through border border-red-100">' + conv.oldResponse + '</div></div>';
+        messages.appendChild(oldDiv);
+        gsap.to(oldDiv, { opacity: 1, duration: reduced ? 0 : 0.4 });
+      }, 500);
+
+      // Typing dots
+      setTimeout(() => {
+        const dotsDiv = document.createElement('div');
+        dotsDiv.id = 'chat-typing';
+        dotsDiv.className = 'flex items-start gap-2 mb-2';
+        dotsDiv.innerHTML = '<div class="w-7 h-7 rounded-full bg-violet-100 flex items-center justify-center flex-shrink-0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div><div class="bg-gray-100 rounded-2xl rounded-bl-md px-4 py-3 inline-flex items-center gap-1.5"><div class="typing-dot w-2 h-2 rounded-full bg-accent/60"></div><div class="typing-dot w-2 h-2 rounded-full bg-accent/60"></div><div class="typing-dot w-2 h-2 rounded-full bg-accent/60"></div></div>';
+        messages.appendChild(dotsDiv);
+      }, 1200);
+
+      // New response
+      setTimeout(() => {
+        const typing = document.getElementById('chat-typing');
+        if (typing) typing.remove();
+        const newDiv = document.createElement('div');
+        newDiv.className = 'flex items-start gap-2 opacity-0';
+        newDiv.innerHTML = '<div class="w-7 h-7 rounded-full bg-violet-100 flex items-center justify-center flex-shrink-0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div><div><div class="text-[9px] text-accent font-bold uppercase tracking-wider mb-1">New Response (emotion-aware)</div><div class="bg-accent/10 text-sm px-4 py-2.5 rounded-2xl rounded-bl-md border border-accent/20">' + conv.newResponse + '</div></div>';
+        messages.appendChild(newDiv);
+        gsap.to(newDiv, { opacity: 1, duration: reduced ? 0 : 0.5 });
+        messages.scrollTop = messages.scrollHeight;
+      }, 3000);
+    });
+  });
+})();
+
+// ═══════════════════════════════════════════
+// Summary Carousel
+// ═══════════════════════════════════════════
+(function(){
+  const section = document.getElementById('quick-summary-section');
+  const glow = document.getElementById('summary-glow');
+  if(section && glow) {
+    section.addEventListener('mouseenter', () => { glow.style.opacity = '1'; });
+    section.addEventListener('mouseleave', () => { glow.style.opacity = '0'; });
+    section.addEventListener('mousemove', e => {
+      const r = section.getBoundingClientRect();
+      glow.style.left = (e.clientX - r.left) + 'px';
+      glow.style.top = (e.clientY - r.top) + 'px';
+    });
+  }
+
+  ScrollTrigger.create({
+    trigger: '#quick-summary-section', start: 'top 75%', once: true,
+    onEnter: () => {
+      gsap.fromTo('.summary-float-card',
+        { opacity: 0, y: 30, scale: 0.8 },
+        { opacity: 1, y: 0, scale: 1, duration: reduced ? 0 : 0.7, stagger: 0.15, ease: 'back.out(1.7)' }
+      );
+      document.querySelectorAll('.summary-float-card').forEach((card, i) => {
+        gsap.to(card, { y: '-=8', duration: reduced ? 0 : 2 + i * 0.4, repeat: reduced ? 0 : -1, yoyo: true, ease: 'sine.inOut', delay: i * 0.3 });
+      });
+    }
+  });
+
+  const mbtn = document.querySelector('.summary-magnetic');
+  if(mbtn) {
+    mbtn.addEventListener('mousemove', e => {
+      const r = mbtn.getBoundingClientRect();
+      const x = (e.clientX - r.left - r.width / 2) * 0.15;
+      const y = (e.clientY - r.top - r.height / 2) * 0.15;
+      mbtn.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+    });
+    mbtn.addEventListener('mouseleave', () => {
+      gsap.to(mbtn, { x: 0, y: 0, duration: reduced ? 0 : 0.4, ease: 'elastic.out(1, 0.4)' });
+      mbtn.style.transform = '';
+    });
+  }
+
+  const btn = document.getElementById('summary-btn');
+  const overlay = document.getElementById('summary-overlay');
+  const backdrop = document.getElementById('summary-backdrop');
+  const closeBtn = document.getElementById('summary-close');
+  const slides = document.getElementById('summary-slides');
+  const prevBtn = document.getElementById('summary-prev');
+  const nextBtn = document.getElementById('summary-next');
+  const dots = document.querySelectorAll('.summary-dot');
+  if(!btn || !overlay) return;
+
+  let current = 0;
+  const total = dots.length;
+
+  function goTo(i) {
+    current = Math.max(0, Math.min(total - 1, i));
+    slides.style.transform = 'translateX(-' + (current * 100) + '%)';
+    dots.forEach((d, idx) => { d.style.backgroundColor = idx === current ? '#8b5cf6' : '#d1d5db'; });
+    prevBtn.disabled = current === 0;
+    nextBtn.style.opacity = current === total - 1 ? '0.3' : '1';
+  }
+
+  function openSummary() {
+    overlay.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    goTo(0);
+    gsap.fromTo('#summary-card', { opacity: 0, scale: 0.92, y: 40 }, { opacity: 1, scale: 1, y: 0, duration: reduced ? 0 : 0.4, ease: 'power3.out' });
+  }
+
+  function closeSummary() {
+    gsap.to('#summary-card', { opacity: 0, scale: 0.95, y: 20, duration: reduced ? 0 : 0.25, ease: 'power2.in', onComplete: () => {
+      overlay.classList.add('hidden');
+      document.body.style.overflow = '';
+    }});
+  }
+
+  btn.addEventListener('click', openSummary);
+  closeBtn.addEventListener('click', closeSummary);
+  backdrop.addEventListener('click', closeSummary);
+  prevBtn.addEventListener('click', () => goTo(current - 1));
+  nextBtn.addEventListener('click', () => goTo(current + 1));
+  dots.forEach((dot, idx) => { dot.addEventListener('click', () => goTo(idx)); });
+  document.addEventListener('keydown', e => {
+    if(overlay.classList.contains('hidden')) return;
+    if(e.key === 'Escape') closeSummary();
+    if(e.key === 'ArrowRight') goTo(current + 1);
+    if(e.key === 'ArrowLeft') goTo(current - 1);
+  });
+})();
+
+}); // end gsap.matchMedia
+</script>
 
 </body>
 </html>

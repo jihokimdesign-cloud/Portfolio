@@ -7,6 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css">
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script>
 tailwind.config = {
   theme: {
@@ -204,6 +205,7 @@ tailwind.config = {
   .research-method { transition: transform 0.2s ease, box-shadow 0.2s ease; }
   .research-method:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
 </style>
+<script>window.ScrollTrigger={create:function(){return{kill:function(){}}},refresh:function(){},update:function(){},getAll:function(){return[]},batch:function(){return[]},matchMedia:function(){},killAll:function(){}};</script>
 <style>.gs-child{opacity:1 !important;transform:none !important}.opacity-0{opacity:1 !important}.hero-badge{transform:none !important}</style>
 </head>
 <body class="bg-white text-primary leading-relaxed">
@@ -220,16 +222,17 @@ tailwind.config = {
             <!-- Top gradient light beam -->
     <!-- Light beam from top -->
     
+              </div>
 
     <!-- 2. Center title + subtitle -->
     <div class="px-10 lg:px-20 pt-14 pb-4 text-center relative z-10">
-      <a href="https://www.tap3d.com/" target="_blank" rel="noopener" class="hero-subtitle inline-flex items-center gap-2 mt-6 px-5 py-2.5 bg-primary text-white text-sm font-medium rounded-full opacity-0 transition-all duration-200 hover:opacity-90 hover:shadow-lg" style="text-decoration:none">
+                  <a href="https://www.tap3d.com/" target="_blank" rel="noopener" class="hero-subtitle inline-flex items-center gap-2 mt-6 px-5 py-2.5 bg-primary text-white text-sm font-medium rounded-full opacity-0 transition-all duration-200 hover:opacity-90 hover:shadow-lg" style="text-decoration:none">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
         Visit TAP3D
       </a>
     </div>
 
-
+    
     <!-- 4. Badges -->
     <div class="flex items-center gap-2 flex-wrap justify-center pb-10 opacity-0 hero-badge relative z-10">
       <span class="inline-flex items-center gap-1.5 bg-accent/5 border border-accent/15 rounded-full px-3 py-1.5 text-xs text-accent font-medium">Lead Product Designer (End-to-End)</span>
@@ -1491,6 +1494,504 @@ tailwind.config = {
   </div>
 </div>
 
+<script>
+/* ScrollTrigger stubbed for embed */
+
+// Shared reduced-motion flag, set by matchMedia and accessible to event handlers
+var _prefersReducedMotion = false;
+
+// ─── Number counter (function definition, used by animations) ───
+function animateCounter(el) {
+  const target = parseFloat(el.dataset.target);
+  const prefix = el.dataset.prefix || '';
+  const suffix = el.dataset.suffix || '';
+  const isDecimal = el.dataset.decimal === 'true';
+  const obj = { val: 0 };
+  gsap.to(obj, {
+    val: target, duration: _prefersReducedMotion ? 0 : 1.5, ease: 'power2.out',
+    onUpdate: () => {
+      el.textContent = prefix + (isDecimal ? obj.val.toFixed(2) : Math.round(obj.val)) + suffix;
+    }
+  });
+}
+
+// ─── matchMedia: all GSAP animations with reduced-motion support ───
+var mm = gsap.matchMedia();
+mm.add({
+  normal: '(prefers-reduced-motion: no-preference)',
+  reduced: '(prefers-reduced-motion: reduce)'
+}, function(context) {
+  var reduced = context.conditions.reduced;
+  _prefersReducedMotion = reduced;
+
+  // ─── Scroll progress bar (scrub-based, user-driven) ───
+  gsap.to('.scroll-progress', {
+    scaleX: 1,
+    ease: 'none',
+    scrollTrigger: { trigger: 'body', start: 'top top', end: 'bottom bottom', scrub: 0.3 }
+  });
+
+  // ─── Hero entrance timeline ───
+  const heroTl = gsap.timeline({ defaults: { ease: 'power3.out' }});
+  heroTl
+    // Brand name appears first
+    .fromTo('.hero-brand-bg', { opacity: 0, scale: 0.92 }, { opacity: 1, scale: 1, duration: reduced ? 0 : 0.8, ease: 'power2.out' })
+    // Product image rises up after
+    .fromTo('.hero-badge', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: reduced ? 0 : 0.8, stagger: 0.12 }, '-=0.3')
+    // Title + subtitle
+    .fromTo('.hero-subtitle', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: reduced ? 0 : 0.7, stagger: 0.1 }, '-=0.5')
+    // Contributions + meta
+    .fromTo('.hero-contributions', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: reduced ? 0 : 0.6 }, '-=0.3')
+    .fromTo('.meta-group', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: reduced ? 0 : 0.6, stagger: 0.12 }, '-=0.4')
+    .fromTo('.hero-corner', { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: reduced ? 0 : 0.6, stagger: 0.1, ease: 'back.out(2)' }, '-=0.4');
+
+  // ─── Scroll arrow gentle bounce ───
+  gsap.to('#scroll-arrow', {
+    y: 5, duration: reduced ? 0 : 1.2, repeat: reduced ? 0 : -1, yoyo: true, ease: 'sine.inOut'
+  });
+
+  // ─── Completion bar chart animation ───
+  ScrollTrigger.create({
+    trigger: '.completion-bar', start: 'top 85%', once: true,
+    onEnter: () => {
+      document.querySelectorAll('.completion-bar').forEach((bar, i) => {
+        const targetH = bar.getAttribute('data-h');
+        gsap.to(bar, { height: targetH + 'px', duration: reduced ? 0 : 0.8, delay: i * 0.12, ease: 'power3.out' });
+      });
+      document.querySelectorAll('.completion-bar-label').forEach((lbl, i) => {
+        gsap.to(lbl, { opacity: 1, y: 0, duration: reduced ? 0 : 0.3, delay: 0.5 + i * 0.12 });
+      });
+    }
+  });
+
+  // ─── Hero cards scroll-triggered entrance ───
+  gsap.set('.hero-card', { opacity: 0, y: 40 });
+  ScrollTrigger.create({
+    trigger: '.hero-card', start: 'top 85%', once: true,
+    onEnter: () => {
+      gsap.to('.hero-card', {
+        opacity: 1, y: 0, duration: reduced ? 0 : 0.7, stagger: 0.2, ease: 'power3.out'
+      });
+    }
+  });
+
+  // ─── Light beam follows scroll (scrub-based, user-driven) ───
+  gsap.to('#hero-light', {
+    y: 150, opacity: 0, ease: 'none',
+    scrollTrigger: { trigger: '#hero', start: '20% top', end: 'bottom top', scrub: 1 }
+  });
+
+  // ─── Parallax dots (scrub-based, user-driven) ───
+  gsap.utils.toArray('.parallax-slow').forEach(dot => {
+    gsap.to(dot, {
+      y: -40, ease: 'none',
+      scrollTrigger: { trigger: dot, start: 'top bottom', end: 'bottom top', scrub: 1 }
+    });
+  });
+
+  // ─── Header stat counters ───
+  document.querySelectorAll('header .stat-number').forEach((el, i) => {
+    gsap.delayedCall(1.0 + i * 0.3, () => animateCounter(el));
+  });
+
+  // ─── Hero images ───
+  gsap.to('.scroll-indicator', {
+    opacity: 0, scrollTrigger: { trigger: '.hero-images', start: 'top 90%', toggleActions: 'play none none reverse' }
+  });
+  gsap.fromTo('.hero-images .gs-child',
+    { opacity: 0, y: 40, scale: 0.96 },
+    { opacity: 1, y: 0, scale: 1, duration: reduced ? 0 : 0.7, stagger: 0.12, ease: 'power3.out',
+      scrollTrigger: { trigger: '.hero-images', start: 'top 85%' }
+    }
+  );
+
+  // ─── TOC ───
+  const toc = document.querySelector('.toc');
+  ScrollTrigger.create({
+    trigger: '.main-body', start: 'top 60%',
+    onEnter: () => gsap.to(toc, { opacity: 1, visibility: 'visible', duration: reduced ? 0 : 0.4, ease: 'power2.out' }),
+    onLeaveBack: () => gsap.to(toc, { opacity: 0, duration: reduced ? 0 : 0.3, ease: 'power2.in', onComplete: () => { toc.style.visibility = 'hidden'; } })
+  });
+
+  // ─── TOC active tracking ───
+  const tocLinks = document.querySelectorAll('.toc-link');
+  document.querySelectorAll('.section').forEach(section => {
+    ScrollTrigger.create({
+      trigger: section, start: 'top 30%', end: 'bottom 30%',
+      onEnter: () => setActive(section.id),
+      onEnterBack: () => setActive(section.id),
+    });
+  });
+  function setActive(id) {
+    tocLinks.forEach(link => link.classList.toggle('active', link.getAttribute('href') === '#' + id));
+  }
+
+  // ─── Section stagger reveals ───
+  document.querySelectorAll('.section, .pillar').forEach(section => {
+    const children = section.querySelectorAll(':scope > .gs-child, :scope > div > .gs-child, :scope > div > div > .gs-child');
+    if (!children.length) return;
+    gsap.fromTo(children,
+      { opacity: 0, y: 30 },
+      { opacity: 1, y: 0, duration: reduced ? 0 : 0.65, stagger: 0.08, ease: 'power3.out',
+        scrollTrigger: { trigger: section, start: 'top 80%' }
+      }
+    );
+  });
+
+  // ─── Body stat counters ───
+  document.querySelectorAll('.main-body .stat-number, .main-body .result-num').forEach(el => {
+    ScrollTrigger.create({
+      trigger: el, start: 'top 85%', once: true,
+      onEnter: () => animateCounter(el),
+    });
+  });
+
+  // ─── Image placeholders ───
+  document.querySelectorAll('.main-body .img-placeholder').forEach(el => {
+    gsap.fromTo(el,
+      { opacity: 0, y: 30, scale: 0.97 },
+      { opacity: 1, y: 0, scale: 1, duration: reduced ? 0 : 0.7, ease: 'power3.out',
+        scrollTrigger: { trigger: el, start: 'top 85%' }
+      }
+    );
+  });
+
+  // ─── Formula boxes stagger ───
+  gsap.fromTo('.formula-box',
+    { opacity: 0, y: 20, scale: 0.9 },
+    { opacity: 1, y: 0, scale: 1, duration: reduced ? 0 : 0.5, stagger: 0.15, ease: 'back.out(1.4)',
+      scrollTrigger: { trigger: '.formula-box', start: 'top 85%' }
+    }
+  );
+  gsap.fromTo('.formula-arrow',
+    { opacity: 0, x: -10 },
+    { opacity: 1, x: 0, duration: reduced ? 0 : 0.4, stagger: 0.1, delay: 0.3,
+      scrollTrigger: { trigger: '.formula-box', start: 'top 85%' }
+    }
+  );
+
+  // ─── Drop-off journey steps ───
+  ScrollTrigger.create({
+    trigger: '.drop-off-journey', start: 'top 85%', once: true,
+    onEnter: () => {
+      gsap.fromTo('.drop-off-step',
+        { opacity: 0, y: 20, scale: 0.8 },
+        { opacity: 1, y: 0, scale: 1, duration: reduced ? 0 : 0.5, stagger: 0.2, ease: 'back.out(1.4)' }
+      );
+      gsap.to('.drop-off-step:last-child', { opacity: 0.3, delay: 0.8 });
+      gsap.to('.drop-off-line', { width: '100%', duration: reduced ? 0 : 1.2, delay: 0.3, ease: 'power2.inOut' });
+    }
+  });
+
+  // ─── Research method cards ───
+  gsap.fromTo('.research-method',
+    { opacity: 0, x: -20 },
+    { opacity: 1, x: 0, duration: reduced ? 0 : 0.6, stagger: 0.15, ease: 'power3.out',
+      scrollTrigger: { trigger: '.research-method', start: 'top 85%' }
+    }
+  );
+
+  // ─── Progress bar fill ───
+  document.querySelectorAll('.progress-fill').forEach(bar => {
+    ScrollTrigger.create({
+      trigger: bar, start: 'top 90%', once: true,
+      onEnter: () => {
+        gsap.to(bar, { width: bar.dataset.width, duration: reduced ? 0 : 1.2, ease: 'power2.out', delay: 0.5 });
+      }
+    });
+  });
+
+  // ─── Section divider icons ───
+  gsap.utils.toArray('.section-icon').forEach(icon => {
+    gsap.fromTo(icon,
+      { opacity: 0, rotation: -90, scale: 0.5 },
+      { opacity: 1, rotation: 0, scale: 1, duration: reduced ? 0 : 0.6, ease: 'back.out(2)',
+        scrollTrigger: { trigger: icon, start: 'top 90%' }
+      }
+    );
+  });
+
+  // ─── Matrix interactive: scroll auto-reveal ───
+  ScrollTrigger.create({
+    trigger: '#matrix-grid', start: 'bottom 50%', once: true,
+    onEnter: () => {
+      var answers = document.querySelectorAll('.matrix-answer');
+      var ghosts = document.querySelectorAll('.matrix-ghost');
+      answers.forEach((a, i) => {
+        gsap.to(ghosts[i], { opacity: 0, duration: reduced ? 0 : 0.2 });
+        gsap.fromTo(a, { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: reduced ? 0 : 0.5, stagger: 0.15, delay: i * 0.15, ease: 'back.out(2)' });
+      });
+    }
+  });
+
+  // ─── Phased timeline animation ───
+  gsap.fromTo('.phased-step',
+    { opacity: 0, y: 20 },
+    { opacity: 1, y: 0, duration: reduced ? 0 : 0.5, stagger: 0.2, ease: 'power3.out',
+      scrollTrigger: { trigger: '.phased-timeline', start: 'top 85%' }
+    }
+  );
+
+  // ─── Floating preview cards entrance ───
+  ScrollTrigger.create({
+    trigger: '#quick-summary-section', start: 'top 75%', once: true,
+    onEnter: () => {
+      gsap.fromTo('.summary-float-card',
+        { opacity: 0, y: 30, scale: 0.8 },
+        { opacity: 1, y: 0, scale: 1, duration: reduced ? 0 : 0.7, stagger: 0.15, ease: 'back.out(1.7)' }
+      );
+      // Continuous gentle float
+      document.querySelectorAll('.summary-float-card').forEach((card, i) => {
+        gsap.to(card, {
+          y: '-=8', duration: reduced ? 0 : (2 + i * 0.4), repeat: reduced ? 0 : -1, yoyo: true, ease: 'sine.inOut', delay: i * 0.3
+        });
+      });
+    }
+  });
+
+}); // end matchMedia
+
+// ─── Hero cards 3D tilt on hover (non-GSAP) ───
+document.querySelectorAll('.hero-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width;
+    const y = (e.clientY - r.top) / r.height;
+    const tiltX = (y - 0.5) * -10;
+    const tiltY = (x - 0.5) * 10;
+    card.style.transform = 'perspective(600px) rotateX(' + tiltX + 'deg) rotateY(' + tiltY + 'deg) scale(1.02)';
+    card.style.boxShadow = '0 20px 40px rgba(37,99,235,0.1), 0 8px 16px rgba(0,0,0,0.06)';
+    card.style.setProperty('--mx', (x * 100) + '%');
+    card.style.setProperty('--my', (y * 100) + '%');
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = '';
+    card.style.boxShadow = '';
+  });
+});
+
+// ═══════════════════════════════════════════
+// INTERACTIVE 1: 2x2 Matrix — Drag to place
+// ═══════════════════════════════════════════
+(function(){
+  const grid = document.getElementById('matrix-grid');
+  const chips = document.querySelectorAll('.matrix-chip');
+  const answers = document.querySelectorAll('.matrix-answer');
+  const ghosts = document.querySelectorAll('.matrix-ghost');
+  if(!grid || !chips.length) return;
+
+  const answerMap = { mentor: 0, checklist: 1, ai: 2 };
+  const placed = new Set();
+  let activeChip = null, ghostEl = null, offX = 0, offY = 0;
+
+  function revealAnswer(idx) {
+    gsap.to(ghosts[idx], { opacity: 0, duration: _prefersReducedMotion ? 0 : 0.2 });
+    gsap.fromTo(answers[idx], { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: _prefersReducedMotion ? 0 : 0.4, ease: 'back.out(2)' });
+  }
+
+  // Drag logic
+  chips.forEach(chip => {
+    chip.addEventListener('pointerdown', e => {
+      if(chip.classList.contains('placed')) return;
+      e.preventDefault();
+      activeChip = chip;
+      const r = chip.getBoundingClientRect();
+      offX = e.clientX - r.left; offY = e.clientY - r.top;
+      ghostEl = chip.cloneNode(true);
+      ghostEl.classList.add('matrix-chip-ghost');
+      ghostEl.style.width = r.width + 'px';
+      ghostEl.style.left = (e.pageX - offX) + 'px';
+      ghostEl.style.top = (e.pageY - offY) + 'px';
+      document.body.appendChild(ghostEl);
+      chip.style.opacity = '0.3';
+    });
+  });
+
+  document.addEventListener('pointermove', e => {
+    if(!ghostEl) return;
+    ghostEl.style.left = (e.pageX - offX) + 'px';
+    ghostEl.style.top = (e.pageY - offY) + 'px';
+  });
+
+  document.addEventListener('pointerup', e => {
+    if(!ghostEl || !activeChip) return;
+    const gR = grid.getBoundingClientRect();
+    const x = e.clientX, y = e.clientY;
+    if(x >= gR.left && x <= gR.right && y >= gR.top && y <= gR.bottom) {
+      const name = activeChip.dataset.name;
+      const idx = answerMap[name];
+      placed.add(idx);
+      revealAnswer(idx);
+      activeChip.classList.add('placed');
+    } else {
+      activeChip.style.opacity = '1';
+    }
+    ghostEl.remove(); ghostEl = null; activeChip = null;
+  });
+})();
+
+// ═══════════════════════════════════════════
+// INTERACTIVE 2: WoZ Upload Simulation
+// ═══════════════════════════════════════════
+(function(){
+  const btn = document.getElementById('woz-upload-btn');
+  if(!btn) return;
+  btn.addEventListener('click', () => {
+    document.getElementById('woz-step-1').classList.add('hidden');
+    const s2 = document.getElementById('woz-step-2');
+    s2.classList.remove('hidden');
+    const prog = document.getElementById('woz-progress');
+    const stat = document.getElementById('woz-status');
+    const stages = [
+      [30, 'Extracting context from recording...'],
+      [60, 'Identifying issue: Safety Protocol Step 4...'],
+      [85, 'Drafting message for instructor...'],
+      [100, 'Done — generating response']
+    ];
+    let i = 0;
+    const nextStage = () => {
+      if(i >= stages.length) {
+        setTimeout(() => {
+          s2.classList.add('hidden');
+          const s3 = document.getElementById('woz-step-3');
+          s3.classList.remove('hidden');
+          const target = document.getElementById('woz-typing');
+          const msg = "Hi Instructor Kim, learner Alex is stuck on Safety Protocol Step 4 (Equipment Lockout). The recording shows they're confused about the valve sequence order. Could you clarify steps 4-B and 4-C? Context: 70% module completion, first attempt.";
+          let c = 0;
+          const typeIt = setInterval(() => {
+            target.textContent += msg[c]; c++;
+            if(c >= msg.length) clearInterval(typeIt);
+          }, 18);
+        }, 400);
+        return;
+      }
+      prog.style.width = stages[i][0] + '%';
+      stat.textContent = stages[i][1];
+      i++;
+      setTimeout(nextStage, 700);
+    };
+    setTimeout(nextStage, 300);
+  });
+})();
+
+// ═══════════════════════════════════════════
+// INTERACTIVE 3: Before/After Slider
+// ═══════════════════════════════════════════
+(function(){
+  const slider = document.getElementById('ba-slider');
+  const handle = document.getElementById('ba-handle');
+  const after = document.getElementById('ba-after');
+  if(!slider || !handle || !after) return;
+  let dragging = false;
+
+  function setPos(x) {
+    const r = slider.getBoundingClientRect();
+    let pct = ((x - r.left) / r.width) * 100;
+    pct = Math.max(0, Math.min(100, pct));
+    handle.style.left = pct + '%';
+    after.style.clipPath = 'inset(0 0 0 ' + pct + '%)';
+  }
+
+  handle.addEventListener('pointerdown', e => { dragging = true; e.preventDefault(); });
+  slider.addEventListener('pointerdown', e => { dragging = true; setPos(e.clientX); });
+  document.addEventListener('pointermove', e => { if(dragging) setPos(e.clientX); });
+  document.addEventListener('pointerup', () => { dragging = false; });
+})();
+
+
+// ═══════════════════════════════════════════
+// INTERACTIVE 5: Summary Mode Overlay Carousel
+// ═══════════════════════════════════════════
+
+// --- Mouse-follow glow ---
+(function(){
+  const section = document.getElementById('quick-summary-section');
+  const glow = document.getElementById('summary-glow');
+  if(!section || !glow) return;
+  section.addEventListener('mouseenter', () => { glow.style.opacity = '1'; });
+  section.addEventListener('mouseleave', () => { glow.style.opacity = '0'; });
+  section.addEventListener('mousemove', e => {
+    const r = section.getBoundingClientRect();
+    glow.style.left = (e.clientX - r.left) + 'px';
+    glow.style.top = (e.clientY - r.top) + 'px';
+  });
+})();
+
+// --- Magnetic button effect ---
+(function(){
+  const btn = document.querySelector('.summary-magnetic');
+  if(!btn) return;
+  btn.addEventListener('mousemove', e => {
+    const r = btn.getBoundingClientRect();
+    const x = (e.clientX - r.left - r.width / 2) * 0.15;
+    const y = (e.clientY - r.top - r.height / 2) * 0.15;
+    btn.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+  });
+  btn.addEventListener('mouseleave', () => {
+    gsap.to(btn, { x: 0, y: 0, duration: _prefersReducedMotion ? 0 : 0.4, ease: 'elastic.out(1, 0.4)' });
+    btn.style.transform = '';
+  });
+})();
+
+// --- Carousel logic ---
+(function(){
+  const btn = document.getElementById('summary-btn');
+  const overlay = document.getElementById('summary-overlay');
+  const backdrop = document.getElementById('summary-backdrop');
+  const closeBtn = document.getElementById('summary-close');
+  const slides = document.getElementById('summary-slides');
+  const prevBtn = document.getElementById('summary-prev');
+  const nextBtn = document.getElementById('summary-next');
+  const dots = document.querySelectorAll('.summary-dot');
+  if(!btn || !overlay) return;
+
+  let current = 0;
+  const total = dots.length;
+
+  function goTo(i) {
+    current = Math.max(0, Math.min(total - 1, i));
+    slides.style.transform = 'translateX(-' + (current * 100) + '%)';
+    dots.forEach((d, idx) => {
+      d.style.backgroundColor = idx === current ? '#2563eb' : '#d1d5db';
+    });
+    prevBtn.disabled = current === 0;
+    nextBtn.style.opacity = current === total - 1 ? '0.3' : '1';
+  }
+
+  function openSummary() {
+    overlay.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    goTo(0);
+    gsap.fromTo('#summary-card', { opacity: 0, scale: 0.92, y: 40 }, { opacity: 1, scale: 1, y: 0, duration: _prefersReducedMotion ? 0 : 0.4, ease: 'power3.out' });
+  }
+
+  function closeSummary() {
+    gsap.to('#summary-card', { opacity: 0, scale: 0.95, y: 20, duration: _prefersReducedMotion ? 0 : 0.25, ease: 'power2.in', onComplete: () => {
+      overlay.classList.add('hidden');
+      document.body.style.overflow = '';
+    }});
+  }
+
+  btn.addEventListener('click', openSummary);
+  closeBtn.addEventListener('click', closeSummary);
+  backdrop.addEventListener('click', closeSummary);
+  prevBtn.addEventListener('click', () => goTo(current - 1));
+  nextBtn.addEventListener('click', () => goTo(current + 1));
+
+  // Dot click nav
+  dots.forEach((dot, idx) => {
+    dot.addEventListener('click', () => goTo(idx));
+  });
+
+  // Keyboard nav
+  document.addEventListener('keydown', e => {
+    if(overlay.classList.contains('hidden')) return;
+    if(e.key === 'Escape') closeSummary();
+    if(e.key === 'ArrowRight') goTo(current + 1);
+    if(e.key === 'ArrowLeft') goTo(current - 1);
+  });
+})();
+</script>
 
 </body>
 </html>
