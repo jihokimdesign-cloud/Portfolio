@@ -44,7 +44,7 @@ export default function LegacyHero({ projectInfo, coverImage }: Props) {
       </div>
 
       {/* 브랜드 로고 + 타이틀 + 메타 — 이미지 바로 아래, 중앙 정렬 */}
-      <div className="mx-auto max-w-3xl px-4 pb-6 pt-12 text-center lg:pt-16">
+      <div className="mx-auto max-w-3xl px-4 pb-2 pt-10 text-center lg:pt-12">
         {logo && (
           // eslint-disable-next-line @next/next/no-img-element
           <img

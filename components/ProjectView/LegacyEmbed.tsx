@@ -56,7 +56,7 @@ export default function LegacyEmbed({ src }: { src: string }) {
   }, [src]);
 
   return (
-    <div className="col-span-full -mx-6 2xl:-mx-16 mt-12">
+    <div className="col-span-full -mx-6 2xl:-mx-16 mt-2">
       <iframe
         ref={ref}
         src={src}
