@@ -205,8 +205,9 @@ tailwind.config = {
   .research-method { transition: transform 0.2s ease, box-shadow 0.2s ease; }
   .research-method:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
 </style>
-<script>window.ScrollTrigger={create:function(){return{kill:function(){}}},refresh:function(){},update:function(){},getAll:function(){return[]},batch:function(){return[]},matchMedia:function(){},killAll:function(){}};</script>
+<script>window.ScrollTrigger={create:function(c){try{if(c){if(c.onEnter)c.onEnter();if(c.animation&&c.animation.play)c.animation.play()}}catch(e){}return{kill:function(){}}},refresh:function(){},update:function(){},getAll:function(){return[]},batch:function(){return[]},matchMedia:function(){},killAll:function(){}};</script>
 <style>.gs-child{opacity:1 !important;transform:none !important}.opacity-0{opacity:1 !important}.hero-badge{transform:none !important}</style>
+<style>.matrix-ghost,.matrix-chip{display:none !important}.matrix-answer{opacity:1 !important}#matrix-container,#ba-slider{pointer-events:none !important;cursor:default !important}</style>
 </head>
 <body class="bg-white text-primary leading-relaxed">
 
@@ -274,11 +275,12 @@ tailwind.config = {
     <div class="px-10 lg:px-20 pb-16 relative z-10">
       <div class="max-w-5xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-8 pt-8 border-t border-gray-100">
         <div class="meta-group opacity-0">
-          <div class="text-[10px] font-bold uppercase tracking-widest text-accent mb-4">Impact</div>
+          <div class="text-[10px] font-bold uppercase tracking-widest text-accent mb-1">Validation Impact</div>
+          <div class="text-[10px] text-secondary mb-4">Wizard-of-Oz simulation &middot; n=24</div>
           <div class="space-y-4">
-            <div><div class="font-display text-2xl font-semibold leading-none mb-1 stat-number" data-target="38" data-prefix="+" data-suffix="%">+38%</div><div class="text-xs text-secondary">Issue resolution rate</div></div>
-            <div><div class="font-display text-2xl font-semibold leading-none mb-1 stat-number" data-target="25" data-prefix="+" data-suffix="%">+25%</div><div class="text-xs text-secondary">Task start rate</div></div>
-            <div><div class="font-display text-2xl font-semibold leading-none mb-1 stat-number" data-target="33" data-prefix="+" data-suffix="%">+33%</div><div class="text-xs text-secondary">User engagement</div></div>
+            <div><div class="font-display text-2xl font-semibold leading-none mb-1">+38%</div><div class="text-xs text-secondary">Issue resolution (33% &rarr; 71%)</div></div>
+            <div><div class="font-display text-2xl font-semibold leading-none mb-1">+25%</div><div class="text-xs text-secondary">Task start rate (38% &rarr; 63%)</div></div>
+            <div class="text-sm leading-snug"><span class="text-accent">&rarr;</span> <strong>Outcome: C-suite approved full AI&nbsp;Agent rollout</strong></div>
           </div>
         </div>
         <div class="opacity-0 hero-contributions">
@@ -302,7 +304,42 @@ tailwind.config = {
         </div>
       </div>
     </div>
-  </header>
+  
+    <!-- Role split (moved from Collaboration per trim spec) -->
+    <div class="px-10 lg:px-20 pb-16 relative z-10"><div class="max-w-5xl mx-auto">
+<div class="my-10 gs-child">
+          <h3 class="font-display text-lg font-semibold mb-4">Defining the Work Scope &amp; Boundaries</h3>
+          <p class="text-sm text-secondary leading-relaxed mb-6 max-w-xl xl:max-w-2xl">As the sole designer, establishing clear ownership with the Product Manager was critical to moving fast and shipping the MVP.</p>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-accent/[0.03] border border-accent/10 rounded-xl p-5 transition-shadow duration-200 hover:shadow-md" style="box-shadow:0 0 0 0.5px rgba(37,99,235,0.08),0 1px 2px rgba(17,24,39,0.04)">
+              <div class="text-[10px] font-bold uppercase tracking-widest text-accent mb-4">Me — Product Design</div>
+              <div class="space-y-2.5">
+                <div class="flex items-start gap-2"><span class="w-1 h-1 rounded-full bg-accent mt-1.5 flex-shrink-0"></span><span class="text-sm text-secondary leading-snug">UX &amp; interface design</span></div>
+                <div class="flex items-start gap-2"><span class="w-1 h-1 rounded-full bg-accent mt-1.5 flex-shrink-0"></span><span class="text-sm text-secondary leading-snug">AI behavior logic</span></div>
+                <div class="flex items-start gap-2"><span class="w-1 h-1 rounded-full bg-accent mt-1.5 flex-shrink-0"></span><span class="text-sm text-secondary leading-snug">User research (9 interviews)</span></div>
+                <div class="flex items-start gap-2"><span class="w-1 h-1 rounded-full bg-accent mt-1.5 flex-shrink-0"></span><span class="text-sm text-secondary leading-snug">WoZ validation (n=24)</span></div>
+              </div>
+            </div>
+            <div class="bg-surface rounded-xl p-5 border border-gray-200 transition-shadow duration-200 hover:shadow-md" style="box-shadow:0 1px 2px rgba(17,24,39,0.04)">
+              <div class="text-[10px] font-bold uppercase tracking-widest text-secondary mb-4">Product Manager</div>
+              <div class="space-y-2.5">
+                <div class="flex items-start gap-2"><span class="w-1 h-1 rounded-full bg-gray-300 mt-1.5 flex-shrink-0"></span><span class="text-sm text-secondary leading-snug">Product roadmap</span></div>
+                <div class="flex items-start gap-2"><span class="w-1 h-1 rounded-full bg-gray-300 mt-1.5 flex-shrink-0"></span><span class="text-sm text-secondary leading-snug">AI token cost constraints</span></div>
+                <div class="flex items-start gap-2"><span class="w-1 h-1 rounded-full bg-gray-300 mt-1.5 flex-shrink-0"></span><span class="text-sm text-secondary leading-snug">Web-to-VR API prioritization</span></div>
+              </div>
+            </div>
+            <div class="bg-surface rounded-xl p-5 border border-gray-200 transition-shadow duration-200 hover:shadow-md" style="box-shadow:0 1px 2px rgba(17,24,39,0.04)">
+              <div class="text-[10px] font-bold uppercase tracking-widest text-secondary mb-4">Engineering &amp; QA</div>
+              <div class="space-y-2.5">
+                <div class="flex items-start gap-2"><span class="w-1 h-1 rounded-full bg-gray-300 mt-1.5 flex-shrink-0"></span><span class="text-sm text-secondary leading-snug">Backend logic</span></div>
+                <div class="flex items-start gap-2"><span class="w-1 h-1 rounded-full bg-gray-300 mt-1.5 flex-shrink-0"></span><span class="text-sm text-secondary leading-snug">API latency optimization</span></div>
+                <div class="flex items-start gap-2"><span class="w-1 h-1 rounded-full bg-gray-300 mt-1.5 flex-shrink-0"></span><span class="text-sm text-secondary leading-snug">Edge case coverage</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div></div>
+</header>
 
 
   <!-- ═══════ QUICK SUMMARY — Interactive CTA ═══════ -->
@@ -826,12 +863,7 @@ tailwind.config = {
 
         <!-- ★ Interactive 2×2 Matrix — Ghost hints, auto-reveals on scroll -->
         <div class="my-10 gs-child">
-          <div class="text-xs text-secondary text-center mb-4">
-            <span class="inline-flex items-center gap-1.5 bg-accent/5 border border-accent/10 rounded-full px-3 py-1">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M5 9l4-4 4 4M5 15l4 4 4-4"/></svg>
-              Drag each option onto the matrix — or scroll to reveal
-            </span>
-          </div>
+          
           <div id="matrix-container" class="relative" style="user-select:none">
             <div class="text-xs font-bold text-secondary uppercase tracking-wider text-center mb-2">↑ High Impact</div>
             <div class="flex items-stretch gap-0">
@@ -1085,11 +1117,7 @@ tailwind.config = {
                 </div>
               </div>
             </div>
-            <div class="mt-6 flex items-center gap-6 justify-center">
-              <div class="text-center"><span class="font-display text-2xl text-gray-300 line-through">38%</span><div class="text-xs text-secondary">Before</div></div>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-              <div class="text-center"><span class="font-display text-2xl font-semibold text-green-600 result-num" data-target="63" data-suffix="%">63%</span><div class="text-xs text-green-600 font-medium">+25%</div></div>
-            </div>
+
           </div>
 
           <!-- Test 3: Report Summary + Weekly summary mockup -->
@@ -1157,12 +1185,7 @@ tailwind.config = {
 
         <!-- ★ Interactive Before/After Slider — MVP vs AI Agent -->
         <div class="my-10 gs-child">
-          <div class="text-xs text-secondary text-center mb-4">
-            <span class="inline-flex items-center gap-1.5 bg-accent/5 border border-accent/10 rounded-full px-3 py-1">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M18 8L22 12L18 16"/><path d="M6 8L2 12L6 16"/></svg>
-              Drag the slider to compare MVP vs. AI Agent
-            </span>
-          </div>
+          
           <div class="rounded-xl overflow-hidden border border-gray-200">
             <div id="ba-slider" class="relative cursor-ew-resize" style="overflow:visible">
               <!-- Before (MVP) -->
@@ -1209,231 +1232,17 @@ tailwind.config = {
             <div class="text-xs text-secondary">Chinese localization in progress</div>
           </div>
         </div>
-      </section>
+      
+        <p class="text-xs text-secondary/70 mt-10 max-w-xl">
+          Post-rollout completion metrics fall outside my engagement window &mdash;
+          the validation data above is what secured the investment.
+        </p>
+</section>
 
       <!-- ★ Section transition divider -->
       <div class="flex items-center gap-4 py-6">
         <div class="flex-1 h-px bg-gray-100"></div>
         <svg class="section-icon w-8 h-8 text-accent/30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        <div class="flex-1 h-px bg-gray-100"></div>
-      </div>
-
-      <!-- ─── COLLABORATION ─── -->
-      <section class="section py-20 border-b border-gray-200" id="collaboration">
-        <div class="text-xs font-bold uppercase tracking-widest text-accent mb-6 gs-child">Collaboration</div>
-        <h2 class="font-display text-2xl lg:text-[1.75rem] font-semibold leading-snug mb-8 max-w-xl xl:max-w-2xl gs-child">One Designer, Six Partners</h2>
-        <div class="text-base text-secondary leading-loose max-w-xl xl:max-w-2xl">
-          <p class="mb-5 gs-child">As the sole designer on a 6-person cross-functional team, I had to balance speed with alignment. Collaboration wasn't a phase — it was embedded in every step of the process.</p>
-        </div>
-
-        <!-- ★ Defining Work Scope & Boundaries -->
-        <div class="my-10 gs-child">
-          <h3 class="font-display text-lg font-semibold mb-4">Defining the Work Scope &amp; Boundaries</h3>
-          <p class="text-sm text-secondary leading-relaxed mb-6 max-w-xl xl:max-w-2xl">As the sole designer, establishing clear ownership with the Product Manager was critical to moving fast and shipping the MVP.</p>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div class="bg-accent/[0.03] border border-accent/10 rounded-xl p-5 transition-shadow duration-200 hover:shadow-md" style="box-shadow:0 0 0 0.5px rgba(37,99,235,0.08),0 1px 2px rgba(17,24,39,0.04)">
-              <div class="text-[10px] font-bold uppercase tracking-widest text-accent mb-4">Me — Product Design</div>
-              <div class="space-y-2.5">
-                <div class="flex items-start gap-2"><span class="w-1 h-1 rounded-full bg-accent mt-1.5 flex-shrink-0"></span><span class="text-sm text-secondary leading-snug">UX &amp; interface design</span></div>
-                <div class="flex items-start gap-2"><span class="w-1 h-1 rounded-full bg-accent mt-1.5 flex-shrink-0"></span><span class="text-sm text-secondary leading-snug">AI behavior logic</span></div>
-                <div class="flex items-start gap-2"><span class="w-1 h-1 rounded-full bg-accent mt-1.5 flex-shrink-0"></span><span class="text-sm text-secondary leading-snug">User research (9 interviews)</span></div>
-                <div class="flex items-start gap-2"><span class="w-1 h-1 rounded-full bg-accent mt-1.5 flex-shrink-0"></span><span class="text-sm text-secondary leading-snug">WoZ validation (n=24)</span></div>
-              </div>
-            </div>
-            <div class="bg-surface rounded-xl p-5 border border-gray-200 transition-shadow duration-200 hover:shadow-md" style="box-shadow:0 1px 2px rgba(17,24,39,0.04)">
-              <div class="text-[10px] font-bold uppercase tracking-widest text-secondary mb-4">Product Manager</div>
-              <div class="space-y-2.5">
-                <div class="flex items-start gap-2"><span class="w-1 h-1 rounded-full bg-gray-300 mt-1.5 flex-shrink-0"></span><span class="text-sm text-secondary leading-snug">Product roadmap</span></div>
-                <div class="flex items-start gap-2"><span class="w-1 h-1 rounded-full bg-gray-300 mt-1.5 flex-shrink-0"></span><span class="text-sm text-secondary leading-snug">AI token cost constraints</span></div>
-                <div class="flex items-start gap-2"><span class="w-1 h-1 rounded-full bg-gray-300 mt-1.5 flex-shrink-0"></span><span class="text-sm text-secondary leading-snug">Web-to-VR API prioritization</span></div>
-              </div>
-            </div>
-            <div class="bg-surface rounded-xl p-5 border border-gray-200 transition-shadow duration-200 hover:shadow-md" style="box-shadow:0 1px 2px rgba(17,24,39,0.04)">
-              <div class="text-[10px] font-bold uppercase tracking-widest text-secondary mb-4">Engineering &amp; QA</div>
-              <div class="space-y-2.5">
-                <div class="flex items-start gap-2"><span class="w-1 h-1 rounded-full bg-gray-300 mt-1.5 flex-shrink-0"></span><span class="text-sm text-secondary leading-snug">Backend logic</span></div>
-                <div class="flex items-start gap-2"><span class="w-1 h-1 rounded-full bg-gray-300 mt-1.5 flex-shrink-0"></span><span class="text-sm text-secondary leading-snug">API latency optimization</span></div>
-                <div class="flex items-start gap-2"><span class="w-1 h-1 rounded-full bg-gray-300 mt-1.5 flex-shrink-0"></span><span class="text-sm text-secondary leading-snug">Edge case coverage</span></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ★ Process timeline with collaboration highlights -->
-        <div class="my-12 relative gs-child">
-          <!-- Vertical line -->
-          <div class="absolute left-[19px] top-0 bottom-0 w-px bg-gray-200 hidden md:block"></div>
-
-          <div class="space-y-10">
-
-            <!-- Step 1: User Research -->
-            <div class="relative md:pl-14">
-              <div class="absolute left-0 top-0 hidden md:flex">
-                <div class="w-10 h-10 rounded-full bg-accent flex items-center justify-center shadow-sm shadow-accent/20 z-10">
-                  <span class="text-white text-xs font-bold">01</span>
-                </div>
-              </div>
-              <div>
-                <div class="flex items-center gap-3 mb-1">
-                  <div class="text-[10px] text-secondary font-medium">Weeks 1–3</div>
-                </div>
-                <div class="font-display font-semibold text-base mb-2">User Research</div>
-                <div class="text-sm text-secondary leading-relaxed mb-4">Conducted 9 in-depth interviews, coded 200+ quotes, and built an affinity map to surface recurring patterns.</div>
-                <div class="bg-accent/[0.03] border border-accent/10 rounded-xl p-5">
-                  <div class="flex items-center gap-2 mb-3">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                    <span class="text-xs font-bold text-accent">Collaboration</span>
-                  </div>
-                  <div class="space-y-2.5">
-                    <div class="flex items-start gap-2.5">
-                      <div class="inline-flex items-center gap-1 bg-white border border-gray-200 rounded-full px-2 py-0.5 flex-shrink-0 mt-0.5"><span class="text-[9px] font-bold text-secondary">PM</span></div>
-                      <div class="text-sm text-secondary leading-relaxed">Co-planned interview scripts and scheduled participant access</div>
-                    </div>
-                    <div class="flex items-start gap-2.5">
-                      <div class="inline-flex items-center gap-1 bg-white border border-gray-200 rounded-full px-2 py-0.5 flex-shrink-0 mt-0.5"><span class="text-[9px] font-bold text-secondary">ENG</span></div>
-                      <div class="text-sm text-secondary leading-relaxed">Weekly sync to present affinity map findings — aligned on problem framing before solutions</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Step 2: Problem Framing -->
-            <div class="relative md:pl-14">
-              <div class="absolute left-0 top-0 hidden md:flex">
-                <div class="w-10 h-10 rounded-full bg-white border-2 border-gray-300 flex items-center justify-center z-10">
-                  <span class="text-secondary text-xs font-bold">02</span>
-                </div>
-              </div>
-              <div>
-                <div class="flex items-center gap-3 mb-1">
-                  <div class="text-[10px] text-secondary font-medium">Week 4</div>
-                </div>
-                <div class="font-display font-semibold text-base mb-2">Problem Framing &amp; Strategy</div>
-                <div class="text-sm text-secondary leading-relaxed mb-4">Synthesized three cognitive barriers and evaluated three solution options on an impact-vs-feasibility matrix. Proposed a phased approach: Checklist MVP first, AI Agent after validation.</div>
-                <div class="bg-accent/[0.03] border border-accent/10 rounded-xl p-5">
-                  <div class="flex items-center gap-2 mb-3">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                    <span class="text-xs font-bold text-accent">Collaboration</span>
-                  </div>
-                  <div class="space-y-2.5">
-                    <div class="flex items-start gap-2.5">
-                      <div class="inline-flex items-center gap-1 bg-white border border-gray-200 rounded-full px-2 py-0.5 flex-shrink-0 mt-0.5"><span class="text-[9px] font-bold text-secondary">PM</span></div>
-                      <div class="text-sm text-secondary leading-relaxed">Jointly prioritized barriers by severity and frequency to focus the MVP scope</div>
-                    </div>
-                    <div class="flex items-start gap-2.5">
-                      <div class="inline-flex items-center gap-1 bg-white border border-gray-200 rounded-full px-2 py-0.5 flex-shrink-0 mt-0.5"><span class="text-[9px] font-bold text-secondary">ENG</span></div>
-                      <div class="text-sm text-secondary leading-relaxed">Flagged AI latency and token cost constraints early — shaped the phased rollout decision</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Step 3: Design + Prototype -->
-            <div class="relative md:pl-14">
-              <div class="absolute left-0 top-0 hidden md:flex">
-                <div class="w-10 h-10 rounded-full bg-white border-2 border-gray-300 flex items-center justify-center z-10">
-                  <span class="text-secondary text-xs font-bold">03</span>
-                </div>
-              </div>
-              <div>
-                <div class="flex items-center gap-3 mb-1">
-                  <div class="text-[10px] text-secondary font-medium">Weeks 5–8</div>
-                </div>
-                <div class="font-display font-semibold text-base mb-2">Design &amp; Prototype</div>
-                <div class="text-sm text-secondary leading-relaxed mb-4">Designed the Checklist Card MVP and AI Agent prototype in Figma. Iterated through multiple rounds — from wireframes to high-fidelity interaction specs.</div>
-                <div class="bg-accent/[0.03] border border-accent/10 rounded-xl p-5">
-                  <div class="flex items-center gap-2 mb-3">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                    <span class="text-xs font-bold text-accent">Collaboration</span>
-                  </div>
-                  <div class="space-y-2.5">
-                    <div class="flex items-start gap-2.5">
-                      <div class="inline-flex items-center gap-1 bg-white border border-gray-200 rounded-full px-2 py-0.5 flex-shrink-0 mt-0.5"><span class="text-[9px] font-bold text-secondary">ENG</span></div>
-                      <div class="text-sm text-secondary leading-relaxed">Bi-weekly Figma critiques — iterated on feasibility constraints like API response time and component reuse</div>
-                    </div>
-                    <div class="flex items-start gap-2.5">
-                      <div class="inline-flex items-center gap-1 bg-white border border-gray-200 rounded-full px-2 py-0.5 flex-shrink-0 mt-0.5"><span class="text-[9px] font-bold text-secondary">QA</span></div>
-                      <div class="text-sm text-secondary leading-relaxed">Reviewed prototypes for edge cases — empty states, error handling, network failure scenarios</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Step 4: WoZ Validation -->
-            <div class="relative md:pl-14">
-              <div class="absolute left-0 top-0 hidden md:flex">
-                <div class="w-10 h-10 rounded-full bg-amber-100 border-2 border-amber-300 flex items-center justify-center z-10">
-                  <span class="text-amber-700 text-xs font-bold">04</span>
-                </div>
-              </div>
-              <div>
-                <div class="flex items-center gap-3 mb-1">
-                  <div class="text-[10px] text-secondary font-medium">Weeks 9–12</div>
-                </div>
-                <div class="font-display font-semibold text-base mb-2">WoZ Validation</div>
-                <div class="text-sm text-secondary leading-relaxed mb-4">Ran Wizard of Oz simulation with 24 users. I acted as the AI backend in real-time, while the team observed and captured behavior data.</div>
-                <div class="bg-accent/[0.03] border border-accent/10 rounded-xl p-5">
-                  <div class="flex items-center gap-2 mb-3">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                    <span class="text-xs font-bold text-accent">Collaboration</span>
-                  </div>
-                  <div class="space-y-2.5">
-                    <div class="flex items-start gap-2.5">
-                      <div class="inline-flex items-center gap-1 bg-white border border-gray-200 rounded-full px-2 py-0.5 flex-shrink-0 mt-0.5"><span class="text-[9px] font-bold text-secondary">PM</span></div>
-                      <div class="text-sm text-secondary leading-relaxed">Observed sessions live — together caught the "Oldest-First" sort issue and fixed it between test rounds</div>
-                    </div>
-                    <div class="flex items-start gap-2.5">
-                      <div class="inline-flex items-center gap-1 bg-white border border-gray-200 rounded-full px-2 py-0.5 flex-shrink-0 mt-0.5"><span class="text-[9px] font-bold text-secondary">QA</span></div>
-                      <div class="text-sm text-secondary leading-relaxed">Monitored edge cases in real-time, flagging failure patterns I couldn't see from the operator seat</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Step 5: Ship & Scale -->
-            <div class="relative md:pl-14">
-              <div class="absolute left-0 top-0 hidden md:flex">
-                <div class="w-10 h-10 rounded-full bg-green-100 border-2 border-green-300 flex items-center justify-center z-10">
-                  <span class="text-green-700 text-xs font-bold">05</span>
-                </div>
-              </div>
-              <div>
-                <div class="flex items-center gap-3 mb-1">
-                  <div class="text-[10px] text-secondary font-medium">Weeks 13–24</div>
-                </div>
-                <div class="font-display font-semibold text-base mb-2">Ship &amp; Scale</div>
-                <div class="text-sm text-secondary leading-relaxed mb-4">Handed off annotated specs, built the AI widget as a reusable design system component, and kicked off Chinese localization.</div>
-                <div class="bg-accent/[0.03] border border-accent/10 rounded-xl p-5">
-                  <div class="flex items-center gap-2 mb-3">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                    <span class="text-xs font-bold text-accent">Collaboration</span>
-                  </div>
-                  <div class="space-y-2.5">
-                    <div class="flex items-start gap-2.5">
-                      <div class="inline-flex items-center gap-1 bg-white border border-gray-200 rounded-full px-2 py-0.5 flex-shrink-0 mt-0.5"><span class="text-[9px] font-bold text-secondary">ENG</span></div>
-                      <div class="text-sm text-secondary leading-relaxed">Co-built the AI widget as a reusable component — paired on interaction states and responsive behavior</div>
-                    </div>
-                    <div class="flex items-start gap-2.5">
-                      <div class="inline-flex items-center gap-1 bg-white border border-gray-200 rounded-full px-2 py-0.5 flex-shrink-0 mt-0.5"><span class="text-[9px] font-bold text-secondary">PM</span></div>
-                      <div class="text-sm text-secondary leading-relaxed">Defined CN localization scope together — created layout guidelines for CJK text reflow</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      <!-- ★ Section transition divider -->
-      <div class="flex items-center gap-4 py-6">
-        <div class="flex-1 h-px bg-gray-100"></div>
-        <svg class="section-icon w-8 h-8 text-accent/30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
         <div class="flex-1 h-px bg-gray-100"></div>
       </div>
 
