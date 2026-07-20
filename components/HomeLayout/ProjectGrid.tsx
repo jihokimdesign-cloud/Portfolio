@@ -41,6 +41,18 @@ const ProjectGrid = ({ projects, heroOffset }: Props) => {
   const windowDimension = useWindowDimension();
   const gridBeginRef = useRef() as MutableRefObject<HTMLDivElement>;
 
+  // 그리드 실제 폭 측정 — 썸네일 피처드 타일을 16:9로 맞추기 위함
+  const [gridWidth, setGridWidth] = useState(0);
+  useLayoutEffect(() => {
+    const el = gridBeginRef.current;
+    if (!el) return;
+    const measure = () => setGridWidth(el.clientWidth);
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
   const itemSizes = useMemo(() => {
     if (currentBreakpoint >= breakpoints["2xl"]) {
       return {
@@ -107,11 +119,21 @@ const ProjectGrid = ({ projects, heroOffset }: Props) => {
             ? Math.floor((index + rowOffset) / 2)
             : index;
 
+          // 피처드 썸네일 타일은 16:9 배너로 (준비된 비율 유지, 크롭 없음)
+          const isFeaturedThumb =
+            index === 0 &&
+            shouldEmphasiseFirst &&
+            !!projectInfo.thumbHtml &&
+            gridWidth > 0;
+          const resolvedHeight = isFeaturedThumb
+            ? Math.round((gridWidth * 9) / 16)
+            : index === 0
+            ? itemSizes.firstItem
+            : itemSizes.normalItem;
+
           return (
             <ProjectGridItem
-              cardHeight={
-                index === 0 ? itemSizes.firstItem : itemSizes.normalItem
-              }
+              cardHeight={resolvedHeight}
               projectRow={currentRow}
               firstRowHeight={itemSizes.firstItem}
               projectStyle={projectStyle}

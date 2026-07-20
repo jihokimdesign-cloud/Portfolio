@@ -48,7 +48,7 @@ const ProjectGridItem = ({
   isFirstItem,
   shouldHideTitles,
 }: Props) => {
-  const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const [isImageLoaded, setIsImageLoaded] = useState(!!projectInfo.thumbHtml);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
   const hasVideo = projectInfo.previewVideo !== undefined;
   const isLoading = useMemo(
@@ -145,80 +145,60 @@ const ProjectGridItem = ({
       style={{
         gridColumnStart: isWide ? 1 : "auto",
         gridColumnEnd: isWide ? 3 : "auto",
-        height: cardHeight,
       }}
     >
       <ReactiveTapArea>
-        <div className="relative">
-          {/* rainbow bloom behind the card (soft halo) */}
+        <Link href={`projects/${projectInfo.slug}`} scroll={false}>
           <div
-            aria-hidden
-            className="rainbow-ring pointer-events-none absolute -inset-[2px] rounded-[13px]"
+            ref={containerRef}
+            className="relative overflow-hidden rounded-xl"
             style={{
-              filter: "blur(10px)",
-              opacity: isHovering ? 0.45 : 0,
-              transition: "opacity .35s ease",
+              height: cardHeight,
+              backgroundColor: projectInfo.thumbHtml
+                ? "#EDF0F3"
+                : INACTIVE_BG_COLOR,
             }}
-          />
-          {/* crisp 2px rainbow stroke */}
-          <div
-            aria-hidden
-            className="rainbow-ring pointer-events-none absolute -inset-[1px] rounded-[13px]"
-            style={{
-              padding: "1px",
-              WebkitMask:
-                "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-              WebkitMaskComposite: "xor",
-              maskComposite: "exclude",
-              opacity: isHovering ? 1 : 0,
-              transition: "opacity .35s ease",
-            }}
-          />
-        <motion.div
-          ref={containerRef}
-          className="relative h-[50vw] overflow-hidden rounded-xl"
-          style={{
-            height: cardHeight,
-            backgroundColor: INACTIVE_BG_COLOR,
-          }}
-        >
-          <Link
-            href={`projects/${projectInfo.slug}`}
-            scroll={false}
-            onMouseEnter={() => setIsHovering(true)}
-            onMouseLeave={() => setIsHovering(false)}
           >
             <motion.div
               initial={{ opacity: 0 }}
-              animate={{
-                opacity: !isLoading ? 1 : 0,
-              }}
+              animate={{ opacity: !isLoading ? 1 : 0 }}
               transition={{
                 duration: AnimationConfig.NORMAL,
                 ease: AnimationConfig.EASING_DRAMATIC,
               }}
             >
-              {(!isFirstItem || !hasVideo) && (
-                <Image
-                  src={getProjectCover(projectInfo.slug)}
-                  width={582}
-                  height={767}
-                  className={
-                    isFirstItem ? "w-full object-cover object-center" : "w-full "
-                  }
-                  style={isFirstItem ? { height: cardHeight } : undefined}
-                  alt={""}
+              {projectInfo.thumbHtml ? (
+                // 애니메이션 HTML 썸네일 — 타일이 이미 16:9라 그대로 채운다
+                <iframe
+                  src={projectInfo.thumbHtml}
+                  title={projectInfo.title}
+                  scrolling="no"
+                  className="block w-full border-0"
+                  style={{ height: cardHeight, pointerEvents: "none" }}
                   onLoad={() => setIsImageLoaded(true)}
                 />
+              ) : (
+                (!isFirstItem || !hasVideo) && (
+                  <Image
+                    src={getProjectCover(projectInfo.slug)}
+                    width={582}
+                    height={767}
+                    className={
+                      isFirstItem
+                        ? "w-full object-cover object-center"
+                        : "w-full "
+                    }
+                    style={isFirstItem ? { height: cardHeight } : undefined}
+                    alt={""}
+                    onLoad={() => setIsImageLoaded(true)}
+                  />
+                )
               )}
 
               {projectInfo.previewVideo !== undefined && (
                 <motion.video
                   disablePictureInPicture
-                  style={{
-                    opacity: isHovering || isFirstItem ? 1 : 0,
-                    height: cardHeight,
-                  }}
+                  style={{ opacity: isFirstItem ? 1 : 0, height: cardHeight }}
                   ref={videoRef}
                   src={projectInfo.previewVideo}
                   preload="metadata"
@@ -229,44 +209,26 @@ const ProjectGridItem = ({
                 />
               )}
             </motion.div>
-            <motion.div
-              className="absolute top-0 left-0 right-0 mx-4 my-3 text-sm lg:text-base tracking-tight grid grid-cols-2"
-              style={{
-                color: projectStyle.getTextColor(),
-              }}
-            >
-              <motion.div
-                initial={{
-                  opacity: 0,
-                }}
-                animate={{
-                  opacity: !shouldHideTitles && !isLoading ? 1 : 0,
-                }}
-                className="mb-1 leading-tight"
+          </div>
+
+          {/* 타이틀 / 카테고리 — 박스 아래, 좌: 타이틀 우: 카테고리 */}
+          {!shouldHideTitles && (
+            <div className="mt-3 flex items-start justify-between gap-4 px-1">
+              <span
+                className="text-sm leading-tight lg:text-base"
+                style={{ color: "var(--title)" }}
               >
                 {projectInfo.title}
-              </motion.div>
-              <motion.div
-                initial={{
-                  opacity: 0,
-                }}
-                animate={{
-                  opacity: !shouldHideTitles && !isLoading ? 1 : 0,
-                }}
-                className="opacity-60 leading-tight"
+              </span>
+              <span
+                className="text-right text-sm leading-tight lg:text-base"
+                style={{ color: "var(--fg-muted)" }}
               >
-                {!isHovering
-                  ? projectInfo.tags?.map((tag, index) => (
-                      <div className="" key={index}>
-                        {tag}
-                      </div>
-                    ))
-                  : projectInfo.description}
-              </motion.div>
-            </motion.div>
-          </Link>
-        </motion.div>
-        </div>
+                {projectInfo.tags?.join(" · ")}
+              </span>
+            </div>
+          )}
+        </Link>
       </ReactiveTapArea>
     </motion.div>
   );
