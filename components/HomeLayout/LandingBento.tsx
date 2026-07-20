@@ -48,6 +48,15 @@ function HeroChatBar() {
   const [value, setValue] = useState("");
   const [heroInView, setHeroInView] = useState(true);
   const [promptIndex, setPromptIndex] = useState(0);
+  const [recruiter, setRecruiter] = useState(false);
+
+  // 리크루터 모드 표시 — ChatWidget/나브 토글과 동기화
+  useEffect(() => {
+    const sync = (e: Event) =>
+      setRecruiter(Boolean((e as CustomEvent).detail?.recruiter));
+    window.addEventListener("jiho-chat-mode-changed", sync);
+    return () => window.removeEventListener("jiho-chat-mode-changed", sync);
+  }, []);
 
   // 라이브 사이트처럼 플레이스홀더가 순환한다
   useEffect(() => {
@@ -95,7 +104,7 @@ function HeroChatBar() {
       }}
     >
       <div
-        className="liquid-glass flex w-full max-w-xl items-center gap-2 rounded-full p-2 pl-5"
+        className="liquid-glass flex w-full max-w-3xl items-center gap-2 rounded-full p-2 pl-5"
         style={{
           border: "1px solid var(--glass-border)",
           boxShadow: "var(--liquid-rim), var(--glass-shadow)",
@@ -120,6 +129,26 @@ function HeroChatBar() {
           className="flex-1 bg-transparent text-[14px] focus:outline-none"
           style={{ color: "var(--fg)" }}
         />
+        {recruiter && (
+          <button
+            onClick={() =>
+              window.dispatchEvent(
+                new CustomEvent("jiho-chat-mode", {
+                  detail: { recruiter: false },
+                })
+              )
+            }
+            title="Recruiter mode on — click to turn off"
+            className="shrink-0 rounded-full px-2.5 py-1 text-[11px] font-medium"
+            style={{
+              background: "#F9703022",
+              color: "#F97030",
+              boxShadow: "inset 0 0 0 1px #F9703055",
+            }}
+          >
+            Recruiter
+          </button>
+        )}
         <button
           onClick={submit}
           disabled={!value.trim()}

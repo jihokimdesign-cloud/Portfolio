@@ -182,6 +182,19 @@ export default function ChatWidget() {
       prev.includes(skill) ? prev.filter((s) => s !== skill) : [...prev, skill]
     );
 
+  // 리크루터 모드 진입 시 레인보우 스윕 전환 오버레이
+  const [sweeping, setSweeping] = useState(false);
+  const prevRecruiter = useRef(false);
+  useEffect(() => {
+    const was = prevRecruiter.current;
+    prevRecruiter.current = isRecruiter;
+    if (isRecruiter && !was) {
+      setSweeping(true);
+      const t = setTimeout(() => setSweeping(false), 950);
+      return () => clearTimeout(t);
+    }
+  }, [isRecruiter]);
+
   // 히어로(#landing-hero)가 보이는 동안엔 플로팅 챗 바가 대신 떠 있으니
   // FAB/힌트 숨김 — 히어로를 지나면 우하단 플로팅으로 나타난다
   const [heroBarInView, setHeroBarInView] = useState(false);
@@ -244,6 +257,15 @@ export default function ChatWidget() {
 
   return createPortal(
     <div style={{ fontFamily: FONT_STACK, color: FOREGROUND }}>
+      {/* ── 리크루터 전환: 무지개가 지나가는 스크린 ── */}
+      {sweeping && (
+        <div
+          aria-hidden
+          className="pointer-events-none fixed inset-0 z-[300] overflow-hidden"
+        >
+          <div className="rainbow-sweep-band" />
+        </div>
+      )}
       <AnimatePresence>
         {isOpen && (
           <>
@@ -267,7 +289,7 @@ export default function ChatWidget() {
                 ease: AnimationConfig.EASING,
               }}
               onClick={(e) => e.stopPropagation()}
-              className="liquid-glass flex max-h-[calc(100vh-160px)] w-full max-w-xl flex-col overflow-hidden rounded-[22px]"
+              className="liquid-glass flex max-h-[calc(100vh-160px)] w-full max-w-3xl flex-col overflow-hidden rounded-[22px]"
               style={{
                 transformOrigin: "bottom center",
                 border: "1px solid var(--glass-border)",
