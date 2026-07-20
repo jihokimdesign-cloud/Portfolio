@@ -6,6 +6,7 @@ import { OverscrollDirection, useOverscroll } from "../../hooks/useOverscroll";
 import { useWindowDimension } from "../../hooks/useWindowDimension";
 import {
   getProjectLink,
+  getProjectCover,
   getProjectLogo,
   ProjectInfo,
   ProjectStyle,
@@ -81,33 +82,48 @@ const ProjectLinkCard = ({
               ease: AnimationConfig.EASING,
             }}
           >
-            {/* 다음 프로젝트 액센트로 물드는 전환 리빌 — 카드 상단에서 강하고
-                아래로 스크롤할수록 캔버스로 부드럽게 사라진다(하드 엣지 없음) */}
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-0"
-              style={{
-                background: `linear-gradient(180deg, ${projectStyle.accent} 0%, transparent 55%)`,
-                opacity: 0.16,
-              }}
-            />
-            <div
-              aria-hidden
-              className="pointer-events-none absolute left-1/2 top-[6em] h-[26em] w-[26em] -translate-x-1/2 rounded-full"
-              style={{
-                background: projectStyle.accent,
-                opacity: 0.12,
-                filter: "blur(90px)",
-              }}
-            />
-            {/* "Next project" eyebrow */}
-            <div
-              className="relative z-10 px-4 pt-6 lg:px-8 lg:pt-8 text-[11px] font-bold uppercase tracking-widest"
-              style={{ color: projectStyle.accent }}
-            >
-              Next project →
+            {/* Next 라벨 + 프로젝트 이름 */}
+            <div className="px-4 pt-8 text-center lg:px-8">
+              <div
+                className="text-[11px] font-bold uppercase tracking-widest"
+                style={{ color: projectStyle.accent }}
+              >
+                Next project →
+              </div>
+              <h2
+                className="mt-2 text-xl lg:text-2xl"
+                style={{
+                  fontFamily: '"TikTok Sans", Inter, sans-serif',
+                  fontWeight: 400,
+                  letterSpacing: "-0.025em",
+                  color: "var(--title)",
+                }}
+              >
+                {projectInfo.title}
+              </h2>
             </div>
-            <ProjectHeader projectInfo={projectInfo} invertLogo />
+
+            {/* 프리뷰 — 애니메이션 썸네일(있으면) 또는 커버 이미지.
+                카드가 위로 올라오며 프리뷰 상단부터 드러난다 */}
+            <div className="mx-4 mt-6 overflow-hidden rounded-[1rem] lg:mx-8">
+              {projectInfo.thumbHtml ? (
+                <iframe
+                  src={projectInfo.thumbHtml}
+                  title={projectInfo.title}
+                  scrolling="no"
+                  className="block w-full border-0"
+                  style={{ aspectRatio: "16 / 9" }}
+                />
+              ) : (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={getProjectCover(projectInfo.slug)}
+                  alt={projectInfo.title}
+                  className="block w-full object-cover"
+                  style={{ aspectRatio: "16 / 10" }}
+                />
+              )}
+            </div>
           </motion.a>
         </motion.div>
       </Link>

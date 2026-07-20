@@ -39,8 +39,13 @@ export default function LegacyHero({ projectInfo, coverImage }: Props) {
       {/* 타이틀 + 메타 — 이미지 바로 아래, 중앙 정렬 */}
       <div className="mx-auto max-w-3xl px-4 pb-6 pt-12 text-center lg:pt-16">
         <h1
-          className="text-[1.6rem] font-semibold leading-tight lg:text-[2.4rem] lg:leading-[1.1]"
-          style={{ letterSpacing: "-0.02em", color: "var(--fg)" }}
+          className="text-[1.6rem] leading-tight lg:text-[2.4rem] lg:leading-[1.1]"
+          style={{
+            fontFamily: '"TikTok Sans", Inter, sans-serif',
+            fontWeight: 400,
+            letterSpacing: "-0.025em",
+            color: "var(--title)",
+          }}
         >
           {projectInfo.description}
         </h1>

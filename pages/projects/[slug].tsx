@@ -145,6 +145,15 @@ export default function Post({
           />
         </Head>
       )}
+      {/* 사이트 공통 타이틀 폰트 (히어로 타이틀용) */}
+      {meta.legacyHtml && (
+        <Head>
+          <link
+            href="https://fonts.googleapis.com/css2?family=TikTok+Sans:wght@400;500&display=swap"
+            rel="stylesheet"
+          />
+        </Head>
+      )}
       <VideoHoverContextProvider>
         <ColorShifterContextProvider
           initialColor={shellStyle.getTextColor()}
