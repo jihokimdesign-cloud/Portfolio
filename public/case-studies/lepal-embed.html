@@ -196,6 +196,7 @@ tailwind.config = {
 </style>
 <script>window.ScrollTrigger={create:function(c){try{if(c){if(c.onEnter)c.onEnter();if(c.animation&&c.animation.play)c.animation.play()}}catch(e){}return{kill:function(){}}},refresh:function(){},update:function(){},getAll:function(){return[]},batch:function(){return[]},matchMedia:function(){},killAll:function(){}};</script>
 <style>.gs-child{opacity:1 !important;transform:none !important}.opacity-0{opacity:1 !important}.hero-badge{transform:none !important}#quick-summary-section,#summary-overlay{display:none !important}</style>
+<style>#speed-slider{pointer-events:none !important}</style>
 </head>
 <body class="bg-white text-primary leading-relaxed">
 
@@ -222,7 +223,7 @@ tailwind.config = {
     <!-- 4. Badges -->
     <div class="flex items-center gap-2 flex-wrap justify-center pb-10 opacity-0 hero-badge relative z-10">
       <span class="inline-flex items-center gap-1.5 bg-accent/5 border border-accent/15 rounded-full px-3 py-1.5 text-xs text-accent font-medium">Lead Product Designer</span>
-      <span class="inline-flex items-center gap-1.5 bg-accent/5 border border-accent/15 rounded-full px-3 py-1.5 text-xs text-accent font-medium">0 → 1 Design</span>
+      <span class="inline-flex items-center gap-1.5 bg-accent/5 border border-accent/15 rounded-full px-3 py-1.5 text-xs text-accent font-medium">AI Experience Redesign</span>
       <span class="inline-flex items-center gap-1.5 bg-surface border border-gray-200 rounded-full px-3 py-1.5 text-xs text-secondary">12 Weeks</span>
       <span class="inline-flex items-center gap-1.5 bg-surface border border-gray-200 rounded-full px-3 py-1.5 text-xs text-secondary">HealthTech</span>
     </div>
@@ -234,7 +235,7 @@ tailwind.config = {
           <div class="text-[10px] font-bold uppercase tracking-widest text-accent mb-4">Impact</div>
           <div class="space-y-4">
             <div><div class="font-display text-2xl font-semibold leading-none mb-1 stat-number" data-target="15" data-prefix="+" data-suffix="%">+15%</div><div class="text-xs text-secondary">D7 retention lift</div></div>
-            <div><div class="font-display text-2xl font-semibold leading-none mb-1 stat-number" data-target="85" data-suffix="%">85%</div><div class="text-xs text-secondary">"Supportive" AI perception</div></div>
+            <div><div class="font-display text-2xl font-semibold leading-none mb-1 stat-number" data-target="85" data-suffix="%">85%</div><div class="text-xs text-secondary">rated the AI &ldquo;supportive&rdquo; (post-test survey)</div></div>
             <div><div class="font-display text-2xl font-semibold leading-none mb-1 stat-number" data-target="60" data-suffix="%">60%</div><div class="text-xs text-secondary">User satisfaction (from 24%)</div></div>
           </div>
         </div>
@@ -244,12 +245,12 @@ tailwind.config = {
             <a href="#research" class="block text-sm leading-snug no-underline group cursor-pointer"><strong class="group-hover:text-accent transition-colors">Led user research</strong><br><span class="text-secondary text-xs">5 interviews · Diary study · Drop-off mapping</span></a>
             <a href="#framework" class="block text-sm leading-snug no-underline group cursor-pointer"><strong class="group-hover:text-accent transition-colors">Designed Tone Framework</strong><br><span class="text-secondary text-xs">Emotion classifier · Variable latency · Context over keywords</span></a>
             <a href="#collaboration" class="block text-sm leading-snug no-underline group cursor-pointer"><strong class="group-hover:text-accent transition-colors">Drove cross-functional alignment</strong><br><span class="text-secondary text-xs">Resolved "Speed vs. Care" debate with Engineering</span></a>
-            <a href="#outcome" class="block text-sm leading-snug no-underline group cursor-pointer"><strong class="group-hover:text-accent transition-colors">Delivered 0→1 impact</strong><br><span class="text-secondary text-xs">Broke 72-hour wall · Mobile app launch</span></a>
+            <a href="#outcome" class="block text-sm leading-snug no-underline group cursor-pointer"><strong class="group-hover:text-accent transition-colors">Delivered launch impact</strong><br><span class="text-secondary text-xs">Broke 72-hour wall · Mobile app launch</span></a>
           </div>
         </div>
         <div class="meta-group opacity-0">
           <div class="text-[10px] font-bold uppercase tracking-widest text-accent mb-4">Team</div>
-          <div class="text-sm leading-relaxed"><strong>1 Lead Product Designer</strong> (me)<br><span class="text-secondary text-xs">0→1 Product Strategy & UI</span></div>
+          <div class="text-sm leading-relaxed"><strong>1 Lead Product Designer</strong> (me)<br><span class="text-secondary text-xs">Product Strategy & UI</span></div>
           <div class="text-sm leading-relaxed mt-3"><strong>5 Cross-functional partners</strong><br><span class="text-secondary text-xs">PM · Engineers · CTO · Conv. Designer</span></div>
         </div>
         <div class="meta-group opacity-0">
@@ -280,7 +281,7 @@ tailwind.config = {
         <div class="h-1 bg-accent/5 rounded w-3/4"></div>
       </div>
       <div class="summary-float-card absolute bg-white rounded-xl shadow-lg border border-gray-100 p-3 w-28 opacity-0" style="bottom:18%;left:12%">
-        <div class="text-[10px] font-bold mb-1">+85%</div>
+        <div class="text-[10px] font-bold mb-1">85%</div>
         <div class="text-[10px] text-secondary">"Supportive"</div>
       </div>
       <div class="summary-float-card absolute bg-white rounded-xl shadow-lg border border-gray-100 p-3 w-36 opacity-0" style="bottom:15%;right:8%">
@@ -338,9 +339,9 @@ tailwind.config = {
             </div>
             <div class="flex-1 p-8 flex flex-col justify-center">
               <div class="font-display text-lg font-semibold mb-4">Project Summary</div>
-              <div class="text-sm text-secondary leading-relaxed mb-6">Designed an emotionally intelligent wellness chatbot from 0→1, shifting from efficiency to empathy to break a critical 72-hour retention wall for Gen Z users.</div>
+              <div class="text-sm text-secondary leading-relaxed mb-6">Designed an emotionally intelligent wellness chatbot end-to-end, shifting from efficiency to empathy to break a critical 72-hour retention wall for Gen Z users.</div>
               <div class="space-y-3">
-                <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-accent"></span><span class="text-sm"><strong>Role:</strong> Lead Product Designer (0→1)</span></div>
+                <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-accent"></span><span class="text-sm"><strong>Role:</strong> Lead Product Designer</span></div>
                 <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-accent"></span><span class="text-sm"><strong>Timeline:</strong> 12 weeks</span></div>
                 <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-accent"></span><span class="text-sm"><strong>Team:</strong> 5 Cross-functional partners</span></div>
               </div>
@@ -356,7 +357,7 @@ tailwind.config = {
             </div>
             <div class="flex-1 p-8 flex flex-col justify-center">
               <div class="text-xs font-bold uppercase tracking-wider text-accent mb-4">Research</div>
-              <div class="text-sm text-secondary leading-relaxed mb-4">5 interviews · 3-day mood diary · 1,000+ quotes · 800+ sessions</div>
+              <div class="text-sm text-secondary leading-relaxed mb-4">5 interviews · 3-day diary · 800+ beta logs · 1,000+ utterances coded</div>
               <div class="space-y-3">
                 <div class="bg-surface rounded-lg p-3 border border-gray-100"><strong class="text-sm">Empathy Gap</strong><div class="text-xs text-secondary mt-1">AI remembered facts but failed to read feelings</div></div>
                 <div class="bg-surface rounded-lg p-3 border border-gray-100"><strong class="text-sm">Generic Tone</strong><div class="text-xs text-secondary mt-1">"Productivity tips" when user was emotionally drained</div></div>
@@ -390,7 +391,7 @@ tailwind.config = {
               <div class="text-xs font-bold uppercase tracking-wider text-green-600 mb-4">Outcome</div>
               <div class="font-display text-lg font-semibold mb-4">Measurable Impact</div>
               <div class="space-y-3">
-                <div class="flex items-center gap-2"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="text-sm">85% increase in "supportive" perception</span></div>
+                <div class="flex items-center gap-2"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="text-sm">85% rated the AI "supportive" (post-test survey)</span></div>
                 <div class="flex items-center gap-2"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="text-sm">15% D7 retention lift</span></div>
                 <div class="flex items-center gap-2"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="text-sm">30% → 45% engagement, 24% → 60% satisfaction</span></div>
               </div>
@@ -475,7 +476,7 @@ tailwind.config = {
                 </div>
               </div>
               <div class="text-sm font-bold mb-0.5">Me — Lead Product Designer</div>
-              <div class="text-[10px] text-secondary mb-6">0→1 Design, Strategy, Tone Framework</div>
+              <div class="text-[10px] text-secondary mb-6">Design, Strategy, Tone Framework</div>
 
               <!-- Connection lines -->
               <div class="w-px h-4 bg-accent/20"></div>
@@ -667,19 +668,19 @@ tailwind.config = {
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 my-10">
           <div class="gs-child text-center">
             <div class="font-display text-3xl font-semibold text-accent stat-number" data-target="5">5</div>
-            <div class="text-xs text-secondary mt-1">interviews</div>
+            <div class="text-xs text-secondary mt-1">interviews (Gen&nbsp;Z grad students)</div>
           </div>
           <div class="gs-child text-center">
             <div class="font-display text-3xl font-semibold stat-number" data-target="3">3</div>
-            <div class="text-xs text-secondary mt-1">day mood diary</div>
-          </div>
-          <div class="gs-child text-center">
-            <div class="font-display text-3xl font-semibold stat-number" data-target="1000" data-suffix="+">1000+</div>
-            <div class="text-xs text-secondary mt-1">quotes analyzed</div>
+            <div class="text-xs text-secondary mt-1">day mood diary study</div>
           </div>
           <div class="gs-child text-center">
             <div class="font-display text-3xl font-semibold stat-number" data-target="800" data-suffix="+">800+</div>
-            <div class="text-xs text-secondary mt-1">sessions reviewed</div>
+            <div class="text-xs text-secondary mt-1">beta session logs reviewed</div>
+          </div>
+          <div class="gs-child text-center">
+            <div class="font-display text-3xl font-semibold stat-number" data-target="1000" data-suffix="+">1,000+</div>
+            <div class="text-xs text-secondary mt-1">user utterances coded from logs + interviews</div>
           </div>
         </div>
 
@@ -972,12 +973,7 @@ tailwind.config = {
             </div>
 
             <!-- Speed slider interactive -->
-            <div class="text-xs text-secondary text-center mb-3">
-              <span class="inline-flex items-center gap-1.5 bg-accent/5 border border-accent/10 rounded-full px-3 py-1">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                Drag the slider to feel the difference
-              </span>
-            </div>
+            
             <div class="bg-white rounded-xl p-6 max-w-md mx-auto border border-gray-200 shadow-sm">
               <div class="mb-4">
                 <div class="flex items-center justify-between mb-2">
@@ -1053,243 +1049,20 @@ tailwind.config = {
             <div class="flex-1 h-px bg-gray-200"></div>
           </div>
 
-          <!-- ═══ Decision 2: The "Blank Page" Dilemma ═══ -->
+          <!-- ═══ Decision 2: The "Blank Page" Dilemma — condensed per trim spec ═══ -->
           <div class="gs-child">
-            <div class="flex items-start gap-4 mb-6">
-              <div class="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-1">
-                <span class="font-display text-sm font-bold text-accent">02</span>
-              </div>
-              <div class="flex-1">
-                <div class="font-bold text-lg mb-1">The "Blank Page" Dilemma</div>
-                <div class="inline-flex items-center gap-1.5 bg-accent/5 border border-accent/10 rounded-full px-3 py-1 text-xs text-accent font-medium">Onboarding</div>
-              </div>
-            </div>
-
-            <!-- Challenge -->
-            <div class="bg-surface rounded-xl p-6 mb-6">
-              <div class="text-xs font-bold uppercase tracking-wider text-secondary mb-3">The Challenge</div>
-              <p class="text-sm text-secondary leading-relaxed">Users often <strong class="text-primary font-medium">froze when facing an empty chat box</strong>. We needed to guide them without compromising the quality of the emotional data we were collecting.</p>
-            </div>
-
-            <!-- Trade-off: Option A vs B -->
-            <div class="text-xs font-bold uppercase tracking-wider text-secondary mb-4">The Trade-off</div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-              <!-- Option A -->
-              <div class="bg-white rounded-xl border border-gray-200 p-5">
-                <div class="flex items-center gap-2 mb-3">
-                  <div class="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center">
-                    <span class="text-[10px] font-bold text-secondary">A</span>
-                  </div>
-                  <span class="text-sm font-bold">Always Show FAQ</span>
-                </div>
-                <p class="text-xs text-secondary leading-relaxed mb-3">Display FAQ guidance text permanently above the chat.</p>
-                <!-- Mini visual: FAQ sentences on top of chat -->
-                <div class="bg-gray-50 rounded-lg overflow-hidden mb-3">
-                  <div class="bg-accent/5 border-b border-accent/10 px-3 py-2 space-y-1">
-                    <div class="flex items-start gap-1.5">
-                      <span class="text-[8px] font-bold text-accent mt-0.5">1.</span>
-                      <span class="text-[9px] text-secondary">Share how you're feeling</span>
-                    </div>
-                    <div class="flex items-start gap-1.5">
-                      <span class="text-[8px] font-bold text-accent mt-0.5">2.</span>
-                      <span class="text-[9px] text-secondary">I'll respond based on your mood</span>
-                    </div>
-                    <div class="flex items-start gap-1.5">
-                      <span class="text-[8px] font-bold text-accent mt-0.5">3.</span>
-                      <span class="text-[9px] text-secondary">Everything stays private</span>
-                    </div>
-                  </div>
-                  <div class="px-3 py-2">
-                    <div class="bg-white rounded-full border border-gray-200 px-2 py-1 flex items-center">
-                      <span class="text-[9px] text-gray-300 italic flex-1">Type here...</span>
-                    </div>
-                  </div>
-                </div>
-                <div class="flex items-center gap-1.5 bg-red-50 rounded-lg px-3 py-2">
-                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
-                  <span class="text-[10px] text-red-600 font-medium">Always-visible FAQ clutters the chat and feels hand-holdy for returning users.</span>
-                </div>
-              </div>
-              <!-- Option B -->
-              <div class="bg-white rounded-xl border border-gray-200 p-5">
-                <div class="flex items-center gap-2 mb-3">
-                  <div class="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center">
-                    <span class="text-[10px] font-bold text-secondary">B</span>
-                  </div>
-                  <span class="text-sm font-bold">Remove Prompts Entirely</span>
-                </div>
-                <p class="text-xs text-secondary leading-relaxed mb-3">A clean input field.</p>
-                <!-- Mini visual -->
-                <div class="bg-gray-50 rounded-lg p-3 mb-3">
-                  <div class="bg-white rounded-full border border-gray-200 px-3 py-2 flex items-center">
-                    <span class="text-[10px] text-gray-300 italic flex-1">What's on your mind?</span>
-                    <div class="w-4 h-4 rounded-full bg-gray-200"></div>
-                  </div>
-                </div>
-                <div class="flex items-center gap-1.5 bg-red-50 rounded-lg px-3 py-2">
-                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
-                  <span class="text-[10px] text-red-600 font-medium">High friction. New users don't know how to start and drop off.</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Solution — emphasized -->
-            <div class="rounded-xl mb-6 relative border-2 border-accent/30 shadow-lg">
-              <div class="absolute -top-3 left-5 bg-accent text-white text-[10px] font-bold px-3 py-1 rounded-full z-10">My Solution</div>
-              <!-- Header -->
-              <div class="bg-gradient-to-r from-accent/10 via-violet-50 to-accent/5 px-8 pt-8 pb-5 rounded-t-xl">
-                <div class="font-display text-lg font-bold text-primary mb-1">The Hybrid Approach</div>
-                <p class="text-xs text-secondary leading-relaxed max-w-lg">I designed a middle ground that satisfies both needs — reducing friction for new users while preserving data quality for the Tone Framework.</p>
-              </div>
-              <!-- Three phases as a visual flow -->
-              <div class="bg-white px-8 py-6">
-                <div class="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr_auto_1fr] gap-4 items-start">
-                  <!-- Phase 1 -->
-                  <div class="bg-accent/5 rounded-xl p-5 border border-accent/10">
-                    <div class="flex items-center gap-2 mb-3">
-                      <div class="w-7 h-7 rounded-full bg-accent text-white flex items-center justify-center flex-shrink-0">
-                        <span class="text-[10px] font-bold">1</span>
-                      </div>
-                      <div class="text-xs font-bold text-accent">First Run Only</div>
-                    </div>
-                    <div class="text-[10px] text-secondary leading-relaxed mb-3">Contextual starters tailored to Gen Z/students:</div>
-                    <div class="space-y-1.5">
-                      <div class="bg-white text-[10px] px-2.5 py-1.5 rounded-lg border border-accent/10 text-accent leading-relaxed">"My head is a mess from labs and assignments 🤯"</div>
-                      <div class="bg-white text-[10px] px-2.5 py-1.5 rounded-lg border border-accent/10 text-accent leading-relaxed">"Things are a bit rocky with a friend right now 💬"</div>
-                      <div class="bg-white text-[10px] px-2.5 py-1.5 rounded-lg border border-accent/10 text-accent leading-relaxed">"I just want to do absolutely nothing and recharge 🔋"</div>
-                    </div>
-                  </div>
-                  <!-- Arrow -->
-                  <div class="hidden md:flex items-center justify-center pt-8">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="1.5" class="opacity-40"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                  </div>
-                  <!-- Phase 2 -->
-                  <div class="bg-green-50 rounded-xl p-5 border border-green-200">
-                    <div class="flex items-center gap-2 mb-3">
-                      <div class="w-7 h-7 rounded-full bg-green-500 text-white flex items-center justify-center flex-shrink-0">
-                        <span class="text-[10px] font-bold">2</span>
-                      </div>
-                      <div class="text-xs font-bold text-green-700">Organic Return</div>
-                    </div>
-                    <div class="text-[10px] text-secondary leading-relaxed mb-3">Once a user actively engages, starters smoothly fade out to encourage <strong class="text-primary font-medium">authentic, self-directed journaling</strong>.</div>
-                    <!-- Mini visual: clean input -->
-                    <div class="bg-white rounded-lg p-3 border border-green-100">
-                      <div class="bg-gray-50 rounded-full px-3 py-1.5 flex items-center">
-                        <span class="text-[9px] text-gray-400 italic flex-1">What's on your mind today?</span>
-                        <div class="w-4 h-4 rounded-full bg-accent/20 flex items-center justify-center">
-                          <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- Arrow -->
-                  <div class="hidden md:flex items-center justify-center pt-8">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="1.5" class="opacity-40"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                  </div>
-                  <!-- Phase 3 -->
-                  <div class="bg-amber-50 rounded-xl p-5 border border-amber-200">
-                    <div class="flex items-center gap-2 mb-3">
-                      <div class="w-7 h-7 rounded-full bg-amber-500 text-white flex items-center justify-center flex-shrink-0">
-                        <span class="text-[10px] font-bold">3</span>
-                      </div>
-                      <div class="text-xs font-bold text-amber-700">The Safety Net</div>
-                    </div>
-                    <div class="text-[10px] text-secondary leading-relaxed mb-3">A discreet <strong class="text-primary font-medium">"i" button</strong> provides on-demand FAQ guidance without cluttering the interface or biasing natural input.</div>
-                    <!-- Mini visual: "i" button -->
-                    <div class="bg-white rounded-lg p-3 border border-amber-100 flex items-center justify-between">
-                      <span class="text-[9px] text-secondary">Always accessible</span>
-                      <div class="w-6 h-6 rounded-full bg-accent text-white flex items-center justify-center">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- Bottom bar: why this works -->
-              <div class="bg-accent/5 border-t border-accent/10 px-8 py-4 flex items-center gap-6 flex-wrap rounded-b-xl">
-                <div class="flex items-center gap-1.5">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                  <span class="text-[10px] text-secondary"><strong class="text-primary">New users</strong> get guided onboarding</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                  <span class="text-[10px] text-secondary"><strong class="text-primary">Returning users</strong> get a clean canvas</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                  <span class="text-[10px] text-secondary"><strong class="text-primary">Tone Framework</strong> gets authentic data</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Interactive: FAQ "i" button demo -->
-            <div class="text-xs text-secondary text-center mb-3">
-              <span class="inline-flex items-center gap-1.5 bg-accent/5 border border-accent/10 rounded-full px-3 py-1">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-                Click the "i" button to toggle FAQ guidance
-              </span>
-            </div>
-            <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden max-w-md mx-auto" id="faq-demo">
-              <!-- Chat header with "i" button -->
-              <div class="flex items-center justify-between py-3 px-5 border-b border-gray-100 bg-gray-50/50">
-                <div class="flex items-center gap-2">
-                  <div class="w-6 h-6 rounded-full bg-violet-100 flex items-center justify-center">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-                  </div>
-                  <span class="text-xs font-bold">My Journal</span>
-                </div>
-                <button id="faq-i-btn" class="w-7 h-7 rounded-full bg-accent text-white flex items-center justify-center flex-shrink-0 cursor-pointer hover:bg-accent/80 transition-colors shadow-sm" title="Toggle FAQ">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-                </button>
-              </div>
-
-              <!-- FAQ panel — visible by default -->
-              <div id="faq-panel" class="bg-accent/5 border-b border-accent/10 px-5 py-4 transition-all duration-300" style="max-height:300px;overflow:hidden;opacity:1">
-                <div class="text-[10px] text-accent font-bold uppercase tracking-wider mb-2.5">How to use My Journal</div>
-                <div class="space-y-2">
-                  <div class="flex items-start gap-2">
-                    <div class="w-4 h-4 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="text-[8px] font-bold text-accent">1</span></div>
-                    <span class="text-xs text-secondary leading-relaxed">Share how you're feeling — there's no wrong answer.</span>
-                  </div>
-                  <div class="flex items-start gap-2">
-                    <div class="w-4 h-4 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="text-[8px] font-bold text-accent">2</span></div>
-                    <span class="text-xs text-secondary leading-relaxed">I'll respond based on your mood, not a script.</span>
-                  </div>
-                  <div class="flex items-start gap-2">
-                    <div class="w-4 h-4 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="text-[8px] font-bold text-accent">3</span></div>
-                    <span class="text-xs text-secondary leading-relaxed">Everything stays private. This is your space.</span>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Chat area -->
-              <div class="p-5">
-                <div class="flex items-start gap-2 mb-4">
-                  <div class="w-7 h-7 rounded-full bg-violet-100 flex items-center justify-center flex-shrink-0">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-                  </div>
-                  <div class="bg-gray-100 text-sm px-4 py-2.5 rounded-2xl rounded-bl-md">Hey! How are you feeling today?</div>
-                </div>
-                <div class="flex items-center gap-2">
-                  <div class="flex-1 flex items-center gap-2 bg-surface rounded-full border border-gray-200 px-4 py-2.5">
-                    <span class="text-xs text-gray-400 flex-1">Type anything you'd like to share...</span>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- ★ Final Product Image — Decision 2 -->
-            <div class="mt-10 gs-child">
-              <div class="text-xs font-bold uppercase tracking-wider text-secondary mb-4">Final Design</div>
-              <div class="rounded-xl overflow-hidden border-2 border-accent/30 shadow-sm">
-                <img src="/lepal_img/lepal_after2.png" alt="Final design — contextual help prompts" class="w-full block">
-              </div>
+            <div class="font-bold text-lg mb-4">The &ldquo;Blank Page&rdquo; Dilemma</div>
+            <p class="text-sm text-secondary leading-relaxed max-w-xl xl:max-w-2xl mb-6">
+              A second decision &mdash; the blank-page dilemma &mdash; followed the same logic:
+              contextual starters for first-run users, fading out once journaling
+              becomes self-directed, with an on-demand &#9432; for guidance. Retention
+              protected, data quality intact.
+            </p>
+            <div class="rounded-xl overflow-hidden border-2 border-accent/30 shadow-sm max-w-xl">
+              <img src="/lepal_img/lepal_after2.png" alt="Final design — contextual help prompts" class="w-full block">
             </div>
           </div>
-
-        </div>
-      </section>
+        </section>
 
       <!-- Section divider -->
       <div class="flex items-center gap-4 py-6">
@@ -1551,7 +1324,7 @@ tailwind.config = {
         <!-- ★ Stakeholder Quotes -->
         <div class="my-12 gs-child">
           <div class="text-xs font-bold uppercase tracking-wider text-secondary mb-5">What the team said</div>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="grid grid-cols-1 max-w-md">
             <div class="bg-blue-50 rounded-xl p-5 border border-blue-100">
               <svg class="mb-3 opacity-30" width="20" height="20" viewBox="0 0 24 24" fill="#2563eb" stroke="none"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
               <p class="text-xs text-blue-800 italic leading-relaxed mb-3">"I didn't see it as a UX problem until she reframed latency as listening. That changed how I thought about the entire architecture."</p>
@@ -1559,26 +1332,6 @@ tailwind.config = {
                 <div class="w-6 h-6 rounded-full bg-blue-200 flex items-center justify-center"><span class="text-[8px] font-bold text-blue-700">SE</span></div>
                 <div>
                   <div class="text-[10px] font-bold text-blue-700">Lead Engineer</div>
-                </div>
-              </div>
-            </div>
-            <div class="bg-amber-50 rounded-xl p-5 border border-amber-100">
-              <svg class="mb-3 opacity-30" width="20" height="20" viewBox="0 0 24 24" fill="#d97706" stroke="none"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
-              <p class="text-xs text-amber-800 italic leading-relaxed mb-3">"The 'Training Wheels' metaphor made it click for me. We didn't have to choose between retention and data quality — we could have both."</p>
-              <div class="flex items-center gap-2">
-                <div class="w-6 h-6 rounded-full bg-amber-200 flex items-center justify-center"><span class="text-[8px] font-bold text-amber-700">PM</span></div>
-                <div>
-                  <div class="text-[10px] font-bold text-amber-700">Product Manager</div>
-                </div>
-              </div>
-            </div>
-            <div class="bg-green-50 rounded-xl p-5 border border-green-100">
-              <svg class="mb-3 opacity-30" width="20" height="20" viewBox="0 0 24 24" fill="#16a34a" stroke="none"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
-              <p class="text-xs text-green-800 italic leading-relaxed mb-3">"Having clear tone rules and empathy markers made my job easier. I wasn't guessing anymore — I was writing with a system."</p>
-              <div class="flex items-center gap-2">
-                <div class="w-6 h-6 rounded-full bg-green-200 flex items-center justify-center"><span class="text-[8px] font-bold text-green-700">CD</span></div>
-                <div>
-                  <div class="text-[10px] font-bold text-green-700">Conversation Designer</div>
                 </div>
               </div>
             </div>
@@ -1599,7 +1352,7 @@ tailwind.config = {
         <div class="text-xs font-bold uppercase tracking-widest text-accent mb-6 gs-child">Outcomes & Impact</div>
         <h2 class="font-display text-2xl lg:text-[1.75rem] font-semibold leading-snug mb-8 max-w-xl xl:max-w-2xl gs-child">From Productivity Tool to Emotional Companion</h2>
         <div class="text-base text-secondary leading-loose max-w-xl xl:max-w-2xl">
-          <p class="mb-5 gs-child">To validate the Tone Framework, we ran an <strong class="text-primary font-medium">A/B test</strong> comparing the original "Productivity-driven" tone (Control) against our new "Emotion-Aware" framework (Variant).</p>
+          <p class="mb-5 gs-child">To validate the Tone Framework, we ran an <strong class="text-primary font-medium">A/B test</strong><!-- TODO(Jiho): add n and test duration, e.g. "(n=___, _-week test)" --> comparing the original "Productivity-driven" tone (Control) against our new "Emotion-Aware" framework (Variant).</p>
         </div>
 
         <!-- A/B Test framing -->
@@ -1619,7 +1372,7 @@ tailwind.config = {
         <div class="my-10 grid grid-cols-2 md:grid-cols-4 gap-4 gs-child">
           <div class="bg-green-50 rounded-xl p-5 border border-green-200 text-center">
             <div class="font-display text-3xl font-semibold text-green-600 stat-number" data-target="85" data-suffix="%">85%</div>
-            <div class="text-xs text-secondary mt-2">increase in "supportive" perception</div>
+            <div class="text-xs text-secondary mt-2">rated the AI &ldquo;supportive&rdquo;</div>
             <div class="text-[10px] text-green-600 mt-1">post-test survey</div>
           </div>
           <div class="bg-green-50 rounded-xl p-5 border border-green-200 text-center">
@@ -1680,7 +1433,7 @@ tailwind.config = {
         <div class="flex items-center justify-between mb-8">
           <div>
             <div class="font-display text-lg font-semibold mb-1">Lepal.ai Case Study</div>
-            <div class="text-xs text-secondary">Lead Product Designer · 0 → 1 Design</div>
+            <div class="text-xs text-secondary">Lead Product Designer · AI Experience Redesign</div>
           </div>
           <a href="#hero" class="inline-flex items-center gap-2 text-xs text-secondary hover:text-accent transition-colors no-underline group bg-surface rounded-full px-4 py-2 border border-gray-200 hover:border-accent/30">
             <span>Back to top</span>
