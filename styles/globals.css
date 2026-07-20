@@ -319,6 +319,10 @@ a {
   opacity: 0.8;
   animation: rainbow-sweep 1600ms cubic-bezier(0.45, 0, 0.25, 1) 200ms both;
 }
+/* 해제 시엔 같은 키프레임을 거꾸로 — 오→왼으로 되감긴다 */
+.rainbow-sweep-band--reverse {
+  animation-direction: reverse;
+}
 @media (prefers-reduced-motion: reduce) {
   .rainbow-sweep-band,
   .rainbow-sweep-screen {

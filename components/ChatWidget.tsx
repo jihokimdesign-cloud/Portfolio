@@ -161,15 +161,15 @@ export default function ChatWidget() {
       prev.includes(skill) ? prev.filter((s) => s !== skill) : [...prev, skill]
     );
 
-  // 리크루터 모드 진입 시 레인보우 스윕 전환 오버레이
-  const [sweeping, setSweeping] = useState(false);
+  // 레인보우 스윕 전환 — 진입은 왼→오, 해제는 반대 방향으로 되감기
+  const [sweepDir, setSweepDir] = useState<"fwd" | "rev" | null>(null);
   const prevRecruiter = useRef(false);
   useEffect(() => {
     const was = prevRecruiter.current;
     prevRecruiter.current = isRecruiter;
-    if (isRecruiter && !was) {
-      setSweeping(true);
-      const t = setTimeout(() => setSweeping(false), 2100);
+    if (isRecruiter !== was) {
+      setSweepDir(isRecruiter ? "fwd" : "rev");
+      const t = setTimeout(() => setSweepDir(null), 2100);
       return () => clearTimeout(t);
     }
   }, [isRecruiter]);
@@ -221,12 +221,16 @@ export default function ChatWidget() {
   return createPortal(
     <div style={{ fontFamily: FONT_STACK, color: FOREGROUND }}>
       {/* ── 리크루터 전환: 검은 화면 위로 무지개가 천천히 지나간다 ── */}
-      {sweeping && (
+      {sweepDir && (
         <div
           aria-hidden
           className="rainbow-sweep-screen pointer-events-none fixed inset-0 z-[300] overflow-hidden"
         >
-          <div className="rainbow-sweep-band" />
+          <div
+            className={`rainbow-sweep-band${
+              sweepDir === "rev" ? " rainbow-sweep-band--reverse" : ""
+            }`}
+          />
         </div>
       )}
       <AnimatePresence>
