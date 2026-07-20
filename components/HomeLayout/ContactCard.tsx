@@ -14,6 +14,7 @@ type Props = {
   email?: string; // 항상 표시. 클릭 시 mailto
   location?: string; // 보조 정보 한 줄. 비우면 숨김
   blurAmount?: number; // 사진 기본 블러(px)
+  hoverBlur?: number; // hover 시에도 남기는 블러(px) — 완전히 선명해지지 않는다
   photoLift?: number; // hover 시 사진이 떠오르는 거리(px)
   style?: React.CSSProperties;
 };
@@ -25,6 +26,7 @@ export default function ContactCard({
   email = SITE.email,
   location = "Seattle, WA · PST",
   blurAmount = 8,
+  hoverBlur = 3,
   photoLift = 24,
   style,
 }: Props) {
@@ -165,7 +167,9 @@ export default function ContactCard({
               objectFit: "cover",
               objectPosition: "top",
               display: "block",
-              filter: hovered ? "blur(0px)" : `blur(${blurAmount}px)`,
+              filter: hovered
+                ? `blur(${hoverBlur}px)`
+                : `blur(${blurAmount}px)`,
               transform: hovered ? "scale(1)" : "scale(1.05)",
               transition: "filter 300ms ease, transform 400ms ease",
               userSelect: "none",
