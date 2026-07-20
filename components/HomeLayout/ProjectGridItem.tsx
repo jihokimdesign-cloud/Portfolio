@@ -127,11 +127,19 @@ const ProjectGridItem = ({
     };
   }, [videoRef]);
 
-  // 비디오는 항상 자동재생 (호버 상호작용 제거)
+  // 호버 시 재생, 벗어나면 정지(첫 프레임 유지). 피처드 타일은 항상 재생.
   useEffect(() => {
-    if (!videoRef.current) return;
-    videoRef.current.play().catch(() => {});
-  }, [isVideoLoaded]);
+    const v = videoRef.current;
+    if (!v) return;
+    if (isHovering || isFirstItem) {
+      v.play().catch(() => {});
+    } else {
+      v.pause();
+      try {
+        v.currentTime = 0;
+      } catch {}
+    }
+  }, [isHovering, isFirstItem, isVideoLoaded]);
   return (
     <motion.div
       style={{
@@ -140,7 +148,37 @@ const ProjectGridItem = ({
       }}
     >
       <ReactiveTapArea>
-        <Link href={`projects/${projectInfo.slug}`} scroll={false}>
+        <Link
+          href={`projects/${projectInfo.slug}`}
+          scroll={false}
+          onMouseEnter={() => setIsHovering(true)}
+          onMouseLeave={() => setIsHovering(false)}
+        >
+          <div className="relative">
+          {/* 무지개 후광 (호버) */}
+          <div
+            aria-hidden
+            className="rainbow-ring pointer-events-none absolute -inset-[2px] rounded-[13px]"
+            style={{
+              filter: "blur(10px)",
+              opacity: isHovering ? 0.45 : 0,
+              transition: "opacity .35s ease",
+            }}
+          />
+          {/* 무지개 1px 스트로크 (호버) */}
+          <div
+            aria-hidden
+            className="rainbow-ring pointer-events-none absolute -inset-[1px] rounded-[13px]"
+            style={{
+              padding: "1px",
+              WebkitMask:
+                "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+              WebkitMaskComposite: "xor",
+              maskComposite: "exclude",
+              opacity: isHovering ? 1 : 0,
+              transition: "opacity .35s ease",
+            }}
+          />
           <div
             ref={containerRef}
             className="relative overflow-hidden rounded-xl"
@@ -195,7 +233,6 @@ const ProjectGridItem = ({
                   ref={videoRef}
                   src={projectInfo.previewVideo}
                   preload="metadata"
-                  autoPlay
                   muted
                   loop
                   playsInline
@@ -203,6 +240,7 @@ const ProjectGridItem = ({
                 />
               )}
             </motion.div>
+          </div>
           </div>
 
           {/* 타이틀 · 카테고리 — 박스 아래, 가까이 묶어서(좌우로 벌리지 않음) */}

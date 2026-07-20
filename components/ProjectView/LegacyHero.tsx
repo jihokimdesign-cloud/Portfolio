@@ -66,6 +66,15 @@ export default function LegacyHero({ projectInfo, coverImage }: Props) {
         >
           {projectInfo.description}
         </h1>
+        {/* 태그 — 타이틀 바로 아래, 간격 좁게 */}
+        {projectInfo.tags?.length ? (
+          <div
+            className="mt-3 text-sm"
+            style={{ color: "var(--fg-secondary)" }}
+          >
+            {projectInfo.tags.join(" · ")}
+          </div>
+        ) : null}
       </div>
     </div>
   );
