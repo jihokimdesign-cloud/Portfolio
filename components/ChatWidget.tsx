@@ -5,7 +5,6 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  MessageCircle,
   X,
   Send,
   Brain,
@@ -93,7 +92,6 @@ function RecruiterSwitch({
 export default function ChatWidget() {
   const [mounted, setMounted] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [showHint, setShowHint] = useState(false);
   const [isRecruiter, setIsRecruiter] = useState(false);
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
   const [input, setInput] = useState("");
@@ -103,25 +101,6 @@ export default function ChatWidget() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => setMounted(true), []);
-
-  // first-visit hint: slide-out label + pulse, once per visitor
-  useEffect(() => {
-    if (localStorage.getItem("jiho-chat-hint-seen")) return;
-    const show = setTimeout(() => setShowHint(true), 1800);
-    const hide = setTimeout(() => {
-      setShowHint(false);
-      localStorage.setItem("jiho-chat-hint-seen", "1");
-    }, 14000);
-    return () => {
-      clearTimeout(show);
-      clearTimeout(hide);
-    };
-  }, []);
-
-  const dismissHint = useCallback(() => {
-    setShowHint(false);
-    localStorage.setItem("jiho-chat-hint-seen", "1");
-  }, []);
 
   useEffect(() => {
     if (isOpen) setTimeout(() => textareaRef.current?.focus(), 300);
@@ -190,30 +169,14 @@ export default function ChatWidget() {
     prevRecruiter.current = isRecruiter;
     if (isRecruiter && !was) {
       setSweeping(true);
-      const t = setTimeout(() => setSweeping(false), 950);
+      const t = setTimeout(() => setSweeping(false), 2100);
       return () => clearTimeout(t);
     }
   }, [isRecruiter]);
 
-  // 히어로(#landing-hero)가 보이는 동안엔 플로팅 챗 바가 대신 떠 있으니
-  // FAB/힌트 숨김 — 히어로를 지나면 우하단 플로팅으로 나타난다
-  const [heroBarInView, setHeroBarInView] = useState(false);
-  useEffect(() => {
-    if (!mounted) return;
-    const el = document.getElementById("landing-hero");
-    if (!el) return;
-    const io = new IntersectionObserver(
-      ([entry]) => setHeroBarInView(entry.isIntersecting),
-      { threshold: 0.1 }
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, [mounted]);
-
   // 히어로 입력/나브에서 열기 — 질문이 있으면 바로 제출
   useEffect(() => {
     const onOpen = (e: Event) => {
-      dismissHint();
       const detail = (e as CustomEvent).detail;
       if (detail?.mode === "recruiter") setIsRecruiter(true);
       setIsOpen(true);
@@ -224,7 +187,7 @@ export default function ChatWidget() {
     };
     window.addEventListener("jiho-chat-open", onOpen);
     return () => window.removeEventListener("jiho-chat-open", onOpen);
-  }, [submit, dismissHint]);
+  }, [submit]);
 
   // 나브 토글 ↔ 모달 내부 스위치 양방향 동기화
   useEffect(() => {
@@ -257,11 +220,11 @@ export default function ChatWidget() {
 
   return createPortal(
     <div style={{ fontFamily: FONT_STACK, color: FOREGROUND }}>
-      {/* ── 리크루터 전환: 무지개가 지나가는 스크린 ── */}
+      {/* ── 리크루터 전환: 검은 화면 위로 무지개가 천천히 지나간다 ── */}
       {sweeping && (
         <div
           aria-hidden
-          className="pointer-events-none fixed inset-0 z-[300] overflow-hidden"
+          className="rainbow-sweep-screen pointer-events-none fixed inset-0 z-[300] overflow-hidden"
         >
           <div className="rainbow-sweep-band" />
         </div>
@@ -596,60 +559,7 @@ export default function ChatWidget() {
         )}
       </AnimatePresence>
 
-      {/* ── First-visit hint label ── */}
-      <AnimatePresence>
-        {showHint && !isOpen && !heroBarInView && (
-          <motion.button
-            initial={{ opacity: 0, x: 16 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 16 }}
-            transition={{
-              duration: AnimationConfig.NORMAL,
-              ease: AnimationConfig.EASING,
-            }}
-            onClick={() => {
-              dismissHint();
-              setIsOpen(true);
-            }}
-            className="fixed bottom-[30px] right-[76px] z-[201] whitespace-nowrap rounded-full px-4 py-2 text-[13px]"
-            style={{
-              color: FOREGROUND,
-              background: "var(--surface)",
-              boxShadow: "0 8px 24px rgba(0,0,0,.25)",
-            }}
-          >
-            Ask my AI anything{" "}
-            <span style={{ color: PRIMARY }} aria-hidden>
-              →
-            </span>
-          </motion.button>
-        )}
-      </AnimatePresence>
 
-      {/* ── Floating icon — 히어로 입력이 화면에 있는 동안엔 숨김 ── */}
-      {!heroBarInView && (
-        <button
-          onClick={() => {
-            dismissHint();
-            setIsOpen((v) => !v);
-          }}
-          aria-label={isOpen ? "Close chat" : "Chat with Jiho's AI"}
-          className="fixed bottom-6 right-5 z-[201] flex h-12 w-12 items-center justify-center rounded-full text-white transition-all hover:scale-105"
-          style={{
-            background: PRIMARY,
-            boxShadow: "0 8px 24px rgba(0,113,227,.45)",
-          }}
-        >
-          {showHint && !isOpen && (
-            <span
-              className="absolute inset-0 animate-ping rounded-full"
-              style={{ background: `${PRIMARY}40` }}
-              aria-hidden
-            />
-          )}
-          {isOpen ? <X size={18} /> : <MessageCircle size={18} />}
-        </button>
-      )}
     </div>,
     document.body
   );
