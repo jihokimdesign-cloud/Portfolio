@@ -112,6 +112,15 @@ export default function Post({
   const nextProjectStyle = getProjectStyle(nextProjectMeta);
   const nextProjectInfo = getProjectInfo(nextProjectMeta);
 
+  // legacyHtml 스터디: 셸 크롬(히어로 밴드/푸터)이 고정 다크색이라 라이트
+  // 테마에서 흰 본문 위아래로 어두운 띠가 생김 → 크롬을 테마 토큰으로 중립화
+  const themeChrome = (s: typeof projectStyle) =>
+    meta.legacyHtml
+      ? { ...s, getBgColor: () => "var(--canvas)", getTextColor: () => "var(--fg)" }
+      : s;
+  const shellStyle = themeChrome(projectStyle);
+  const shellNextStyle = themeChrome(nextProjectStyle);
+
   return (
     <>
       <NextSeo
@@ -135,22 +144,22 @@ export default function Post({
       )}
       <VideoHoverContextProvider>
         <ColorShifterContextProvider
-          initialColor={projectStyle.getTextColor()}
-          initalBackground={projectStyle.getBgColor()}
+          initialColor={shellStyle.getTextColor()}
+          initalBackground={shellStyle.getBgColor()}
         >
           <EditableContextProvider>
             <ProjectView
               projectInfo={projectInfo}
-              projectStyle={projectStyle}
+              projectStyle={shellStyle}
               nextProjectInfo={nextProjectInfo}
-              nextProjectStyle={nextProjectStyle}
+              nextProjectStyle={shellNextStyle}
               coverImage={getProjectCover(projectInfo.slug)}
               slugTitleMap={slugTitleMap}
             >
               {/* <h1 className="text-6xl">{meta.title}</h1> */}
               <ProjectHeader
                 projectInfo={projectInfo}
-                invertLogo={!projectStyle.isDarkColorScheme}
+                invertLogo={!!meta.legacyHtml || !projectStyle.isDarkColorScheme}
               />
               <main
                 className={`${

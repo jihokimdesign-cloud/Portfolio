@@ -22,7 +22,8 @@ const ProjectHeader = ({ projectInfo, invertLogo = false }: Props) => {
         <Image
           src={getProjectLogo(projectInfo.slug, !isBiggerThanMd)}
           className="lg:max-h-12 mt-1 ml-1 md:mt-0 md:ml-0"
-          style={invertLogo ? { filter: "brightness(0) opacity(0.88)" } : undefined}
+          // 흰 워드마크를 사이트 테마에 맞춤 (다크: 그대로, 라이트: 어둡게)
+          style={invertLogo ? { filter: "var(--icon-filter)" } : undefined}
           alt={""}
           width={144}
           height={144}
