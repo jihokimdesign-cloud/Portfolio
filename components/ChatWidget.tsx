@@ -256,11 +256,14 @@ export default function ChatWidget() {
                 ease: AnimationConfig.EASING,
               }}
               onClick={(e) => e.stopPropagation()}
-              className="liquid-glass flex max-h-[calc(100vh-160px)] w-full max-w-3xl flex-col overflow-hidden rounded-[22px]"
+              className="flex max-h-[calc(100vh-160px)] w-full max-w-3xl flex-col overflow-hidden rounded-[22px]"
               style={{
                 transformOrigin: "bottom center",
-                border: "1px solid var(--glass-border)",
-                boxShadow: "var(--liquid-rim), var(--glass-shadow)",
+                // 불투명 서피스 — 유리로 두면 딤 백드롭이 비쳐 라이트 테마에서도
+                // 어둡게 보였음. 서피스는 테마별로 흰색/다크로 알아서 전환
+                background: "var(--surface)",
+                border: "1px solid var(--hairline)",
+                boxShadow: "0 24px 60px rgba(0,0,0,.28)",
               }}
             >
               {/* header */}

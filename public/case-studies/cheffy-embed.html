@@ -19,7 +19,7 @@ tailwind.config = {
       colors: {
         primary: '#1a1a1a',
         secondary: '#6b6b6b',
-        accent: '#F97030',
+        accent: '#ea580c',
         surface: '#fffbeb',
         highlight: '#ef4444',
         success: '#16a34a',
@@ -54,16 +54,16 @@ tailwind.config = {
   .toc-link { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #999; text-decoration: none; padding: 6px 10px; border-radius: 8px; transition: color 0.18s, background 0.18s; line-height: 1.3; }
   .toc-link:hover { color: #1a1a1a; background: rgba(0,0,0,0.03); }
   .toc-link:active { transform: scale(0.97); }
-  .toc-link.active { color: #1a1a1a; font-weight: 500; background: rgba(249,112,48,0.06); }
+  .toc-link.active { color: #1a1a1a; font-weight: 500; background: rgba(234,88,12,0.06); }
   .toc-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; opacity: 0.2; flex-shrink: 0; transition: all 0.25s cubic-bezier(.19,1,.22,1); }
   .toc-link:hover .toc-dot { opacity: 0.5; }
-  .toc-link.active .toc-dot { opacity: 1; width: 6px; height: 6px; background: #F97030; box-shadow: 0 0 0 3px rgba(249,112,48,0.15); }
+  .toc-link.active .toc-dot { opacity: 1; width: 6px; height: 6px; background: #ea580c; box-shadow: 0 0 0 3px rgba(234,88,12,0.15); }
   @media (max-width: 1440px) { .toc { display: none; } }
 
   /* Scroll progress */
   .scroll-progress {
     position: fixed; top: 0; left: 0; height: 3px;
-    background: linear-gradient(90deg, #F97030, #f59e0b, #F97030);
+    background: linear-gradient(90deg, #ea580c, #f59e0b, #ea580c);
     background-size: 200% 100%;
     animation: gradient-shift 3s ease infinite;
     z-index: 200; transform-origin: left; transform: scaleX(0);
@@ -74,9 +74,9 @@ tailwind.config = {
   .hero-mesh {
     position: absolute; inset: 0; pointer-events: none; z-index: 0;
     background:
-      radial-gradient(ellipse 600px 400px at 15% 25%, rgba(249,112,48,0.05), transparent),
+      radial-gradient(ellipse 600px 400px at 15% 25%, rgba(234,88,12,0.05), transparent),
       radial-gradient(ellipse 500px 300px at 75% 55%, rgba(245,158,11,0.04), transparent),
-      radial-gradient(ellipse 400px 400px at 50% 90%, rgba(249,112,48,0.03), transparent);
+      radial-gradient(ellipse 400px 400px at 50% 90%, rgba(234,88,12,0.03), transparent);
   }
 
   /* Hero brand background text + fade */
@@ -88,7 +88,7 @@ tailwind.config = {
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: clamp(120px, 18vw, 300px);
     font-weight: 800;
-    color: rgba(249,112,48,0.07);
+    color: rgba(234,88,12,0.07);
     letter-spacing: -0.05em;
     white-space: nowrap;
     pointer-events: none;
@@ -102,7 +102,7 @@ tailwind.config = {
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(to bottom, rgba(249,112,48,0.15) 0%, rgba(249,112,48,0.06) 30%, transparent 60%);
+    background: linear-gradient(to bottom, rgba(234,88,12,0.15) 0%, rgba(234,88,12,0.06) 30%, transparent 60%);
     pointer-events: none;
     z-index: 1;
   }
@@ -168,9 +168,9 @@ tailwind.config = {
   }
 
   @keyframes proximity-pulse {
-    0% { box-shadow: 0 0 0 0 rgba(249,112,48,0.4); }
-    70% { box-shadow: 0 0 0 20px rgba(249,112,48,0); }
-    100% { box-shadow: 0 0 0 0 rgba(249,112,48,0); }
+    0% { box-shadow: 0 0 0 0 rgba(234,88,12,0.4); }
+    70% { box-shadow: 0 0 0 20px rgba(234,88,12,0); }
+    100% { box-shadow: 0 0 0 0 rgba(234,88,12,0); }
   }
   .proximity-active { animation: proximity-pulse 1.5s ease-in-out infinite; }
 
@@ -217,8 +217,8 @@ tailwind.config = {
 
   /* Insight glow */
   @keyframes border-glow {
-    0%, 100% { border-color: rgba(249,112,48,0.15); }
-    50% { border-color: rgba(249,112,48,0.4); }
+    0%, 100% { border-color: rgba(234,88,12,0.15); }
+    50% { border-color: rgba(234,88,12,0.4); }
   }
   .insight-glow { animation: border-glow 3s ease-in-out infinite; border-width: 1px; border-style: solid; }
 </style>
@@ -328,7 +328,7 @@ html[data-theme="dark"] .shadow-sm,html[data-theme="dark"] .shadow-md,html[data-
                   <div class="flex-1 bg-gray-800 flex items-center justify-center">
                     <svg width="36" height="36" fill="none" stroke="white" stroke-width="1.5" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
                   </div>
-                  <div class="absolute inset-y-0 right-0 w-[55%] flex flex-col items-center justify-center" style="background:linear-gradient(to left, rgba(249,112,48,0.9), rgba(249,112,48,0.4), transparent);">
+                  <div class="absolute inset-y-0 right-0 w-[55%] flex flex-col items-center justify-center" style="background:linear-gradient(to left, rgba(234,88,12,0.9), rgba(234,88,12,0.4), transparent);">
                     <div class="text-white/70 text-[8px] font-medium tracking-wider uppercase mb-1">Elbow-Bump Mode</div>
                     <div class="w-[140px] h-[100px] rounded-xl bg-white/20 backdrop-blur-sm border-2 border-white/40 flex items-center justify-center">
                       <span class="text-white text-base font-bold font-display">Next Step &rarr;</span>
@@ -400,9 +400,9 @@ html[data-theme="dark"] .shadow-sm,html[data-theme="dark"] .shadow-md,html[data-
   <!-- ═══════ QUICK SUMMARY — Interactive CTA ═══════ -->
   <div class="relative overflow-hidden" id="quick-summary-section" style="min-height:320px">
     <!-- Dot grid background -->
-    <div class="absolute inset-0 opacity-[0.12]" style="background-image:radial-gradient(circle,#F97030 0.6px,transparent 0.6px);background-size:28px 28px" id="dot-grid"></div>
+    <div class="absolute inset-0 opacity-[0.12]" style="background-image:radial-gradient(circle,#ea580c 0.6px,transparent 0.6px);background-size:28px 28px" id="dot-grid"></div>
     <!-- Mouse-follow glow -->
-    <div id="summary-glow" class="absolute w-[500px] h-[500px] rounded-full pointer-events-none opacity-0 transition-opacity duration-500" style="background:radial-gradient(circle,rgba(249,112,48,0.08) 0%,transparent 70%);transform:translate(-50%,-50%)"></div>
+    <div id="summary-glow" class="absolute w-[500px] h-[500px] rounded-full pointer-events-none opacity-0 transition-opacity duration-500" style="background:radial-gradient(circle,rgba(234,88,12,0.08) 0%,transparent 70%);transform:translate(-50%,-50%)"></div>
     <!-- Floating preview cards -->
     <div class="absolute inset-0 pointer-events-none" id="floating-cards">
       <div class="summary-float-card absolute bg-white rounded-xl shadow-lg border border-gray-100 p-3 w-36 opacity-0" style="top:15%;left:8%">
@@ -1125,7 +1125,7 @@ html[data-theme="dark"] .shadow-sm,html[data-theme="dark"] .shadow-md,html[data-
                   </div>
                 </div>
               </div>
-              <div id="sim-macro-overlay" class="absolute inset-y-0 right-0 w-[55%] flex flex-col items-center justify-center opacity-0 transition-all duration-500 pointer-events-none" style="background: linear-gradient(to left, rgba(249,112,48,0.9), rgba(249,112,48,0.4), transparent);">
+              <div id="sim-macro-overlay" class="absolute inset-y-0 right-0 w-[55%] flex flex-col items-center justify-center opacity-0 transition-all duration-500 pointer-events-none" style="background: linear-gradient(to left, rgba(234,88,12,0.9), rgba(234,88,12,0.4), transparent);">
                 <div class="text-white/70 text-xs font-medium tracking-wider uppercase mb-2">Elbow-Bump Mode</div>
                 <div class="w-[180px] h-[110px] rounded-2xl bg-white/20 backdrop-blur-sm border-2 border-white/40 flex items-center justify-center">
                   <span class="text-white text-xl font-bold font-display">Next Step &rarr;</span>
@@ -1188,7 +1188,7 @@ html[data-theme="dark"] .shadow-sm,html[data-theme="dark"] .shadow-md,html[data-
             <div class="flex gap-2 mb-2">
               <div class="flex-1 h-16 rounded-lg bg-gray-800 relative overflow-hidden">
                 <div class="absolute inset-0 flex items-center justify-center text-[9px] text-white/60">Video visible</div>
-                <div class="absolute inset-x-0 bottom-0 h-8" style="background:linear-gradient(to top, rgba(249,112,48,0.85), transparent);"></div>
+                <div class="absolute inset-x-0 bottom-0 h-8" style="background:linear-gradient(to top, rgba(234,88,12,0.85), transparent);"></div>
               </div>
             </div>
             <div class="text-center text-[10px] text-secondary">85% gradient &rarr; recipe still visible beneath button</div>
@@ -1362,7 +1362,7 @@ html[data-theme="dark"] .shadow-sm,html[data-theme="dark"] .shadow-md,html[data-
                   <div class="flex-1 bg-gray-800 flex items-center justify-center">
                     <svg width="36" height="36" fill="none" stroke="white" stroke-width="1.5" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
                   </div>
-                  <div class="absolute inset-y-0 right-0 w-[55%] flex flex-col items-center justify-center" style="background:linear-gradient(to left, rgba(249,112,48,0.9), rgba(249,112,48,0.4), transparent);">
+                  <div class="absolute inset-y-0 right-0 w-[55%] flex flex-col items-center justify-center" style="background:linear-gradient(to left, rgba(234,88,12,0.9), rgba(234,88,12,0.4), transparent);">
                     <div class="text-white/70 text-[9px] font-medium tracking-wider uppercase mb-1">Elbow-Bump Mode</div>
                     <div class="w-[150px] h-[90px] rounded-xl bg-white/20 backdrop-blur-sm border-2 border-white/40 flex items-center justify-center">
                       <span class="text-white text-base font-bold font-display">Next Step &rarr;</span>
@@ -1433,13 +1433,13 @@ html[data-theme="dark"] .shadow-sm,html[data-theme="dark"] .shadow-md,html[data-
       <div class="my-10 grid grid-cols-1 md:grid-cols-3 gap-4 gs-child">
         <div class="flex items-start gap-3 p-4 rounded-xl bg-accent/5 border border-accent/10">
           <div class="w-6 h-6 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
           </div>
           <div class="text-xs text-secondary leading-relaxed"><strong class="text-primary">Context is the best input</strong> &mdash; When voice fails and gestures fail, the system already knows the user needs help. Reading failure signals beats adding new modalities.</div>
         </div>
         <div class="flex items-start gap-3 p-4 rounded-xl bg-accent/5 border border-accent/10">
           <div class="w-6 h-6 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
           </div>
           <div class="text-xs text-secondary leading-relaxed"><strong class="text-primary">Body mechanics drive digital design</strong> &mdash; The 50% screen button only works because we measured real elbow contact areas (4.2 &times; 6.8cm) and forearm approach angles first.</div>
         </div>

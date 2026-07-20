@@ -19,7 +19,7 @@ tailwind.config = {
       colors: {
         primary: '#1a1a1a',
         secondary: '#6b6b6b',
-        accent: '#F97030',
+        accent: '#8b5cf6',
         surface: '#f5f5f5',
         highlight: '#e74c3c',
       }
@@ -49,10 +49,10 @@ tailwind.config = {
   .toc-link { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #999; text-decoration: none; padding: 6px 10px; border-radius: 8px; transition: color 0.18s, background 0.18s; line-height: 1.3; }
   .toc-link:hover { color: #1a1a1a; background: rgba(0,0,0,0.03); }
   .toc-link:active { transform: scale(0.97); }
-  .toc-link.active { color: #1a1a1a; font-weight: 500; background: rgba(249,112,48,0.06); }
+  .toc-link.active { color: #1a1a1a; font-weight: 500; background: rgba(139,92,246,0.06); }
   .toc-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; opacity: 0.2; flex-shrink: 0; transition: all 0.25s cubic-bezier(.19,1,.22,1); }
   .toc-link:hover .toc-dot { opacity: 0.5; }
-  .toc-link.active .toc-dot { opacity: 1; width: 6px; height: 6px; background: #F97030; box-shadow: 0 0 0 3px rgba(249,112,48,0.15); }
+  .toc-link.active .toc-dot { opacity: 1; width: 6px; height: 6px; background: #8b5cf6; box-shadow: 0 0 0 3px rgba(139,92,246,0.15); }
   @media (max-width: 1440px) { .toc { display: none; } }
 
   .img-placeholder { position: relative; overflow: hidden; }
@@ -67,7 +67,7 @@ tailwind.config = {
 
   .scroll-progress {
     position: fixed; top: 0; left: 0; height: 3px;
-    background: linear-gradient(90deg, #F97030, #c084fc, #F97030);
+    background: linear-gradient(90deg, #8b5cf6, #c084fc, #8b5cf6);
     background-size: 200% 100%;
     animation: gradient-shift 3s ease infinite;
     z-index: 200; transform-origin: left; transform: scaleX(0);
@@ -77,9 +77,9 @@ tailwind.config = {
   .hero-mesh {
     position: absolute; inset: 0; pointer-events: none; z-index: 0;
     background:
-      radial-gradient(ellipse 600px 400px at 10% 20%, rgba(249,112,48,0.04), transparent),
+      radial-gradient(ellipse 600px 400px at 10% 20%, rgba(139,92,246,0.04), transparent),
       radial-gradient(ellipse 500px 300px at 80% 60%, rgba(192,132,252,0.03), transparent),
-      radial-gradient(ellipse 400px 400px at 50% 100%, rgba(249,112,48,0.02), transparent);
+      radial-gradient(ellipse 400px 400px at 50% 100%, rgba(139,92,246,0.02), transparent);
   }
 
   /* Hero brand background text + fade */
@@ -91,7 +91,7 @@ tailwind.config = {
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: clamp(120px, 18vw, 300px);
     font-weight: 800;
-    color: rgba(249,112,48,0.07);
+    color: rgba(139,92,246,0.07);
     letter-spacing: -0.05em;
     white-space: nowrap;
     pointer-events: none;
@@ -105,7 +105,7 @@ tailwind.config = {
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(to bottom, rgba(249,112,48,0.15) 0%, rgba(249,112,48,0.06) 30%, transparent 60%);
+    background: linear-gradient(to bottom, rgba(139,92,246,0.15) 0%, rgba(139,92,246,0.06) 30%, transparent 60%);
     pointer-events: none;
     z-index: 1;
   }
@@ -118,7 +118,7 @@ tailwind.config = {
   .card-glow { position: relative; overflow: hidden; }
   .card-glow::before {
     content: ''; position: absolute; width: 200px; height: 200px;
-    background: radial-gradient(circle, rgba(249,112,48,0.08), transparent 70%);
+    background: radial-gradient(circle, rgba(139,92,246,0.08), transparent 70%);
     border-radius: 50%; pointer-events: none;
     transform: translate(-50%, -50%);
     opacity: 0; transition: opacity 0.3s;
@@ -126,12 +126,12 @@ tailwind.config = {
   .card-glow:hover::before { opacity: 1; }
 
   @keyframes border-glow {
-    0%, 100% { border-color: rgba(249,112,48,0.15); }
-    50% { border-color: rgba(249,112,48,0.35); }
+    0%, 100% { border-color: rgba(139,92,246,0.15); }
+    50% { border-color: rgba(139,92,246,0.35); }
   }
   .insight-glow { animation: border-glow 3s ease-in-out infinite; border-width: 1px; border-style: solid; }
 
-  .num-glow { text-shadow: 0 0 30px rgba(249,112,48,0.15); }
+  .num-glow { text-shadow: 0 0 30px rgba(139,92,246,0.15); }
 
   .toc-link span {
     background-image: linear-gradient(#1a1a1a, #1a1a1a);
@@ -167,13 +167,13 @@ tailwind.config = {
   .speed-slider::-webkit-slider-thumb {
     -webkit-appearance: none; appearance: none;
     width: 20px; height: 20px; border-radius: 50%;
-    background: #F97030; cursor: pointer; border: 3px solid white;
-    box-shadow: 0 2px 8px rgba(249,112,48,0.3);
+    background: #8b5cf6; cursor: pointer; border: 3px solid white;
+    box-shadow: 0 2px 8px rgba(139,92,246,0.3);
   }
   .speed-slider::-moz-range-thumb {
     width: 20px; height: 20px; border-radius: 50%;
-    background: #F97030; cursor: pointer; border: 3px solid white;
-    box-shadow: 0 2px 8px rgba(249,112,48,0.3);
+    background: #8b5cf6; cursor: pointer; border: 3px solid white;
+    box-shadow: 0 2px 8px rgba(139,92,246,0.3);
   }
 
   /* Onboarding toggle */
@@ -312,9 +312,9 @@ html[data-theme="dark"] .shadow-sm,html[data-theme="dark"] .shadow-md,html[data-
   <!-- ═══════ QUICK SUMMARY — Interactive CTA ═══════ -->
   <div class="relative overflow-hidden" id="quick-summary-section" style="min-height:320px">
     <!-- Animated dot grid -->
-    <div class="absolute inset-0 opacity-[0.12]" style="background-image:radial-gradient(circle,#F97030 0.6px,transparent 0.6px);background-size:28px 28px" id="dot-grid"></div>
+    <div class="absolute inset-0 opacity-[0.12]" style="background-image:radial-gradient(circle,#8b5cf6 0.6px,transparent 0.6px);background-size:28px 28px" id="dot-grid"></div>
     <!-- Mouse-follow radial glow -->
-    <div id="summary-glow" class="absolute w-[500px] h-[500px] rounded-full pointer-events-none opacity-0 transition-opacity duration-500" style="background:radial-gradient(circle,rgba(249,112,48,0.08) 0%,transparent 70%);transform:translate(-50%,-50%)"></div>
+    <div id="summary-glow" class="absolute w-[500px] h-[500px] rounded-full pointer-events-none opacity-0 transition-opacity duration-500" style="background:radial-gradient(circle,rgba(139,92,246,0.08) 0%,transparent 70%);transform:translate(-50%,-50%)"></div>
     <!-- Floating preview cards -->
     <div class="absolute inset-0 pointer-events-none" id="floating-cards">
       <div class="summary-float-card absolute bg-white rounded-xl shadow-lg border border-gray-100 p-3 w-36 opacity-0" style="top:15%;left:8%">
@@ -379,7 +379,7 @@ html[data-theme="dark"] .shadow-sm,html[data-theme="dark"] .shadow-md,html[data-
           <div class="w-full flex-shrink-0 flex flex-col lg:flex-row">
             <div class="flex-1 bg-surface p-8 flex flex-col items-center justify-center">
               <div class="w-20 h-20 rounded-2xl bg-accent/10 flex items-center justify-center mb-4">
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
               </div>
               <div class="font-display text-xl font-bold mb-1">Lepal.ai</div>
               <div class="text-sm text-secondary">AI Mental Wellness Companion</div>
@@ -566,7 +566,7 @@ html[data-theme="dark"] .shadow-sm,html[data-theme="dark"] .shadow-md,html[data-
                 <div class="text-center">
                   <div class="w-px h-4 bg-accent/20 mx-auto"></div>
                   <div class="w-10 h-10 rounded-full bg-violet-100 flex items-center justify-center mx-auto mb-1.5">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
                   </div>
                   <div class="text-[10px] font-bold">ML Eng</div>
                   <div class="text-[8px] text-secondary">x1</div>
@@ -682,13 +682,13 @@ html[data-theme="dark"] .shadow-sm,html[data-theme="dark"] .shadow-md,html[data-
             <!-- Design -->
             <div class="bg-accent/5 rounded-xl md:rounded-l-none p-6 border border-accent/20 md:border-l-0">
               <div class="flex items-center gap-2 mb-4">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
                 <span class="text-[10px] font-bold uppercase tracking-wider text-accent">Design (Me)</span>
               </div>
               <div class="font-display text-xl font-bold text-primary mb-2">"It's an empathy gap."</div>
               <p class="text-xs text-secondary leading-relaxed mb-4">The AI remembered facts but failed to read feelings. Users didn't feel <em>heard</em>.</p>
               <div class="bg-white/60 rounded-lg px-3 py-2 inline-flex items-center gap-2">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
                 <span class="text-[10px] text-accent font-medium">Redesign tone & interactions</span>
               </div>
             </div>
@@ -734,7 +734,7 @@ html[data-theme="dark"] .shadow-sm,html[data-theme="dark"] .shadow-md,html[data-
         <!-- Key insight -->
         <div class="bg-surface rounded-xl p-8 my-10 gs-child relative overflow-hidden insight-glow">
           <div class="absolute -right-4 -bottom-4 opacity-5">
-            <svg width="120" height="120" viewBox="0 0 24 24" fill="#F97030"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            <svg width="120" height="120" viewBox="0 0 24 24" fill="#8b5cf6"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
           </div>
           <div class="text-xs font-bold uppercase tracking-widest text-accent mb-3">The Insight</div>
           <div class="font-display text-lg lg:text-xl font-semibold leading-snug mb-4">Users felt "unseen."</div>
@@ -780,7 +780,7 @@ html[data-theme="dark"] .shadow-sm,html[data-theme="dark"] .shadow-md,html[data-
         <div class="my-12 gs-child">
           <div class="text-xs text-secondary text-center mb-4">
             <span class="inline-flex items-center gap-1.5 bg-accent/5 border border-accent/10 rounded-full px-3 py-1">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="2"><path d="M12 20V10M18 20V4M6 20v-4"/></svg>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><path d="M12 20V10M18 20V4M6 20v-4"/></svg>
               Try it — Type a sentence and watch the classifier work
             </span>
           </div>
@@ -848,7 +848,7 @@ html[data-theme="dark"] .shadow-sm,html[data-theme="dark"] .shadow-md,html[data-
         <div class="bg-surface rounded-xl p-6 lg:p-8 my-10 gs-child">
           <div class="flex items-center gap-3 mb-4">
             <div class="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
             </div>
             <div>
               <div class="text-xs font-bold uppercase tracking-wider text-accent">How It Works</div>
@@ -963,7 +963,7 @@ html[data-theme="dark"] .shadow-sm,html[data-theme="dark"] .shadow-md,html[data-
                 <!-- Mini gradient bar visual -->
                 <div class="bg-gray-50 rounded-lg p-3 mb-3">
                   <div class="h-1.5 rounded-full bg-gray-200 overflow-hidden relative">
-                    <div class="absolute inset-0 rounded-full overflow-hidden" style="background:linear-gradient(90deg,transparent,rgba(249,112,48,0.4),transparent);background-size:200% 100%;animation:gradient-shift 1.5s ease-in-out infinite"></div>
+                    <div class="absolute inset-0 rounded-full overflow-hidden" style="background:linear-gradient(90deg,transparent,rgba(139,92,246,0.4),transparent);background-size:200% 100%;animation:gradient-shift 1.5s ease-in-out infinite"></div>
                   </div>
                   <span class="text-[10px] text-gray-400 mt-2 block">Generating response...</span>
                 </div>
@@ -1039,7 +1039,7 @@ html[data-theme="dark"] .shadow-sm,html[data-theme="dark"] .shadow-md,html[data-
                 </div>
                 <div class="flex items-start gap-2">
                   <div class="w-7 h-7 rounded-full bg-violet-100 flex items-center justify-center flex-shrink-0">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
                   </div>
                   <div>
                     <div id="speed-dots" class="bg-gray-100 rounded-2xl rounded-bl-md px-4 py-3 inline-flex items-center gap-1.5">
@@ -1148,7 +1148,7 @@ html[data-theme="dark"] .shadow-sm,html[data-theme="dark"] .shadow-md,html[data-
               </div>
               <div class="flex flex-col items-center">
                 <div class="w-9 h-9 rounded-full bg-purple-100 border-2 border-purple-300 flex items-center justify-center z-10">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
                 </div>
                 <div class="text-[11px] font-bold mt-2">Shared Framework</div>
                 <div class="text-[10px] text-secondary">Week 5–6</div>
@@ -1211,7 +1211,7 @@ html[data-theme="dark"] .shadow-sm,html[data-theme="dark"] .shadow-md,html[data-
           <!-- Usability Testing Validation -->
           <div class="bg-surface rounded-xl p-6 mt-6 max-w-xl mx-auto">
             <div class="flex items-center gap-2 mb-4">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="1.5"><path d="M9 19v-6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2zm0 0V9a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v10m-6 0a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2m0 0V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2z"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="1.5"><path d="M9 19v-6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2zm0 0V9a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v10m-6 0a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2m0 0V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2z"/></svg>
               <div class="text-xs font-bold uppercase tracking-wider text-accent">Usability Testing: Speed vs. Care</div>
             </div>
             <p class="text-xs text-secondary leading-relaxed mb-4">While intentional delay builds trust, excessive lag frustrates users. I established a <strong class="text-primary font-medium">maximum latency threshold of 3 seconds</strong> and ran a pre-launch comparison test.</p>
@@ -1330,7 +1330,7 @@ html[data-theme="dark"] .shadow-sm,html[data-theme="dark"] .shadow-md,html[data-
             <!-- Central framework label -->
             <div class="text-center mb-6">
               <div class="inline-flex items-center gap-2 bg-accent/5 border border-accent/15 rounded-full px-5 py-2.5">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                 <span class="text-sm font-bold text-accent">Adaptive Tone Framework</span>
               </div>
             </div>
@@ -1459,13 +1459,13 @@ html[data-theme="dark"] .shadow-sm,html[data-theme="dark"] .shadow-md,html[data-
         <div class="my-10 grid grid-cols-1 md:grid-cols-2 gap-4 gs-child">
           <div class="flex items-start gap-3 p-4 rounded-xl bg-accent/5 border border-accent/10">
             <div class="w-6 h-6 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
             </div>
             <div class="text-xs text-secondary leading-relaxed"><strong class="text-primary">Conflict → Collaboration</strong> — I aligned Engineering's need for "logic" with Design's need for "empathy" by building a shared Tone Framework they could both contribute to.</div>
           </div>
           <div class="flex items-start gap-3 p-4 rounded-xl bg-accent/5 border border-accent/10">
             <div class="w-6 h-6 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
             </div>
             <div class="text-xs text-secondary leading-relaxed"><strong class="text-primary">Rituals over Features</strong> — Success wasn't about adding more tools, but refining the daily ritual of journaling to be emotionally safe. A smaller, warmer feature set won over a larger, colder one.</div>
           </div>
@@ -1853,7 +1853,7 @@ gsap.utils.toArray('.section-icon').forEach(icon => {
         const dotsDiv = document.createElement('div');
         dotsDiv.id = 'chat-typing';
         dotsDiv.className = 'flex items-start gap-2 mb-2';
-        dotsDiv.innerHTML = '<div class="w-7 h-7 rounded-full bg-violet-100 flex items-center justify-center flex-shrink-0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div><div class="bg-gray-100 rounded-2xl rounded-bl-md px-4 py-3 inline-flex items-center gap-1.5"><div class="typing-dot w-2 h-2 rounded-full bg-accent/60"></div><div class="typing-dot w-2 h-2 rounded-full bg-accent/60"></div><div class="typing-dot w-2 h-2 rounded-full bg-accent/60"></div></div>';
+        dotsDiv.innerHTML = '<div class="w-7 h-7 rounded-full bg-violet-100 flex items-center justify-center flex-shrink-0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div><div class="bg-gray-100 rounded-2xl rounded-bl-md px-4 py-3 inline-flex items-center gap-1.5"><div class="typing-dot w-2 h-2 rounded-full bg-accent/60"></div><div class="typing-dot w-2 h-2 rounded-full bg-accent/60"></div><div class="typing-dot w-2 h-2 rounded-full bg-accent/60"></div></div>';
         messages.appendChild(dotsDiv);
       }, 1200);
 
@@ -1863,7 +1863,7 @@ gsap.utils.toArray('.section-icon').forEach(icon => {
         if (typing) typing.remove();
         const newDiv = document.createElement('div');
         newDiv.className = 'flex items-start gap-2 opacity-0';
-        newDiv.innerHTML = '<div class="w-7 h-7 rounded-full bg-violet-100 flex items-center justify-center flex-shrink-0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div><div><div class="text-[9px] text-accent font-bold uppercase tracking-wider mb-1">New Response (emotion-aware)</div><div class="bg-accent/10 text-sm px-4 py-2.5 rounded-2xl rounded-bl-md border border-accent/20">' + conv.newResponse + '</div></div>';
+        newDiv.innerHTML = '<div class="w-7 h-7 rounded-full bg-violet-100 flex items-center justify-center flex-shrink-0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div><div><div class="text-[9px] text-accent font-bold uppercase tracking-wider mb-1">New Response (emotion-aware)</div><div class="bg-accent/10 text-sm px-4 py-2.5 rounded-2xl rounded-bl-md border border-accent/20">' + conv.newResponse + '</div></div>';
         messages.appendChild(newDiv);
         gsap.to(newDiv, { opacity: 1, duration: reduced ? 0 : 0.5 });
         messages.scrollTop = messages.scrollHeight;
@@ -1931,7 +1931,7 @@ gsap.utils.toArray('.section-icon').forEach(icon => {
   function goTo(i) {
     current = Math.max(0, Math.min(total - 1, i));
     slides.style.transform = 'translateX(-' + (current * 100) + '%)';
-    dots.forEach((d, idx) => { d.style.backgroundColor = idx === current ? '#F97030' : '#d1d5db'; });
+    dots.forEach((d, idx) => { d.style.backgroundColor = idx === current ? '#8b5cf6' : '#d1d5db'; });
     prevBtn.disabled = current === 0;
     nextBtn.style.opacity = current === total - 1 ? '0.3' : '1';
   }

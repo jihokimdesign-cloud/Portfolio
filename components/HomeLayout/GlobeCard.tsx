@@ -93,12 +93,14 @@ export default function GlobeCard({
         height: width * 2,
         phi: 0,
         theta: 0.06,
-        dark: 1,
-        diffuse: isDark ? 1.2 : 1.32,
+        // dark:1은 다크 카드 전용 — 라이트 카드에선 검은 구체가 되어버려
+        // dark:0 + 밝은 회색 베이스로 흰 배경 위 부드러운 지구본을 만든다
+        dark: isDark ? 1 : 0,
+        diffuse: isDark ? 1.2 : 1.1,
         mapSamples: 10877,
-        mapBrightness: isDark ? 6 : 12,
-        baseColor: isDark ? [1, 1, 1] : [0.2, 0.2, 0.2],
-        glowColor: isDark ? [0.3, 0.3, 0.3] : [1, 1, 1],
+        mapBrightness: isDark ? 6 : 2.6,
+        baseColor: isDark ? [1, 1, 1] : [0.58, 0.6, 0.66],
+        glowColor: isDark ? [0.3, 0.3, 0.3] : [0.9, 0.92, 0.96],
         markerColor,
         markers: CITIES.map((c) => ({
           location: [c.lat, c.lng],
