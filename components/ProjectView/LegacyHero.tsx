@@ -21,9 +21,20 @@ export default function LegacyHero({ projectInfo, coverImage }: Props) {
   const heroSrc = projectInfo.heroHtml?.replace("{theme}", theme);
   return (
     <div className="mx-4 mt-2 lg:mx-8">
-      {/* 히어로 — HTML(heroHtml) 또는 커버 이미지. 넉넉한 높이 */}
+      {/* 히어로 — HTML(heroHtml)이면 콘텐츠 종횡비에 맞춤, 아니면 커버 이미지 */}
       <div className="relative overflow-hidden rounded-[1.25rem]">
-        <div className="relative h-[86vh] min-h-[540px] w-full">
+        <div
+          className={
+            heroSrc && projectInfo.heroAspect
+              ? "relative w-full"
+              : "relative h-[86vh] min-h-[540px] w-full"
+          }
+          style={
+            heroSrc && projectInfo.heroAspect
+              ? { aspectRatio: projectInfo.heroAspect }
+              : undefined
+          }
+        >
           {heroSrc ? (
             <iframe
               key={heroSrc}
