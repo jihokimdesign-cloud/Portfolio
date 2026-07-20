@@ -52,8 +52,8 @@ const ProjectGridItem = ({
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
   const hasVideo = projectInfo.previewVideo !== undefined;
   const isLoading = useMemo(
-    () => (isFirstItem && hasVideo ? !isVideoLoaded : !isImageLoaded),
-    [isFirstItem, hasVideo, isVideoLoaded, isImageLoaded],
+    () => (hasVideo ? !isVideoLoaded : !isImageLoaded),
+    [hasVideo, isVideoLoaded, isImageLoaded],
   );
 
   const [isHovering, setIsHovering] = useState(false);
@@ -124,22 +124,11 @@ const ProjectGridItem = ({
     };
   }, [videoRef]);
 
-  // video loading mechanism
+  // 비디오는 항상 자동재생 (호버 상호작용 제거)
   useEffect(() => {
     if (!videoRef.current) return;
-
-    if (isFirstItem) {
-      videoRef.current.play();
-      return;
-    }
-
-    if (isHovering) {
-      videoRef.current.currentTime = 0;
-      videoRef.current.play();
-    } else {
-      videoRef.current.pause();
-    }
-  }, [isHovering, isFirstItem]);
+    videoRef.current.play().catch(() => {});
+  }, [isVideoLoaded]);
   return (
     <motion.div
       style={{
@@ -178,7 +167,7 @@ const ProjectGridItem = ({
                   onLoad={() => setIsImageLoaded(true)}
                 />
               ) : (
-                (!isFirstItem || !hasVideo) && (
+                !hasVideo && (
                   <Image
                     src={getProjectCover(projectInfo.slug)}
                     width={582}
@@ -195,16 +184,17 @@ const ProjectGridItem = ({
                 )
               )}
 
-              {projectInfo.previewVideo !== undefined && (
+              {hasVideo && (
                 <motion.video
                   disablePictureInPicture
-                  style={{ opacity: isFirstItem ? 1 : 0, height: cardHeight }}
+                  style={{ height: cardHeight }}
                   ref={videoRef}
                   src={projectInfo.previewVideo}
                   preload="metadata"
                   autoPlay
                   muted
                   loop
+                  playsInline
                   className="w-full object-cover object-center absolute top-0 left-0 right-0"
                 />
               )}
