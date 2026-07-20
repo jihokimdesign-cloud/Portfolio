@@ -117,10 +117,9 @@ body {
     inset 0 -1px 1.5px rgba(255, 255, 255, 0.5),
     inset 1px 0 1px rgba(255, 255, 255, 0.35),
     inset -1px 0 1px rgba(255, 255, 255, 0.35);
-  /* NOTE: per Jiho's spec the title stays rgb(230,230,230) in BOTH themes —
-     on the light canvas this is nearly invisible (≈1.07:1). If light mode
-     ships, revisit. */
-  --title: rgb(230, 230, 230);
+  /* 다크의 230,230,230(= --fg보다 한 단계 소프트)에 대응하는 라이트 잉크 —
+     Apple 헤드라인 컬러. 2026-07-19 Jiho가 라이트 타이틀 너무 연하다고 확인. */
+  --title: #1d1d1f;
 }
 
 /* ── Liquid Glass (Apple iOS 26-style material) ───────────────────
