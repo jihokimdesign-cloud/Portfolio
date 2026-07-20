@@ -204,7 +204,7 @@ tailwind.config = {
   .research-method { transition: transform 0.2s ease, box-shadow 0.2s ease; }
   .research-method:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
 </style>
-<style>.gs-child{opacity:1 !important;transform:none !important}</style>
+<style>.gs-child{opacity:1 !important;transform:none !important}.opacity-0{opacity:1 !important}.hero-badge{transform:none !important}</style>
 </head>
 <body class="bg-white text-primary leading-relaxed">
 
@@ -217,12 +217,9 @@ tailwind.config = {
 
   <!-- ═══════ HERO ═══════ -->
   <header class="relative overflow-hidden bg-white" id="hero">
-    <div class="hero-mesh"></div>
-    <div class="hero-fade"></div>
-    <!-- Top gradient light beam -->
+            <!-- Top gradient light beam -->
     <!-- Light beam from top -->
-    <div class="hero-brand-bg" aria-hidden="true">TAP</div>
-
+    
     <!-- 1. Full-width hero screenshot -->
     <div class="px-6 lg:px-16 pt-52 pb-6 relative z-10" style="overflow:visible">
       <div class="max-w-5xl mx-auto opacity-0 hero-badge" style="transform:scale(1.1)">
@@ -230,10 +227,7 @@ tailwind.config = {
           <img src="/TAPimgs/TAP_case_hero_pic.png" alt="TAP3D Platform" class="w-full block">
         </div>
       </div>
-      <div id="hero-light" class="absolute left-0 w-full pointer-events-none" style="top:0;left:0;right:0;height:100%;opacity:1">
-        <div class="absolute inset-0" style="background:linear-gradient(180deg, rgba(37,99,235,0.18) 0%, rgba(96,165,250,0.08) 30%, transparent 60%)"></div>
-      </div>
-    </div>
+          </div>
 
     <!-- 2. Center title + subtitle -->
     <div class="px-10 lg:px-20 pt-14 pb-4 text-center relative z-10">
