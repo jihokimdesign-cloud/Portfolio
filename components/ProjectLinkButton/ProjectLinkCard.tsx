@@ -65,10 +65,11 @@ const ProjectLinkCard = ({
           }}
         >
           <motion.a
-            className="block h-[64em] rounded-tl-[1.25rem] rounded-tr-[1.25rem] relative cursor-pointer"
+            className="block h-[64em] rounded-tl-[1.25rem] rounded-tr-[1.25rem] relative cursor-pointer overflow-hidden"
             style={{
-              backgroundColor: projectStyle.getBgColor(),
-              color: projectStyle.getTextColor(),
+              backgroundColor: "var(--canvas)",
+              color: "var(--fg)",
+              borderTop: "1px solid var(--hairline)",
             }}
             onClickCapture={handleClick}
             ref={linkRef}
@@ -80,7 +81,32 @@ const ProjectLinkCard = ({
               ease: AnimationConfig.EASING,
             }}
           >
-            <ProjectHeader projectInfo={projectInfo} />
+            {/* 다음 프로젝트 액센트로 부드럽게 물드는 전환 리빌 */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-x-0 top-0 h-[32em]"
+              style={{
+                background: `linear-gradient(180deg, transparent 0%, ${projectStyle.accent} 100%)`,
+                opacity: 0.14,
+              }}
+            />
+            <div
+              aria-hidden
+              className="pointer-events-none absolute left-1/2 top-[7em] h-[22em] w-[22em] -translate-x-1/2 rounded-full"
+              style={{
+                background: projectStyle.accent,
+                opacity: 0.1,
+                filter: "blur(80px)",
+              }}
+            />
+            {/* "Next project" eyebrow */}
+            <div
+              className="relative z-10 px-4 pt-6 lg:px-8 lg:pt-8 text-[11px] font-bold uppercase tracking-widest"
+              style={{ color: projectStyle.accent }}
+            >
+              Next project →
+            </div>
+            <ProjectHeader projectInfo={projectInfo} invertLogo />
           </motion.a>
         </motion.div>
       </Link>
