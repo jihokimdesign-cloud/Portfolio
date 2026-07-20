@@ -1,5 +1,6 @@
 import { MDXRemote } from "next-mdx-remote";
 import Head from "next/head";
+import NextLink from "next/link";
 import { serialize } from "next-mdx-remote/serialize";
 import { GetStaticProps, InferGetStaticPropsType, GetStaticPaths } from "next";
 import { getAllPostSlugs, getPostBySlug } from "../../lib/projects";
@@ -110,6 +111,46 @@ export default function Post({
 
   const nextProjectStyle = getProjectStyle(nextProjectMeta);
   const nextProjectInfo = getProjectInfo(nextProjectMeta);
+
+  // 옛 라이브 사이트 케이스 스터디 통째 서빙 — 자체 Tailwind/GSAP/나브가
+  // 들어있는 완결 HTML이라 iframe으로 그대로 (타일 전환은 페이드로 유지)
+  if (meta.legacyHtml) {
+    return (
+      <>
+        <NextSeo
+          title={`${projectInfo.title} — Jiho Kim`}
+          description={`${projectInfo.description}`}
+        />
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1, transition: { duration: 0.4 } }}
+          exit={{ opacity: 0, transition: { duration: 0.2 } }}
+          className="fixed inset-0 z-40"
+          style={{ background: "#ffffff" }}
+        >
+          <iframe
+            src={meta.legacyHtml}
+            title={projectInfo.title}
+            className="h-full w-full border-0"
+          />
+        </motion.div>
+        <NextLink href="/" scroll={false} legacyBehavior>
+          <a
+            aria-label="Back to home"
+            className="fixed left-5 top-5 z-50 flex h-10 w-10 items-center justify-center rounded-full text-[#111]"
+            style={{
+              background: "rgba(255,255,255,.75)",
+              backdropFilter: "blur(20px)",
+              border: "1px solid rgba(0,0,0,.08)",
+              boxShadow: "0 4px 16px rgba(0,0,0,.1)",
+            }}
+          >
+            ✕
+          </a>
+        </NextLink>
+      </>
+    );
+  }
 
   return (
     <>
