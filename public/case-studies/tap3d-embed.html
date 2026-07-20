@@ -19,7 +19,7 @@ tailwind.config = {
       colors: {
         primary: '#1a1a1a',
         secondary: '#6b6b6b',
-        accent: '#2563eb',
+        accent: '#F97030',
         surface: '#f5f5f5',
         highlight: '#e74c3c',
       }
@@ -52,10 +52,10 @@ tailwind.config = {
   .toc-link { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #999; text-decoration: none; padding: 6px 10px; border-radius: 8px; transition: color 0.18s, background 0.18s; line-height: 1.3; }
   .toc-link:hover { color: #1a1a1a; background: rgba(0,0,0,0.03); }
   .toc-link:active { transform: scale(0.97); }
-  .toc-link.active { color: #1a1a1a; font-weight: 500; background: rgba(37,99,235,0.06); }
+  .toc-link.active { color: #1a1a1a; font-weight: 500; background: rgba(249,112,48,0.06); }
   .toc-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; opacity: 0.2; flex-shrink: 0; transition: all 0.25s cubic-bezier(.19,1,.22,1); }
   .toc-link:hover .toc-dot { opacity: 0.5; }
-  .toc-link.active .toc-dot { opacity: 1; width: 6px; height: 6px; background: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.15); }
+  .toc-link.active .toc-dot { opacity: 1; width: 6px; height: 6px; background: #F97030; box-shadow: 0 0 0 3px rgba(249,112,48,0.15); }
   @media (max-width: 1440px) { .toc { display: none; } }
 
   .img-placeholder { position: relative; overflow: hidden; }
@@ -72,7 +72,7 @@ tailwind.config = {
   .section-divider { overflow: visible; }
   .section-divider .divider-line { stroke-dasharray: 1000; stroke-dashoffset: 1000; }
 
-  .floating-dot { position: absolute; border-radius: 50%; opacity: 0; background: #2563eb; }
+  .floating-dot { position: absolute; border-radius: 50%; opacity: 0; background: #F97030; }
   .flow-connector path { stroke-dasharray: 8 4; }
   .progress-ring circle { transition: stroke-dashoffset 0.8s ease; }
 
@@ -92,7 +92,7 @@ tailwind.config = {
 
   .scroll-progress {
     position: fixed; top: 0; left: 0; height: 3px;
-    background: linear-gradient(90deg, #2563eb, #7c3aed, #2563eb);
+    background: linear-gradient(90deg, #F97030, #7c3aed, #F97030);
     background-size: 200% 100%;
     animation: gradient-shift 3s ease infinite;
     z-index: 200; transform-origin: left; transform: scaleX(0);
@@ -105,9 +105,9 @@ tailwind.config = {
   .hero-mesh {
     position: absolute; inset: 0; pointer-events: none; z-index: 0;
     background:
-      radial-gradient(ellipse 600px 400px at 10% 20%, rgba(37,99,235,0.04), transparent),
+      radial-gradient(ellipse 600px 400px at 10% 20%, rgba(249,112,48,0.04), transparent),
       radial-gradient(ellipse 500px 300px at 80% 60%, rgba(124,58,237,0.03), transparent),
-      radial-gradient(ellipse 400px 400px at 50% 100%, rgba(37,99,235,0.02), transparent);
+      radial-gradient(ellipse 400px 400px at 50% 100%, rgba(249,112,48,0.02), transparent);
   }
 
   /* Scroll down indicator */
@@ -124,7 +124,7 @@ tailwind.config = {
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: clamp(120px, 18vw, 300px);
     font-weight: 800;
-    color: rgba(37,99,235,0.07);
+    color: rgba(249,112,48,0.07);
     letter-spacing: -0.05em;
     white-space: nowrap;
     pointer-events: none;
@@ -138,7 +138,7 @@ tailwind.config = {
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(to bottom, rgba(37,99,235,0.15) 0%, rgba(37,99,235,0.06) 30%, transparent 60%);
+    background: linear-gradient(to bottom, rgba(249,112,48,0.15) 0%, rgba(249,112,48,0.06) 30%, transparent 60%);
     pointer-events: none;
     z-index: 1;
   }
@@ -165,7 +165,7 @@ tailwind.config = {
   }
   .card-glow::before {
     content: ''; position: absolute; width: 200px; height: 200px;
-    background: radial-gradient(circle, rgba(37,99,235,0.08), transparent 70%);
+    background: radial-gradient(circle, rgba(249,112,48,0.08), transparent 70%);
     border-radius: 50%; pointer-events: none;
     transform: translate(-50%, -50%);
     opacity: 0; transition: opacity 0.3s;
@@ -174,8 +174,8 @@ tailwind.config = {
 
   /* Animated gradient border on key insight */
   @keyframes border-glow {
-    0%, 100% { border-color: rgba(37,99,235,0.15); }
-    50% { border-color: rgba(37,99,235,0.35); }
+    0%, 100% { border-color: rgba(249,112,48,0.15); }
+    50% { border-color: rgba(249,112,48,0.35); }
   }
   .insight-glow { animation: border-glow 3s ease-in-out infinite; border-width: 1px; border-style: solid; }
 
@@ -187,7 +187,7 @@ tailwind.config = {
   .float-anim { animation: float 4s ease-in-out infinite; }
 
   /* Number highlight glow */
-  .num-glow { text-shadow: 0 0 30px rgba(37,99,235,0.15); }
+  .num-glow { text-shadow: 0 0 30px rgba(249,112,48,0.15); }
 
 
 
@@ -311,7 +311,7 @@ tailwind.config = {
           <h3 class="font-display text-lg font-semibold mb-4">Defining the Work Scope &amp; Boundaries</h3>
           <p class="text-sm text-secondary leading-relaxed mb-6 max-w-xl xl:max-w-2xl">As the sole designer, establishing clear ownership with the Product Manager was critical to moving fast and shipping the MVP.</p>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div class="bg-accent/[0.03] border border-accent/10 rounded-xl p-5 transition-shadow duration-200 hover:shadow-md" style="box-shadow:0 0 0 0.5px rgba(37,99,235,0.08),0 1px 2px rgba(17,24,39,0.04)">
+            <div class="bg-accent/[0.03] border border-accent/10 rounded-xl p-5 transition-shadow duration-200 hover:shadow-md" style="box-shadow:0 0 0 0.5px rgba(249,112,48,0.08),0 1px 2px rgba(17,24,39,0.04)">
               <div class="text-[10px] font-bold uppercase tracking-widest text-accent mb-4">Me — Product Design</div>
               <div class="space-y-2.5">
                 <div class="flex items-start gap-2"><span class="w-1 h-1 rounded-full bg-accent mt-1.5 flex-shrink-0"></span><span class="text-sm text-secondary leading-snug">UX &amp; interface design</span></div>
@@ -345,9 +345,9 @@ tailwind.config = {
   <!-- ═══════ QUICK SUMMARY — Interactive CTA ═══════ -->
   <div class="relative overflow-hidden" id="quick-summary-section" style="min-height:320px">
     <!-- Animated dot grid that reacts to scroll -->
-    <div class="absolute inset-0 opacity-[0.12]" style="background-image:radial-gradient(circle,#2563eb 0.6px,transparent 0.6px);background-size:28px 28px" id="dot-grid"></div>
+    <div class="absolute inset-0 opacity-[0.12]" style="background-image:radial-gradient(circle,#F97030 0.6px,transparent 0.6px);background-size:28px 28px" id="dot-grid"></div>
     <!-- Mouse-follow radial glow -->
-    <div id="summary-glow" class="absolute w-[500px] h-[500px] rounded-full pointer-events-none opacity-0 transition-opacity duration-500" style="background:radial-gradient(circle,rgba(37,99,235,0.08) 0%,transparent 70%);transform:translate(-50%,-50%)"></div>
+    <div id="summary-glow" class="absolute w-[500px] h-[500px] rounded-full pointer-events-none opacity-0 transition-opacity duration-500" style="background:radial-gradient(circle,rgba(249,112,48,0.08) 0%,transparent 70%);transform:translate(-50%,-50%)"></div>
     <!-- Floating preview cards -->
     <div class="absolute inset-0 pointer-events-none" id="floating-cards">
       
@@ -399,7 +399,7 @@ tailwind.config = {
           <div class="w-full flex-shrink-0 flex flex-col lg:flex-row">
             <div class="flex-1 bg-surface p-8 flex flex-col items-center justify-center">
               <div class="w-20 h-20 rounded-2xl bg-accent/10 flex items-center justify-center mb-4">
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="1.5"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4"/></svg>
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="1.5"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4"/></svg>
               </div>
               <div class="font-display text-xl font-bold mb-1">TAP3D</div>
               <div class="text-sm text-secondary">VR Training Platform · B2B / EdTech</div>
@@ -549,7 +549,7 @@ tailwind.config = {
           <div class="flex items-end gap-3 lg:gap-4" style="height:180px">
             <div class="flex-1 flex flex-col items-center justify-end h-full gap-1.5">
               <div class="text-xs font-semibold text-accent completion-bar-label" style="opacity:0">92%</div>
-              <div class="w-full rounded-t-md overflow-hidden completion-bar" data-h="165" style="height:0px;background:#dbeafe"><div style="width:100%;height:100%;background:#2563eb;border-radius:6px 6px 0 0"></div></div>
+              <div class="w-full rounded-t-md overflow-hidden completion-bar" data-h="165" style="height:0px;background:#dbeafe"><div style="width:100%;height:100%;background:#F97030;border-radius:6px 6px 0 0"></div></div>
               <div class="text-[10px] text-secondary">Module 1</div>
             </div>
             <div class="flex-1 flex flex-col items-center justify-end h-full gap-1.5">
@@ -598,14 +598,14 @@ tailwind.config = {
             </div>
             <div class="drop-off-step flex flex-col items-center text-center relative z-10 flex-1">
               <div class="w-10 h-10 rounded-full bg-blue-100 border-2 border-blue-300 flex items-center justify-center mb-3">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
               </div>
               <div class="text-xs font-semibold mb-0.5">Onboarding</div>
               <div class="text-xs text-secondary">100%</div>
             </div>
             <div class="drop-off-step flex flex-col items-center text-center relative z-10 flex-1">
               <div class="w-10 h-10 rounded-full bg-blue-50 border-2 border-blue-200 flex items-center justify-center mb-3">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
               </div>
               <div class="text-xs font-semibold mb-0.5">Initial Modules</div>
               <div class="text-xs text-secondary">Struggling</div>
@@ -649,7 +649,7 @@ tailwind.config = {
         <div class="my-12 grid grid-cols-2 gap-4 gs-child">
           <div class="bg-blue-50/50 rounded-xl p-6 flex items-start gap-4 border border-blue-100 research-method">
             <div class="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-1">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
             </div>
             <div>
               <div class="font-bold text-sm mb-1">User Interviews</div>
@@ -658,7 +658,7 @@ tailwind.config = {
           </div>
           <div class="bg-blue-50/50 rounded-xl p-6 flex items-start gap-4 border border-blue-100 research-method">
             <div class="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-1">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
             </div>
             <div>
               <div class="font-bold text-sm mb-1">Affinity Mapping</div>
@@ -708,14 +708,14 @@ tailwind.config = {
                 <div class="flex flex-col items-center gap-1.5">
                   <div class="w-px h-8 bg-gray-200"></div>
                   <div class="w-7 h-7 rounded-full bg-accent/10 flex items-center justify-center">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                   </div>
                   <div class="w-px h-8 bg-gray-200"></div>
                 </div>
               </div>
               <div class="p-8 bg-accent/[0.03]">
                 <div class="inline-flex items-center gap-2 bg-accent/10 rounded-full px-3 py-1 mb-5">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
                   <span class="text-[10px] font-bold uppercase tracking-wider text-accent">Solution</span>
                 </div>
                 <div class="font-display font-semibold text-base mb-2.5">Bite-sized Checklist</div>
@@ -738,14 +738,14 @@ tailwind.config = {
                 <div class="flex flex-col items-center gap-1.5">
                   <div class="w-px h-8 bg-gray-200"></div>
                   <div class="w-7 h-7 rounded-full bg-accent/10 flex items-center justify-center">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                   </div>
                   <div class="w-px h-8 bg-gray-200"></div>
                 </div>
               </div>
               <div class="p-8 bg-accent/[0.03]">
                 <div class="inline-flex items-center gap-2 bg-accent/10 rounded-full px-3 py-1 mb-5">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
                   <span class="text-[10px] font-bold uppercase tracking-wider text-accent">Solution</span>
                 </div>
                 <div class="font-display font-semibold text-base mb-2.5">Personalized Suggestion</div>
@@ -768,14 +768,14 @@ tailwind.config = {
                 <div class="flex flex-col items-center gap-1.5">
                   <div class="w-px h-8 bg-gray-200"></div>
                   <div class="w-7 h-7 rounded-full bg-accent/10 flex items-center justify-center">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                   </div>
                   <div class="w-px h-8 bg-gray-200"></div>
                 </div>
               </div>
               <div class="p-8 bg-accent/[0.03]">
                 <div class="inline-flex items-center gap-2 bg-accent/10 rounded-full px-3 py-1 mb-5">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
                   <span class="text-[10px] font-bold uppercase tracking-wider text-accent">Solution</span>
                 </div>
                 <div class="font-display font-semibold text-base mb-2.5">Context-Aware Handoff</div>
@@ -787,7 +787,7 @@ tailwind.config = {
 
         <div class="bg-surface rounded-xl p-8 my-10 gs-child relative overflow-hidden insight-glow">
           <div class="absolute -right-4 -bottom-4 opacity-5">
-            <svg width="120" height="120" viewBox="0 0 24 24" fill="#2563eb"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            <svg width="120" height="120" viewBox="0 0 24 24" fill="#F97030"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
           </div>
           <div class="text-xs font-bold uppercase tracking-widest text-accent mb-3">Core Goals</div>
           <div class="font-display text-lg lg:text-xl font-semibold leading-snug">Make starting feel bite-sized. Make "why today" obvious. Provide a quick help path.</div>
@@ -827,7 +827,7 @@ tailwind.config = {
               <span class="text-xs font-bold text-white uppercase tracking-wider">MVP ✓</span>
             </div>
             <div class="mt-4 mb-3">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
             </div>
             <div class="font-bold text-sm mb-2 text-accent">Checklist</div>
             <div class="text-xs text-secondary leading-relaxed mb-3">Low dev cost, leverages existing LMS metadata.</div>
@@ -937,7 +937,7 @@ tailwind.config = {
             </div>
             <div class="hidden md:flex items-center justify-center">
               <div class="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
               </div>
             </div>
             <div class="text-center md:text-left">
@@ -1048,7 +1048,7 @@ tailwind.config = {
                   </button>
                 </div>
                 <div id="woz-step-2" class="hidden">
-                  <div class="flex items-center gap-3 mb-4"><div class="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center"><svg class="animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg></div><div class="text-sm text-secondary">AI is analyzing the recording...</div></div>
+                  <div class="flex items-center gap-3 mb-4"><div class="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center"><svg class="animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="2"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg></div><div class="text-sm text-secondary">AI is analyzing the recording...</div></div>
                   <div class="space-y-2"><div class="h-2 bg-gray-100 rounded-full overflow-hidden"><div id="woz-progress" class="h-full bg-accent rounded-full transition-all duration-1000" style="width:0%"></div></div><div id="woz-status" class="text-xs text-secondary">Extracting context...</div></div>
                 </div>
                 <div id="woz-step-3" class="hidden">
@@ -1185,7 +1185,7 @@ tailwind.config = {
               <div id="ba-handle" class="absolute top-0 bottom-0 flex items-center" style="left:50%;transform:translateX(-50%);z-index:10">
                 <div class="w-0.5 h-full bg-accent/60"></div>
                 <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white border-2 border-accent shadow-lg flex items-center justify-center hover:scale-110 transition-transform">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M18 8L22 12L18 16"/><path d="M6 8L2 12L6 16"/></svg>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="2"><path d="M18 8L22 12L18 16"/><path d="M6 8L2 12L6 16"/></svg>
                 </div>
               </div>
             </div>
@@ -1205,7 +1205,7 @@ tailwind.config = {
             <div class="text-xs text-secondary">Across training flow</div>
           </div>
           <div class="bg-blue-50 rounded-xl p-6 border border-blue-200 text-center">
-            <svg class="mx-auto mb-3" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            <svg class="mx-auto mb-3" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
             <div class="font-bold text-sm text-accent mb-1">Modular Component</div>
             <div class="text-xs text-secondary">Part of design system</div>
           </div>
@@ -1241,13 +1241,13 @@ tailwind.config = {
         <div class="my-10 grid grid-cols-1 md:grid-cols-2 gap-4 gs-child">
           <div class="flex items-start gap-3 p-4 rounded-xl bg-accent/5 border border-accent/10">
             <div class="w-6 h-6 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
             </div>
             <div class="text-xs text-secondary leading-relaxed"><strong class="text-primary">Validation Culture</strong> — Simulation testing proved its value, seeding a culture of data-driven design and early validation at TAP3D.</div>
           </div>
           <div class="flex items-start gap-3 p-4 rounded-xl bg-accent/5 border border-accent/10">
             <div class="w-6 h-6 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
             </div>
             <div class="text-xs text-secondary leading-relaxed"><strong class="text-primary">Cross-Functional Leadership</strong> — Navigated constraints with PMs and Engineers, making strategic trade-offs to arrive at the optimal phased solution.</div>
           </div>
@@ -1552,7 +1552,7 @@ document.querySelectorAll('.hero-card').forEach(card => {
     const tiltX = (y - 0.5) * -10;
     const tiltY = (x - 0.5) * 10;
     card.style.transform = 'perspective(600px) rotateX(' + tiltX + 'deg) rotateY(' + tiltY + 'deg) scale(1.02)';
-    card.style.boxShadow = '0 20px 40px rgba(37,99,235,0.1), 0 8px 16px rgba(0,0,0,0.06)';
+    card.style.boxShadow = '0 20px 40px rgba(249,112,48,0.1), 0 8px 16px rgba(0,0,0,0.06)';
     card.style.setProperty('--mx', (x * 100) + '%');
     card.style.setProperty('--my', (y * 100) + '%');
   });
@@ -1744,7 +1744,7 @@ document.querySelectorAll('.hero-card').forEach(card => {
     current = Math.max(0, Math.min(total - 1, i));
     slides.style.transform = 'translateX(-' + (current * 100) + '%)';
     dots.forEach((d, idx) => {
-      d.style.backgroundColor = idx === current ? '#2563eb' : '#d1d5db';
+      d.style.backgroundColor = idx === current ? '#F97030' : '#d1d5db';
     });
     prevBtn.disabled = current === 0;
     nextBtn.style.opacity = current === total - 1 ? '0.3' : '1';

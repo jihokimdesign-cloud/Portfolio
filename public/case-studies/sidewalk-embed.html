@@ -19,7 +19,7 @@ tailwind.config = {
       colors: {
         primary: '#1a1a1a',
         secondary: '#6b6b6b',
-        accent: '#16a34a',
+        accent: '#F97030',
         surface: '#f5f5f5',
         highlight: '#e74c3c',
       }
@@ -50,10 +50,10 @@ tailwind.config = {
   .toc-link { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #999; text-decoration: none; padding: 6px 10px; border-radius: 8px; transition: color 0.18s, background 0.18s; line-height: 1.3; }
   .toc-link:hover { color: #1a1a1a; background: rgba(0,0,0,0.03); }
   .toc-link:active { transform: scale(0.97); }
-  .toc-link.active { color: #1a1a1a; font-weight: 500; background: rgba(22,163,74,0.06); }
+  .toc-link.active { color: #1a1a1a; font-weight: 500; background: rgba(249,112,48,0.06); }
   .toc-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; opacity: 0.2; flex-shrink: 0; transition: all 0.25s cubic-bezier(.19,1,.22,1); }
   .toc-link:hover .toc-dot { opacity: 0.5; }
-  .toc-link.active .toc-dot { opacity: 1; width: 6px; height: 6px; background: #16a34a; box-shadow: 0 0 0 3px rgba(22,163,74,0.15); }
+  .toc-link.active .toc-dot { opacity: 1; width: 6px; height: 6px; background: #F97030; box-shadow: 0 0 0 3px rgba(249,112,48,0.15); }
   @media (max-width: 1440px) { .toc { display: none; } }
 
   .img-placeholder { position: relative; overflow: hidden; }
@@ -70,11 +70,11 @@ tailwind.config = {
   .section-divider { overflow: visible; }
   .section-divider .divider-line { stroke-dasharray: 1000; stroke-dashoffset: 1000; }
 
-  .floating-dot { position: absolute; border-radius: 50%; opacity: 0; background: #16a34a; }
+  .floating-dot { position: absolute; border-radius: 50%; opacity: 0; background: #F97030; }
 
   .scroll-progress {
     position: fixed; top: 0; left: 0; height: 3px;
-    background: linear-gradient(90deg, #16a34a, #059669, #16a34a);
+    background: linear-gradient(90deg, #F97030, #059669, #F97030);
     background-size: 200% 100%;
     animation: gradient-shift 3s ease infinite;
     z-index: 200; transform-origin: left; transform: scaleX(0);
@@ -86,9 +86,9 @@ tailwind.config = {
   .hero-mesh {
     position: absolute; inset: 0; pointer-events: none; z-index: 0;
     background:
-      radial-gradient(ellipse 600px 400px at 10% 20%, rgba(22,163,74,0.04), transparent),
+      radial-gradient(ellipse 600px 400px at 10% 20%, rgba(249,112,48,0.04), transparent),
       radial-gradient(ellipse 500px 300px at 80% 60%, rgba(5,150,105,0.03), transparent),
-      radial-gradient(ellipse 400px 400px at 50% 100%, rgba(22,163,74,0.02), transparent);
+      radial-gradient(ellipse 400px 400px at 50% 100%, rgba(249,112,48,0.02), transparent);
   }
 
   .hero-card {
@@ -113,7 +113,7 @@ tailwind.config = {
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: clamp(100px, 14vw, 240px);
     font-weight: 800;
-    color: rgba(22,163,74,0.07);
+    color: rgba(249,112,48,0.07);
     letter-spacing: -0.05em;
     white-space: nowrap;
     pointer-events: none;
@@ -127,7 +127,7 @@ tailwind.config = {
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(to bottom, rgba(22,163,74,0.15) 0%, rgba(22,163,74,0.06) 30%, transparent 60%);
+    background: linear-gradient(to bottom, rgba(249,112,48,0.15) 0%, rgba(249,112,48,0.06) 30%, transparent 60%);
     pointer-events: none;
     z-index: 1;
   }
@@ -144,7 +144,7 @@ tailwind.config = {
   .card-glow { position: relative; overflow: hidden; }
   .card-glow::before {
     content: ''; position: absolute; width: 200px; height: 200px;
-    background: radial-gradient(circle, rgba(22,163,74,0.08), transparent 70%);
+    background: radial-gradient(circle, rgba(249,112,48,0.08), transparent 70%);
     border-radius: 50%; pointer-events: none;
     transform: translate(-50%, -50%);
     opacity: 0; transition: opacity 0.3s;
@@ -152,8 +152,8 @@ tailwind.config = {
   .card-glow:hover::before { opacity: 1; }
 
   @keyframes border-glow {
-    0%, 100% { border-color: rgba(22,163,74,0.15); }
-    50% { border-color: rgba(22,163,74,0.35); }
+    0%, 100% { border-color: rgba(249,112,48,0.15); }
+    50% { border-color: rgba(249,112,48,0.35); }
   }
   .insight-glow { animation: border-glow 3s ease-in-out infinite; border-width: 1px; border-style: solid; }
 
@@ -163,7 +163,7 @@ tailwind.config = {
   }
   .float-anim { animation: float 4s ease-in-out infinite; }
 
-  .num-glow { text-shadow: 0 0 30px rgba(22,163,74,0.15); }
+  .num-glow { text-shadow: 0 0 30px rgba(249,112,48,0.15); }
 
   .toc-link span {
     background-image: linear-gradient(#1a1a1a, #1a1a1a);
@@ -268,8 +268,8 @@ tailwind.config = {
 
   <!-- ═══════ QUICK SUMMARY — Interactive CTA ═══════ -->
   <div class="relative overflow-hidden" id="quick-summary-section" style="min-height:320px">
-    <div class="absolute inset-0 opacity-[0.12]" style="background-image:radial-gradient(circle,#16a34a 0.6px,transparent 0.6px);background-size:28px 28px" id="dot-grid"></div>
-    <div id="summary-glow" class="absolute w-[500px] h-[500px] rounded-full pointer-events-none opacity-0 transition-opacity duration-500" style="background:radial-gradient(circle,rgba(22,163,74,0.08) 0%,transparent 70%);transform:translate(-50%,-50%)"></div>
+    <div class="absolute inset-0 opacity-[0.12]" style="background-image:radial-gradient(circle,#F97030 0.6px,transparent 0.6px);background-size:28px 28px" id="dot-grid"></div>
+    <div id="summary-glow" class="absolute w-[500px] h-[500px] rounded-full pointer-events-none opacity-0 transition-opacity duration-500" style="background:radial-gradient(circle,rgba(249,112,48,0.08) 0%,transparent 70%);transform:translate(-50%,-50%)"></div>
     <!-- Floating preview cards -->
     <div class="absolute inset-0 pointer-events-none" id="floating-cards">
       <div class="summary-float-card absolute bg-white rounded-xl shadow-lg border border-gray-100 p-3 w-36 opacity-0" style="top:15%;left:8%">
@@ -332,7 +332,7 @@ tailwind.config = {
           <div class="w-full flex-shrink-0 flex flex-col lg:flex-row">
             <div class="flex-1 bg-surface p-8 flex flex-col items-center justify-center">
               <div class="w-20 h-20 rounded-2xl bg-accent/10 flex items-center justify-center mb-4">
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
               </div>
               <div class="font-display text-xl font-bold mb-1">Project Sidewalk</div>
               <div class="text-sm text-secondary">Civic Tech &middot; Open-Source &middot; Accessibility</div>
@@ -472,7 +472,7 @@ tailwind.config = {
               </div>
               <div class="text-center">
                 <div class="w-10 h-10 mx-auto rounded-lg bg-green-50 border border-green-100 flex items-center justify-center mb-2">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                 </div>
                 <div class="font-display text-xs font-semibold">0 axe-core violations</div>
                 <div class="text-[10px] text-secondary mt-0.5">verified with NVDA + VoiceOver</div>
@@ -584,9 +584,9 @@ tailwind.config = {
           <h3 class="font-display text-xl font-semibold mb-4">Stakeholder Alignment at Scale</h3>
           <p class="text-base text-secondary leading-loose max-w-xl xl:max-w-2xl mb-8">Redesigning a civic tech platform wasn't just about updating the UI — it required balancing the competing needs of three distinct user groups. An accessible-by-default design system was the only way to satisfy all of them simultaneously.</p>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div class="bg-accent/[0.03] border border-accent/10 rounded-xl p-5 transition-shadow duration-200 hover:shadow-md" style="box-shadow:0 0 0 0.5px rgba(22,163,74,0.08),0 1px 2px rgba(17,24,39,0.04)">
+            <div class="bg-accent/[0.03] border border-accent/10 rounded-xl p-5 transition-shadow duration-200 hover:shadow-md" style="box-shadow:0 0 0 0.5px rgba(249,112,48,0.08),0 1px 2px rgba(17,24,39,0.04)">
               <div class="flex items-center gap-2.5 mb-4">
-                <div class="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+                <div class="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
                 <div>
                   <div class="text-[10px] font-bold uppercase tracking-widest text-accent leading-none">The Mappers</div>
                   <div class="text-[9px] text-secondary/50 mt-0.5">Citizens &amp; Volunteers</div>
@@ -652,21 +652,21 @@ tailwind.config = {
         <div class="my-12 grid grid-cols-3 gap-4 gs-child">
           <div class="bg-green-50/50 rounded-xl p-6 border border-green-100 research-method">
             <div class="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center mb-4">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
             </div>
             <div class="font-bold text-sm mb-1.5">Behavioral Analysis</div>
             <div class="text-xs text-secondary leading-relaxed">Reviewed Hotjar heatmaps and session recordings to pinpoint exact drop-off points, navigational friction, and hesitation markers.</div>
           </div>
           <div class="bg-green-50/50 rounded-xl p-6 border border-green-100 research-method">
             <div class="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center mb-4">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
             </div>
             <div class="font-bold text-sm mb-1.5">Community Voice</div>
             <div class="text-xs text-secondary leading-relaxed">Analyzed GitHub issues and user forum discussions to synthesize and prioritize recurring usability pain points.</div>
           </div>
           <div class="bg-green-50/50 rounded-xl p-6 border border-green-100 research-method">
             <div class="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center mb-4">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
             </div>
             <div class="font-bold text-sm mb-1.5">WCAG 2.2 AA Audit</div>
             <div class="text-xs text-secondary leading-relaxed">Conducted a rigorous heuristic evaluation of the legacy interface against WCAG standards (e.g., color contrast, keyboard navigation, screen reader support).</div>
@@ -828,7 +828,7 @@ tailwind.config = {
                 <div class="hm-ring" style="border-color:#22c55e;"></div>
                 <div class="hm-pulse" style="background:rgba(34,197,94,0.3);"></div>
                 <div class="hm-tooltip" style="left:auto; right:0; transform:translateX(0) translateY(6px);">
-                  <div style="font-size:10px; font-weight:700; color:#16a34a; margin-bottom:4px;">Highest engagement</div>
+                  <div style="font-size:10px; font-weight:700; color:#F97030; margin-bottom:4px;">Highest engagement</div>
                   <div style="font-size:9px; color:#6b7280; line-height:1.4;">Validation buttons had strongest click-through — users understood the core labeling task.</div>
                 </div>
               </div>
@@ -951,7 +951,7 @@ tailwind.config = {
               <div class="text-xs font-bold text-accent uppercase tracking-wider mb-3">SCSS Variables</div>
               <div class="space-y-2">
                 <div class="bg-gray-900 rounded px-3 py-2">
-                  <span class="text-xs font-mono text-green-400">$color-primary</span><span class="text-xs font-mono text-gray-400">: #16a34a;</span>
+                  <span class="text-xs font-mono text-green-400">$color-primary</span><span class="text-xs font-mono text-gray-400">: #F97030;</span>
                 </div>
                 <div class="bg-gray-900 rounded px-3 py-2">
                   <span class="text-xs font-mono text-green-400">$color-text</span><span class="text-xs font-mono text-gray-400">: #1a1a1a;</span>
@@ -980,7 +980,7 @@ tailwind.config = {
 
         <div class="bg-surface rounded-xl p-8 my-10 gs-child relative overflow-hidden insight-glow">
           <div class="absolute -right-4 -bottom-4 opacity-5">
-            <svg width="120" height="120" viewBox="0 0 24 24" fill="#16a34a"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            <svg width="120" height="120" viewBox="0 0 24 24" fill="#F97030"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
           </div>
           <div class="text-xs font-bold uppercase tracking-widest text-accent mb-3">Core Design Principle</div>
           <div class="font-display text-lg lg:text-xl font-semibold leading-snug">Treat design as infrastructure, not surface. Build systems that make compliance automatic and scaling effortless.</div>
@@ -1146,17 +1146,17 @@ tailwind.config = {
         <!-- Result cards -->
         <div class="my-10 grid grid-cols-1 md:grid-cols-3 gap-4 gs-child">
           <div class="bg-green-50 rounded-xl p-6 border border-green-200 text-center">
-            <svg class="mx-auto mb-3" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <svg class="mx-auto mb-3" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
             <div class="font-bold text-sm text-green-700 mb-1">24 Components &middot; 9 Semantic Tokens</div>
             <div class="text-xs text-secondary">The system&rsquo;s building blocks &mdash; adopted across 3 teams with zero added a11y effort.</div>
           </div>
           <div class="bg-green-50 rounded-xl p-6 border border-green-200 text-center">
-            <svg class="mx-auto mb-3" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <svg class="mx-auto mb-3" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
             <div class="font-bold text-sm text-accent mb-1">0 violations in axe-core audits, verified manually with NVDA + VoiceOver</div>
             <div class="text-xs text-secondary">Eliminated legacy accessibility debt, validated by zero violations in automated axe-core audits.</div>
           </div>
           <div class="bg-green-50 rounded-xl p-6 border border-green-200 text-center">
-            <svg class="mx-auto mb-3" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="1.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            <svg class="mx-auto mb-3" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="1.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
             <div class="font-bold text-sm text-green-700 mb-1">Fewer regressions, faster delivery</div>
             <div class="text-xs text-secondary">System adoption across 3 cross-functional teams drastically reduced engineering overhead, accelerated feature delivery, and sharply reduced UI-related frontend bugs.</div>
           </div>
@@ -1175,48 +1175,48 @@ tailwind.config = {
           </div>
           <!-- Body -->
           <div class="px-5 py-5 font-mono text-[11px] leading-relaxed" style="color:#6b7280;">
-            <div><span style="color:#16a34a;">$</span> <span style="color:#1f2937;">npx axe-core --standard wcag2aa ./components</span></div>
+            <div><span style="color:#F97030;">$</span> <span style="color:#1f2937;">npx axe-core --standard wcag2aa ./components</span></div>
             <div class="mt-3" style="color:#9ca3af;">Running accessibility audit on 24 components...</div>
             <div class="mt-4 grid grid-cols-2 gap-x-8 gap-y-3">
               <!-- Color Contrast -->
               <div class="flex items-center gap-2">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
                 <span style="color:#1f2937;">Color Contrast</span>
               </div>
-              <div style="color:#16a34a;">0 violations &middot; 4.5:1+ all text</div>
+              <div style="color:#F97030;">0 violations &middot; 4.5:1+ all text</div>
               <!-- Keyboard -->
               <div class="flex items-center gap-2">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
                 <span style="color:#1f2937;">Keyboard Flow</span>
               </div>
-              <div style="color:#16a34a;">24/24 components reachable</div>
+              <div style="color:#F97030;">24/24 components reachable</div>
               <!-- Screen Reader -->
               <div class="flex items-center gap-2">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
                 <span style="color:#1f2937;">Screen Reader</span>
               </div>
-              <div style="color:#16a34a;">NVDA + VoiceOver verified</div>
+              <div style="color:#F97030;">NVDA + VoiceOver verified</div>
               <!-- Focus -->
               <div class="flex items-center gap-2">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
                 <span style="color:#1f2937;">Focus Indicators</span>
               </div>
-              <div style="color:#16a34a;">Visible on all interactive elements</div>
+              <div style="color:#F97030;">Visible on all interactive elements</div>
               <!-- ARIA -->
               <div class="flex items-center gap-2">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
                 <span style="color:#1f2937;">ARIA Labels</span>
               </div>
-              <div style="color:#16a34a;">All roles &amp; landmarks defined</div>
+              <div style="color:#F97030;">All roles &amp; landmarks defined</div>
               <!-- Touch Targets -->
               <div class="flex items-center gap-2">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
                 <span style="color:#1f2937;">Touch Targets</span>
               </div>
-              <div style="color:#16a34a;">44px minimum &middot; spacing compliant</div>
+              <div style="color:#F97030;">44px minimum &middot; spacing compliant</div>
             </div>
             <div class="mt-5 pt-3" style="border-top:1px solid #f3f4f6;">
-              <span style="color:#16a34a;">&#10003; 6 checks passed</span><span style="color:#d1d5db;"> &middot; </span><span style="color:#ef4444;">0 failed</span><span style="color:#d1d5db;"> &middot; </span><span style="color:#f59e0b;">0 warnings</span>
+              <span style="color:#F97030;">&#10003; 6 checks passed</span><span style="color:#d1d5db;"> &middot; </span><span style="color:#ef4444;">0 failed</span><span style="color:#d1d5db;"> &middot; </span><span style="color:#f59e0b;">0 warnings</span>
             </div>
             <div class="mt-1" style="color:#9ca3af;">Completed in 2.4s &middot; Standard: WCAG 2.2 AA &middot; Tool: axe-core 4.8</div>
           </div>
@@ -1234,13 +1234,13 @@ tailwind.config = {
         <div class="my-10 grid grid-cols-1 md:grid-cols-2 gap-4 gs-child">
           <div class="flex items-start gap-3 p-4 rounded-xl bg-accent/5 border border-accent/10">
             <div class="w-6 h-6 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
             </div>
             <div class="text-xs text-secondary leading-relaxed"><strong class="text-primary">Designing for Resilience</strong> &mdash; This project shifted my perspective from designing for "the happy path" to designing for resilience in open-source and civic tech environments.</div>
           </div>
           <div class="flex items-start gap-3 p-4 rounded-xl bg-accent/5 border border-accent/10">
             <div class="w-6 h-6 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#F97030" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
             </div>
             <div class="text-xs text-secondary leading-relaxed"><strong class="text-primary">Infrastructure over Surface</strong> &mdash; By treating design as infrastructure, I enabled 3 cross-functional teams to ship accessible features without extra effort.</div>
           </div>
@@ -1482,7 +1482,7 @@ document.querySelectorAll('.hero-card').forEach(function(card) {
     var tiltX = (y - 0.5) * -10;
     var tiltY = (x - 0.5) * 10;
     card.style.transform = 'perspective(600px) rotateX(' + tiltX + 'deg) rotateY(' + tiltY + 'deg) scale(1.02)';
-    card.style.boxShadow = '0 20px 40px rgba(22,163,74,0.1), 0 8px 16px rgba(0,0,0,0.06)';
+    card.style.boxShadow = '0 20px 40px rgba(249,112,48,0.1), 0 8px 16px rgba(0,0,0,0.06)';
     card.style.setProperty('--mx', (x * 100) + '%');
     card.style.setProperty('--my', (y * 100) + '%');
   });
@@ -1545,7 +1545,7 @@ document.querySelectorAll('.hero-card').forEach(function(card) {
     current = Math.max(0, Math.min(total - 1, i));
     slides.style.transform = 'translateX(-' + (current * 100) + '%)';
     dots.forEach(function(d, idx) {
-      d.style.backgroundColor = idx === current ? '#16a34a' : '#d1d5db';
+      d.style.backgroundColor = idx === current ? '#F97030' : '#d1d5db';
     });
     prevBtn.disabled = current === 0;
     nextBtn.style.opacity = current === total - 1 ? '0.3' : '1';
