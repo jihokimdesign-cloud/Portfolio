@@ -21,19 +21,13 @@ import type { ChatResponse } from "../types";
 import { AnimationConfig } from "./AnimationConfig";
 
 const PRIMARY = "#0071e3";
-const ACCENT = "#F97030"; // 사이트 메인 오렌지 — 입력 바 쪽에서 사용
-const FOREGROUND = "var(--fg, #1d1d1f)";
-
-// 모달 내부는 라이브 사이트(jihokim.me)의 라이트 카드 팔레트 고정 —
-// 테마와 무관하게 흰 카드 (Jiho: "현재 포트폴리오의 콘텐츠 스타일")
-const M_TEXT = "#1d1d1f";
-const M_SECONDARY = "#515154";
-const M_MUTED = "#6e6e73";
-const M_LINE = "#e2e2e7";
-const M_ALT = "#f5f5f7";
-const GREEN = "#16a34a"; // 라이브 사이트의 success — 리크루터 액션
+const ACCENT = "#F97030"; // 사이트 메인 오렌지 — 리크루터 액션에 사용
 const SUCCESS = "#34c759"; // 매치 80%+
-const WARNING = "#d4a900"; // 매치 60%+ (흰 카드 위 가독 옐로)
+const WARNING = "#ffcc00"; // 매치 60%+
+const FOREGROUND = "var(--fg, #1d1d1f)";
+const MUTED = "var(--fg-muted, #6e6e73)";
+const SECONDARY = "var(--fg-secondary, #6e6e73)";
+const HAIRLINE = "var(--glass-border, #d2d2d7)";
 const FONT_STACK =
   '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif';
 const MONO_STACK =
@@ -76,15 +70,15 @@ function RecruiterSwitch({
       aria-checked={on}
       className="flex shrink-0 items-center gap-2 rounded-full px-3 py-1.5 text-[12px]"
       style={{
-        border: `1px solid ${on ? GREEN : M_LINE}`,
-        color: on ? M_TEXT : M_SECONDARY,
+        border: `1px solid ${on ? ACCENT : "var(--glass-border)"}`,
+        color: on ? FOREGROUND : SECONDARY,
       }}
     >
       Recruiter
       <span
         aria-hidden
         className="relative inline-block h-5 w-9 shrink-0 rounded-full transition-colors duration-200"
-        style={{ background: on ? GREEN : M_LINE }}
+        style={{ background: on ? ACCENT : "var(--hairline)" }}
       >
         <span
           className="absolute top-0.5 h-4 w-4 rounded-full bg-white transition-[left] duration-200"
@@ -262,29 +256,27 @@ export default function ChatWidget() {
                 ease: AnimationConfig.EASING,
               }}
               onClick={(e) => e.stopPropagation()}
-              className="flex max-h-[calc(100vh-160px)] w-full max-w-3xl flex-col overflow-hidden rounded-2xl"
+              className="liquid-glass flex max-h-[calc(100vh-160px)] w-full max-w-3xl flex-col overflow-hidden rounded-[22px]"
               style={{
                 transformOrigin: "bottom center",
-                background: "#ffffff",
-                color: M_TEXT,
-                border: `1px solid ${M_LINE}`,
-                boxShadow: "0 24px 60px rgba(0,0,0,.3)",
+                border: "1px solid var(--glass-border)",
+                boxShadow: "var(--liquid-rim), var(--glass-shadow)",
               }}
             >
               {/* header */}
               <div
                 className="flex items-start justify-between px-6 py-5 md:px-10 md:py-6"
-                style={{ borderBottom: `1px solid ${M_LINE}` }}
+                style={{ borderBottom: `1px solid ${HAIRLINE}` }}
               >
                 <div>
-                  <h2 className="text-xl font-bold md:text-2xl">
+                  <h2 className="text-xl font-semibold md:text-2xl">
                     {isRecruiter
                       ? "AI-Powered Job Match Analysis"
                       : "Chat with Jiho’s AI Assistant"}
                   </h2>
                   <p
                     className="mt-1 text-xs"
-                    style={{ color: M_MUTED, fontFamily: MONO_STACK }}
+                    style={{ color: MUTED, fontFamily: MONO_STACK }}
                   >
                     {isRecruiter
                       ? "Paste a job description to see how well I match your role"
@@ -297,7 +289,7 @@ export default function ChatWidget() {
                     onClick={() => setIsOpen(false)}
                     aria-label="Close chat"
                     className="rounded-full p-2 transition-opacity hover:opacity-70"
-                    style={{ color: M_MUTED }}
+                    style={{ color: MUTED }}
                   >
                     <X size={20} />
                   </button>
@@ -311,7 +303,7 @@ export default function ChatWidget() {
                   <div className="mb-5">
                     <p
                       className="mb-2.5 text-xs font-medium"
-                      style={{ color: M_MUTED, fontFamily: MONO_STACK }}
+                      style={{ color: MUTED, fontFamily: MONO_STACK }}
                     >
                       Highlight Specific Skills (Optional)
                     </p>
@@ -328,13 +320,13 @@ export default function ChatWidget() {
                               fontFamily: MONO_STACK,
                               ...(active
                                 ? {
-                                    background: "rgba(34,197,94,.13)",
-                                    color: GREEN,
-                                    boxShadow: "inset 0 0 0 1px rgba(34,197,94,.35)",
+                                    background: `${ACCENT}22`,
+                                    color: ACCENT,
+                                    boxShadow: `inset 0 0 0 1px ${ACCENT}55`,
                                   }
                                 : {
-                                    background: M_ALT,
-                                    color: M_SECONDARY,
+                                    border: `1px solid ${HAIRLINE}`,
+                                    color: SECONDARY,
                                   }),
                             }}
                           >
@@ -359,9 +351,8 @@ export default function ChatWidget() {
                         className="rounded-full px-4 py-2 text-[11px] font-medium transition-all hover:opacity-80"
                         style={{
                           fontFamily: MONO_STACK,
-                          border: `1px solid ${M_LINE}`,
-                          background: "#ffffff",
-                          color: M_SECONDARY,
+                          border: `1px solid ${HAIRLINE}`,
+                          color: SECONDARY,
                         }}
                       >
                         {action.label}
@@ -398,13 +389,13 @@ export default function ChatWidget() {
                     style={{
                       minHeight: 100,
                       maxHeight: 300,
-                      border: `1px solid ${M_LINE}`,
-                      background: M_ALT,
-                      color: M_TEXT,
+                      border: `1px solid ${HAIRLINE}`,
+                      background: "var(--bubble, rgba(127,127,127,.08))",
+                      color: FOREGROUND,
                     }}
                     onFocus={(e) =>
                       (e.currentTarget.style.boxShadow = `0 0 0 3px ${
-                        isRecruiter ? GREEN : PRIMARY
+                        isRecruiter ? ACCENT : PRIMARY
                       }33`)
                     }
                     onBlur={(e) => (e.currentTarget.style.boxShadow = "none")}
@@ -416,7 +407,7 @@ export default function ChatWidget() {
                   onClick={() => submit()}
                   disabled={!input.trim() || loading}
                   className="inline-flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold text-white transition-all active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
-                  style={{ background: isRecruiter ? GREEN : PRIMARY }}
+                  style={{ background: isRecruiter ? ACCENT : PRIMARY }}
                 >
                   {loading ? (
                     <>
@@ -437,18 +428,18 @@ export default function ChatWidget() {
                     <div
                       className="flex h-12 w-12 items-center justify-center rounded-full"
                       style={{
-                        background: `${isRecruiter ? GREEN : PRIMARY}14`,
+                        background: `${isRecruiter ? ACCENT : PRIMARY}14`,
                       }}
                     >
                       <Brain
                         size={24}
                         className="animate-pulse"
-                        style={{ color: isRecruiter ? GREEN : PRIMARY }}
+                        style={{ color: isRecruiter ? ACCENT : PRIMARY }}
                       />
                     </div>
                     <p
                       className="text-xs font-medium"
-                      style={{ color: M_MUTED, fontFamily: MONO_STACK }}
+                      style={{ color: MUTED, fontFamily: MONO_STACK }}
                     >
                       {isRecruiter ? "Analyzing job match..." : "Thinking..."}
                     </p>
@@ -496,16 +487,18 @@ export default function ChatWidget() {
                       className="rounded-xl p-6"
                       style={{
                         border: `1px solid ${
-                          matchTint ? `${matchTint}59` : M_LINE
+                          matchTint ? `${matchTint}59` : HAIRLINE
                         }`,
-                        background: matchTint ? `${matchTint}0d` : M_ALT,
+                        background: matchTint
+                          ? `${matchTint}0d`
+                          : "var(--bubble, rgba(127,127,127,.08))",
                       }}
                     >
                       {response.matchPercentage !== undefined && (
                         <div className="mb-4 flex items-center gap-3">
                           <Sparkles
                             size={20}
-                            style={{ color: matchTint ?? M_MUTED }}
+                            style={{ color: matchTint ?? MUTED }}
                           />
                           <span className="text-4xl font-bold">
                             {response.matchPercentage}%
@@ -515,8 +508,8 @@ export default function ChatWidget() {
                               className="rounded-full px-3 py-1 text-xs font-semibold"
                               style={{
                                 fontFamily: MONO_STACK,
-                                background: `${matchTint ?? M_MUTED}1a`,
-                                color: matchTint ?? M_MUTED,
+                                background: `${matchTint ?? MUTED}1a`,
+                                color: matchTint ?? MUTED,
                               }}
                             >
                               {response.matchLevel}
@@ -526,7 +519,7 @@ export default function ChatWidget() {
                       )}
                       <div
                         className="space-y-2 text-sm leading-relaxed"
-                        style={{ color: M_SECONDARY }}
+                        style={{ color: SECONDARY }}
                       >
                         {response.content.split("\n").map((line, i) =>
                           line.trim() ? (
@@ -552,8 +545,8 @@ export default function ChatWidget() {
                             className="rounded-full px-4 py-2 text-left text-[11px] font-medium transition-all hover:opacity-80"
                             style={{
                               fontFamily: MONO_STACK,
-                              border: `1px solid ${M_LINE}`,
-                              color: M_SECONDARY,
+                              border: `1px solid ${HAIRLINE}`,
+                              color: SECONDARY,
                             }}
                           >
                             {q}
