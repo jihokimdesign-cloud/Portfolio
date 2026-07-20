@@ -62,6 +62,7 @@ export default function ContactCard({
           position: "absolute",
           top: 14,
           left: 18,
+          zIndex: 1,
           color: "var(--fg-muted)",
           fontSize: 13,
           lineHeight: "15px",
@@ -128,6 +129,7 @@ export default function ContactCard({
           position: "absolute",
           top: 10,
           right: 10,
+          zIndex: 1,
           color: "var(--fg-muted)",
           transform: hovered ? "translate(4px, -4px)" : "translate(0, 0)",
           transition: "transform 200ms ease",
@@ -139,43 +141,43 @@ export default function ContactCard({
         />
       </svg>
 
-      {/* 사진 — 카드 하단에서 떠오름. 기본: 살짝 가라앉은 채 블러,
-          hover: photoLift만큼 상승하며 초점이 맞음 */}
+      {/* 사진 — 카드 전체 배경. 기본 블러, hover 시 살짝 초점 */}
       {image ? (
-        <div
-          style={{
-            position: "absolute",
-            left: "10%",
-            right: "10%",
-            bottom: 0,
-            height: "58%",
-            borderRadius: "10px 10px 0 0",
-            overflow: "hidden",
-            transform: hovered ? "translateY(0)" : `translateY(${photoLift}px)`,
-            transition: "transform 400ms cubic-bezier(0.22, 1, 0.36, 1)",
-            boxShadow: "rgba(0,0,0,0.12) 0px -4px 16px",
-          }}
-        >
+        <>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={image}
             alt=""
             draggable={false}
             style={{
+              position: "absolute",
+              inset: 0,
+              zIndex: 0,
               width: "100%",
               height: "100%",
               objectFit: "cover",
-              objectPosition: "top",
+              objectPosition: "center",
               display: "block",
               filter: hovered
                 ? `blur(${hoverBlur}px)`
                 : `blur(${blurAmount}px)`,
-              transform: hovered ? "scale(1)" : "scale(1.05)",
-              transition: "filter 300ms ease, transform 400ms ease",
+              transform: hovered ? "scale(1.06)" : "scale(1.1)",
+              transition: "filter 300ms ease, transform 500ms ease",
               userSelect: "none",
             }}
           />
-        </div>
+          {/* 텍스트 가독용 스크림 — 상단은 서피스색, 하단으로 투명 */}
+          <div
+            aria-hidden
+            style={{
+              position: "absolute",
+              inset: 0,
+              zIndex: 0,
+              background:
+                "linear-gradient(180deg, var(--surface) 0%, color-mix(in srgb, var(--surface) 78%, transparent) 28%, color-mix(in srgb, var(--surface) 30%, transparent) 60%, transparent 100%)",
+            }}
+          />
+        </>
       ) : (
         <div
           style={{

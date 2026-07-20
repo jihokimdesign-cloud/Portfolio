@@ -20,6 +20,7 @@ import { useWindowDimension } from "../../hooks/useWindowDimension";
 import ReactiveTapArea from "../ReactiveTapArea/ReactiveTapArea";
 import { AnimationConfig } from "../AnimationConfig";
 import { useMotionValueSwitch } from "../../hooks/useMotionValueSwitch";
+import { useSiteTheme } from "../../hooks/useSiteTheme";
 
 type Props = {
   projectStyle: ProjectStyle;
@@ -49,6 +50,8 @@ const ProjectGridItem = ({
   shouldHideTitles,
 }: Props) => {
   const [isImageLoaded, setIsImageLoaded] = useState(!!projectInfo.thumbHtml);
+  const siteTheme = useSiteTheme();
+  const themeThumbSrc = projectInfo.thumbHtml?.replace("{theme}", siteTheme);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
   const hasVideo = projectInfo.previewVideo !== undefined;
   const isLoading = useMemo(
@@ -157,9 +160,10 @@ const ProjectGridItem = ({
               }}
             >
               {projectInfo.thumbHtml ? (
-                // 애니메이션 HTML 썸네일 — 타일이 이미 16:9라 그대로 채운다
+                // 애니메이션 HTML 썸네일 — {theme} 토큰은 테마별 파일로 스위칭
                 <iframe
-                  src={projectInfo.thumbHtml}
+                  key={themeThumbSrc}
+                  src={themeThumbSrc}
                   title={projectInfo.title}
                   scrolling="no"
                   className="block w-full border-0"
@@ -201,9 +205,9 @@ const ProjectGridItem = ({
             </motion.div>
           </div>
 
-          {/* 타이틀 / 카테고리 — 박스 아래, 좌: 타이틀 우: 카테고리 */}
+          {/* 타이틀 · 카테고리 — 박스 아래, 가까이 묶어서(좌우로 벌리지 않음) */}
           {!shouldHideTitles && (
-            <div className="mt-3 flex items-start justify-between gap-4 px-1">
+            <div className="mt-2.5 flex items-baseline justify-start gap-3 px-1">
               <span
                 className="text-sm leading-tight lg:text-base"
                 style={{ color: "var(--title)" }}

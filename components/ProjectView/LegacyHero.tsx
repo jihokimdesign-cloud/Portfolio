@@ -1,6 +1,7 @@
 // 케이스 스터디 히어로 — 커버 이미지를 위에 두고, 그 아래 브랜드 로고 +
 // 타이틀/스코프/태그를 중앙에 얹는다(오버레이 아님, 옛 포트폴리오 스타일).
 import { ProjectInfo } from "../../lib/ProjectInfo";
+import { useSiteTheme } from "../../hooks/useSiteTheme";
 
 // 브랜드 로고(있는 케이스만) — /public/logos
 const BRAND_LOGO: Record<string, string> = {
@@ -16,14 +17,17 @@ type Props = {
 
 export default function LegacyHero({ projectInfo, coverImage }: Props) {
   const logo = BRAND_LOGO[projectInfo.slug];
+  const theme = useSiteTheme();
+  const heroSrc = projectInfo.heroHtml?.replace("{theme}", theme);
   return (
     <div className="mx-4 mt-2 lg:mx-8">
       {/* 히어로 — HTML(heroHtml) 또는 커버 이미지. 넉넉한 높이 */}
       <div className="relative overflow-hidden rounded-[1.25rem]">
         <div className="relative h-[86vh] min-h-[540px] w-full">
-          {projectInfo.heroHtml ? (
+          {heroSrc ? (
             <iframe
-              src={projectInfo.heroHtml}
+              key={heroSrc}
+              src={heroSrc}
               title={projectInfo.title}
               scrolling="no"
               className="absolute inset-0 h-full w-full border-0"

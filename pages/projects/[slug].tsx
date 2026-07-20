@@ -173,8 +173,8 @@ export default function Post({
               coverImage={getProjectCover(projectInfo.slug)}
               slugTitleMap={slugTitleMap}
             >
-              {/* legacy: 커버 이미지 위에 타이틀 오버레이 히어로. 그 외엔 기존 헤더 */}
-              {meta.legacyHtml && meta.heroImage ? (
+              {/* legacy: 커버 이미지/HTML 히어로. 그 외엔 기존 헤더 */}
+              {meta.legacyHtml && (meta.heroImage || meta.heroHtml) ? (
                 <LegacyHero
                   projectInfo={projectInfo}
                   coverImage={meta.heroImage}
