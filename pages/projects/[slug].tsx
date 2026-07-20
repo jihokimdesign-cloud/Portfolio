@@ -145,13 +145,18 @@ export default function Post({
           />
         </Head>
       )}
-      {/* 사이트 공통 타이틀 폰트 (히어로 타이틀용) */}
+      {/* 사이트 공통 타이틀 폰트 + 케이스 스터디 배경을 본문과 통일
+          (기본 캔버스 #f5f5f7 회색이 히어로 주변에 보였음 → 본문색과 맞춤) */}
       {meta.legacyHtml && (
         <Head>
           <link
             href="https://fonts.googleapis.com/css2?family=TikTok+Sans:wght@400;500&display=swap"
             rel="stylesheet"
           />
+          <style>{`
+            html[data-theme="light"] body { background-color: #ffffff !important; }
+            html[data-theme="dark"] body { background-color: #0e0e10 !important; }
+          `}</style>
         </Head>
       )}
       <VideoHoverContextProvider>
