@@ -81,22 +81,23 @@ const ProjectLinkCard = ({
               ease: AnimationConfig.EASING,
             }}
           >
-            {/* 다음 프로젝트 액센트로 부드럽게 물드는 전환 리빌 */}
+            {/* 다음 프로젝트 액센트로 물드는 전환 리빌 — 카드 상단에서 강하고
+                아래로 스크롤할수록 캔버스로 부드럽게 사라진다(하드 엣지 없음) */}
             <div
               aria-hidden
-              className="pointer-events-none absolute inset-x-0 top-0 h-[32em]"
+              className="pointer-events-none absolute inset-0"
               style={{
-                background: `linear-gradient(180deg, transparent 0%, ${projectStyle.accent} 100%)`,
-                opacity: 0.14,
+                background: `linear-gradient(180deg, ${projectStyle.accent} 0%, transparent 55%)`,
+                opacity: 0.16,
               }}
             />
             <div
               aria-hidden
-              className="pointer-events-none absolute left-1/2 top-[7em] h-[22em] w-[22em] -translate-x-1/2 rounded-full"
+              className="pointer-events-none absolute left-1/2 top-[6em] h-[26em] w-[26em] -translate-x-1/2 rounded-full"
               style={{
                 background: projectStyle.accent,
-                opacity: 0.1,
-                filter: "blur(80px)",
+                opacity: 0.12,
+                filter: "blur(90px)",
               }}
             />
             {/* "Next project" eyebrow */}
