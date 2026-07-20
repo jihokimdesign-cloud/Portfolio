@@ -37,9 +37,26 @@ const labelStyle: React.CSSProperties = {
 /* 플로팅 챗 입력 — 나브와 같은 리퀴드 글래스 필. 히어로(#landing-hero)가
    보이는 동안 하단 중앙에 떠 있고, 지나치면 사라진다(그 자리는 ChatWidget
    FAB이 이어받음). 제출하면 커스텀 이벤트로 패널을 열고 질문을 보낸다. */
+const CHAT_PROMPTS = [
+  "Tell me about the Lepal project...",
+  "What's your design process?",
+  "Are you open to new roles?",
+  "How do you prototype with code?",
+];
+
 function HeroChatBar() {
   const [value, setValue] = useState("");
   const [heroInView, setHeroInView] = useState(true);
+  const [promptIndex, setPromptIndex] = useState(0);
+
+  // 라이브 사이트처럼 플레이스홀더가 순환한다
+  useEffect(() => {
+    const t = setInterval(
+      () => setPromptIndex((i) => (i + 1) % CHAT_PROMPTS.length),
+      3500
+    );
+    return () => clearInterval(t);
+  }, []);
   // ScrollContainer의 transform 때문에 내부 fixed는 뷰포트에 안 붙는다 —
   // ChatWidget과 같은 이유로 body 포털 필수
   const [mounted, setMounted] = useState(false);
@@ -98,7 +115,7 @@ function HeroChatBar() {
               })
             )
           }
-          placeholder="Ask my AI anything — my work, process, availability…"
+          placeholder={CHAT_PROMPTS[promptIndex]}
           aria-label="Ask Jiho's AI"
           className="flex-1 bg-transparent text-[14px] focus:outline-none"
           style={{ color: "var(--fg)" }}

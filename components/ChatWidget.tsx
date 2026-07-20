@@ -1,7 +1,18 @@
+// 라이브 사이트(jihokim.me)의 ChatModal 구조를 리퀴드 글래스로 재해석한 버전.
+// 중앙 대형 모달 + 백드롭, 퀵 액션은 입력창 프리필, 원샷 응답 카드(매치 %는
+// 점수별 색상), 리크루터 모드는 스킬 필 멀티셀렉트. 스레드형 챗이 아니다.
 import { useState, useRef, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageCircle, X, ArrowUp } from "lucide-react";
+import {
+  MessageCircle,
+  X,
+  Send,
+  Brain,
+  Loader2,
+  AlertCircle,
+  Sparkles,
+} from "lucide-react";
 import {
   QUICK_ACTIONS_GENERAL,
   QUICK_ACTIONS_RECRUITER,
@@ -10,16 +21,18 @@ import {
 import type { ChatResponse } from "../types";
 import { AnimationConfig } from "./AnimationConfig";
 
-/* DESIGN.md tokens (Apple-style ground truth) — theme-aware via CSS vars */
 const PRIMARY = "#0071e3";
+const ACCENT = "#F97030"; // 사이트 메인 오렌지 — 리크루터 액션에 사용
+const SUCCESS = "#34c759"; // 매치 80%+
+const WARNING = "#ffcc00"; // 매치 60%+
 const FOREGROUND = "var(--fg, #1d1d1f)";
 const MUTED = "var(--fg-muted, #6e6e73)";
-const CANVAS_LIGHT = "var(--bubble, #f5f5f7)";
-const HAIRLINE = "var(--hairline, #d2d2d7)";
-const LINK_LIGHT = "var(--link, #0066cc)";
-const SURFACE = "var(--surface, #ffffff)";
+const SECONDARY = "var(--fg-secondary, #6e6e73)";
+const HAIRLINE = "var(--glass-border, #d2d2d7)";
 const FONT_STACK =
   '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif';
+const MONO_STACK =
+  'ui-monospace, "SF Mono", SFMono-Regular, Menlo, monospace';
 
 /* **bold** segments from the API render as accent chips */
 function RichText({ text }: { text: string }) {
@@ -43,12 +56,39 @@ function RichText({ text }: { text: string }) {
   );
 }
 
-type Message = {
-  role: "user" | "assistant";
-  content: string;
-  matchPercentage?: number;
-  matchLevel?: string;
-};
+/* 모달 중앙의 리크루터 스위치 — 나브 토글과 같은 문법 */
+function RecruiterSwitch({
+  on,
+  onChange,
+}: {
+  on: boolean;
+  onChange: (v: boolean) => void;
+}) {
+  return (
+    <button
+      onClick={() => onChange(!on)}
+      role="switch"
+      aria-checked={on}
+      className="flex items-center gap-2.5 rounded-full px-4 py-2 text-[13px]"
+      style={{
+        border: `1px solid ${on ? ACCENT : "var(--glass-border)"}`,
+        color: on ? FOREGROUND : SECONDARY,
+      }}
+    >
+      Recruiter mode
+      <span
+        aria-hidden
+        className="relative inline-block h-5 w-9 shrink-0 rounded-full transition-colors duration-200"
+        style={{ background: on ? ACCENT : "var(--hairline)" }}
+      >
+        <span
+          className="absolute top-0.5 h-4 w-4 rounded-full bg-white transition-[left] duration-200"
+          style={{ left: on ? 18 : 2, boxShadow: "0 1px 3px rgba(0,0,0,.25)" }}
+        />
+      </span>
+    </button>
+  );
+}
 
 export default function ChatWidget() {
   const [mounted, setMounted] = useState(false);
@@ -57,11 +97,10 @@ export default function ChatWidget() {
   const [isRecruiter, setIsRecruiter] = useState(false);
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
   const [input, setInput] = useState("");
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [followUps, setFollowUps] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
+  const [response, setResponse] = useState<ChatResponse | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => setMounted(true), []);
 
@@ -85,7 +124,7 @@ export default function ChatWidget() {
   }, []);
 
   useEffect(() => {
-    if (isOpen) setTimeout(() => textareaRef.current?.focus(), 250);
+    if (isOpen) setTimeout(() => textareaRef.current?.focus(), 300);
   }, [isOpen]);
 
   useEffect(() => {
@@ -96,53 +135,46 @@ export default function ChatWidget() {
     return () => window.removeEventListener("keydown", onKey);
   }, [isOpen]);
 
+  // 닫거나 모드를 바꾸면 원샷 응답 초기화 (라이브 사이트와 동일)
   useEffect(() => {
-    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight });
-  }, [messages, loading]);
+    if (!isOpen) {
+      setResponse(null);
+      setError(null);
+    }
+  }, [isOpen]);
+  useEffect(() => {
+    setResponse(null);
+    setError(null);
+  }, [isRecruiter]);
 
-  const send = useCallback(
-    async (text: string) => {
-      if (!text.trim() || loading) return;
-      setInput("");
-      setFollowUps([]);
-      setMessages((m) => [...m, { role: "user", content: text }]);
+  const submit = useCallback(
+    async (text?: string) => {
+      const message = (text ?? input).trim();
+      if (!message || loading) return;
       setLoading(true);
+      setError(null);
+      setResponse(null);
       try {
         const res = await fetch("/api/chat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            message: text,
+            message,
             mode: isRecruiter ? "recruiter" : "general",
             selectedSkills: isRecruiter ? selectedSkills : [],
           }),
         });
         if (!res.ok) throw new Error();
-        const data: ChatResponse = await res.json();
-        setMessages((m) => [
-          ...m,
-          {
-            role: "assistant",
-            content: data.content,
-            matchPercentage: data.matchPercentage,
-            matchLevel: data.matchLevel,
-          },
-        ]);
-        setFollowUps(data.followUps ?? []);
+        setResponse(await res.json());
       } catch {
-        setMessages((m) => [
-          ...m,
-          {
-            role: "assistant",
-            content:
-              "Hmm, I couldn't reach the assistant just now. Please try again in a moment, or email me directly.",
-          },
-        ]);
+        setError(
+          "Unable to reach the AI assistant right now. Please try again, or email me directly."
+        );
       } finally {
         setLoading(false);
       }
     },
-    [loading, isRecruiter, selectedSkills]
+    [input, loading, isRecruiter, selectedSkills]
   );
 
   const toggleSkill = (skill: string) =>
@@ -151,7 +183,7 @@ export default function ChatWidget() {
     );
 
   // 히어로(#landing-hero)가 보이는 동안엔 플로팅 챗 바가 대신 떠 있으니
-  // FAB/힌트 숨김 — 히어로를 지나면 지금처럼 우하단 플로팅으로 나타난다
+  // FAB/힌트 숨김 — 히어로를 지나면 우하단 플로팅으로 나타난다
   const [heroBarInView, setHeroBarInView] = useState(false);
   useEffect(() => {
     if (!mounted) return;
@@ -165,22 +197,23 @@ export default function ChatWidget() {
     return () => io.disconnect();
   }, [mounted]);
 
-  // 히어로 입력 클릭/제출 → 패널을 히어로 바 위 중앙에 열고, 질문이 있으면 바로 전송
-  const [fromHero, setFromHero] = useState(false);
+  // 히어로 입력/나브에서 열기 — 질문이 있으면 바로 제출
   useEffect(() => {
     const onOpen = (e: Event) => {
       dismissHint();
       const detail = (e as CustomEvent).detail;
-      setFromHero(detail?.source === "hero");
       if (detail?.mode === "recruiter") setIsRecruiter(true);
       setIsOpen(true);
-      if (detail?.message) send(detail.message);
+      if (detail?.message) {
+        setInput(detail.message);
+        submit(detail.message);
+      }
     };
     window.addEventListener("jiho-chat-open", onOpen);
     return () => window.removeEventListener("jiho-chat-open", onOpen);
-  }, [send, dismissHint]);
+  }, [submit, dismissHint]);
 
-  // 나브 토글 ↔ 패널 내부 모드 전환 양방향 동기화
+  // 나브 토글 ↔ 모달 내부 스위치 양방향 동기화
   useEffect(() => {
     const onMode = (e: Event) =>
       setIsRecruiter(Boolean((e as CustomEvent).detail?.recruiter));
@@ -197,250 +230,354 @@ export default function ChatWidget() {
 
   if (!mounted) return null;
 
+  const quickActions = isRecruiter
+    ? QUICK_ACTIONS_RECRUITER
+    : QUICK_ACTIONS_GENERAL;
+  const matchTint =
+    response?.matchPercentage !== undefined
+      ? response.matchPercentage >= 80
+        ? SUCCESS
+        : response.matchPercentage >= 60
+        ? WARNING
+        : null
+      : null;
+
   return createPortal(
     <div style={{ fontFamily: FONT_STACK, color: FOREGROUND }}>
-      {/* ── Panel ── */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: 16, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 16, scale: 0.98 }}
-            transition={{
-              duration: AnimationConfig.FAST,
-              ease: AnimationConfig.EASING,
-            }}
-            style={{
-              transformOrigin: fromHero ? "bottom center" : "bottom right",
-              boxShadow: "0 24px 60px rgba(0,0,0,.35)",
-              background: SURFACE,
-            }}
-            className={`fixed bottom-24 z-[201] flex w-[min(24rem,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-[18px] ${
-              fromHero ? "inset-x-0 mx-auto" : "right-5"
-            }`}
-          >
-            {/* header */}
-            <div
-              className="flex items-start justify-between px-5 py-4"
-              style={{ borderBottom: `1px solid ${HAIRLINE}` }}
-            >
-              <div>
-                <div className="flex items-center gap-2 text-[15px] font-semibold">
-                  {isRecruiter ? "AI Job Match Analysis" : "Chat with Jiho's AI"}
-                  {isRecruiter && (
-                    <span
-                      className="rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide"
-                      style={{ background: `${PRIMARY}14`, color: PRIMARY }}
-                    >
-                      Recruiter
-                    </span>
-                  )}
-                </div>
-                <div className="mt-0.5 text-[13px]" style={{ color: MUTED }}>
-                  {isRecruiter
-                    ? "Paste a job description to see how I match"
-                    : "Ask anything about my work, skills, or experience"}
-                </div>
-              </div>
-              <button
-                onClick={() => setIsOpen(false)}
-                aria-label="Close chat"
-                className="rounded-full p-1 transition-colors"
-                style={{ color: MUTED }}
-              >
-                <X size={16} />
-              </button>
-            </div>
+          <>
+            {/* ── Backdrop ── */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: AnimationConfig.FAST }}
+              className="fixed inset-0 z-[200]"
+              style={{ background: "rgba(0,0,0,.45)" }}
+              onClick={() => setIsOpen(false)}
+            />
 
-            {/* messages */}
+            {/* ── Modal — 리퀴드 글래스. framer가 transform을 덮어쓰므로
+                 translate 센터링 대신 flex 래퍼로 중앙 정렬 ── */}
             <div
-              ref={scrollRef}
-              className="flex max-h-[45vh] min-h-[180px] flex-col gap-2.5 overflow-y-auto px-4 py-4 text-[14px] leading-relaxed"
+              className="fixed inset-0 z-[201] flex items-center justify-center p-4"
+              onClick={() => setIsOpen(false)}
             >
-              {messages.length === 0 && !loading && (
-                <>
-                  {isRecruiter && (
-                    <div>
-                      <div
-                        className="mb-2 text-[11px] font-semibold uppercase tracking-wide"
-                        style={{ color: MUTED }}
-                      >
-                        Highlight Specific Skills (Optional)
-                      </div>
-                      <div className="flex flex-wrap gap-1.5">
-                        {SKILL_PILLS.map((skill) => {
-                          const active = selectedSkills.includes(skill);
-                          return (
-                            <button
-                              key={skill}
-                              onClick={() => toggleSkill(skill)}
-                              aria-pressed={active}
-                              className="rounded-full px-3 py-1.5 text-[12px] transition-colors"
-                              style={
-                                active
-                                  ? { background: PRIMARY, color: "#fff" }
-                                  : {
-                                      border: `1px solid ${HAIRLINE}`,
-                                      color: MUTED,
-                                    }
-                              }
-                            >
-                              {skill}
-                            </button>
-                          );
-                        })}
-                      </div>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.96, y: 20 }}
+              transition={{
+                duration: AnimationConfig.NORMAL,
+                ease: AnimationConfig.EASING,
+              }}
+              onClick={(e) => e.stopPropagation()}
+              className="liquid-glass flex max-h-[85vh] w-[min(56rem,100%)] flex-col overflow-hidden rounded-[22px]"
+              style={{
+                border: "1px solid var(--glass-border)",
+                boxShadow: "var(--liquid-rim), var(--glass-shadow)",
+              }}
+            >
+              {/* header */}
+              <div
+                className="flex items-start justify-between px-6 py-5 md:px-10 md:py-6"
+                style={{ borderBottom: `1px solid ${HAIRLINE}` }}
+              >
+                <div>
+                  <h2 className="text-xl font-semibold md:text-2xl">
+                    {isRecruiter
+                      ? "AI-Powered Job Match Analysis"
+                      : "Chat with Jiho’s AI Assistant"}
+                  </h2>
+                  <p
+                    className="mt-1 text-xs"
+                    style={{ color: MUTED, fontFamily: MONO_STACK }}
+                  >
+                    {isRecruiter
+                      ? "Paste a job description to see how well I match your role"
+                      : "Ask anything about my work, skills, or experience"}
+                  </p>
+                </div>
+                <button
+                  onClick={() => setIsOpen(false)}
+                  aria-label="Close chat"
+                  className="rounded-full p-2 transition-opacity hover:opacity-70"
+                  style={{ color: MUTED }}
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              {/* body */}
+              <div className="flex-1 overflow-y-auto px-6 py-5 md:px-10 md:py-6">
+                {/* recruiter switch — 가운데 */}
+                <div className="mb-6 flex justify-center">
+                  <RecruiterSwitch on={isRecruiter} onChange={setIsRecruiter} />
+                </div>
+
+                {/* skill pills — recruiter only */}
+                {isRecruiter && (
+                  <div className="mb-5">
+                    <p
+                      className="mb-2.5 text-xs font-medium"
+                      style={{ color: MUTED, fontFamily: MONO_STACK }}
+                    >
+                      Highlight Specific Skills (Optional)
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {SKILL_PILLS.map((skill) => {
+                        const active = selectedSkills.includes(skill);
+                        return (
+                          <button
+                            key={skill}
+                            onClick={() => toggleSkill(skill)}
+                            aria-pressed={active}
+                            className="rounded-full px-3.5 py-1.5 text-[11px] font-medium transition-all"
+                            style={{
+                              fontFamily: MONO_STACK,
+                              ...(active
+                                ? {
+                                    background: `${ACCENT}22`,
+                                    color: ACCENT,
+                                    boxShadow: `inset 0 0 0 1px ${ACCENT}55`,
+                                  }
+                                : {
+                                    border: `1px solid ${HAIRLINE}`,
+                                    color: SECONDARY,
+                                  }),
+                            }}
+                          >
+                            {skill}
+                          </button>
+                        );
+                      })}
                     </div>
-                  )}
-                  <div className="flex flex-wrap gap-1.5">
-                    {(isRecruiter
-                      ? QUICK_ACTIONS_RECRUITER
-                      : QUICK_ACTIONS_GENERAL
-                    ).map((a) => (
+                  </div>
+                )}
+
+                {/* quick actions — 입력창 프리필 (라이브 사이트와 동일) */}
+                {!response && !loading && (
+                  <div className="mb-5 flex flex-wrap gap-2">
+                    {quickActions.map((action) => (
                       <button
-                        key={a.label}
-                        onClick={() => send(a.prompt)}
-                        className="rounded-full px-3 py-1.5 text-[12px] transition-colors"
+                        key={action.label}
+                        onClick={() => {
+                          setInput(action.prompt);
+                          textareaRef.current?.focus();
+                        }}
+                        className="rounded-full px-4 py-2 text-[11px] font-medium transition-all hover:opacity-80"
                         style={{
+                          fontFamily: MONO_STACK,
                           border: `1px solid ${HAIRLINE}`,
-                          color: LINK_LIGHT,
+                          color: SECONDARY,
                         }}
                       >
-                        {a.label}
+                        {action.label}
                       </button>
                     ))}
                   </div>
-                </>
-              )}
+                )}
 
-              {messages.map((msg, i) =>
-                msg.role === "user" ? (
-                  <div
-                    key={i}
-                    className="max-w-[85%] self-end rounded-[18px] rounded-br-[6px] px-4 py-2.5 text-white"
-                    style={{ background: PRIMARY }}
+                {/* input */}
+                <div className="mb-5">
+                  <label
+                    className="mb-2 block text-xs font-medium"
+                    style={{ fontFamily: MONO_STACK }}
                   >
-                    {msg.content}
-                  </div>
-                ) : (
-                  <div
-                    key={i}
-                    className="max-w-[92%] self-start rounded-[18px] rounded-bl-[6px] px-4 py-2.5"
-                    style={{ background: CANVAS_LIGHT }}
-                  >
-                    {msg.matchPercentage !== undefined && (
-                      <div className="mb-2 flex items-center gap-2">
-                        <span className="text-2xl font-semibold">
-                          {msg.matchPercentage}%
-                        </span>
-                        <span
-                          className="rounded-full px-2.5 py-0.5 text-[11px] font-semibold"
-                          style={{ background: `${PRIMARY}14`, color: PRIMARY }}
-                        >
-                          {msg.matchLevel}
-                        </span>
-                      </div>
-                    )}
-                    {msg.content.split("\n").map((line, j) =>
-                      line.trim() ? (
-                        <p key={j} className={j > 0 ? "mt-1.5" : ""}>
-                          <RichText text={line} />
-                        </p>
-                      ) : null
-                    )}
-                  </div>
-                )
-              )}
-
-              {loading && (
-                <div
-                  className="flex gap-1.5 self-start rounded-[18px] rounded-bl-[6px] px-4 py-3.5"
-                  style={{ background: CANVAS_LIGHT }}
-                >
-                  {[0, 1, 2].map((d) => (
-                    <span
-                      key={d}
-                      className="h-1.5 w-1.5 animate-pulse rounded-full"
-                      style={{
-                        background: MUTED,
-                        animationDelay: `${d * 0.2}s`,
-                      }}
-                    />
-                  ))}
+                    {isRecruiter ? "Job Description" : "Your Question"}
+                  </label>
+                  <textarea
+                    ref={textareaRef}
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && !e.shiftKey) {
+                        e.preventDefault();
+                        submit();
+                      }
+                    }}
+                    placeholder={
+                      isRecruiter
+                        ? "Paste the job description here..."
+                        : "Type your question..."
+                    }
+                    rows={4}
+                    className="w-full resize-none rounded-xl px-4 py-3 text-sm transition-shadow focus:outline-none"
+                    style={{
+                      minHeight: 100,
+                      maxHeight: 300,
+                      border: `1px solid ${HAIRLINE}`,
+                      background: "var(--bubble, rgba(127,127,127,.08))",
+                      color: FOREGROUND,
+                    }}
+                    onFocus={(e) =>
+                      (e.currentTarget.style.boxShadow = `0 0 0 3px ${
+                        isRecruiter ? ACCENT : PRIMARY
+                      }33`)
+                    }
+                    onBlur={(e) => (e.currentTarget.style.boxShadow = "none")}
+                  />
                 </div>
-              )}
 
-              {followUps.length > 0 && !loading && (
-                <div className="flex flex-wrap gap-1.5">
-                  {followUps.map((q, i) => (
-                    <button
-                      key={i}
-                      onClick={() => send(q)}
-                      className="rounded-full px-3 py-1.5 text-left text-[12px] transition-colors"
+                {/* submit */}
+                <button
+                  onClick={() => submit()}
+                  disabled={!input.trim() || loading}
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold text-white transition-all active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
+                  style={{ background: isRecruiter ? ACCENT : PRIMARY }}
+                >
+                  {loading ? (
+                    <>
+                      <Loader2 size={16} className="animate-spin" />
+                      Analyzing...
+                    </>
+                  ) : (
+                    <>
+                      <Send size={16} />
+                      {isRecruiter ? "Analyze Match" : "Send"}
+                    </>
+                  )}
+                </button>
+
+                {/* loading */}
+                {loading && (
+                  <div className="mt-6 flex flex-col items-center gap-3 py-8">
+                    <div
+                      className="flex h-12 w-12 items-center justify-center rounded-full"
                       style={{
-                        border: `1px solid ${HAIRLINE}`,
-                        color: LINK_LIGHT,
+                        background: `${isRecruiter ? ACCENT : PRIMARY}14`,
                       }}
                     >
-                      {q}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
+                      <Brain
+                        size={24}
+                        className="animate-pulse"
+                        style={{ color: isRecruiter ? ACCENT : PRIMARY }}
+                      />
+                    </div>
+                    <p
+                      className="text-xs font-medium"
+                      style={{ color: MUTED, fontFamily: MONO_STACK }}
+                    >
+                      {isRecruiter ? "Analyzing job match..." : "Thinking..."}
+                    </p>
+                  </div>
+                )}
 
-            {/* input */}
-            <div
-              className="px-4 py-3"
-              style={{ borderTop: `1px solid ${HAIRLINE}` }}
-            >
-              <div className="flex items-end gap-2">
-                <textarea
-                  ref={textareaRef}
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" && !e.shiftKey) {
-                      e.preventDefault();
-                      send(input);
-                    }
-                  }}
-                  placeholder={
-                    isRecruiter
-                      ? "Paste a job description..."
-                      : "Type a question..."
-                  }
-                  rows={1}
-                  className="max-h-28 min-h-[40px] flex-1 resize-none rounded-[8px] px-3 py-2.5 text-[14px] transition-shadow focus:outline-none"
-                  style={{
-                    border: `1px solid ${HAIRLINE}`,
-                    background: SURFACE,
-                    color: FOREGROUND,
-                  }}
-                  onFocus={(e) =>
-                    (e.currentTarget.style.boxShadow = `0 0 0 3px ${PRIMARY}33`)
-                  }
-                  onBlur={(e) => (e.currentTarget.style.boxShadow = "none")}
-                />
-                <button
-                  onClick={() => send(input)}
-                  disabled={!input.trim() || loading}
-                  aria-label="Send message"
-                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-white transition-transform active:scale-95 disabled:opacity-30"
-                  style={{ background: PRIMARY }}
-                >
-                  <ArrowUp size={16} />
-                </button>
+                {/* error */}
+                {error && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mt-6 flex items-start gap-3 rounded-xl p-4"
+                    style={{
+                      border: "1px solid rgba(255,59,48,.35)",
+                      background: "rgba(255,59,48,.08)",
+                    }}
+                  >
+                    <AlertCircle
+                      size={18}
+                      className="mt-0.5 shrink-0"
+                      style={{ color: "#ff3b30" }}
+                    />
+                    <div>
+                      <p className="text-sm">{error}</p>
+                      <button
+                        onClick={() => submit()}
+                        className="mt-2 text-xs font-semibold underline"
+                        style={{ color: "#ff3b30", fontFamily: MONO_STACK }}
+                      >
+                        Try again
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* response — 원샷 카드 */}
+                {response && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4 }}
+                    className="mt-6"
+                  >
+                    <div
+                      className="rounded-xl p-6"
+                      style={{
+                        border: `1px solid ${
+                          matchTint ? `${matchTint}59` : HAIRLINE
+                        }`,
+                        background: matchTint
+                          ? `${matchTint}0d`
+                          : "var(--bubble, rgba(127,127,127,.08))",
+                      }}
+                    >
+                      {response.matchPercentage !== undefined && (
+                        <div className="mb-4 flex items-center gap-3">
+                          <Sparkles
+                            size={20}
+                            style={{ color: matchTint ?? MUTED }}
+                          />
+                          <span className="text-4xl font-bold">
+                            {response.matchPercentage}%
+                          </span>
+                          {response.matchLevel && (
+                            <span
+                              className="rounded-full px-3 py-1 text-xs font-semibold"
+                              style={{
+                                fontFamily: MONO_STACK,
+                                background: `${matchTint ?? MUTED}1a`,
+                                color: matchTint ?? MUTED,
+                              }}
+                            >
+                              {response.matchLevel}
+                            </span>
+                          )}
+                        </div>
+                      )}
+                      <div
+                        className="space-y-2 text-sm leading-relaxed"
+                        style={{ color: SECONDARY }}
+                      >
+                        {response.content.split("\n").map((line, i) =>
+                          line.trim() ? (
+                            <p key={i}>
+                              <RichText text={line} />
+                            </p>
+                          ) : null
+                        )}
+                      </div>
+                    </div>
+
+                    {/* follow-ups — 프리필 칩 */}
+                    {response.followUps && response.followUps.length > 0 && (
+                      <div className="mt-4 flex flex-wrap gap-2">
+                        {response.followUps.map((q, i) => (
+                          <button
+                            key={i}
+                            onClick={() => {
+                              setInput(q);
+                              setResponse(null);
+                              textareaRef.current?.focus();
+                            }}
+                            className="rounded-full px-4 py-2 text-left text-[11px] font-medium transition-all hover:opacity-80"
+                            style={{
+                              fontFamily: MONO_STACK,
+                              border: `1px solid ${HAIRLINE}`,
+                              color: SECONDARY,
+                            }}
+                          >
+                            {q}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </motion.div>
+                )}
               </div>
-              <button
-                onClick={() => setIsRecruiter((v) => !v)}
-                className="mt-2 text-[12px] transition-colors"
-                style={{ color: LINK_LIGHT }}
-              >
-                {isRecruiter ? "← Back to chat" : "Recruiter →"}
-              </button>
+            </motion.div>
             </div>
-          </motion.div>
+          </>
         )}
       </AnimatePresence>
 
@@ -462,7 +599,7 @@ export default function ChatWidget() {
             className="fixed bottom-[30px] right-[76px] z-[201] whitespace-nowrap rounded-full px-4 py-2 text-[13px]"
             style={{
               color: FOREGROUND,
-              background: SURFACE,
+              background: "var(--surface)",
               boxShadow: "0 8px 24px rgba(0,0,0,.25)",
             }}
           >
