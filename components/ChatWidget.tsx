@@ -169,7 +169,7 @@ export default function ChatWidget() {
     prevRecruiter.current = isRecruiter;
     if (isRecruiter !== was) {
       setSweepDir(isRecruiter ? "fwd" : "rev");
-      const t = setTimeout(() => setSweepDir(null), 2100);
+      const t = setTimeout(() => setSweepDir(null), 1400);
       return () => clearTimeout(t);
     }
   }, [isRecruiter]);
