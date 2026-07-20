@@ -69,13 +69,13 @@ function RecruiterSwitch({
       onClick={() => onChange(!on)}
       role="switch"
       aria-checked={on}
-      className="flex items-center gap-2.5 rounded-full px-4 py-2 text-[13px]"
+      className="flex shrink-0 items-center gap-2 rounded-full px-3 py-1.5 text-[12px]"
       style={{
         border: `1px solid ${on ? ACCENT : "var(--glass-border)"}`,
         color: on ? FOREGROUND : SECONDARY,
       }}
     >
-      Recruiter mode
+      Recruiter
       <span
         aria-hidden
         className="relative inline-block h-5 w-9 shrink-0 rounded-full transition-colors duration-200"
@@ -247,34 +247,29 @@ export default function ChatWidget() {
       <AnimatePresence>
         {isOpen && (
           <>
-            {/* ── Backdrop ── */}
+            {/* ── 백드롭 + 포지셔닝 래퍼: 히어로 입력 바로 위, 입력과 같은 폭
+                 (max-w-xl). 입력 바(z-201)는 딤 위에 남아 계속 클릭 가능 ── */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: AnimationConfig.FAST }}
-              className="fixed inset-0 z-[200]"
+              className="fixed inset-0 z-[200] flex items-end justify-center px-4 pb-[84px]"
               style={{ background: "rgba(0,0,0,.45)" }}
-              onClick={() => setIsOpen(false)}
-            />
-
-            {/* ── Modal — 리퀴드 글래스. framer가 transform을 덮어쓰므로
-                 translate 센터링 대신 flex 래퍼로 중앙 정렬 ── */}
-            <div
-              className="fixed inset-0 z-[201] flex items-center justify-center p-4"
               onClick={() => setIsOpen(false)}
             >
             <motion.div
-              initial={{ opacity: 0, scale: 0.96, y: 20 }}
+              initial={{ opacity: 0, scale: 0.98, y: 16 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.96, y: 20 }}
+              exit={{ opacity: 0, scale: 0.98, y: 16 }}
               transition={{
                 duration: AnimationConfig.NORMAL,
                 ease: AnimationConfig.EASING,
               }}
               onClick={(e) => e.stopPropagation()}
-              className="liquid-glass flex max-h-[85vh] w-[min(56rem,100%)] flex-col overflow-hidden rounded-[22px]"
+              className="liquid-glass flex max-h-[calc(100vh-160px)] w-full max-w-xl flex-col overflow-hidden rounded-[22px]"
               style={{
+                transformOrigin: "bottom center",
                 border: "1px solid var(--glass-border)",
                 boxShadow: "var(--liquid-rim), var(--glass-shadow)",
               }}
@@ -299,23 +294,21 @@ export default function ChatWidget() {
                       : "Ask anything about my work, skills, or experience"}
                   </p>
                 </div>
-                <button
-                  onClick={() => setIsOpen(false)}
-                  aria-label="Close chat"
-                  className="rounded-full p-2 transition-opacity hover:opacity-70"
-                  style={{ color: MUTED }}
-                >
-                  <X size={20} />
-                </button>
+                <div className="flex shrink-0 items-center gap-2">
+                  <RecruiterSwitch on={isRecruiter} onChange={setIsRecruiter} />
+                  <button
+                    onClick={() => setIsOpen(false)}
+                    aria-label="Close chat"
+                    className="rounded-full p-2 transition-opacity hover:opacity-70"
+                    style={{ color: MUTED }}
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
               </div>
 
               {/* body */}
               <div className="flex-1 overflow-y-auto px-6 py-5 md:px-10 md:py-6">
-                {/* recruiter switch — 가운데 */}
-                <div className="mb-6 flex justify-center">
-                  <RecruiterSwitch on={isRecruiter} onChange={setIsRecruiter} />
-                </div>
-
                 {/* skill pills — recruiter only */}
                 {isRecruiter && (
                   <div className="mb-5">
@@ -576,7 +569,7 @@ export default function ChatWidget() {
                 )}
               </div>
             </motion.div>
-            </div>
+            </motion.div>
           </>
         )}
       </AnimatePresence>

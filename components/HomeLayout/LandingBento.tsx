@@ -86,7 +86,7 @@ function HeroChatBar() {
 
   return createPortal(
     <div
-      className="fixed inset-x-0 bottom-5 z-[150] flex justify-center px-4"
+      className="fixed inset-x-0 bottom-5 z-[201] flex justify-center px-4"
       style={{
         opacity: heroInView ? 1 : 0,
         transform: heroInView ? "translateY(0)" : "translateY(12px)",
