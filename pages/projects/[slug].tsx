@@ -3,6 +3,7 @@ import Head from "next/head";
 import LegacyEmbed from "../../components/ProjectView/LegacyEmbed";
 import CaseStudyNav from "../../components/ProjectView/CaseStudyNav";
 import CaseStudyTOC from "../../components/ProjectView/CaseStudyTOC";
+import LegacyHero from "../../components/ProjectView/LegacyHero";
 import { serialize } from "next-mdx-remote/serialize";
 import { GetStaticProps, InferGetStaticPropsType, GetStaticPaths } from "next";
 import { getAllPostSlugs, getPostBySlug } from "../../lib/projects";
@@ -158,11 +159,18 @@ export default function Post({
               coverImage={getProjectCover(projectInfo.slug)}
               slugTitleMap={slugTitleMap}
             >
-              {/* <h1 className="text-6xl">{meta.title}</h1> */}
-              <ProjectHeader
-                projectInfo={projectInfo}
-                invertLogo={!!meta.legacyHtml || !projectStyle.isDarkColorScheme}
-              />
+              {/* legacy: 커버 이미지 위에 타이틀 오버레이 히어로. 그 외엔 기존 헤더 */}
+              {meta.legacyHtml && meta.heroImage ? (
+                <LegacyHero
+                  projectInfo={projectInfo}
+                  coverImage={meta.heroImage}
+                />
+              ) : (
+                <ProjectHeader
+                  projectInfo={projectInfo}
+                  invertLogo={!projectStyle.isDarkColorScheme}
+                />
+              )}
               <main
                 className={`${
                   meta.fontTheme === "live" ? "live-type " : ""
@@ -172,17 +180,7 @@ export default function Post({
                 {/* legacyHtml: 옛 케이스 스터디 본문을 셸(히어로/넥스트 푸터)
                     사이에 끼움 — 전환은 리디자인 그대로 */}
                 {meta.legacyHtml ? (
-                  <>
-                    {meta.heroImage && (
-                      <FullImage
-                        src={meta.heroImage}
-                        width={meta.heroWidth ?? 2208}
-                        height={meta.heroHeight ?? 1104}
-                        priority
-                      />
-                    )}
-                    <LegacyEmbed src={meta.legacyHtml} />
-                  </>
+                  <LegacyEmbed src={meta.legacyHtml} />
                 ) : (
                 <MDXRemote
                   {...source}
