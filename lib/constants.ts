@@ -2,6 +2,9 @@ export const SITE = {
   name: "Jiho Kim",
   title: "Product Designer",
   email: "jihokimdesign@gmail.com",
+  // Gmail 컴포즈 — mailto가 데스크톱 기본 메일앱 없으면 안 열려서 이걸로 대체
+  emailHref:
+    "https://mail.google.com/mail/?view=cm&fs=1&to=jihokimdesign@gmail.com",
   linkedin: "https://www.linkedin.com/in/hoyak/",
   resumeUrl: "https://drive.google.com/file/d/1lqlo2l6fnMgX0HX8WQLtgb4yDVCJF4Tr/view?usp=sharing",
 } as const;

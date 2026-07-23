@@ -34,7 +34,9 @@ export default function ContactCard({
 
   return (
     <a
-      href={`mailto:${email}`}
+      href={SITE.emailHref}
+      target="_blank"
+      rel="noreferrer"
       aria-label={`Email ${email}`}
       onPointerEnter={() => setHovered(true)}
       onPointerLeave={() => setHovered(false)}
