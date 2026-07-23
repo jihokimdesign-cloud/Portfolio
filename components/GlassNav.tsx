@@ -80,7 +80,9 @@ export default function GlassNav() {
           LinkedIn
         </a>
         <a
-          href={`mailto:${SITE.email}`}
+          href={SITE.emailHref}
+          target="_blank"
+          rel="noreferrer"
           className="rounded-full px-3 py-1 text-[13px] transition-opacity hover:opacity-70"
           style={{ color: "var(--fg-secondary)" }}
         >
