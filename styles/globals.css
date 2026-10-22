@@ -363,3 +363,45 @@ html.theme-transitioning *::after {
   font-family: "Plus Jakarta Sans", "DM Sans", sans-serif;
   letter-spacing: -0.01em;
 }
+
+/* ── Selected Work — shared tokens (featured + grid share one system) ─── */
+:root {
+  --tag-fg: var(--fg-muted);
+  --tag-border: var(--hairline);
+  /* panel: soft radial tint behind the TAP app vid */
+  --panel-bg: radial-gradient(
+      120% 90% at 50% 0%,
+      rgba(0, 105, 228, 0.07),
+      transparent 60%
+    ),
+    #eef1f5;
+  --panel-fade: #f5f5f7;
+}
+:root[data-theme="dark"] {
+  --panel-bg: radial-gradient(
+      120% 90% at 50% 0%,
+      rgba(64, 140, 255, 0.1),
+      transparent 60%
+    ),
+    #16181c;
+  --panel-fade: #0a0a0b;
+}
+/* mono tag chip — used by featured + grid cards */
+.sw-tag {
+  font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, monospace;
+  font-size: 11.5px;
+  line-height: 1;
+  padding: 5px 9px;
+  border-radius: 6px;
+  border: 1px solid var(--tag-border);
+  color: var(--tag-fg);
+  white-space: nowrap;
+}
+/* "Read the case →" link arrow nudges on hover */
+.sw-readlink .sw-arrow {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+.sw-readlink:hover .sw-arrow {
+  transform: translateX(3px);
+}

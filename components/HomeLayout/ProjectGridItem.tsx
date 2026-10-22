@@ -1,43 +1,31 @@
-import React, {
-  MutableRefObject,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import {
-  ProjectInfo,
-  ProjectStyle,
-  getProjectCover,
-} from "../../lib/ProjectInfo";
-
+import React, { useEffect, useRef, useState } from "react";
+import { ProjectInfo, ProjectStyle, getProjectCover } from "../../lib/ProjectInfo";
 import Image from "next/image";
-import { motion, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import Link from "next/link";
-import { useContainerScroll } from "../ScrollContainer/ScrollContainer";
-import { useWindowDimension } from "../../hooks/useWindowDimension";
 import ReactiveTapArea from "../ReactiveTapArea/ReactiveTapArea";
 import { AnimationConfig } from "../AnimationConfig";
-import { useMotionValueSwitch } from "../../hooks/useMotionValueSwitch";
 import { useSiteTheme } from "../../hooks/useSiteTheme";
 
 type Props = {
   projectStyle: ProjectStyle;
   projectInfo: ProjectInfo;
-  projectRow: number;
-  isWide: boolean;
   cardHeight: number;
-  firstRowHeight: number;
-  topOffset: number;
   isFirstItem: boolean;
   shouldHideTitles: boolean;
 };
 
+const TITLE_FONT = '"TikTok Sans", Inter, sans-serif';
 const INACTIVE_BG_COLOR = "rgb(37, 55, 52)";
 
-/* 수상 칩 + 트로피 팝 — 카드가 처음 보일 때 세션당 1회, 1초 미만의 버스트.
-   prefers-reduced-motion이면 정적 칩만 보여준다. */
+// no em dashes in displayed copy
+const cleanCopy = (s?: string) =>
+  (s ?? "").replace(/\s*—\s*/g, ", ").trim();
+
+// per-project crop focus for wide thumbs in the 4/3 box
+const FOCUS: Record<string, string> = { sidewalk: "18% center" };
+
+/* 수상 칩 + 트로피 팝 — 카드가 처음 보일 때 세션당 1회, 1초 미만의 버스트. */
 function AwardChip({ label }: { label: string }) {
   const chipRef = useRef<HTMLDivElement | null>(null);
   const [popping, setPopping] = useState(false);
@@ -83,7 +71,11 @@ function AwardChip({ label }: { label: string }) {
         {popping && (
           <span className="trophy-burst" aria-hidden>
             {Array.from({ length: 6 }).map((_, i) => (
-              <span key={i} className="trophy-particle" style={{ ["--i" as any]: i }} />
+              <span
+                key={i}
+                className="trophy-particle"
+                style={{ ["--i" as any]: i }}
+              />
             ))}
           </span>
         )}
@@ -93,108 +85,47 @@ function AwardChip({ label }: { label: string }) {
   );
 }
 
-const TRANSPARENT_IMAGE = `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=`;
-
 const ProjectGridItem = ({
   projectInfo,
-  projectStyle,
-  projectRow,
-  firstRowHeight,
   cardHeight,
-  topOffset,
-  isWide,
   isFirstItem,
   shouldHideTitles,
 }: Props) => {
+  const siteTheme = useSiteTheme();
+  const themeThumbSrc = projectInfo.thumbHtml?.replace("{theme}", siteTheme);
+  const hasVideo = projectInfo.previewVideo !== undefined;
+  const thumbFocus = FOCUS[projectInfo.slug] ?? "center";
+
   const [isImageLoaded, setIsImageLoaded] = useState(
     !!projectInfo.thumbHtml || !!projectInfo.thumbImage,
   );
-  const siteTheme = useSiteTheme();
-  const themeThumbSrc = projectInfo.thumbHtml?.replace("{theme}", siteTheme);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
-  const hasVideo = projectInfo.previewVideo !== undefined;
-  // 와이드 UI 영상을 세로 카드에 담을 때 크롭 초점. Sidewalk은 왼쪽(필터+
-  // 첫 열 카드)이 온전히 보이게 좌측 편향, 나머지는 중앙.
-  const thumbFocus =
-    projectInfo.slug === "sidewalk" ? "18% center" : "center";
-  const isLoading = useMemo(
-    () => (hasVideo ? !isVideoLoaded : !isImageLoaded),
-    [hasVideo, isVideoLoaded, isImageLoaded],
-  );
+  const isLoading = hasVideo ? !isVideoLoaded : !isImageLoaded;
 
   const [isHovering, setIsHovering] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
-  const { scrollY } = useContainerScroll();
-  const containerRef = useRef() as MutableRefObject<HTMLDivElement>;
-
-  const projectGridGap = 16 / 2;
-  const marginTop = 16;
-  const firstRow = useMemo(
-    () => firstRowHeight + projectGridGap,
-    [firstRowHeight, projectGridGap],
-  );
-  const beginShrinkPos = useMemo(() => {
-    return (
-      firstRow +
-      (projectRow - 1) * (cardHeight + projectGridGap) -
-      marginTop +
-      topOffset
-    );
-  }, [cardHeight, firstRow, projectGridGap, projectRow, topOffset]);
-  const endShrinkPos = useMemo(() => {
-    return beginShrinkPos + cardHeight;
-  }, [beginShrinkPos, cardHeight]);
-  const boxContainerHeight = useMemo(() => cardHeight, [cardHeight]);
-  const boxTransitionOutProgress = useTransform(
-    scrollY,
-    [beginShrinkPos, endShrinkPos],
-    [1, 0],
-  );
-
-  const boxHeight = useTransform(boxTransitionOutProgress, (val) => {
-    return val * boxContainerHeight;
-  });
-  const parallaxY = useTransform(boxTransitionOutProgress, (val) => {
-    return (1 - val) * -boxContainerHeight * 1;
-  });
-
-  const headingOpacity = useTransform(
-    boxTransitionOutProgress,
-    [0.2, 0.1],
-    [1, 0],
-  );
-
-  const videoRef = useRef() as MutableRefObject<HTMLVideoElement>;
-
-  // video loading mechanism
+  // video load
   useEffect(() => {
     const vid = videoRef.current;
     if (!vid) return;
-    if (vid.readyState === 4) {
+    if (vid.readyState >= 1) {
       setIsVideoLoaded(true);
       return;
     }
-    const handleVideoLoaded = () => {
-      setIsVideoLoaded(true);
-      console.log("video is now loaded");
-    };
-    vid.addEventListener("loadedmetadata", handleVideoLoaded);
+    const onLoaded = () => setIsVideoLoaded(true);
+    vid.addEventListener("loadedmetadata", onLoaded);
     try {
       vid.load();
-    } catch (e) {
-      console.warn(e);
-    }
+    } catch {}
+    return () => vid.removeEventListener("loadedmetadata", onLoaded);
+  }, []);
 
-    return () => {
-      vid.removeEventListener("loadedmetadata", handleVideoLoaded);
-    };
-  }, [videoRef]);
-
-  // 호버 시 재생, 벗어나면 정지(첫 프레임 유지). 피처드 타일은 항상 재생.
+  // play on hover; otherwise hold first frame
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
-    if (isHovering || isFirstItem) {
+    if (isHovering) {
       v.play().catch(() => {});
     } else {
       v.pause();
@@ -202,84 +133,66 @@ const ProjectGridItem = ({
         v.currentTime = 0;
       } catch {}
     }
-  }, [isHovering, isFirstItem, isVideoLoaded]);
+  }, [isHovering, isVideoLoaded]);
+
+  const title =
+    projectInfo.cardTitle ?? projectInfo.hook ?? projectInfo.description;
+  const description = cleanCopy(projectInfo.description);
+  const tags = projectInfo.tags ?? [];
+
   return (
-    <motion.div
-      style={{
-        gridColumnStart: isWide ? 1 : "auto",
-        gridColumnEnd: isWide ? 3 : "auto",
-      }}
-    >
+    <motion.div>
       <ReactiveTapArea>
         <Link
-          href={`projects/${projectInfo.slug}`}
+          href={`/projects/${projectInfo.slug}`}
           scroll={false}
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => setIsHovering(false)}
+          className="group block"
         >
-          <div className="relative">
-          {/* 무지개 후광 (호버) */}
+          {/* ── thumbnail panel (4/3) ── */}
           <div
-            aria-hidden
-            className="rainbow-ring pointer-events-none absolute -inset-[2px] rounded-[13px]"
-            style={{
-              filter: "blur(10px)",
-              opacity: isHovering ? 0.45 : 0,
-              transition: "opacity .35s ease",
-            }}
-          />
-          {/* 무지개 1px 스트로크 (호버) */}
-          <div
-            aria-hidden
-            className="rainbow-ring pointer-events-none absolute -inset-[1px] rounded-[13px]"
-            style={{
-              padding: "1px",
-              WebkitMask:
-                "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-              WebkitMaskComposite: "xor",
-              maskComposite: "exclude",
-              opacity: isHovering ? 1 : 0,
-              transition: "opacity .35s ease",
-            }}
-          />
-          <div
-            ref={containerRef}
-            className="relative overflow-hidden rounded-xl"
+            className="relative overflow-hidden rounded-[18px]"
             style={{
               height: cardHeight,
-              backgroundColor: projectInfo.thumbHtml
-                ? "#EDF0F3"
-                : INACTIVE_BG_COLOR,
+              border: "1px solid var(--hairline)",
+              backgroundColor:
+                projectInfo.thumbHtml || projectInfo.thumbImage
+                  ? "var(--panel-fade)"
+                  : INACTIVE_BG_COLOR,
             }}
           >
             {projectInfo.award && <AwardChip label={projectInfo.award} />}
             <motion.div
+              className="h-full w-full"
               initial={{ opacity: 0 }}
               animate={{ opacity: !isLoading ? 1 : 0 }}
               transition={{
                 duration: AnimationConfig.NORMAL,
                 ease: AnimationConfig.EASING_DRAMATIC,
               }}
+              style={{
+                transform: isHovering ? "scale(1.01)" : "scale(1)",
+                transition: "transform .4s ease",
+              }}
             >
               {projectInfo.thumbHtml ? (
-                // 애니메이션 HTML 썸네일 — {theme} 토큰은 테마별 파일로 스위칭
                 <iframe
                   key={themeThumbSrc}
                   src={themeThumbSrc}
                   title={projectInfo.title}
                   scrolling="no"
-                  className="block w-full border-0"
-                  style={{ height: cardHeight, pointerEvents: "none" }}
+                  className="absolute inset-0 h-full w-full border-0"
+                  style={{ pointerEvents: "none" }}
                   onLoad={() => setIsImageLoaded(true)}
                 />
               ) : projectInfo.thumbImage ? (
-                // 정적/애니 이미지 썸네일 — 박스를 가득 채운다(크롭)
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={projectInfo.thumbImage}
-                  className="w-full object-cover object-center"
-                  style={{ height: cardHeight }}
-                  alt={`${projectInfo.title} case study thumbnail`}
+                  className="absolute inset-0 h-full w-full object-cover"
+                  style={{ objectPosition: thumbFocus }}
+                  alt={`${projectInfo.title} thumbnail`}
                   onLoad={() => setIsImageLoaded(true)}
                 />
               ) : (
@@ -288,54 +201,70 @@ const ProjectGridItem = ({
                     src={getProjectCover(projectInfo.slug)}
                     width={582}
                     height={767}
-                    className="w-full object-cover object-center"
-                    style={{ height: cardHeight }}
-                    alt={`${projectInfo.title} case study thumbnail`}
+                    className="absolute inset-0 h-full w-full object-cover"
+                    style={{ objectPosition: thumbFocus }}
+                    alt={`${projectInfo.title} thumbnail`}
                     onLoad={() => setIsImageLoaded(true)}
                   />
                 )
               )}
 
               {hasVideo && (
-                <motion.video
+                <video
                   disablePictureInPicture
-                  style={{ height: cardHeight, objectPosition: thumbFocus }}
                   ref={videoRef}
                   src={projectInfo.previewVideo}
                   preload="metadata"
                   muted
                   loop
                   playsInline
-                  className="w-full object-cover absolute top-0 left-0 right-0"
+                  className="absolute inset-0 h-full w-full object-cover"
+                  style={{ objectPosition: thumbFocus }}
                 />
               )}
             </motion.div>
           </div>
-          </div>
 
-          {/* 훅 라인이 1행 타이틀 — 회사명이 아니라 '무엇을 했는지'가 먼저.
-              프로젝트명 · 카테고리는 보조 라벨로 아래에 작게 */}
+          {/* ── text (16px gap below panel) ── */}
           {!shouldHideTitles && (
-            <div className="mt-2.5 flex flex-col gap-0.5 px-1">
-              <span
-                className="text-sm leading-snug lg:text-base"
-                style={{ color: "var(--title)" }}
-              >
-                {projectInfo.cardTitle ??
-                  projectInfo.hook ??
-                  projectInfo.description}
-              </span>
-              <span
-                className="text-xs leading-tight lg:text-sm"
-                style={{ color: "var(--fg-muted)" }}
-              >
-                {projectInfo.cardMeta ??
-                  `${projectInfo.title}${
-                    projectInfo.tags?.length
-                      ? ` · ${projectInfo.tags.join(" · ")}`
-                      : ""
-                  }`}
-              </span>
+            <div className="mt-4 flex flex-col gap-2">
+              <div className="flex items-start gap-2">
+                <span
+                  className="text-[22px] leading-snug lg:text-[24px]"
+                  style={{
+                    fontFamily: TITLE_FONT,
+                    fontWeight: 500,
+                    letterSpacing: "-0.02em",
+                    color: "var(--title)",
+                  }}
+                >
+                  {title}
+                </span>
+                <span
+                  aria-hidden
+                  className="mt-[6px] shrink-0 transition-transform duration-200 group-hover:translate-x-1"
+                  style={{ color: "var(--fg-muted)" }}
+                >
+                  &rarr;
+                </span>
+              </div>
+              {description && (
+                <p
+                  className="max-w-[46ch] text-[15px] leading-relaxed lg:text-[16px]"
+                  style={{ color: "var(--fg-secondary)", margin: 0 }}
+                >
+                  {description}
+                </p>
+              )}
+              {tags.length > 0 && (
+                <div className="mt-1 flex flex-wrap gap-1.5">
+                  {tags.map((t) => (
+                    <span key={t} className="sw-tag">
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
           )}
         </Link>
