@@ -8,7 +8,6 @@ import { PageTransitionProvider } from "../components/PageTransition/PageTransit
 import { HomeScrollPositionContextProvider } from "../components/HomeScrollPositionContext";
 import { useImagePreload } from "../hooks/useImagePreload";
 import { HistoryProvider } from "../contexts/History";
-import { RecruiterProvider } from "../contexts/recruiter-context";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import { initGA, logEvent, logPageView } from "../lib/analytics";
@@ -88,8 +87,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
       <Head>
         <meta name="pinterest" content="nopin" />
       </Head>
-      <RecruiterProvider>
-        <HistoryProvider>
+      <HistoryProvider>
           <WindowDimensionContextProvider>
             <HomeScrollPositionContextProvider>
               <PageTransitionProvider>
@@ -104,9 +102,8 @@ function MyApp({ Component, pageProps, router }: AppProps) {
               </PageTransitionProvider>
             </HomeScrollPositionContextProvider>
           </WindowDimensionContextProvider>
-        </HistoryProvider>
-        {isRouteHome && <ChatWidget />}
-      </RecruiterProvider>
+      </HistoryProvider>
+      {isRouteHome && <ChatWidget />}
       {/* <!-- Default Statcounter code for portfolio https://alvinn.design --> */}
       {/* <script type="text/javascript">
         {`var sc_project=12719687; var sc_invisible=1; var sc_security="ce1e7f94";`}

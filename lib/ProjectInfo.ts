@@ -6,8 +6,13 @@ export interface ProjectInfo {
   scope: string;
   previewVideo: string;
   thumbHtml?: string; // 애니메이션 HTML 썸네일 (iframe으로 프리뷰)
+  thumbImage?: string; // 정적/애니 이미지 썸네일 (object-cover로 채움)
   heroHtml?: string; // 히어로를 이미지 대신 HTML로 (iframe)
   heroAspect?: string; // heroHtml의 종횡비 (예: "1600 / 620")
+  hook?: string; // 카드 1행 타이틀 — 회사명이 아니라 '무엇을 했는지'
+  cardTitle?: string; // 랜딩 카드 문장형 타이틀 (hook보다 우선)
+  cardMeta?: string; // 랜딩 카드 보조 라벨 ("Name · tag · tag")
+  award?: string; // 수상 칩 (예: "UIST 2024 Best Paper")
   hidden: boolean;
 }
 
@@ -20,8 +25,13 @@ export function getProjectInfo(meta: any): ProjectInfo {
     description: meta.description,
     previewVideo: meta.previewVideo,
     thumbHtml: meta.thumbHtml ?? null,
+    thumbImage: meta.thumbImage ?? null,
     heroHtml: meta.heroHtml ?? null,
     heroAspect: meta.heroAspect ?? null,
+    hook: meta.hook ?? null,
+    cardTitle: meta.cardTitle ?? null,
+    cardMeta: meta.cardMeta ?? null,
+    award: meta.award ?? null,
     hidden: meta.hidden,
   };
 }

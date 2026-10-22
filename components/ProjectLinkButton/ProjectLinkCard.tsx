@@ -15,6 +15,7 @@ import { AnimationConfig } from "../AnimationConfig";
 import ProjectHeader from "../Layouts/ProjectHeader";
 import { usePageTransition } from "../PageTransition/PageTransitionContext";
 import ReactiveTapArea from "../ReactiveTapArea/ReactiveTapArea";
+import { useSiteTheme } from "../../hooks/useSiteTheme";
 
 type Props = {
   isShowing: boolean;
@@ -30,6 +31,8 @@ const ProjectLinkCard = ({
   isOverscrollComplete,
 }: Props) => {
   const linkRef = useRef() as MutableRefObject<HTMLAnchorElement>;
+  const siteTheme = useSiteTheme();
+  const themeThumbSrc = projectInfo.thumbHtml?.replace("{theme}", siteTheme);
 
   const { prevCardRef } = usePageTransition();
   const handleClick = () => {
@@ -105,9 +108,9 @@ const ProjectLinkCard = ({
             {/* 프리뷰 — 애니메이션 썸네일(있으면) 또는 커버 이미지.
                 카드가 위로 올라오며 프리뷰 상단부터 드러난다 */}
             <div className="mx-4 mt-6 overflow-hidden rounded-[1rem] lg:mx-8">
-              {projectInfo.thumbHtml ? (
+              {themeThumbSrc ? (
                 <iframe
-                  src={projectInfo.thumbHtml}
+                  src={themeThumbSrc}
                   title={projectInfo.title}
                   scrolling="no"
                   className="block w-full border-0"

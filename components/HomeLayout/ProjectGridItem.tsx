@@ -36,6 +36,63 @@ type Props = {
 
 const INACTIVE_BG_COLOR = "rgb(37, 55, 52)";
 
+/* 수상 칩 + 트로피 팝 — 카드가 처음 보일 때 세션당 1회, 1초 미만의 버스트.
+   prefers-reduced-motion이면 정적 칩만 보여준다. */
+function AwardChip({ label }: { label: string }) {
+  const chipRef = useRef<HTMLDivElement | null>(null);
+  const [popping, setPopping] = useState(false);
+
+  useEffect(() => {
+    const el = chipRef.current;
+    if (!el) return;
+    const reduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    if (reduced || sessionStorage.getItem("trophy-popped")) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          sessionStorage.setItem("trophy-popped", "1");
+          setPopping(true);
+          io.disconnect();
+        }
+      },
+      { threshold: 0.5 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  return (
+    <div
+      ref={chipRef}
+      className="absolute left-3 top-3 z-10 flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[12px] font-medium"
+      style={{
+        background: "rgba(20, 20, 22, 0.6)",
+        backdropFilter: "blur(10px)",
+        WebkitBackdropFilter: "blur(10px)",
+        color: "#fff",
+        boxShadow: "inset 0 0 0 1px rgba(255,255,255,.18)",
+      }}
+    >
+      <span
+        aria-hidden
+        className={`relative inline-block${popping ? " trophy-pop" : ""}`}
+      >
+        🏆
+        {popping && (
+          <span className="trophy-burst" aria-hidden>
+            {Array.from({ length: 6 }).map((_, i) => (
+              <span key={i} className="trophy-particle" style={{ ["--i" as any]: i }} />
+            ))}
+          </span>
+        )}
+      </span>
+      {label}
+    </div>
+  );
+}
+
 const TRANSPARENT_IMAGE = `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=`;
 
 const ProjectGridItem = ({
@@ -49,11 +106,17 @@ const ProjectGridItem = ({
   isFirstItem,
   shouldHideTitles,
 }: Props) => {
-  const [isImageLoaded, setIsImageLoaded] = useState(!!projectInfo.thumbHtml);
+  const [isImageLoaded, setIsImageLoaded] = useState(
+    !!projectInfo.thumbHtml || !!projectInfo.thumbImage,
+  );
   const siteTheme = useSiteTheme();
   const themeThumbSrc = projectInfo.thumbHtml?.replace("{theme}", siteTheme);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
   const hasVideo = projectInfo.previewVideo !== undefined;
+  // 와이드 UI 영상을 세로 카드에 담을 때 크롭 초점. Sidewalk은 왼쪽(필터+
+  // 첫 열 카드)이 온전히 보이게 좌측 편향, 나머지는 중앙.
+  const thumbFocus =
+    projectInfo.slug === "sidewalk" ? "18% center" : "center";
   const isLoading = useMemo(
     () => (hasVideo ? !isVideoLoaded : !isImageLoaded),
     [hasVideo, isVideoLoaded, isImageLoaded],
@@ -189,6 +252,7 @@ const ProjectGridItem = ({
                 : INACTIVE_BG_COLOR,
             }}
           >
+            {projectInfo.award && <AwardChip label={projectInfo.award} />}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: !isLoading ? 1 : 0 }}
@@ -208,19 +272,25 @@ const ProjectGridItem = ({
                   style={{ height: cardHeight, pointerEvents: "none" }}
                   onLoad={() => setIsImageLoaded(true)}
                 />
+              ) : projectInfo.thumbImage ? (
+                // 정적/애니 이미지 썸네일 — 박스를 가득 채운다(크롭)
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={projectInfo.thumbImage}
+                  className="w-full object-cover object-center"
+                  style={{ height: cardHeight }}
+                  alt={`${projectInfo.title} case study thumbnail`}
+                  onLoad={() => setIsImageLoaded(true)}
+                />
               ) : (
                 !hasVideo && (
                   <Image
                     src={getProjectCover(projectInfo.slug)}
                     width={582}
                     height={767}
-                    className={
-                      isFirstItem
-                        ? "w-full object-cover object-center"
-                        : "w-full "
-                    }
-                    style={isFirstItem ? { height: cardHeight } : undefined}
-                    alt={""}
+                    className="w-full object-cover object-center"
+                    style={{ height: cardHeight }}
+                    alt={`${projectInfo.title} case study thumbnail`}
                     onLoad={() => setIsImageLoaded(true)}
                   />
                 )
@@ -229,34 +299,42 @@ const ProjectGridItem = ({
               {hasVideo && (
                 <motion.video
                   disablePictureInPicture
-                  style={{ height: cardHeight }}
+                  style={{ height: cardHeight, objectPosition: thumbFocus }}
                   ref={videoRef}
                   src={projectInfo.previewVideo}
                   preload="metadata"
                   muted
                   loop
                   playsInline
-                  className="w-full object-cover object-center absolute top-0 left-0 right-0"
+                  className="w-full object-cover absolute top-0 left-0 right-0"
                 />
               )}
             </motion.div>
           </div>
           </div>
 
-          {/* 타이틀 · 카테고리 — 박스 아래, 가까이 묶어서(좌우로 벌리지 않음) */}
+          {/* 훅 라인이 1행 타이틀 — 회사명이 아니라 '무엇을 했는지'가 먼저.
+              프로젝트명 · 카테고리는 보조 라벨로 아래에 작게 */}
           {!shouldHideTitles && (
-            <div className="mt-2.5 flex items-baseline justify-start gap-3 px-1">
+            <div className="mt-2.5 flex flex-col gap-0.5 px-1">
               <span
-                className="text-sm leading-tight lg:text-base"
+                className="text-sm leading-snug lg:text-base"
                 style={{ color: "var(--title)" }}
               >
-                {projectInfo.title}
+                {projectInfo.cardTitle ??
+                  projectInfo.hook ??
+                  projectInfo.description}
               </span>
               <span
-                className="text-right text-sm leading-tight lg:text-base"
+                className="text-xs leading-tight lg:text-sm"
                 style={{ color: "var(--fg-muted)" }}
               >
-                {projectInfo.tags?.join(" · ")}
+                {projectInfo.cardMeta ??
+                  `${projectInfo.title}${
+                    projectInfo.tags?.length
+                      ? ` · ${projectInfo.tags.join(" · ")}`
+                      : ""
+                  }`}
               </span>
             </div>
           )}

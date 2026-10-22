@@ -1,11 +1,37 @@
 import Link from "next/link";
+import { useState } from "react";
 import { SITE } from "../lib/constants";
 import ThemeToggle from "./ThemeToggle";
 import SignatureMark from "./SignatureMark";
-import RecruiterNav from "./RecruiterNav";
 
 const FONT_STACK =
   '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif';
+
+// 이메일은 mailto 대신 클립보드 복사가 기본 동작 — 1.5초 "Copied" 확인
+function EmailCopyButton() {
+  const [copied, setCopied] = useState(false);
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(SITE.email);
+    } catch {
+      // 클립보드가 막힌 환경(구형 Safari 등) — Gmail 컴포즈로 폴백
+      window.open(SITE.emailHref, "_blank");
+      return;
+    }
+    setCopied(true);
+    window.setTimeout(() => setCopied(false), 1500);
+  };
+  return (
+    <button
+      onClick={copy}
+      className="rounded-full px-3 py-1 text-[13px] transition-opacity hover:opacity-70"
+      style={{ color: copied ? "var(--fg)" : "var(--fg-secondary)" }}
+      aria-live="polite"
+    >
+      {copied ? "Copied ✓" : "Email"}
+    </button>
+  );
+}
 
 // Floating glassmorphism nav — frosted pill, DESIGN.md tokens via --glass vars.
 export default function GlassNav() {
@@ -44,6 +70,9 @@ export default function GlassNav() {
       <div
         className="liquid-glass flex items-center gap-1 rounded-full px-2 py-1.5"
         style={{
+          // near-opaque fill (over the blur) keeps labels legible over any
+          // thumbnail, in both light and dark mode
+          background: "var(--nav-bg)",
           border: "1px solid var(--glass-border)",
           boxShadow: "var(--liquid-rim), var(--glass-shadow)",
           color: "var(--fg)",
@@ -79,15 +108,7 @@ export default function GlassNav() {
         >
           LinkedIn
         </a>
-        <a
-          href={SITE.emailHref}
-          target="_blank"
-          rel="noreferrer"
-          className="rounded-full px-3 py-1 text-[13px] transition-opacity hover:opacity-70"
-          style={{ color: "var(--fg-secondary)" }}
-        >
-          Email
-        </a>
+        <EmailCopyButton />
         <span
           className="mx-1 h-4 w-px"
           style={{ background: "var(--glass-border)" }}
@@ -95,7 +116,6 @@ export default function GlassNav() {
         />
         <ThemeToggle inline />
       </div>
-      <RecruiterNav />
     </nav>
   );
 }

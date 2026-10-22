@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useHomeScrollPosition } from "../components/HomeScrollPositionContext";
 import { useContainerScroll } from "../components/ScrollContainer/ScrollContainer";
 import { getAllPostSlugs, getPostBySlug } from "../lib/projects";
+import { PROJECT_ORDER } from "../lib/constants";
 import { NextSeo } from "next-seo";
 import HomeLayout from "../components/HomeLayout/HomeLayout";
 import dynamic from "next/dynamic";
@@ -22,6 +23,12 @@ export const getStaticProps: GetStaticProps = () => {
         })
         //@ts-ignore
         .sort((a, b) => {
+          const order = PROJECT_ORDER as readonly string[];
+          const ia = order.indexOf(a.meta.slug);
+          const ib = order.indexOf(b.meta.slug);
+          if (ia !== -1 && ib !== -1) return ia - ib;
+          if (ia !== -1) return -1;
+          if (ib !== -1) return 1;
           return b.meta.weight - a.meta.weight;
         }),
     },
@@ -78,7 +85,7 @@ const Home: NextPage = ({
       </Head>
       <NextSeo
         title={`Jiho Kim — Product Designer`}
-        description={`Product designer who turns technical ambiguity and complex AI into experiences that feel effortless. Currently building AI agent experiences at a stealth startup.`}
+        description={`Product designer building AI products that adapt to people — and prototyping them in code. Cheffy, TAP, LePal, Project Sidewalk, and UIST 2024 Best Paper research CookAR.`}
       />
       {/* <LandingHero isViewingGrid={isViewingGrid} /> */}
       {/* <div ref={projectRef} /> */}

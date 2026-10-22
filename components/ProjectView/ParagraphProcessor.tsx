@@ -17,8 +17,10 @@ export const createParagraphProcessor = (
 
     const defaultParagraphFormat = DefaultParagraph;
 
+    // Paragraph/ParagraphBig은 props가 아니라 children 원본을 인자로 받는다
+    // — 링크·em으로 시작하는 문단에서 {children} 객체가 그대로 렌더되던 버그
     if (typeof paragraphHeadingChunk !== "string")
-      return defaultParagraphFormat({ children });
+      return defaultParagraphFormat(children);
 
     const reducerFunction = (
       accumulator: IParagraphProcessor,

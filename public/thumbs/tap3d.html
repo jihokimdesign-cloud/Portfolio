@@ -6,6 +6,11 @@
 <title>TAP3D — AI Agent Showcase</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+<script>
+  // 부모가 ?theme=dark|light 로 넘겨준다 (mdx thumbHtml의 {theme} 토큰)
+  document.documentElement.dataset.theme =
+    new URLSearchParams(location.search).get("theme") === "dark" ? "dark" : "light";
+</script>
 <style>
   :root{
     --blue:#0069E4; --blue-lt:#4899FF; --gray:#76848D; --border:#DBDDE0;
@@ -16,6 +21,10 @@
   body{font-family:'Poppins',Inter,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
 
   .frame{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;border-radius:16px;background:#EDF0F3}
+  /* 다크 테마 — 프레임/그림자만 어둡게. 제품 목업은 브랜드 컬러 유지 (two-voice) */
+  html[data-theme="dark"] .frame{background:#15181C}
+  html[data-theme="dark"] .world{filter:drop-shadow(0 24px 60px rgba(0,0,0,.55))}
+  html[data-theme="dark"] .bot{filter:drop-shadow(0 14px 24px rgba(0,0,0,.5))}
   .stage{position:absolute;top:0;left:0;width:1280px;height:720px;transform-origin:top left}
   .loop{position:absolute;inset:0;animation:loopFade var(--dur) ease infinite}
   @keyframes loopFade{0%,1%{opacity:0}4%,95%{opacity:1}99.5%,100%{opacity:0}}
