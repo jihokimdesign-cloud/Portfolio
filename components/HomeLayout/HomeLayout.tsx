@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import ProjectGrid from "./ProjectGrid";
+import SelectedWork from "./SelectedWork";
 import { motion, transform } from "framer-motion";
 import { AnimationConfig } from "../AnimationConfig";
 import { ExternalLink } from "../Layouts/ExternalLink";
@@ -79,7 +79,7 @@ const HomeLayout = ({ projects }: Props) => {
         >
           Selected Work
         </h2>
-        <ProjectGrid heroOffset={HERO_OFFSET} projects={projects} />
+        <SelectedWork projects={projects} />
       </div>
     </motion.div>
   );
