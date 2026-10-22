@@ -69,17 +69,15 @@ const HomeLayout = ({ projects }: Props) => {
       <LandingBento />
       <div className="mb-4">
         <h2
-          className="mb-8 mt-10 text-3xl md:text-[40px]"
+          className="text-[13px]"
           style={{
             fontFamily: '"TikTok Sans", Inter, sans-serif',
             fontWeight: 400,
-            lineHeight: 1,
-            letterSpacing: "-0.025em",
-            color: "var(--title)",
-            margin: "40px 0 32px",
+            color: "var(--fg-muted)",
+            margin: "20px 0 12px",
           }}
         >
-          Selected work(s)
+          Selected Work
         </h2>
         <ProjectGrid heroOffset={HERO_OFFSET} projects={projects} />
       </div>

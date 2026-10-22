@@ -91,6 +91,8 @@ body {
   --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.22);
   --glass-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
   --liquid-bg: rgba(255, 255, 255, 0.05);
+  /* near-opaque nav fill so labels stay legible over any thumbnail */
+  --nav-bg: rgba(22, 22, 24, 0.86);
   --liquid-rim: inset 0 1.5px 1px rgba(255, 255, 255, 0.45),
     inset 0 -1px 1.5px rgba(255, 255, 255, 0.16),
     inset 1px 0 1px rgba(255, 255, 255, 0.1),
@@ -114,6 +116,7 @@ body {
   --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.9);
   --glass-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
   --liquid-bg: rgba(255, 255, 255, 0.25);
+  --nav-bg: rgba(252, 252, 253, 0.88);
   --liquid-rim: inset 0 1.5px 1px rgba(255, 255, 255, 1),
     inset 0 -1px 1.5px rgba(255, 255, 255, 0.5),
     inset 1px 0 1px rgba(255, 255, 255, 0.35),
@@ -270,63 +273,82 @@ a {
   background: #555;
 }
 
-/* ── Recruiter-mode rainbow sweep (ChatWidget 전환 오버레이) ─────────── */
-@keyframes rainbow-sweep {
-  from {
-    transform: translateX(-80vw) skewX(-14deg);
-  }
-  to {
-    transform: translateX(190vw) skewX(-14deg);
+/* ── 테마 전환 크로스페이드 — setSiteTheme()가 450ms 동안만 켠다 ────── */
+html.theme-transitioning,
+html.theme-transitioning *,
+html.theme-transitioning *::before,
+html.theme-transitioning *::after {
+  transition:
+    background-color 0.4s ease,
+    color 0.4s ease,
+    border-color 0.4s ease,
+    fill 0.4s ease,
+    stroke 0.4s ease,
+    box-shadow 0.4s ease,
+    filter 0.4s ease !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  html.theme-transitioning,
+  html.theme-transitioning *,
+  html.theme-transitioning *::before,
+  html.theme-transitioning *::after {
+    transition: none !important;
   }
 }
-/* 검은 전환 화면 — 살짝 페이드인, 무지개가 지나간 뒤 페이드아웃 */
-@keyframes rainbow-screen {
+
+/* ── CookAR 수상 칩 트로피 팝 — 세션당 1회, 총 0.9s 미만 ─────────────── */
+@keyframes trophy-pop {
   0% {
-    opacity: 0;
+    transform: scale(0.3);
   }
-  12% {
-    opacity: 1;
+  55% {
+    transform: scale(1.35);
   }
-  82% {
+  75% {
+    transform: scale(0.92);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.trophy-pop {
+  animation: trophy-pop 650ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+@keyframes trophy-particle {
+  0% {
+    transform: rotate(calc(var(--i) * 60deg)) translateY(0) scale(1);
     opacity: 1;
   }
   100% {
+    transform: rotate(calc(var(--i) * 60deg)) translateY(-18px) scale(0.3);
     opacity: 0;
   }
 }
-.rainbow-sweep-screen {
-  background: #000;
-  animation: rainbow-screen 1300ms ease forwards;
-}
-.rainbow-sweep-band {
+.trophy-burst {
   position: absolute;
-  top: -10%;
-  bottom: -10%;
-  left: 0;
-  width: 60vw;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    #ff3b30,
-    #ff9500,
-    #ffcc00,
-    #34c759,
-    #00c7be,
-    #007aff,
-    #af52de,
-    transparent
-  );
-  filter: blur(32px) saturate(1.4);
-  opacity: 0.8;
-  animation: rainbow-sweep 1000ms cubic-bezier(0.45, 0, 0.25, 1) 130ms both;
+  inset: 0;
+  pointer-events: none;
 }
-/* 해제 시엔 같은 키프레임을 거꾸로 — 오→왼으로 되감긴다 */
-.rainbow-sweep-band--reverse {
-  animation-direction: reverse;
+.trophy-particle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 4px;
+  height: 4px;
+  margin: -2px 0 0 -2px;
+  border-radius: 50%;
+  background: #ffcc00;
+  animation: trophy-particle 800ms ease-out 120ms both;
+}
+.trophy-particle:nth-child(even) {
+  background: #f97030;
 }
 @media (prefers-reduced-motion: reduce) {
-  .rainbow-sweep-band,
-  .rainbow-sweep-screen {
+  .trophy-pop,
+  .trophy-particle {
+    animation: none;
+  }
+  .trophy-particle {
     display: none;
   }
 }

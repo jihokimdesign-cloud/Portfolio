@@ -53,30 +53,30 @@ const ProjectGrid = ({ projects, heroOffset }: Props) => {
     return () => ro.disconnect();
   }, []);
 
+  // 티어별 고정 규격: 피처드 = 그리드 폭 16:9 배너, 나머지 = 582×767 세로형.
+  // 그리드 실측 폭에서 계산해 모든 소형 카드가 정확히 같은 비율/크기를 가진다.
   const itemSizes = useMemo(() => {
-    if (currentBreakpoint >= breakpoints["2xl"]) {
-      return {
-        normalItem: windowDimension.width * 0.37,
-        firstItem: windowDimension.height * 0.85,
-      };
-    }
-    if (currentBreakpoint >= breakpoints.lg) {
-      return {
-        normalItem: windowDimension.width * 0.37,
-        firstItem: windowDimension.height * 0.85,
-      };
-    }
-    if (currentBreakpoint >= breakpoints.md) {
-      return {
-        normalItem: windowDimension.width * 0.55,
-        firstItem: windowDimension.width * 0.55,
-      };
-    }
+    const gapX = 20; // gap-x-5
+    const colWidth = isTwoColumns ? (gridWidth - gapX) / 2 : gridWidth;
+    const portrait =
+      colWidth > 0
+        ? Math.round(colWidth * (767 / 582))
+        : windowDimension.width * 0.6;
+    const featured =
+      gridWidth > 0
+        ? Math.round((gridWidth * 9) / 16)
+        : windowDimension.height * 0.85;
     return {
-      normalItem: windowDimension.width * 0.9,
-      firstItem: windowDimension.width * 0.9,
+      normalItem: portrait,
+      firstItem: shouldEmphasiseFirst ? featured : portrait,
     };
-  }, [currentBreakpoint, windowDimension.height, windowDimension.width]);
+  }, [
+    gridWidth,
+    isTwoColumns,
+    shouldEmphasiseFirst,
+    windowDimension.height,
+    windowDimension.width,
+  ]);
 
   const topOffset = useMemo(() => {
     return currentBreakpoint < breakpoints.lg ? heroOffset + 16 : 0;
@@ -119,17 +119,14 @@ const ProjectGrid = ({ projects, heroOffset }: Props) => {
             ? Math.floor((index + rowOffset) / 2)
             : index;
 
-          // 피처드 썸네일 타일은 16:9 배너로 (준비된 비율 유지, 크롭 없음)
-          const isFeaturedThumb =
-            index === 0 &&
-            shouldEmphasiseFirst &&
-            !!projectInfo.thumbHtml &&
-            gridWidth > 0;
-          const resolvedHeight = isFeaturedThumb
-            ? Math.round((gridWidth * 9) / 16)
-            : index === 0
-            ? itemSizes.firstItem
-            : itemSizes.normalItem;
+          // HTML 썸네일(16:9로 제작)은 모바일 1열에서도 배너 비율 유지 —
+          // 세로형 높이를 주면 아래가 빈 회색으로 남는다
+          const resolvedHeight =
+            index === 0
+              ? projectInfo.thumbHtml && gridWidth > 0
+                ? Math.round((gridWidth * 9) / 16)
+                : itemSizes.firstItem
+              : itemSizes.normalItem;
 
           return (
             <ProjectGridItem

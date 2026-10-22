@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Sun, Moon } from "lucide-react";
+import { setSiteTheme } from "../lib/theme";
 
 // DESIGN.md-token theme switch. Persists to localStorage; _document's init
 // script applies the saved value before first paint.
@@ -26,8 +27,7 @@ export default function ThemeToggle({ inline = false }: { inline?: boolean }) {
   const toggle = () => {
     const next = theme === "dark" ? "light" : "dark";
     setTheme(next);
-    document.documentElement.dataset.theme = next;
-    localStorage.setItem("theme", next);
+    setSiteTheme(next);
   };
 
   return (

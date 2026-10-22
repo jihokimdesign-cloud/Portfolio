@@ -1,29 +1,14 @@
 // 라이브 사이트(jihokim.me)의 ChatModal 구조를 리퀴드 글래스로 재해석한 버전.
-// 중앙 대형 모달 + 백드롭, 퀵 액션은 입력창 프리필, 원샷 응답 카드(매치 %는
-// 점수별 색상), 리크루터 모드는 스킬 필 멀티셀렉트. 스레드형 챗이 아니다.
+// 중앙 대형 모달 + 백드롭, 퀵 액션은 입력창 프리필, 원샷 응답 카드. 스레드형 챗이 아니다.
 import { useState, useRef, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  X,
-  Send,
-  Brain,
-  Loader2,
-  AlertCircle,
-  Sparkles,
-} from "lucide-react";
-import {
-  QUICK_ACTIONS_GENERAL,
-  QUICK_ACTIONS_RECRUITER,
-  SKILL_PILLS,
-} from "../lib/constants";
+import { X, Send, Brain, Loader2, AlertCircle } from "lucide-react";
+import { QUICK_ACTIONS_GENERAL } from "../lib/constants";
 import type { ChatResponse } from "../types";
 import { AnimationConfig } from "./AnimationConfig";
 
 const PRIMARY = "#0071e3";
-const ACCENT = "#F97030"; // 사이트 메인 오렌지 — 리크루터 액션에 사용
-const SUCCESS = "#34c759"; // 매치 80%+
-const WARNING = "#ffcc00"; // 매치 60%+
 const FOREGROUND = "var(--fg, #1d1d1f)";
 const MUTED = "var(--fg-muted, #6e6e73)";
 const SECONDARY = "var(--fg-secondary, #6e6e73)";
@@ -55,45 +40,9 @@ function RichText({ text }: { text: string }) {
   );
 }
 
-/* 모달 중앙의 리크루터 스위치 — 나브 토글과 같은 문법 */
-function RecruiterSwitch({
-  on,
-  onChange,
-}: {
-  on: boolean;
-  onChange: (v: boolean) => void;
-}) {
-  return (
-    <button
-      onClick={() => onChange(!on)}
-      role="switch"
-      aria-checked={on}
-      className="flex shrink-0 items-center gap-2 rounded-full px-3 py-1.5 text-[12px]"
-      style={{
-        border: `1px solid ${on ? ACCENT : "var(--glass-border)"}`,
-        color: on ? FOREGROUND : SECONDARY,
-      }}
-    >
-      Recruiter
-      <span
-        aria-hidden
-        className="relative inline-block h-5 w-9 shrink-0 rounded-full transition-colors duration-200"
-        style={{ background: on ? ACCENT : "var(--hairline)" }}
-      >
-        <span
-          className="absolute top-0.5 h-4 w-4 rounded-full bg-white transition-[left] duration-200"
-          style={{ left: on ? 18 : 2, boxShadow: "0 1px 3px rgba(0,0,0,.25)" }}
-        />
-      </span>
-    </button>
-  );
-}
-
 export default function ChatWidget() {
   const [mounted, setMounted] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [isRecruiter, setIsRecruiter] = useState(false);
-  const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState<ChatResponse | null>(null);
@@ -114,17 +63,13 @@ export default function ChatWidget() {
     return () => window.removeEventListener("keydown", onKey);
   }, [isOpen]);
 
-  // 닫거나 모드를 바꾸면 원샷 응답 초기화 (라이브 사이트와 동일)
+  // 닫으면 원샷 응답 초기화 (라이브 사이트와 동일)
   useEffect(() => {
     if (!isOpen) {
       setResponse(null);
       setError(null);
     }
   }, [isOpen]);
-  useEffect(() => {
-    setResponse(null);
-    setError(null);
-  }, [isRecruiter]);
 
   const submit = useCallback(
     async (text?: string) => {
@@ -137,11 +82,7 @@ export default function ChatWidget() {
         const res = await fetch("/api/chat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            message,
-            mode: isRecruiter ? "recruiter" : "general",
-            selectedSkills: isRecruiter ? selectedSkills : [],
-          }),
+          body: JSON.stringify({ message, mode: "general" }),
         });
         if (!res.ok) throw new Error();
         setResponse(await res.json());
@@ -153,32 +94,13 @@ export default function ChatWidget() {
         setLoading(false);
       }
     },
-    [input, loading, isRecruiter, selectedSkills]
+    [input, loading]
   );
-
-  const toggleSkill = (skill: string) =>
-    setSelectedSkills((prev) =>
-      prev.includes(skill) ? prev.filter((s) => s !== skill) : [...prev, skill]
-    );
-
-  // 레인보우 스윕 전환 — 진입은 왼→오, 해제는 반대 방향으로 되감기
-  const [sweepDir, setSweepDir] = useState<"fwd" | "rev" | null>(null);
-  const prevRecruiter = useRef(false);
-  useEffect(() => {
-    const was = prevRecruiter.current;
-    prevRecruiter.current = isRecruiter;
-    if (isRecruiter !== was) {
-      setSweepDir(isRecruiter ? "fwd" : "rev");
-      const t = setTimeout(() => setSweepDir(null), 1400);
-      return () => clearTimeout(t);
-    }
-  }, [isRecruiter]);
 
   // 히어로 입력/나브에서 열기 — 질문이 있으면 바로 제출
   useEffect(() => {
     const onOpen = (e: Event) => {
       const detail = (e as CustomEvent).detail;
-      if (detail?.mode === "recruiter") setIsRecruiter(true);
       setIsOpen(true);
       if (detail?.message) {
         setInput(detail.message);
@@ -189,50 +111,10 @@ export default function ChatWidget() {
     return () => window.removeEventListener("jiho-chat-open", onOpen);
   }, [submit]);
 
-  // 나브 토글 ↔ 모달 내부 스위치 양방향 동기화
-  useEffect(() => {
-    const onMode = (e: Event) =>
-      setIsRecruiter(Boolean((e as CustomEvent).detail?.recruiter));
-    window.addEventListener("jiho-chat-mode", onMode);
-    return () => window.removeEventListener("jiho-chat-mode", onMode);
-  }, []);
-  useEffect(() => {
-    window.dispatchEvent(
-      new CustomEvent("jiho-chat-mode-changed", {
-        detail: { recruiter: isRecruiter },
-      })
-    );
-  }, [isRecruiter]);
-
   if (!mounted) return null;
-
-  const quickActions = isRecruiter
-    ? QUICK_ACTIONS_RECRUITER
-    : QUICK_ACTIONS_GENERAL;
-  const matchTint =
-    response?.matchPercentage !== undefined
-      ? response.matchPercentage >= 80
-        ? SUCCESS
-        : response.matchPercentage >= 60
-        ? WARNING
-        : null
-      : null;
 
   return createPortal(
     <div style={{ fontFamily: FONT_STACK, color: FOREGROUND }}>
-      {/* ── 리크루터 전환: 검은 화면 위로 무지개가 천천히 지나간다 ── */}
-      {sweepDir && (
-        <div
-          aria-hidden
-          className="rainbow-sweep-screen pointer-events-none fixed inset-0 z-[300] overflow-hidden"
-        >
-          <div
-            className={`rainbow-sweep-band${
-              sweepDir === "rev" ? " rainbow-sweep-band--reverse" : ""
-            }`}
-          />
-        </div>
-      )}
       <AnimatePresence>
         {isOpen && (
           <>
@@ -273,78 +155,31 @@ export default function ChatWidget() {
               >
                 <div>
                   <h2 className="text-xl font-semibold md:text-2xl">
-                    {isRecruiter
-                      ? "AI-Powered Job Match Analysis"
-                      : "Chat with Jiho’s AI Assistant"}
+                    Chat with Jiho’s AI Assistant
                   </h2>
                   <p
                     className="mt-1 text-xs"
                     style={{ color: MUTED, fontFamily: MONO_STACK }}
                   >
-                    {isRecruiter
-                      ? "Paste a job description to see how well I match your role"
-                      : "Ask anything about my work, skills, or experience"}
+                    Ask anything about my work, skills, or experience
                   </p>
                 </div>
-                <div className="flex shrink-0 items-center gap-2">
-                  <RecruiterSwitch on={isRecruiter} onChange={setIsRecruiter} />
-                  <button
-                    onClick={() => setIsOpen(false)}
-                    aria-label="Close chat"
-                    className="rounded-full p-2 transition-opacity hover:opacity-70"
-                    style={{ color: MUTED }}
-                  >
-                    <X size={20} />
-                  </button>
-                </div>
+                <button
+                  onClick={() => setIsOpen(false)}
+                  aria-label="Close chat"
+                  className="shrink-0 rounded-full p-2 transition-opacity hover:opacity-70"
+                  style={{ color: MUTED }}
+                >
+                  <X size={20} />
+                </button>
               </div>
 
               {/* body */}
               <div className="flex-1 overflow-y-auto px-6 py-5 md:px-10 md:py-6">
-                {/* skill pills — recruiter only */}
-                {isRecruiter && (
-                  <div className="mb-5">
-                    <p
-                      className="mb-2.5 text-xs font-medium"
-                      style={{ color: MUTED, fontFamily: MONO_STACK }}
-                    >
-                      Highlight Specific Skills (Optional)
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      {SKILL_PILLS.map((skill) => {
-                        const active = selectedSkills.includes(skill);
-                        return (
-                          <button
-                            key={skill}
-                            onClick={() => toggleSkill(skill)}
-                            aria-pressed={active}
-                            className="rounded-full px-3.5 py-1.5 text-[11px] font-medium transition-all"
-                            style={{
-                              fontFamily: MONO_STACK,
-                              ...(active
-                                ? {
-                                    background: `${ACCENT}22`,
-                                    color: ACCENT,
-                                    boxShadow: `inset 0 0 0 1px ${ACCENT}55`,
-                                  }
-                                : {
-                                    border: `1px solid ${HAIRLINE}`,
-                                    color: SECONDARY,
-                                  }),
-                            }}
-                          >
-                            {skill}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                )}
-
                 {/* quick actions — 입력창 프리필 (라이브 사이트와 동일) */}
                 {!response && !loading && (
                   <div className="mb-5 flex flex-wrap gap-2">
-                    {quickActions.map((action) => (
+                    {QUICK_ACTIONS_GENERAL.map((action) => (
                       <button
                         key={action.label}
                         onClick={() => {
@@ -370,7 +205,7 @@ export default function ChatWidget() {
                     className="mb-2 block text-xs font-medium"
                     style={{ fontFamily: MONO_STACK }}
                   >
-                    {isRecruiter ? "Job Description" : "Your Question"}
+                    Your Question
                   </label>
                   <textarea
                     ref={textareaRef}
@@ -382,11 +217,7 @@ export default function ChatWidget() {
                         submit();
                       }
                     }}
-                    placeholder={
-                      isRecruiter
-                        ? "Paste the job description here..."
-                        : "Type your question..."
-                    }
+                    placeholder="Type your question..."
                     rows={4}
                     className="w-full resize-none rounded-xl px-4 py-3 text-sm transition-shadow focus:outline-none"
                     style={{
@@ -397,9 +228,7 @@ export default function ChatWidget() {
                       color: FOREGROUND,
                     }}
                     onFocus={(e) =>
-                      (e.currentTarget.style.boxShadow = `0 0 0 3px ${
-                        isRecruiter ? ACCENT : PRIMARY
-                      }33`)
+                      (e.currentTarget.style.boxShadow = `0 0 0 3px ${PRIMARY}33`)
                     }
                     onBlur={(e) => (e.currentTarget.style.boxShadow = "none")}
                   />
@@ -410,17 +239,17 @@ export default function ChatWidget() {
                   onClick={() => submit()}
                   disabled={!input.trim() || loading}
                   className="inline-flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold text-white transition-all active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
-                  style={{ background: isRecruiter ? ACCENT : PRIMARY }}
+                  style={{ background: PRIMARY }}
                 >
                   {loading ? (
                     <>
                       <Loader2 size={16} className="animate-spin" />
-                      Analyzing...
+                      Thinking...
                     </>
                   ) : (
                     <>
                       <Send size={16} />
-                      {isRecruiter ? "Analyze Match" : "Send"}
+                      Send
                     </>
                   )}
                 </button>
@@ -430,21 +259,19 @@ export default function ChatWidget() {
                   <div className="mt-6 flex flex-col items-center gap-3 py-8">
                     <div
                       className="flex h-12 w-12 items-center justify-center rounded-full"
-                      style={{
-                        background: `${isRecruiter ? ACCENT : PRIMARY}14`,
-                      }}
+                      style={{ background: `${PRIMARY}14` }}
                     >
                       <Brain
                         size={24}
                         className="animate-pulse"
-                        style={{ color: isRecruiter ? ACCENT : PRIMARY }}
+                        style={{ color: PRIMARY }}
                       />
                     </div>
                     <p
                       className="text-xs font-medium"
                       style={{ color: MUTED, fontFamily: MONO_STACK }}
                     >
-                      {isRecruiter ? "Analyzing job match..." : "Thinking..."}
+                      Thinking...
                     </p>
                   </div>
                 )}
@@ -489,37 +316,10 @@ export default function ChatWidget() {
                     <div
                       className="rounded-xl p-6"
                       style={{
-                        border: `1px solid ${
-                          matchTint ? `${matchTint}59` : HAIRLINE
-                        }`,
-                        background: matchTint
-                          ? `${matchTint}0d`
-                          : "var(--bubble, rgba(127,127,127,.08))",
+                        border: `1px solid ${HAIRLINE}`,
+                        background: "var(--bubble, rgba(127,127,127,.08))",
                       }}
                     >
-                      {response.matchPercentage !== undefined && (
-                        <div className="mb-4 flex items-center gap-3">
-                          <Sparkles
-                            size={20}
-                            style={{ color: matchTint ?? MUTED }}
-                          />
-                          <span className="text-4xl font-bold">
-                            {response.matchPercentage}%
-                          </span>
-                          {response.matchLevel && (
-                            <span
-                              className="rounded-full px-3 py-1 text-xs font-semibold"
-                              style={{
-                                fontFamily: MONO_STACK,
-                                background: `${matchTint ?? MUTED}1a`,
-                                color: matchTint ?? MUTED,
-                              }}
-                            >
-                              {response.matchLevel}
-                            </span>
-                          )}
-                        </div>
-                      )}
                       <div
                         className="space-y-2 text-sm leading-relaxed"
                         style={{ color: SECONDARY }}
@@ -565,8 +365,6 @@ export default function ChatWidget() {
           </>
         )}
       </AnimatePresence>
-
-
     </div>,
     document.body
   );

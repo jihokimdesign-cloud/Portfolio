@@ -61,25 +61,13 @@ Tools: Figma, Unity, ShapesXR, Cursor AI, Claude Code, GSAP, Tailwind CSS
 Technical: HTML/CSS, JavaScript, React/Next.js, Node.js, AR/VR Prototyping, MediaPipe, GSAP Animations
 `;
 
-function extractMatchPercentage(text: string): number | null {
-  const m = text.match(/(\d{1,3})\s*%/);
-  return m ? Math.min(100, Math.max(0, parseInt(m[1]))) : null;
-}
-
-function getMatchLevel(pct: number): string {
-  if (pct >= 85) return "Strong Match";
-  if (pct >= 70) return "Good Match";
-  if (pct >= 55) return "Partial Match";
-  return "Low Match";
-}
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
   try {
-    const { message, mode, selectedSkills } = req.body;
+    const { message } = req.body;
 
     if (!message?.trim()) {
       return res.status(400).json({ error: "Message is required" });
@@ -89,15 +77,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(500).json({ error: "API key not configured" });
     }
 
-    const isRecruiter = mode === "recruiter";
-
-    const skillContext = selectedSkills?.length
-      ? `\nHighlight these skills specifically if relevant: ${selectedSkills.join(", ")}.`
-      : "";
-
-    const systemPrompt = isRecruiter
-      ? `${JIHO_CONTEXT}\n\nRECRUITER MODE: The user has pasted a job description. Analyze the fit between Jiho's profile and this job.\nYour response MUST start with a match percentage like "87% match" on the first line.\nThen provide 3-5 concise bullet points covering: key strengths alignment, relevant projects, any gaps, why you'd be a great hire.\nUse **bold** for skill names and metrics. Keep it professional but confident.${skillContext}`
-      : `${JIHO_CONTEXT}\n\nGENERAL MODE: Answer naturally and conversationally as Jiho. Be warm, direct, and confident.\nEnd your response with a JSON block on a NEW LINE exactly like this (no extra text after):\nFOLLOWUPS:["question 1","question 2","question 3"]${skillContext}`;
+    const systemPrompt = `${JIHO_CONTEXT}\n\nGENERAL MODE: Answer naturally and conversationally as Jiho. Be warm, direct, and confident.\nEnd your response with a JSON block on a NEW LINE exactly like this (no extra text after):\nFOLLOWUPS:["question 1","question 2","question 3"]`;
 
     const completion = await getOpenAI().chat.completions.create({
       model: "gpt-4o-mini",
@@ -105,36 +85,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         { role: "system", content: systemPrompt },
         { role: "user", content: message },
       ],
-      max_tokens: isRecruiter ? 400 : 300,
+      max_tokens: 300,
       temperature: 0.7,
     });
 
     const raw = completion.choices[0]?.message?.content ?? "";
 
-    if (isRecruiter) {
-      const pct = extractMatchPercentage(raw) ?? 75;
-      const lines = raw.split("\n");
-      const contentLines = lines.filter(
-        (l) => !l.match(/^\d{1,3}\s*%/) && l.trim()
-      );
-      return res.status(200).json({
-        type: "job_match",
-        content: contentLines.join("\n"),
-        matchPercentage: pct,
-        matchLevel: getMatchLevel(pct),
-      });
-    } else {
-      const fuMatch = raw.match(/FOLLOWUPS:\[([^\]]+)\]/);
-      const followUps: string[] = fuMatch
-        ? JSON.parse(`[${fuMatch[1]}]`).slice(0, 3)
-        : [];
-      const content = raw.replace(/\nFOLLOWUPS:\[.*?\]/, "").trim();
-      return res.status(200).json({
-        type: "general",
-        content,
-        followUps,
-      });
-    }
+    const fuMatch = raw.match(/FOLLOWUPS:\[([^\]]+)\]/);
+    const followUps: string[] = fuMatch
+      ? JSON.parse(`[${fuMatch[1]}]`).slice(0, 3)
+      : [];
+    const content = raw.replace(/\nFOLLOWUPS:\[.*?\]/, "").trim();
+    return res.status(200).json({
+      type: "general",
+      content,
+      followUps,
+    });
   } catch (err) {
     console.error("Chat API error:", err);
     return res.status(500).json({ error: "Internal server error" });

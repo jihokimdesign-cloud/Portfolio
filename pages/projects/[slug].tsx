@@ -79,7 +79,12 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   const source = getPostBySlug(params.slug as string);
   const nextProjectSource = getPostBySlug(source.meta.nextProject as string);
-  const mdxSource = await serialize(source.content);
+  // 로컬 신뢰 콘텐츠 — v6의 기본 blockJS가 width={1600} 같은 JSX 표현식
+  // 속성을 통째로 제거해 MDX 본문이 깨진다. 위험 호출 차단은 유지.
+  const mdxSource = await serialize(source.content, {
+    blockJS: false,
+    blockDangerousJS: true,
+  });
 
   const paths = getAllPostSlugs();
   const slugTitleMap = paths.map((path) => {

@@ -14,7 +14,10 @@ export function getPostBySlug(slug: string) {
   return { meta: data, content };
 }
 
-const fileNames = fs.readdirSync(DOCS_DIRECTORY);
+const fileNames = fs
+  .readdirSync(DOCS_DIRECTORY)
+  // .mdx만, 그리고 "cheffy 2.mdx" 같은 파인더 복사본은 제외
+  .filter((name) => name.endsWith(".mdx") && !/\s/.test(name));
 export function getAllPostSlugs() {
   return fileNames.map((fileName) => {
     return {

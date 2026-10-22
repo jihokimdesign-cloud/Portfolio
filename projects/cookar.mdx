@@ -1,0 +1,48 @@
+---
+title: CookAR
+tags: AR Research · Accessibility
+description: Multimodal AR that helps low-vision users cook independently
+hook: Multimodal AR that helps low-vision users cook independently
+award: UIST 2024 Best Paper
+type: case-study
+thumbImage: /project-assets/cookar/cookar-demo.webp
+cardTitle: AR that helps low-vision cooks find their way around the kitchen
+cardMeta: CookAR · UIST 2024 Best Paper · AR Accessibility
+
+colorAccent: rgb(245, 158, 11)
+colorLight: rgb(255, 251, 235)
+colorDark: rgb(20, 32, 54)
+colorDarkest: rgb(12, 26, 46)
+colorScheme: dark
+
+nextProject: tap3d
+hidden: false
+
+scope: UIST 2024 · ACM
+weight: 5
+---
+
+-- AR that shows you where to grab — published research helping people with low vision cook safely and independently.
+
+CookAR is a head-mounted AR system that recognizes kitchen tools in real time and overlays affordance augmentations — visual cues that distinguish the part of a tool you grab from the part that can hurt you. It received the Best Paper Award (Belonging and Inclusion) at UIST 2024, ACM's flagship venue for user interface software and technology.
+
+<StatGrid
+  stats={[
+    { value: "ACM", label: "UIST 2024 Best Paper", sub: "Belonging and Inclusion Award" },
+    { value: "10", label: "Low-vision participants", sub: "qualitative lab study" },
+    { value: "1st", label: "Egocentric dataset", sub: "of kitchen tool affordances" },
+    { value: "9", label: "Co-authors", sub: "UW · UW–Madison · UT Dallas" },
+  ]}
+/>
+
+<LayoutMainContent extraMargin>
+  <Image src="/Sub_proj/CookAR_gif.webp" width={330} height={330}>
+    <Caption>CookAR in action — real-time affordance augmentations rendered on kitchen tools through a head-mounted AR display.</Caption>
+  </Image>
+</LayoutMainContent>
+
+The system pairs a fine-tuned affordance segmentation model with a stereo-camera AR headset, generating real-time visual augmentations directly on the tools a user is reaching for. The team collected and annotated the first egocentric dataset of kitchen tool affordances to train it, then refined the augmentation designs through a lab study with ten low-vision participants.
+
+I co-authored the research as part of a cross-institution team spanning the University of Washington, the University of Wisconsin–Madison, and UT Dallas.
+
+[Read the paper on the ACM Digital Library ↗](https://dl.acm.org/doi/10.1145/3654777.3676449)
