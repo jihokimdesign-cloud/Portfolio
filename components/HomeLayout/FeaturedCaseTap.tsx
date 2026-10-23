@@ -26,7 +26,7 @@ export default function FeaturedCaseTap() {
           style={{
             fontFamily: TITLE_FONT,
             fontWeight: 500,
-            fontSize: "clamp(30px, 4vw, 46px)",
+            fontSize: "clamp(28px, 3.2vw, 38px)",
             letterSpacing: "-0.035em",
             lineHeight: 1.06,
             color: "var(--title)",
@@ -61,8 +61,8 @@ export default function FeaturedCaseTap() {
           <Link
             href="/projects/tap3d"
             scroll={false}
-            className="sw-readlink text-[14px] transition-opacity hover:opacity-80"
-            style={{ color: "var(--link)" }}
+            className="sw-readlink text-[14px]"
+            style={{ color: "var(--fg)" }}
           >
             Read the case <span className="sw-arrow">&rarr;</span>
           </Link>

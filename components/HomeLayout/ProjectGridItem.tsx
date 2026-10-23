@@ -1,10 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { ProjectInfo, ProjectStyle, getProjectCover } from "../../lib/ProjectInfo";
 import Image from "next/image";
-import { motion } from "framer-motion";
 import Link from "next/link";
-import ReactiveTapArea from "../ReactiveTapArea/ReactiveTapArea";
-import { AnimationConfig } from "../AnimationConfig";
 import { useSiteTheme } from "../../hooks/useSiteTheme";
 
 type Props = {
@@ -141,135 +138,124 @@ const ProjectGridItem = ({
   const tags = projectInfo.tags ?? [];
 
   return (
-    <motion.div>
-      <ReactiveTapArea>
-        <Link
-          href={`/projects/${projectInfo.slug}`}
-          scroll={false}
-          onMouseEnter={() => setIsHovering(true)}
-          onMouseLeave={() => setIsHovering(false)}
-          className="group block"
-        >
-          {/* ── thumbnail panel (4/3) ── */}
-          <div
-            className="relative overflow-hidden rounded-[18px]"
+    <Link
+      href={`/projects/${projectInfo.slug}`}
+      scroll={false}
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
+      className="sw-card group"
+    >
+      {/* ── row 1: text (title · description · tags) ── */}
+      <div className="flex flex-col gap-2">
+        <div className="flex items-start gap-2">
+          <span
+            className="text-[22px] leading-snug lg:text-[24px]"
             style={{
-              height: cardHeight,
-              border: "1px solid var(--hairline)",
-              backgroundColor:
-                projectInfo.thumbHtml || projectInfo.thumbImage
-                  ? "var(--panel-fade)"
-                  : INACTIVE_BG_COLOR,
+              fontFamily: TITLE_FONT,
+              fontWeight: 500,
+              letterSpacing: "-0.02em",
+              color: "var(--title)",
             }}
           >
-            {projectInfo.award && <AwardChip label={projectInfo.award} />}
-            <motion.div
-              className="h-full w-full"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: !isLoading ? 1 : 0 }}
-              transition={{
-                duration: AnimationConfig.NORMAL,
-                ease: AnimationConfig.EASING_DRAMATIC,
-              }}
-              style={{
-                transform: isHovering ? "scale(1.01)" : "scale(1)",
-                transition: "transform .4s ease",
-              }}
-            >
-              {projectInfo.thumbHtml ? (
-                <iframe
-                  key={themeThumbSrc}
-                  src={themeThumbSrc}
-                  title={projectInfo.title}
-                  scrolling="no"
-                  className="absolute inset-0 h-full w-full border-0"
-                  style={{ pointerEvents: "none" }}
-                  onLoad={() => setIsImageLoaded(true)}
-                />
-              ) : projectInfo.thumbImage ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={projectInfo.thumbImage}
-                  className="absolute inset-0 h-full w-full object-cover"
-                  style={{ objectPosition: thumbFocus }}
-                  alt={`${projectInfo.title} thumbnail`}
-                  onLoad={() => setIsImageLoaded(true)}
-                />
-              ) : (
-                !hasVideo && (
-                  <Image
-                    src={getProjectCover(projectInfo.slug)}
-                    width={582}
-                    height={767}
-                    className="absolute inset-0 h-full w-full object-cover"
-                    style={{ objectPosition: thumbFocus }}
-                    alt={`${projectInfo.title} thumbnail`}
-                    onLoad={() => setIsImageLoaded(true)}
-                  />
-                )
-              )}
-
-              {hasVideo && (
-                <video
-                  disablePictureInPicture
-                  ref={videoRef}
-                  src={projectInfo.previewVideo}
-                  preload="metadata"
-                  muted
-                  loop
-                  playsInline
-                  className="absolute inset-0 h-full w-full object-cover"
-                  style={{ objectPosition: thumbFocus }}
-                />
-              )}
-            </motion.div>
+            {title}
+          </span>
+          <span
+            aria-hidden
+            className="mt-[6px] shrink-0 transition-transform duration-200 group-hover:translate-x-1"
+            style={{ color: "var(--fg-muted)" }}
+          >
+            &rarr;
+          </span>
+        </div>
+        {description && (
+          <p
+            className="max-w-[46ch] text-[15px] leading-relaxed lg:text-[16px]"
+            style={{ color: "var(--fg-secondary)", margin: 0 }}
+          >
+            {description}
+          </p>
+        )}
+        {tags.length > 0 && (
+          <div className="mt-1 flex flex-wrap gap-1.5">
+            {tags.map((t) => (
+              <span key={t} className="sw-tag">
+                {t}
+              </span>
+            ))}
           </div>
+        )}
+      </div>
 
-          {/* ── text (16px gap below panel) ── */}
-          {!shouldHideTitles && (
-            <div className="mt-4 flex flex-col gap-2">
-              <div className="flex items-start gap-2">
-                <span
-                  className="text-[22px] leading-snug lg:text-[24px]"
-                  style={{
-                    fontFamily: TITLE_FONT,
-                    fontWeight: 500,
-                    letterSpacing: "-0.02em",
-                    color: "var(--title)",
-                  }}
-                >
-                  {title}
-                </span>
-                <span
-                  aria-hidden
-                  className="mt-[6px] shrink-0 transition-transform duration-200 group-hover:translate-x-1"
-                  style={{ color: "var(--fg-muted)" }}
-                >
-                  &rarr;
-                </span>
-              </div>
-              {description && (
-                <p
-                  className="max-w-[46ch] text-[15px] leading-relaxed lg:text-[16px]"
-                  style={{ color: "var(--fg-secondary)", margin: 0 }}
-                >
-                  {description}
-                </p>
-              )}
-              {tags.length > 0 && (
-                <div className="mt-1 flex flex-wrap gap-1.5">
-                  {tags.map((t) => (
-                    <span key={t} className="sw-tag">
-                      {t}
-                    </span>
-                  ))}
-                </div>
-              )}
-            </div>
+      {/* ── row 2: thumbnail panel (ratio from cardHeight) ── */}
+      <div
+        className="relative self-start overflow-hidden rounded-[18px]"
+        style={{
+          height: cardHeight,
+          border: "1px solid var(--hairline)",
+          backgroundColor:
+            projectInfo.thumbHtml || projectInfo.thumbImage
+              ? "var(--panel-fade)"
+              : INACTIVE_BG_COLOR,
+        }}
+      >
+        {projectInfo.award && <AwardChip label={projectInfo.award} />}
+        <div
+          className="h-full w-full"
+          style={{
+            opacity: !isLoading ? 1 : 0,
+            transform: isHovering ? "scale(1.01)" : "scale(1)",
+            transition: "opacity .5s ease, transform .4s ease",
+          }}
+        >
+          {projectInfo.thumbHtml ? (
+            <iframe
+              key={themeThumbSrc}
+              src={themeThumbSrc}
+              title={projectInfo.title}
+              scrolling="no"
+              className="absolute inset-0 h-full w-full border-0"
+              style={{ pointerEvents: "none" }}
+              onLoad={() => setIsImageLoaded(true)}
+            />
+          ) : projectInfo.thumbImage ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={projectInfo.thumbImage}
+              className="absolute inset-0 h-full w-full object-cover"
+              style={{ objectPosition: thumbFocus }}
+              alt={`${projectInfo.title} thumbnail`}
+              onLoad={() => setIsImageLoaded(true)}
+            />
+          ) : (
+            !hasVideo && (
+              <Image
+                src={getProjectCover(projectInfo.slug)}
+                width={582}
+                height={767}
+                className="absolute inset-0 h-full w-full object-cover"
+                style={{ objectPosition: thumbFocus }}
+                alt={`${projectInfo.title} thumbnail`}
+                onLoad={() => setIsImageLoaded(true)}
+              />
+            )
           )}
-        </Link>
-      </ReactiveTapArea>
-    </motion.div>
+
+          {hasVideo && (
+            <video
+              disablePictureInPicture
+              ref={videoRef}
+              src={projectInfo.previewVideo}
+              preload="metadata"
+              muted
+              loop
+              playsInline
+              className="absolute inset-0 h-full w-full object-cover"
+              style={{ objectPosition: thumbFocus }}
+            />
+          )}
+        </div>
+      </div>
+    </Link>
   );
 };
 

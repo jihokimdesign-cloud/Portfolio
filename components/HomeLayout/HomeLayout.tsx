@@ -74,7 +74,7 @@ const HomeLayout = ({ projects }: Props) => {
             fontFamily: '"TikTok Sans", Inter, sans-serif',
             fontWeight: 400,
             color: "var(--fg-muted)",
-            margin: "20px 0 12px",
+            margin: "20px 0 24px",
           }}
         >
           Selected Work
