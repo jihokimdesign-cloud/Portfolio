@@ -4,7 +4,8 @@ import { motion, transform } from "framer-motion";
 import { AnimationConfig } from "../AnimationConfig";
 import { ExternalLink } from "../Layouts/ExternalLink";
 import debounce from "../../lib/debounce";
-import LandingBento from "./LandingBento";
+import LandingHero from "./LandingHero";
+import { getProjectInfo } from "../../lib/ProjectInfo";
 import { useContainerScroll } from "../ScrollContainer/ScrollContainer";
 import { useWindowDimension } from "../../hooks/useWindowDimension";
 import fluidFont from "../../lib/fluidFont";
@@ -18,6 +19,10 @@ const HERO_OFFSET = 500;
 
 const HomeLayout = ({ projects }: Props) => {
   const windowDimension = useWindowDimension();
+  const projectCount = useMemo(
+    () => projects.filter((p) => !getProjectInfo(p.meta).hidden).length,
+    [projects]
+  );
   const [transformOrigin, setTransformOrigin] = useState("center center");
   const { scrollY } = useContainerScroll();
   useEffect(() => {
@@ -66,19 +71,22 @@ const HomeLayout = ({ projects }: Props) => {
         },
       }}
     >
-      <LandingBento />
-      <div className="mb-4">
-        <h2
-          className="text-[13px]"
-          style={{
-            fontFamily: '"TikTok Sans", Inter, sans-serif',
-            fontWeight: 400,
-            color: "var(--fg-muted)",
-            margin: "20px 0 24px",
-          }}
-        >
-          Selected Work
-        </h2>
+      <LandingHero />
+      <div
+        className="font-inter mb-4"
+        style={{ marginTop: "clamp(112px, 14vw, 192px)" }}
+      >
+        <div className="sw-header" style={{ marginBottom: 24 }}>
+          <span
+            className="text-[13px]"
+            style={{ fontWeight: 510, color: "var(--hero-fg)" }}
+          >
+            Selected Work
+          </span>
+          <span className="text-[13px]" style={{ color: "var(--hero-fg2)" }}>
+            {projectCount} projects
+          </span>
+        </div>
         <SelectedWork projects={projects} />
       </div>
     </motion.div>

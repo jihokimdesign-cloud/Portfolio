@@ -82,6 +82,10 @@ const Home: NextPage = ({
           href="https://fonts.googleapis.com/css2?family=TikTok+Sans:wght@400;500&display=swap"
           rel="stylesheet"
         />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..600&display=swap"
+          rel="stylesheet"
+        />
       </Head>
       <NextSeo
         title={`Jiho Kim — Product Designer`}

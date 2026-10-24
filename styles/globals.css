@@ -99,6 +99,17 @@ body {
     inset -1px 0 1px rgba(255, 255, 255, 0.1);
   --title: rgb(230, 230, 230);
   --logo-filter: brightness(0) invert(1);
+
+  /* ── Landing hero type + color system (Linear-style) ──────────
+     3 text levels only; accent + status green; AI-bar rainbow. */
+  --hero-fg: #f7f8f8;
+  --hero-fg2: #8a8f98;
+  --hero-fg3: #62666d;
+  --accent: #4d94ff;
+  --status-green: #1f9d63;
+  --hero-hairline: rgba(255, 255, 255, 0.1);
+  --hero-tile: #1c1d1f;
+  --hero-tile-border: rgba(255, 255, 255, 0.12);
 }
 :root[data-theme="light"] {
   --canvas: #f5f5f7;
@@ -125,6 +136,16 @@ body {
      Apple 헤드라인 컬러. 2026-07-19 Jiho가 라이트 타이틀 너무 연하다고 확인. */
   --title: #1d1d1f;
   --logo-filter: none;
+
+  /* hero type + color system — light register */
+  --hero-fg: #08090a;
+  --hero-fg2: #62666d;
+  --hero-fg3: #8a8f98;
+  --accent: #0066ff;
+  --status-green: #1f9d63;
+  --hero-hairline: rgba(8, 9, 10, 0.08);
+  --hero-tile: #ffffff;
+  --hero-tile-border: rgba(8, 9, 10, 0.1);
 }
 
 /* ── Liquid Glass (Apple iOS 26-style material) ───────────────────
@@ -386,10 +407,13 @@ html.theme-transitioning *::after {
     #16181c;
   --panel-fade: #0a0a0b;
 }
-/* mono tag chip — used by featured + grid cards */
+/* tag chip — Inter 12px (unified with the hero type system) */
 .sw-tag {
-  font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, monospace;
-  font-size: 11.5px;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  font-feature-settings: "cv01", "ss03";
+  font-size: 12px;
+  font-weight: 400;
   line-height: 1;
   padding: 5px 9px;
   border-radius: 6px;
@@ -421,5 +445,371 @@ html.theme-transitioning *::after {
     display: flex;
     flex-direction: column;
     gap: 22px;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   LANDING HERO (Linear-style type + interactive phrases)
+   ════════════════════════════════════════════════════════════════ */
+
+/* Inter variable — applied to the hero + Selected Work surface only.
+   Two weights only: titles 510, body 400. */
+.font-inter {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  font-feature-settings: "cv01", "ss03";
+  letter-spacing: normal;
+}
+
+/* ── Headline + hover phrases ─────────────────────────────────── */
+.hero-hl {
+  color: var(--hero-fg);
+  font-weight: 510;
+  letter-spacing: -0.022em;
+  line-height: 1.1;
+  font-size: clamp(30px, 5vw, 50px);
+  transition: color 0.22s ease;
+}
+/* any phrase active → the rest of the sentence drops to the 3rd gray */
+.hero-hl[data-active="ai"],
+.hero-hl[data-active="people"],
+.hero-hl[data-active="code"] {
+  color: var(--hero-fg3);
+}
+.hero-hl[data-active="ai"] .hp--ai,
+.hero-hl[data-active="people"] .hp--people,
+.hero-hl[data-active="code"] .hp--code {
+  color: var(--accent);
+}
+
+/* once the entrance is done, drop any residual entrance filter/transform so
+   hover color changes never lag (and no stuck blur). */
+.hero-hl.done .hero-line {
+  filter: none !important;
+  transform: none !important;
+}
+
+/* forced line breaks on desktop; natural wrap on mobile */
+.hero-line {
+  display: block;
+}
+@media (max-width: 640px) {
+  .hero-line {
+    display: inline;
+  }
+}
+
+/* hover target — dotted underline (radial-gradient dots) */
+.hp {
+  color: inherit;
+  cursor: pointer;
+  outline: none;
+  padding-bottom: 0.08em;
+  background-image: radial-gradient(
+    circle,
+    currentColor 1.1px,
+    transparent 1.1px
+  );
+  background-repeat: repeat-x;
+  background-position: 0 100%;
+  background-size: 6px 2px;
+  transition: color 0.22s ease;
+  border-radius: 2px;
+}
+.hp:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* inline icon chips (✦ and ‹›) */
+.hero-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 0.92em;
+  height: 0.92em;
+  margin: 0 0.04em;
+  border-radius: 0.2em;
+  border: 1px solid var(--hero-tile-border);
+  background: var(--hero-tile);
+  color: var(--hero-fg2);
+  vertical-align: baseline;
+  transform: translateY(0.1em);
+  transition: color 0.22s ease, opacity 0.22s ease, border-color 0.22s ease;
+}
+.hero-chip svg {
+  width: 62%;
+  height: 62%;
+}
+.hero-hl[data-active="ai"] .hero-chip,
+.hero-hl[data-active="people"] .hero-chip,
+.hero-hl[data-active="code"] .hero-chip {
+  opacity: 0.32;
+}
+.hero-hl[data-active="ai"] .chip--ai,
+.hero-hl[data-active="code"] .chip--code {
+  opacity: 1;
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* ── Divider + caption ────────────────────────────────────────── */
+.hero-divider {
+  width: 40px;
+  height: 1px;
+  background: var(--hero-hairline);
+}
+
+/* ── Floating elements around the headline ────────────────────── */
+.hero-floaters {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+@media (max-width: 860px) {
+  .hero-floaters {
+    display: none;
+  }
+}
+
+/* ── §4-1 AI bar ──────────────────────────────────────────────── */
+@property --ang {
+  syntax: "<angle>";
+  initial-value: 0deg;
+}
+.ai-bar-wrap {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.ai-bar {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 50px;
+  padding: 0 18px;
+  border-radius: 999px;
+  background: var(--hero-tile);
+  color: var(--hero-fg);
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  transition: width 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+/* rotating rainbow border + blurred glow behind */
+.ai-bar::before,
+.ai-bar::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  padding: 2px;
+  background: conic-gradient(
+    from var(--ang),
+    #4f8cff,
+    #9b6bff,
+    #ff6fae,
+    #ffb547,
+    #3fd0c9,
+    #4f8cff
+  );
+  animation: ai-spin 4s linear infinite;
+  z-index: -1;
+}
+.ai-bar::before {
+  -webkit-mask: linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+.ai-bar::after {
+  filter: blur(11px);
+  opacity: 0.6;
+  z-index: -2;
+}
+@keyframes ai-spin {
+  to {
+    --ang: 360deg;
+  }
+}
+.ai-orb-glyph {
+  background: linear-gradient(120deg, #4f8cff, #9b6bff, #ff6fae);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: orb-pulse 2.2s ease-in-out infinite;
+}
+@keyframes orb-pulse {
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: scale(0.94);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+}
+.ai-type-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 1px;
+  vertical-align: text-bottom;
+  background: linear-gradient(120deg, #4f8cff, #9b6bff, #ff6fae);
+  animation: caret-blink 1s step-end infinite;
+}
+.ai-situation {
+  font-size: 12px;
+  color: var(--hero-fg2);
+}
+
+/* ── §4-2 people chips ────────────────────────────────────────── */
+.people-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px 8px 10px;
+  border-radius: 999px;
+  background: var(--hero-tile);
+  border: 1px solid var(--hero-tile-border);
+  box-shadow: 0 8px 24px rgba(8, 9, 10, 0.1);
+}
+.people-avatars {
+  display: inline-flex;
+}
+.people-avatars > * {
+  margin-left: -8px;
+  border-radius: 50%;
+  border: 2px solid var(--hero-tile);
+}
+.people-avatars > *:first-child {
+  margin-left: 0;
+}
+.people-num {
+  font-weight: 510;
+  font-size: 15px;
+  color: var(--hero-fg);
+  letter-spacing: -0.01em;
+}
+.people-label {
+  font-size: 12px;
+  color: var(--hero-fg2);
+}
+
+/* ── §4-3 Design → Code → Live ───────────────────────────────── */
+.dcl-node-label {
+  font-size: 11px;
+  color: var(--hero-fg2);
+  margin-bottom: 6px;
+  text-align: center;
+}
+.dcl-card {
+  border-radius: 12px;
+  background: var(--hero-tile);
+  border: 1px solid var(--hero-tile-border);
+  box-shadow: 0 10px 28px rgba(8, 9, 10, 0.12);
+}
+.dcl-codewin {
+  border-radius: 12px;
+  background: #0b0d12;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 28px rgba(8, 9, 10, 0.2);
+  font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+}
+.dcl-dash {
+  stroke: var(--hero-fg3);
+  stroke-width: 1.4;
+  stroke-dasharray: 4 4;
+  fill: none;
+}
+
+/* tool icon tiles (scattered) */
+.tool-tile {
+  width: 42px;
+  height: 42px;
+  border-radius: 11px;
+  background: var(--hero-tile);
+  border: 1px solid var(--hero-tile-border);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04),
+    0 6px 18px rgba(8, 9, 10, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+}
+.tool-name {
+  font-size: 11px;
+  color: var(--hero-fg2);
+  text-align: center;
+  margin-top: 4px;
+}
+
+/* gentle idle float for scattered floaters */
+@keyframes hero-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+.hero-floaty {
+  animation: hero-float 4.5s ease-in-out infinite;
+}
+
+/* ── §4-4 Hover-me hint ───────────────────────────────────────── */
+.hover-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 11px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 510;
+  white-space: nowrap;
+  box-shadow: 0 6px 18px rgba(0, 102, 255, 0.35);
+  animation: hint-bob 1.6s ease-in-out infinite;
+}
+@keyframes hint-bob {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(5px);
+  }
+}
+
+/* ── Selected Work section header row ─────────────────────────── */
+.sw-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--hero-hairline);
+}
+
+/* ── Reduced motion: end states only ──────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .ai-bar::before,
+  .ai-bar::after,
+  .ai-orb-glyph,
+  .ai-type-cursor,
+  .hero-floaty,
+  .hover-hint {
+    animation: none !important;
+  }
+  .ai-bar {
+    transition: none !important;
   }
 }

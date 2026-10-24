@@ -2,9 +2,8 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useSiteTheme } from "../../hooks/useSiteTheme";
 
-const TITLE_FONT = '"TikTok Sans", Inter, sans-serif';
-
-const TAGS = ["TAP", "AI Agent", "XR", "Contract"];
+// TAP moved into the context row above the title, so it's dropped from here
+const TAGS = ["AI Agent", "XR", "Contract"];
 
 /* Featured case — TAP. Header row (title / description + tags + link) over a
    16:9.4 panel that plays the TAP trainee web-app animation. The app screen is
@@ -22,20 +21,30 @@ export default function FeaturedCaseTap() {
     <div>
       {/* ── header row ── */}
       <div className="grid grid-cols-1 gap-8 md:grid-cols-[1.1fr_1fr]">
-        <h2
-          style={{
-            fontFamily: TITLE_FONT,
-            fontWeight: 500,
-            fontSize: "clamp(28px, 3.2vw, 38px)",
-            letterSpacing: "-0.035em",
-            lineHeight: 1.06,
-            color: "var(--title)",
-            textWrap: "balance" as any,
-            margin: 0,
-          }}
-        >
-          From passive lists to proactive agents
-        </h2>
+        <div>
+          {/* context row: TAP pill + what it is */}
+          <div className="mb-4 flex flex-wrap items-center gap-2.5">
+            <span className="sw-tag" style={{ borderColor: "var(--accent)", color: "var(--accent)" }}>
+              TAP
+            </span>
+            <span className="text-[13px]" style={{ color: "var(--hero-fg2)" }}>
+              VR training for manufacturing technicians
+            </span>
+          </div>
+          <h2
+            style={{
+              fontWeight: 510,
+              fontSize: "clamp(28px, 3vw, 40px)",
+              letterSpacing: "-0.022em",
+              lineHeight: 1.1,
+              color: "var(--hero-fg)",
+              textWrap: "balance" as any,
+              margin: 0,
+            }}
+          >
+            From passive lists to proactive agents
+          </h2>
+        </div>
 
         <div className="flex flex-col items-start gap-5">
           <p
