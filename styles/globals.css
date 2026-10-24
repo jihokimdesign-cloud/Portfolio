@@ -604,7 +604,9 @@ html.theme-transitioning *::after {
   z-index: 3;
 }
 
-/* ── §4-1 AI bar — rotating-element rainbow (Safari-safe, no @property/mask) */
+/* ── §4-1 AI bar — a light segment travels along the border (SVG stroke-dash,
+   Safari-safe). .base = faint rainbow all the way round; .run = the moving
+   segment; a blurred copy behind the bar gives it a halo. ── */
 .ai-bar-wrap {
   position: relative;
   display: inline-flex;
@@ -616,44 +618,6 @@ html.theme-transitioning *::after {
   position: relative;
   display: inline-flex;
   height: 48px;
-}
-.ai-glow,
-.ai-wrap {
-  position: absolute;
-  inset: 0;
-  border-radius: 999px;
-  overflow: hidden;
-}
-.ai-wrap {
-  padding: 1.5px;
-  isolation: isolate;
-}
-.ai-glow {
-  z-index: -1;
-  filter: blur(18px);
-  opacity: 0.55;
-}
-.ai-spin {
-  position: absolute;
-  width: 300%;
-  aspect-ratio: 1;
-  left: 50%;
-  top: 50%;
-  translate: -50% -50%;
-  background: conic-gradient(
-    #4f8cff,
-    #9b6bff,
-    #ff6fae,
-    #ffb547,
-    #3fd0c9,
-    #4f8cff
-  );
-  animation: spin 3.2s linear infinite;
-}
-@keyframes spin {
-  to {
-    rotate: 360deg;
-  }
 }
 .ai-bar {
   position: relative;
@@ -670,6 +634,45 @@ html.theme-transitioning *::after {
   font-size: 14px;
   white-space: nowrap;
   overflow: hidden;
+}
+.ai-ring,
+.ai-glow-svg {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+.ai-ring {
+  z-index: 2;
+}
+.ai-glow-svg {
+  z-index: 0;
+  filter: blur(8px);
+  opacity: 0.7;
+}
+.ai-ring .base {
+  fill: none;
+  stroke-width: 1.5;
+  opacity: 0.55;
+}
+.ai-ring .run,
+.ai-glow-svg .run {
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 22 78;
+  animation: ai-run 2.4s linear infinite;
+}
+.ai-glow-svg .run {
+  stroke-width: 6;
+}
+@keyframes ai-run {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: -100;
+  }
 }
 .ai-orb-glyph {
   background: linear-gradient(120deg, #4f8cff, #9b6bff, #ff6fae);
@@ -779,25 +782,40 @@ html.theme-transitioning *::after {
   fill: none;
 }
 
-/* tool icon tiles (scattered) */
+/* tool icon tiles — small, under each flow node; name shows on hover only */
 .tool-tile {
-  width: 42px;
-  height: 42px;
-  border-radius: 11px;
+  position: relative;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
   background: var(--hero-tile);
-  border: 1px solid var(--hero-tile-border);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04),
-    0 6px 18px rgba(8, 9, 10, 0.12);
+  box-shadow: inset 0 0 0 1px var(--hero-tile-border),
+    0 4px 12px rgba(8, 9, 10, 0.12);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 8px;
+  padding: 5px;
 }
-.tool-name {
+.tool-tip {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 3px 7px;
+  border-radius: 5px;
+  background: #1a1a1a;
+  color: #fff;
   font-size: 11px;
-  color: var(--hero-fg2);
-  text-align: center;
-  margin-top: 4px;
+  line-height: 1.2;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  pointer-events: none;
+  z-index: 10;
+}
+.tool-tile:hover .tool-tip,
+.tool-tile:focus-visible .tool-tip {
+  opacity: 1;
 }
 
 /* gentle idle float for scattered floaters */
@@ -851,7 +869,8 @@ html.theme-transitioning *::after {
 
 /* ── Reduced motion: end states only ──────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
-  .ai-spin,
+  .ai-ring .run,
+  .ai-glow-svg .run,
   .ai-orb-glyph,
   .ai-type-cursor,
   .hero-floaty,

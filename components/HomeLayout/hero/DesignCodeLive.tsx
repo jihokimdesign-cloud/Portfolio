@@ -3,10 +3,10 @@ import { motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import { TOOL_ICONS } from "./heroContent";
 
-/* §4-3 — "code" hover. DclFlow (Design → Code → Live) goes in the centered
-   above-layer; ToolColumn renders the tool tiles inside a side column.
-   Class names are distinct (.dcl-*, .tool-tile) to avoid the featured
-   panel's .win / .pf. */
+/* §4-3 — "code" hover. The Design → Code → Live flow lives in the centered
+   above-layer; each node carries a small row of tool icons beneath it (name
+   on hover only). Class names are distinct (.dcl-*, .tool-tile) to avoid the
+   featured panel's .win / .pf. */
 
 const C = {
   punct: "#8b949e",
@@ -57,8 +57,6 @@ function CodeWindow() {
     };
   }, [reduce, total]);
 
-  // split tokens into lines; each token keeps a full copy (hidden chars reserve
-  // width so the window never resizes) and a visible slice up to `shown`.
   let budget = shown;
   const lines: { text: string; c: string; show: number }[][] = [[]];
   for (const tok of CODE) {
@@ -106,13 +104,27 @@ function CodeWindow() {
   );
 }
 
+function ToolIcon({ i }: { i: number }) {
+  const tool = TOOL_ICONS[i];
+  return (
+    <div className="tool-tile" tabIndex={0} aria-label={tool.name}>
+      <Image src={tool.src} alt={tool.name} width={18} height={18} />
+      <span className="tool-tip" role="tooltip">
+        {tool.name}
+      </span>
+    </div>
+  );
+}
+
 function Node({
   label,
   delay,
+  tools,
   children,
 }: {
   label: string;
   delay: number;
+  tools: number[];
   children: React.ReactNode;
 }) {
   const reduce = useReducedMotion();
@@ -125,24 +137,47 @@ function Node({
     >
       <div className="dcl-node-label">{label}</div>
       {children}
+      {/* tool icons, centered under the node; pop in after the node appears */}
+      <div style={{ display: "flex", gap: 6, marginTop: 10, justifyContent: "center" }}>
+        {tools.map((ti, k) => (
+          <motion.div
+            key={ti}
+            initial={reduce ? false : { scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{
+              delay: reduce ? 0 : delay + 0.3 + k * 0.06,
+              type: "spring",
+              stiffness: 480,
+              damping: 18,
+            }}
+          >
+            <ToolIcon i={ti} />
+          </motion.div>
+        ))}
+      </div>
     </motion.div>
   );
 }
 
 function Dash() {
   return (
-    <svg width="34" height="12" viewBox="0 0 34 12" style={{ flexShrink: 0 }}>
+    <svg
+      width="34"
+      height="12"
+      viewBox="0 0 34 12"
+      style={{ flexShrink: 0, alignSelf: "flex-start", marginTop: 44 }}
+    >
       <path className="dcl-dash" d="M1 6 H33" />
     </svg>
   );
 }
 
-// ── the centered flow (lives in the above-layer) ──
+// Design: Figma(0) · Code: Claude(1), Cursor(2) · Live: React(3), After Effects(4)
 export default function DclFlow() {
   const reduce = useReducedMotion();
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
-      <Node label="Design" delay={0.1}>
+    <div style={{ display: "flex", alignItems: "flex-start", gap: 4 }}>
+      <Node label="Design" delay={0.1} tools={[0]}>
         <div className="dcl-card" style={{ width: 92, height: 64, padding: 10 }}>
           <div
             style={{
@@ -178,13 +213,13 @@ export default function DclFlow() {
 
       <Dash />
 
-      <Node label="Code" delay={0.55}>
+      <Node label="Code" delay={0.55} tools={[1, 2]}>
         <CodeWindow />
       </Node>
 
       <Dash />
 
-      <Node label="Live" delay={2.1}>
+      <Node label="Live" delay={2.1} tools={[3, 4]}>
         <div
           className="dcl-card"
           style={{ width: 92, height: 64, padding: 10, position: "relative" }}
@@ -235,56 +270,5 @@ export default function DclFlow() {
         </div>
       </Node>
     </div>
-  );
-}
-
-// ── tool tiles (live in the side columns) ──
-function ToolTile({ name, src }: { name: string; src: string }) {
-  return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-      <div className="tool-tile">
-        <Image src={src} alt={name} width={26} height={26} />
-      </div>
-      <span className="tool-name">{name}</span>
-    </div>
-  );
-}
-
-type ToolSlot = { i: number; top: string; tilt: number };
-const LEFT_TOOLS: ToolSlot[] = [
-  { i: 0, top: "0%", tilt: -6 }, // Figma
-  { i: 1, top: "40%", tilt: 5 }, // Claude
-  { i: 2, top: "74%", tilt: -4 }, // Cursor
-];
-const RIGHT_TOOLS: ToolSlot[] = [
-  { i: 3, top: "2%", tilt: 6 }, // React
-  { i: 4, top: "46%", tilt: -6 }, // After Effects
-];
-
-export function ToolColumn({ side }: { side: "left" | "right" }) {
-  const reduce = useReducedMotion();
-  const slots = side === "left" ? LEFT_TOOLS : RIGHT_TOOLS;
-  return (
-    <>
-      {slots.map((s, k) => {
-        const tool = TOOL_ICONS[s.i];
-        return (
-          <motion.div
-            key={tool.name}
-            className="hero-floaty"
-            initial={reduce ? false : { opacity: 0, scale: 0.7 }}
-            animate={{ opacity: 1, scale: 1, rotate: s.tilt }}
-            transition={{ delay: 0.1 + k * 0.06, type: "spring", stiffness: 320, damping: 20 }}
-            style={{
-              position: "absolute",
-              top: s.top,
-              [side === "left" ? "right" : "left"]: 4,
-            }}
-          >
-            <ToolTile name={tool.name} src={tool.src} />
-          </motion.div>
-        );
-      })}
-    </>
   );
 }

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import AiBar from "./hero/AiBar";
 import PeopleSide from "./hero/PeopleChips";
-import DclFlow, { ToolColumn } from "./hero/DesignCodeLive";
+import DclFlow from "./hero/DesignCodeLive";
 import { PHRASE_CAPTIONS, PhraseKey } from "./hero/heroContent";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -185,14 +185,13 @@ export default function LandingHero() {
         maxWidth: 1120,
         margin: "0 auto",
         textAlign: "center",
-        padding: "clamp(120px, 17vh, 196px) 16px clamp(40px, 6vh, 72px)",
+        padding: "clamp(196px, 23vh, 250px) 16px clamp(40px, 6vh, 72px)",
       }}
     >
       <div className="hero-grid">
         {/* left float column */}
         <div className="float-col">
           {entranceDone && active === "people" && <PeopleSide side="left" />}
-          {entranceDone && active === "code" && <ToolColumn side="left" />}
         </div>
 
         {/* headline + the centered above-layer (AI bar / Design→Code→Live) */}
@@ -259,7 +258,6 @@ export default function LandingHero() {
         {/* right float column */}
         <div className="float-col">
           {entranceDone && active === "people" && <PeopleSide side="right" />}
-          {entranceDone && active === "code" && <ToolColumn side="right" />}
         </div>
       </div>
 
