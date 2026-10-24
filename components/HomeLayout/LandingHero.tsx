@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import AiBar from "./hero/AiBar";
-import PeopleChips from "./hero/PeopleChips";
-import DesignCodeLive from "./hero/DesignCodeLive";
+import PeopleSide from "./hero/PeopleChips";
+import DclFlow, { ToolColumn } from "./hero/DesignCodeLive";
 import { PHRASE_CAPTIONS, PhraseKey } from "./hero/heroContent";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -181,65 +181,32 @@ export default function LandingHero() {
       onKeyDown={(e) => e.key === "Escape" && clear()}
       style={{
         position: "relative",
-        maxWidth: 1024,
+        width: "100%",
+        maxWidth: 1120,
         margin: "0 auto",
         textAlign: "center",
         padding: "clamp(120px, 17vh, 196px) 16px clamp(40px, 6vh, 72px)",
       }}
     >
-      {/* floating elements (per-phrase, hidden < 860px via .hero-floaters) */}
-      <div className="hero-floaters">
-        <AnimatePresence>
-          {entranceDone && active === "ai" && (
-            <motion.div
-              key="f-ai"
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 8 }}
-              transition={{ duration: 0.28 }}
-              style={{
-                position: "absolute",
-                top: "6%",
-                left: "50%",
-                transform: "translateX(-50%)",
-              }}
-            >
-              <AiBar />
-            </motion.div>
-          )}
-          {entranceDone && active === "people" && (
-            <motion.div
-              key="f-people"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.22 }}
-              style={{ position: "absolute", inset: 0 }}
-            >
-              <PeopleChips />
-            </motion.div>
-          )}
-          {entranceDone && active === "code" && (
-            <motion.div
-              key="f-code"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.22 }}
-              style={{ position: "absolute", inset: 0 }}
-            >
-              <DesignCodeLive />
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+      <div className="hero-grid">
+        {/* left float column */}
+        <div className="float-col">
+          {entranceDone && active === "people" && <PeopleSide side="left" />}
+          {entranceDone && active === "code" && <ToolColumn side="left" />}
+        </div>
 
-      {/* headline */}
-      <h1
-        className={`hero-hl${entranceDone ? " done" : ""}`}
-        data-active={active ?? "none"}
-        style={{ position: "relative", zIndex: 2, margin: 0 }}
-      >
+        {/* headline + the centered above-layer (AI bar / Design→Code→Live) */}
+        <div className="headline-col">
+          <div className="above-layer">
+            {entranceDone && active === "ai" && <AiBar />}
+            {entranceDone && active === "code" && <DclFlow />}
+          </div>
+
+          <h1
+            className={`hero-hl${entranceDone ? " done" : ""}`}
+            data-active={active ?? "none"}
+            style={{ position: "relative", zIndex: 2, margin: 0 }}
+          >
         <motion.span className="hero-line" {...line(0)}>
           I&apos;m Jiho, a product designer.
         </motion.span>{" "}
@@ -286,7 +253,15 @@ export default function LandingHero() {
           </motion.span>
           .
         </motion.span>
-      </h1>
+          </h1>
+        </div>
+
+        {/* right float column */}
+        <div className="float-col">
+          {entranceDone && active === "people" && <PeopleSide side="right" />}
+          {entranceDone && active === "code" && <ToolColumn side="right" />}
+        </div>
+      </div>
 
       {/* divider */}
       <div

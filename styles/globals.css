@@ -560,24 +560,51 @@ html.theme-transitioning *::after {
   background: var(--hero-hairline);
 }
 
-/* ── Floating elements around the headline ────────────────────── */
-.hero-floaters {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 1;
+/* ── Floating elements: grid-anchored to the headline ─────────────
+   [ left float column | headline | right float column ]. Side columns
+   stretch to the headline's height so chips/tiles position against it
+   with top:%, never against the viewport. ── */
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) auto minmax(180px, 1fr);
+  align-items: center;
+  column-gap: 24px;
+  width: 100%;
 }
-@media (max-width: 860px) {
-  .hero-floaters {
-    display: none;
+@media (max-width: 1100px) {
+  .hero-grid {
+    grid-template-columns: minmax(140px, 1fr) auto minmax(140px, 1fr);
   }
 }
-
-/* ── §4-1 AI bar ──────────────────────────────────────────────── */
-@property --ang {
-  syntax: "<angle>";
-  initial-value: 0deg;
+@media (max-width: 860px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+  }
+  .float-col,
+  .above-layer {
+    display: none !important;
+  }
 }
+.float-col {
+  position: relative;
+  align-self: stretch;
+  pointer-events: none;
+}
+.headline-col {
+  position: relative;
+  min-width: 0;
+}
+/* full-width layer centered above the headline (AI bar / Design→Code→Live) */
+.above-layer {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(100% + 24px);
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* ── §4-1 AI bar — rotating-element rainbow (Safari-safe, no @property/mask) */
 .ai-bar-wrap {
   position: relative;
   display: inline-flex;
@@ -585,31 +612,35 @@ html.theme-transitioning *::after {
   align-items: center;
   gap: 8px;
 }
-.ai-bar {
+.ai-barbox {
   position: relative;
   display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  height: 50px;
-  padding: 0 18px;
-  border-radius: 999px;
-  background: var(--hero-tile);
-  color: var(--hero-fg);
-  font-size: 14px;
-  white-space: nowrap;
-  overflow: hidden;
-  transition: width 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+  height: 48px;
 }
-/* rotating rainbow border + blurred glow behind */
-.ai-bar::before,
-.ai-bar::after {
-  content: "";
+.ai-glow,
+.ai-wrap {
   position: absolute;
-  inset: -2px;
-  border-radius: inherit;
-  padding: 2px;
+  inset: 0;
+  border-radius: 999px;
+  overflow: hidden;
+}
+.ai-wrap {
+  padding: 1.5px;
+  isolation: isolate;
+}
+.ai-glow {
+  z-index: -1;
+  filter: blur(18px);
+  opacity: 0.55;
+}
+.ai-spin {
+  position: absolute;
+  width: 300%;
+  aspect-ratio: 1;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
   background: conic-gradient(
-    from var(--ang),
     #4f8cff,
     #9b6bff,
     #ff6fae,
@@ -617,24 +648,28 @@ html.theme-transitioning *::after {
     #3fd0c9,
     #4f8cff
   );
-  animation: ai-spin 4s linear infinite;
-  z-index: -1;
+  animation: spin 3.2s linear infinite;
 }
-.ai-bar::before {
-  -webkit-mask: linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-}
-.ai-bar::after {
-  filter: blur(11px);
-  opacity: 0.6;
-  z-index: -2;
-}
-@keyframes ai-spin {
+@keyframes spin {
   to {
-    --ang: 360deg;
+    rotate: 360deg;
   }
+}
+.ai-bar {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 16px;
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--hero-fg);
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
 }
 .ai-orb-glyph {
   background: linear-gradient(120deg, #4f8cff, #9b6bff, #ff6fae);
@@ -678,6 +713,14 @@ html.theme-transitioning *::after {
   background: var(--hero-tile);
   border: 1px solid var(--hero-tile-border);
   box-shadow: 0 8px 24px rgba(8, 9, 10, 0.1);
+  white-space: nowrap;
+  flex-shrink: 0;
+  width: max-content;
+}
+.people-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 .people-avatars {
   display: inline-flex;
@@ -719,8 +762,15 @@ html.theme-transitioning *::after {
   background: #0b0d12;
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 10px 28px rgba(8, 9, 10, 0.2);
-  font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, monospace;
+  font-family: "JetBrains Mono", "SF Mono", SFMono-Regular, Menlo, monospace;
   font-size: 11px;
+  width: max-content;
+  min-width: 220px;
+  padding: 10px 14px;
+}
+.dcl-codewin pre {
+  white-space: pre;
+  overflow: hidden;
 }
 .dcl-dash {
   stroke: var(--hero-fg3);
@@ -801,15 +851,11 @@ html.theme-transitioning *::after {
 
 /* ── Reduced motion: end states only ──────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
-  .ai-bar::before,
-  .ai-bar::after,
+  .ai-spin,
   .ai-orb-glyph,
   .ai-type-cursor,
   .hero-floaty,
   .hover-hint {
     animation: none !important;
-  }
-  .ai-bar {
-    transition: none !important;
   }
 }

@@ -3,8 +3,9 @@ import { motion, useReducedMotion } from "framer-motion";
 import { AI_SITUATIONS } from "./heroContent";
 
 /* §4-1 — shown above the headline while "AI products" is hovered.
-   A 50px orb grows sideways into a bar, then the reply types out. Loops
-   through the situations; the parent unmounts this on mouse-out (reset). */
+   A 50px orb grows sideways into a bar, then the reply types out. The rainbow
+   border is a rotating ELEMENT (transform), not a gradient angle — no @property
+   or mask, so it works in Safari. A blurred copy behind it makes the glow. */
 export default function AiBar() {
   const reduce = useReducedMotion();
   const [phase, setPhase] = useState<"orb" | "open">(reduce ? "open" : "orb");
@@ -15,7 +16,6 @@ export default function AiBar() {
 
   const current = AI_SITUATIONS[idx];
 
-  // open a beat after mount
   useEffect(() => {
     if (reduce) {
       setTyped(current.reply);
@@ -26,12 +26,11 @@ export default function AiBar() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // measure the natural bar width for the current reply
+  // measure the natural bar width (+ the 1.5px rainbow padding on each side)
   useLayoutEffect(() => {
-    if (measureRef.current) setTargetW(measureRef.current.offsetWidth);
+    if (measureRef.current) setTargetW(measureRef.current.offsetWidth + 3);
   }, [idx]);
 
-  // type the reply, hold, then advance to the next situation
   useEffect(() => {
     if (reduce || phase !== "open") return;
     let i = 0;
@@ -65,20 +64,30 @@ export default function AiBar() {
       </motion.div>
 
       <motion.div
-        className="ai-bar"
+        className="ai-barbox"
         animate={{ width: phase === "orb" ? 50 : targetW }}
         transition={
           reduce ? { duration: 0 } : { duration: 0.65, ease: [0.22, 1, 0.36, 1] }
         }
         style={{ width: 50 }}
       >
-        <span className="ai-orb-glyph" aria-hidden>
-          ✦
-        </span>
-        <span style={{ opacity: phase === "open" ? 1 : 0 }}>
-          {typed}
-          {!reduce && <span className="ai-type-cursor" aria-hidden />}
-        </span>
+        {/* blurred rotating copy = glow */}
+        <div className="ai-glow" aria-hidden>
+          <div className="ai-spin" />
+        </div>
+        {/* rainbow border (rotating element) + opaque bar on top */}
+        <div className="ai-wrap">
+          <div className="ai-spin" aria-hidden />
+          <div className="ai-bar">
+            <span className="ai-orb-glyph" aria-hidden>
+              ✦
+            </span>
+            <span style={{ opacity: phase === "open" ? 1 : 0 }}>
+              {typed}
+              {!reduce && <span className="ai-type-cursor" aria-hidden />}
+            </span>
+          </div>
+        </div>
       </motion.div>
 
       {/* hidden measurer — same padding/font as .ai-bar */}
@@ -90,6 +99,7 @@ export default function AiBar() {
           position: "absolute",
           visibility: "hidden",
           width: "auto",
+          height: 48,
           pointerEvents: "none",
         }}
       >
