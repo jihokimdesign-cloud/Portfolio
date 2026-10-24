@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
-import { createPortal } from "react-dom";
-import Link from "next/link";
-import { ArrowUp, Copy, Check } from "lucide-react";
+import { Copy, Check } from "lucide-react";
 import { SITE } from "../../lib/constants";
 
 const TITLE_FONT = '"TikTok Sans", Inter, sans-serif';
@@ -25,21 +23,37 @@ const labelStyle: React.CSSProperties = {
   color: "var(--fg-muted)",
 };
 
-/* "I am a builder." — types the word once on mount, then holds with a
-   blinking caret. Always reads "builder." (no cycling). */
-const TYPED_WORD = "builder.";
+/* "I am a ___." — cycles keywords with a blinking caret (type → hold →
+   delete → next). Starts on "builder." */
+const ROLES = ["builder.", "designer.", "prototyper.", "researcher."];
 
 function Typewriter() {
   const [text, setText] = useState("");
+  const [roleIndex, setRoleIndex] = useState(0);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
-    if (text === TYPED_WORD) return;
-    const t = setTimeout(
-      () => setText(TYPED_WORD.slice(0, text.length + 1)),
-      95
-    );
+    const word = ROLES[roleIndex];
+    let delay = deleting ? 55 : 95;
+    if (!deleting && text === word) delay = 1800; // hold full word
+    if (deleting && text === "") delay = 300;
+
+    const t = setTimeout(() => {
+      if (!deleting && text === word) {
+        setDeleting(true);
+      } else if (deleting && text === "") {
+        setDeleting(false);
+        setRoleIndex((i) => (i + 1) % ROLES.length);
+      } else {
+        setText(
+          deleting
+            ? word.slice(0, text.length - 1)
+            : word.slice(0, text.length + 1),
+        );
+      }
+    }, delay);
     return () => clearTimeout(t);
-  }, [text]);
+  }, [text, deleting, roleIndex]);
 
   return (
     <span>
@@ -52,19 +66,6 @@ function Typewriter() {
 }
 
 /* Inline case-study link inside the bio paragraph */
-function BioLink({ href, children }: { href: string; children: React.ReactNode }) {
-  return (
-    <Link
-      href={href}
-      scroll={false}
-      className="font-medium underline decoration-[1.5px] underline-offset-2 transition-opacity hover:opacity-70"
-      style={{ color: "var(--link)" }}
-    >
-      {children}
-    </Link>
-  );
-}
-
 /* Email pill — copies to clipboard, shows "Copied" briefly. No mailto. */
 function EmailCopyPill() {
   const [copied, setCopied] = useState(false);
@@ -91,116 +92,6 @@ function EmailCopyPill() {
       {copied ? <Check size={13} /> : <Copy size={13} />}
       {copied ? "Copied" : SITE.email}
     </button>
-  );
-}
-
-function PillLink({ href, children }: { href: string; children: React.ReactNode }) {
-  return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noreferrer"
-      className="inline-flex items-center rounded-full border px-3.5 py-1.5 text-[13px] transition-colors hover:bg-[var(--bubble)]"
-      style={{ borderColor: "var(--hairline)", color: "var(--fg-secondary)" }}
-    >
-      {children}
-    </a>
-  );
-}
-
-/* 플로팅 챗 입력 — 나브와 같은 리퀴드 글래스 필. 히어로(#landing-hero)가
-   보이는 동안 하단 중앙에 떠 있고, 지나치면 사라진다. */
-const CHAT_PROMPTS = [
-  "What's your design process?",
-  "Tell me about the Cheffy project...",
-  "Are you open to new roles?",
-  "How do you prototype with code?",
-];
-
-function HeroChatBar() {
-  const [value, setValue] = useState("");
-  const [heroInView, setHeroInView] = useState(true);
-  const [promptIndex, setPromptIndex] = useState(0);
-
-  useEffect(() => {
-    const t = setInterval(
-      () => setPromptIndex((i) => (i + 1) % CHAT_PROMPTS.length),
-      3500
-    );
-    return () => clearInterval(t);
-  }, []);
-
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
-
-  useEffect(() => {
-    if (!mounted) return;
-    const el = document.getElementById("landing-hero");
-    if (!el) return;
-    const io = new IntersectionObserver(
-      ([entry]) => setHeroInView(entry.isIntersecting),
-      { threshold: 0.1 }
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, [mounted]);
-
-  const submit = () => {
-    if (!value.trim()) return;
-    window.dispatchEvent(
-      new CustomEvent("jiho-chat-open", { detail: { message: value.trim() } })
-    );
-    setValue("");
-  };
-
-  if (!mounted) return null;
-
-  return createPortal(
-    <div
-      className="fixed inset-x-0 bottom-5 z-[201] flex justify-center px-4"
-      style={{
-        opacity: heroInView ? 1 : 0,
-        transform: heroInView ? "translateY(0)" : "translateY(12px)",
-        pointerEvents: heroInView ? "auto" : "none",
-        transition: "opacity 250ms ease, transform 250ms ease",
-      }}
-    >
-      <div
-        className="liquid-glass flex w-full max-w-3xl items-center gap-2 rounded-full p-2 pl-5"
-        style={{
-          border: "1px solid var(--glass-border)",
-          boxShadow: "var(--liquid-rim), var(--glass-shadow)",
-          color: "var(--fg)",
-        }}
-      >
-        <input
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") submit();
-          }}
-          onFocus={() =>
-            window.dispatchEvent(
-              new CustomEvent("jiho-chat-open", { detail: { source: "hero" } })
-            )
-          }
-          placeholder={CHAT_PROMPTS[promptIndex]}
-          aria-label="Ask Jiho's AI"
-          className="flex-1 bg-transparent text-[14px] focus:outline-none"
-          style={{ color: "var(--fg)" }}
-        />
-        <button
-          onClick={submit}
-          disabled={!value.trim()}
-          aria-label="Ask"
-          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-white transition-transform active:scale-95 disabled:opacity-30"
-          style={{ background: "#F97030" }}
-        >
-          <ArrowUp size={15} />
-        </button>
-      </div>
-    </div>,
-    document.body
   );
 }
 
@@ -257,43 +148,42 @@ export default function LandingBento() {
           I am a <Typewriter />
         </h1>
 
-        {/* bio */}
-        <div
-          className="mt-6 flex max-w-[62ch] flex-col gap-4 text-[15px] leading-relaxed"
-          style={{ color: "var(--fg-secondary)" }}
+        {/* one-line intro */}
+        <p
+          className="mt-6 max-w-[56ch] text-[15px] leading-relaxed"
+          style={{ color: "var(--fg-secondary)", margin: "24px 0 0" }}
         >
-          <p>
-            I design AI products that adapt to people, and I prototype them in
-            code.
-          </p>
-          <p>
-            I&apos;ve built a hands-free cooking assistant that adapts when your
-            hands are full at <BioLink href="/projects/cheffy">Cheffy</BioLink>,
-            an AI agent for XR workforce training at{" "}
-            <BioLink href="/projects/tap3d">TAP</BioLink>, emotion-aware
-            journaling at <BioLink href="/projects/lepal">LePal</BioLink>, and
-            an accessible design system for{" "}
-            <BioLink href="/projects/sidewalk">Project Sidewalk</BioLink>. My AR
-            research, <BioLink href="/projects/cookar">CookAR</BioLink>,
-            received the UIST 2024 Best Paper Award for Belonging &amp;
-            Inclusion.
-          </p>
-          <p>
-            Based in Seoul. Open to roles in Korea, Vancouver, and remote.
-          </p>
-        </div>
+          I design AI products that adapt to people, and I prototype them in
+          code.
+        </p>
 
-        {/* contact row — right on desktop, stacked on mobile */}
-        <div className="mt-7 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:justify-end">
+        {/* meta + email copy — same row */}
+        <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div
+            className="flex items-center gap-2 text-[14px]"
+            style={{ color: "var(--fg-muted)" }}
+          >
+            <span
+              aria-hidden
+              style={{
+                width: 8,
+                height: 8,
+                borderRadius: "50%",
+                background: "#22c55e",
+                flexShrink: 0,
+              }}
+            />
+            Open to new roles
+          </div>
           <EmailCopyPill />
-          <PillLink href={SITE.resumeUrl}>Resume</PillLink>
-          <PillLink href={SITE.linkedin}>LinkedIn</PillLink>
         </div>
-      </div>
 
-      {/* ── toolkit: 5 marks + one line ── */}
-      <div className="md:col-span-3 p-6 lg:px-9" style={cardStyle}>
-        <div className="flex flex-wrap items-center gap-x-5 gap-y-4">
+        {/* thin divider → toolkit (merged into the hero card) */}
+        <div
+          className="mt-7"
+          style={{ borderTop: "1px solid var(--hairline)" }}
+        />
+        <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-3">
           {TOOLS.map((tool) => (
             <span
               key={tool.name}
@@ -308,14 +198,10 @@ export default function LandingBento() {
                 className="h-8 w-8 object-contain"
                 draggable={false}
               />
-              {/* tooltip */}
               <span
                 role="tooltip"
                 className="pointer-events-none absolute left-1/2 top-full z-10 mt-2 -translate-x-1/2 whitespace-nowrap rounded-md px-2 py-1 text-[11px] opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus:opacity-100"
-                style={{
-                  background: "var(--title)",
-                  color: "var(--canvas)",
-                }}
+                style={{ background: "var(--title)", color: "var(--canvas)" }}
               >
                 {tool.name}
               </span>
@@ -329,9 +215,6 @@ export default function LandingBento() {
           Figma for concepts, Claude Code for everything that moves.
         </div>
       </div>
-
-      {/* ── AI chat input — floating at hero bottom ── */}
-      <HeroChatBar />
     </div>
   );
 }

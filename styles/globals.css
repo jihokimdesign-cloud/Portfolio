@@ -405,3 +405,21 @@ html.theme-transitioning *::after {
 .sw-readlink:hover .sw-arrow {
   transform: translateX(3px);
 }
+
+/* ── Selected Work card — text over thumbnail; subgrid aligns the thumbnail
+   top edges across a row even when title/description line counts differ.
+   The card's own row-gap (text→thumbnail) overrides the grid's row gap. ── */
+.sw-card {
+  display: grid;
+  grid-row: span 2;
+  grid-template-rows: subgrid;
+  row-gap: 22px;
+}
+@supports not (grid-template-rows: subgrid) {
+  .sw-card {
+    grid-row: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+}
