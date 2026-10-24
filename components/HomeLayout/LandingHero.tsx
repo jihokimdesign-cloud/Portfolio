@@ -144,9 +144,8 @@ export default function LandingHero() {
     return () => { cancelAnimationFrame(r1); cancelAnimationFrame(r2); clearTimeout(t); };
   }, []);
 
-  /* first-visit hint + trophy pop + chip wiggle */
+  /* hint (every visit) + trophy pop + chip wiggle */
   useEffect(() => {
-    try { hintSeen.current = localStorage.getItem("jk-hovered") === "1"; } catch { /* storage blocked */ }
     const timers: number[] = [];
     if (!hintSeen.current) timers.push(window.setTimeout(() => !hintSeen.current && setHint(true), 2200));
     timers.push(window.setTimeout(() => setTrophyPop((n) => n + 1), 2600));
@@ -163,7 +162,6 @@ export default function LandingHero() {
     if (key && !hintSeen.current) {
       hintSeen.current = true;
       setHint(false);
-      try { localStorage.setItem("jk-hovered", "1"); } catch { /* storage blocked */ }
     }
   }, []);
   const leave = useCallback(() => {
