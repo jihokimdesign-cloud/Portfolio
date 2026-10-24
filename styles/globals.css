@@ -99,6 +99,17 @@ body {
     inset -1px 0 1px rgba(255, 255, 255, 0.1);
   --title: rgb(230, 230, 230);
   --logo-filter: brightness(0) invert(1);
+
+  /* ── Landing hero type + color system (Linear-style) ──────────
+     3 text levels only; accent + status green; AI-bar rainbow. */
+  --hero-fg: #f7f8f8;
+  --hero-fg2: #8a8f98;
+  --hero-fg3: #62666d;
+  --accent: #4d94ff;
+  --status-green: #1f9d63;
+  --hero-hairline: rgba(255, 255, 255, 0.1);
+  --hero-tile: #1c1d1f;
+  --hero-tile-border: rgba(255, 255, 255, 0.12);
 }
 :root[data-theme="light"] {
   --canvas: #f5f5f7;
@@ -125,6 +136,16 @@ body {
      Apple 헤드라인 컬러. 2026-07-19 Jiho가 라이트 타이틀 너무 연하다고 확인. */
   --title: #1d1d1f;
   --logo-filter: none;
+
+  /* hero type + color system — light register */
+  --hero-fg: #08090a;
+  --hero-fg2: #62666d;
+  --hero-fg3: #8a8f98;
+  --accent: #0066ff;
+  --status-green: #1f9d63;
+  --hero-hairline: rgba(8, 9, 10, 0.08);
+  --hero-tile: #ffffff;
+  --hero-tile-border: rgba(8, 9, 10, 0.1);
 }
 
 /* ── Liquid Glass (Apple iOS 26-style material) ───────────────────
@@ -386,10 +407,13 @@ html.theme-transitioning *::after {
     #16181c;
   --panel-fade: #0a0a0b;
 }
-/* mono tag chip — used by featured + grid cards */
+/* tag chip — Inter 12px (unified with the hero type system) */
 .sw-tag {
-  font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, monospace;
-  font-size: 11.5px;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  font-feature-settings: "cv01", "ss03";
+  font-size: 12px;
+  font-weight: 400;
   line-height: 1;
   padding: 5px 9px;
   border-radius: 6px;
@@ -423,3 +447,26 @@ html.theme-transitioning *::after {
     gap: 22px;
   }
 }
+
+/* ══════════════════════════════════════════════════════════════════
+   SELECTED WORK (hero now lives in styles/landing-hero.css, .jk-* scoped)
+   ════════════════════════════════════════════════════════════════ */
+
+/* Inter variable — applied to the Selected Work surface. Two weights: 510/400. */
+.font-inter {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  font-feature-settings: "cv01", "ss03";
+  letter-spacing: normal;
+}
+
+/* ── Selected Work section header row ─────────────────────────── */
+.sw-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--hero-hairline);
+}
+

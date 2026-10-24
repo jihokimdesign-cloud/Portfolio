@@ -12,7 +12,6 @@ type Props = {
   shouldHideTitles: boolean;
 };
 
-const TITLE_FONT = '"TikTok Sans", Inter, sans-serif';
 const INACTIVE_BG_COLOR = "rgb(37, 55, 52)";
 
 // no em dashes in displayed copy
@@ -151,10 +150,9 @@ const ProjectGridItem = ({
           <span
             className="text-[22px] leading-snug lg:text-[24px]"
             style={{
-              fontFamily: TITLE_FONT,
-              fontWeight: 500,
-              letterSpacing: "-0.02em",
-              color: "var(--title)",
+              fontWeight: 510,
+              letterSpacing: "-0.022em",
+              color: "var(--hero-fg)",
             }}
           >
             {title}

@@ -1,0 +1,193 @@
+/* =========================================================================
+   Landing hero — every selector is scoped under .jk-hero
+   Dark mode: works with [data-theme="dark"] or .dark on any ancestor.
+   If your site uses a different dark-mode hook, copy the dark block's
+   variables onto that selector.
+   ========================================================================= */
+
+.jk-hero{
+  --jk-fg:#08090a; --jk-fg-2:#62666d; --jk-fg-3:#8a8f98;
+  --jk-line:rgba(8,9,10,.06); --jk-line-2:rgba(8,9,10,.1);
+  --jk-surface:#ffffff; --jk-page:#f4f5f7;
+  --jk-accent:#0066ff; --jk-accent-soft:rgba(0,102,255,.1); --jk-ok:#1f9d63;
+  --jk-w-title:510;
+  --jk-sans:"Inter","Inter Variable",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --jk-mono:"JetBrains Mono","SF Mono",ui-monospace,Menlo,monospace;
+  --jk-shadow:0 1px 0 rgba(8,9,10,.03),0 12px 26px -14px rgba(8,9,10,.35);
+  font-family:var(--jk-sans); font-feature-settings:"cv01","ss03"; color:var(--jk-fg);
+  -webkit-font-smoothing:antialiased;
+  padding-inline:max(24px,env(safe-area-inset-left,0px));
+}
+[data-theme="dark"] .jk-hero,.dark .jk-hero{
+  --jk-fg:#f7f8f8; --jk-fg-2:#8a8f98; --jk-fg-3:#62666d;
+  --jk-line:rgba(255,255,255,.05); --jk-line-2:rgba(255,255,255,.1);
+  --jk-surface:#16171b; --jk-page:#0b0c0e;
+  --jk-accent:#4d94ff; --jk-accent-soft:rgba(77,148,255,.14);
+  --jk-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 16px 32px -14px rgba(0,0,0,.7);
+}
+
+/* stage = full content width; floaters are positioned against it */
+.jk-stage{position:relative;max-width:976px;margin:clamp(150px,18vw,240px) auto 0;text-align:center}
+
+/* ---------- headline ---------- */
+.jk-para{margin:0 auto;font-size:clamp(30px,3.9vw,50px);font-weight:var(--jk-w-title);letter-spacing:-.022em;line-height:1.12;color:var(--jk-fg)}
+.jk-line{display:block}
+.jk-w{display:inline-block;transition:transform .8s cubic-bezier(.2,.9,.25,1.05),opacity .6s,filter .6s,color .3s}
+.jk-pre .jk-w{transform:translateY(.7em);opacity:0;filter:blur(6px)}
+.jk-peek .jk-para .jk-w{color:var(--jk-fg-3)}
+.jk-peek .jk-hot.on .jk-w{color:var(--jk-accent)}
+
+.jk-hot{position:relative;outline:none;cursor:default;border-radius:.12em}
+.jk-hot .jk-w:not(.jk-chipw){background-image:radial-gradient(circle,var(--jk-fg-3) 1.1px,transparent 1.6px);background-size:6px 4px;background-repeat:repeat-x;background-position:0 96%}
+.jk-peek .jk-hot.on .jk-w:not(.jk-chipw){background-image:radial-gradient(circle,var(--jk-accent) 1.1px,transparent 1.6px)}
+.jk-hot:focus-visible{outline:2px solid var(--jk-accent);outline-offset:4px}
+
+/* inline icon chips */
+.jk-chipw{line-height:0;vertical-align:-.06em}
+.jk-chip{display:inline-flex;align-items:center;justify-content:center;height:.86em;padding:0 .16em;border-radius:.24em;line-height:0;
+  background:var(--jk-surface);border:1px solid var(--jk-line-2);transition:opacity .3s,border-color .25s}
+.jk-chip svg{height:.58em;width:auto;fill:none;stroke:var(--jk-fg);stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round}
+.jk-chip svg .jk-cur{fill:var(--jk-fg);stroke:none;animation:jk-blink 1s steps(1) infinite}
+.jk-peek .jk-chip{opacity:.45}
+.jk-peek .jk-hot.on .jk-chip{opacity:1;border-color:var(--jk-accent)}
+.jk-peek .jk-hot.on .jk-chip svg{stroke:var(--jk-accent)}
+.jk-peek .jk-hot.on .jk-chip svg .jk-cur{fill:var(--jk-accent)}
+.jk-chip.wiggle{animation:jk-wig .9s cubic-bezier(.36,.07,.19,.97)}
+@keyframes jk-wig{20%{transform:rotate(-10deg)}40%{transform:rotate(8deg)}60%{transform:rotate(-5deg)}80%{transform:rotate(2deg)}}
+@keyframes jk-blink{50%{opacity:0}}
+
+/* first-visit hint */
+.jk-hint{position:absolute;left:calc(100% + 14px);top:50%;transform:translate(-6px,-50%) scale(.9);opacity:0;pointer-events:none;
+  font:var(--jk-w-title) 12px/1 var(--jk-sans);letter-spacing:0;color:#fff;background:var(--jk-accent);padding:6px 10px;border-radius:8px;white-space:nowrap;
+  box-shadow:0 8px 18px -8px rgba(0,102,255,.6);transition:opacity .3s,transform .5s cubic-bezier(.34,1.7,.5,1)}
+.jk-hint::after{content:"";position:absolute;right:100%;top:50%;margin-top:-5px;border:5px solid transparent;border-right-color:var(--jk-accent)}
+.jk-hint.on{opacity:1;transform:translate(0,-50%) scale(1);animation:jk-hintBob 1.8s ease-in-out .6s infinite}
+@keyframes jk-hintBob{50%{transform:translate(-5px,-50%) scale(1)}}
+.jk-h-t{display:none}
+@media (hover:none){.jk-h-m{display:none}.jk-h-t{display:inline}}
+
+/* ---------- caption ---------- */
+.jk-capwrap{display:flex;flex-direction:column;align-items:center;gap:14px;margin-top:40px}
+.jk-div{width:min(360px,60%);border:0;border-top:1px solid var(--jk-line-2);margin:0}
+.jk-cap{margin:0;min-height:3em;font-size:13px;line-height:1.5;color:var(--jk-fg-2);text-align:center;transition:opacity .14s,transform .3s}
+.jk-cap.swap{opacity:0;transform:translateY(4px)}
+.jk-open{display:inline-flex;align-items:center;gap:7px;color:var(--jk-fg);font-weight:var(--jk-w-title)}
+.jk-open::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--jk-ok);box-shadow:0 0 0 3px rgba(31,157,99,.15)}
+.jk-cred{white-space:nowrap}
+.jk-troph{position:relative;display:inline-flex;vertical-align:-2px;margin-right:4px;outline:none}
+.jk-troph svg{width:14px;height:14px;fill:none;stroke:var(--jk-fg-2);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;transition:stroke .2s,transform .3s cubic-bezier(.34,1.8,.5,1)}
+.jk-troph:hover svg{stroke:var(--jk-accent);transform:translateY(-1px) rotate(-8deg)}
+.jk-troph:focus-visible{outline:2px solid var(--jk-accent);outline-offset:2px;border-radius:3px}
+.jk-conf{position:absolute;left:50%;top:40%;width:0;height:0;pointer-events:none}
+.jk-conf i{position:absolute;left:-1.5px;top:-3px;width:3px;height:6px;border-radius:1px;background:var(--c);opacity:0}
+.jk-conf i:nth-child(odd){width:4px;height:4px;border-radius:50%}
+.jk-conf.pop i{animation:jk-burst .9s cubic-bezier(.15,.8,.3,1) forwards}
+@keyframes jk-burst{0%{opacity:1;transform:rotate(var(--a)) translateX(0) rotate(0)}70%{opacity:1}100%{opacity:0;transform:rotate(var(--a)) translateX(var(--dist)) rotate(160deg) translateY(4px)}}
+
+/* ---------- floaters ---------- */
+.jk-pops{position:absolute;inset:0;pointer-events:none;z-index:2}
+.jk-fx{position:absolute;left:var(--x);top:var(--y);display:inline-flex;align-items:center;gap:8px;white-space:nowrap;width:max-content;
+  font:var(--jk-w-title) 12.5px/1 var(--jk-sans);color:var(--jk-fg);text-align:left;
+  opacity:0;transform:translate(-50%,0) rotate(0deg) scale(.6);
+  transition:opacity .2s ease var(--d),transform .55s cubic-bezier(.34,1.7,.5,1) var(--d)}
+.jk-fx.show{opacity:1;transform:translate(-50%,0) rotate(var(--r)) scale(1)}
+.jk-fx > *{flex-shrink:0}
+
+/* AI bar */
+.jk-aiw{flex-direction:column;gap:10px}
+.jk-aictx{font:400 12px/1 var(--jk-sans);color:var(--jk-fg-3);opacity:0;transform:translateY(4px);transition:opacity .3s,transform .3s}
+.jk-aictx.on{opacity:1;transform:none}
+/* Safari-safe rainbow ring: a big rotating conic square clipped by the pill (no @property, no mask) */
+.jk-aibar{position:relative;display:flex;align-items:center;gap:10px;height:50px;width:50px;padding:0 16px 0 15px;border-radius:999px;
+  transition:width .65s cubic-bezier(.65,0,.35,1)}
+.jk-aibar.open{width:var(--w)}
+.jk-aibar::before{content:"";position:absolute;inset:1.5px;border-radius:inherit;background:var(--jk-surface);z-index:1}
+.jk-ring,.jk-glow{position:absolute;border-radius:999px;overflow:hidden;-webkit-mask-image:-webkit-radial-gradient(white,black);pointer-events:none}
+.jk-ring{inset:0;z-index:0}
+.jk-glow{inset:-3px;z-index:-1;filter:blur(14px);opacity:.6}
+.jk-ring i,.jk-glow i{position:absolute;left:50%;top:50%;width:640px;height:640px;margin:-320px 0 0 -320px;
+  background:conic-gradient(#4f8cff,#9b6bff,#ff6fae,#ffb547,#3fd0c9,#4f8cff);animation:jk-aispin 3.2s linear infinite;will-change:transform}
+@keyframes jk-aispin{to{transform:rotate(360deg)}}
+.jk-orb,.jk-aitxt{position:relative;z-index:2}
+.jk-orb{flex:none;font-size:18px;line-height:1;background:linear-gradient(135deg,#4f8cff,#9b6bff 45%,#ff6fae);-webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:jk-orb 2.4s ease-in-out infinite}
+@keyframes jk-orb{50%{transform:scale(.82) rotate(20deg)}}
+.jk-aitxt{overflow:hidden;white-space:nowrap;font:var(--jk-w-title) 14.5px/1 var(--jk-sans);letter-spacing:-.01em;color:var(--jk-fg)}
+.jk-aicur{display:inline-block;width:2px;height:1em;margin-left:2px;vertical-align:-2px;background:linear-gradient(#4f8cff,#ff6fae);animation:jk-blink 1s steps(1) infinite}
+.jk-measure{position:absolute;visibility:hidden;white-space:nowrap;font:var(--jk-w-title) 14.5px/1 var(--jk-sans);letter-spacing:-.01em}
+
+/* people chips */
+.jk-ppl,.jk-a11y{gap:10px;padding:8px 14px 8px 8px;border-radius:999px;background:var(--jk-surface);border:1px solid var(--jk-line-2);box-shadow:var(--jk-shadow)}
+.jk-stack{display:inline-flex}
+.jk-av{width:32px;height:32px;border-radius:50%;background:#eef0f4;border:2px solid var(--jk-surface);margin-left:-9px;overflow:hidden;
+  transform:scale(0);transition:transform .5s cubic-bezier(.34,1.9,.5,1) calc(var(--d) + 120ms + var(--k) * 70ms)}
+.jk-av:first-child{margin-left:0}
+.jk-av svg{width:100%;height:100%;display:block}
+.jk-fx.show .jk-av{transform:scale(1)}
+.jk-pt{display:flex;flex-direction:column;gap:2px;line-height:1.1}
+.jk-pt b{font-size:16px;font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums;color:var(--jk-fg)}
+.jk-pt em{font-style:normal;font-size:11px;font-weight:400;color:var(--jk-fg-2)}
+.jk-acc{width:30px;height:30px;border-radius:50%;background:var(--jk-accent-soft);display:grid;place-items:center}
+.jk-acc svg{width:20px;height:20px;fill:none;stroke:var(--jk-accent);stroke-width:1.6;stroke-linecap:round}
+.jk-acc svg .dot{fill:var(--jk-accent);stroke:none}
+.jk-ck{width:18px;height:18px}
+.jk-ck circle{fill:var(--jk-ok);transform:scale(0);transform-origin:center;transform-box:fill-box;transition:transform .4s cubic-bezier(.34,1.9,.5,1) .55s}
+.jk-ck path{fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:14;stroke-dashoffset:14;transition:stroke-dashoffset .35s ease-out .8s}
+.jk-fx.show .jk-ck circle{transform:scale(1)}
+.jk-fx.show .jk-ck path{stroke-dashoffset:0}
+
+/* code: Design -> Code -> Live */
+.jk-flow{gap:0;align-items:flex-end}
+.jk-node{display:flex;flex-direction:column;align-items:center;gap:6px;opacity:0;transform:translateY(8px) scale(.9);transition:opacity .3s,transform .55s cubic-bezier(.34,1.7,.5,1)}
+.jk-nl{font:var(--jk-w-title) 11px/1 var(--jk-sans);color:var(--jk-fg-3)}
+.jk-flow.show .jk-fig{opacity:1;transform:none;transition-delay:.1s}
+.jk-flow.show .jk-ed{opacity:1;transform:none;transition-delay:.55s}
+.jk-flow.show .jk-pv{opacity:1;transform:none;transition-delay:2.1s}
+.jk-wf,.jk-ph{position:relative;width:84px;height:68px;border-radius:10px;background:var(--jk-surface);border:1px solid var(--jk-line-2);padding:8px;display:flex;flex-direction:column;gap:5px;box-shadow:var(--jk-shadow)}
+.jk-wf i,.jk-ph i{display:block;height:6px;border-radius:3px;background:var(--jk-line-2)}
+.jk-wf i.h{width:60%;height:8px;background:var(--jk-fg-3);opacity:.5}
+.jk-wf i.s{width:75%}
+.jk-wf i.b{margin-top:auto;height:12px;border:1.5px dashed var(--jk-fg-3);background:none;border-radius:4px}
+.jk-ph i.h{width:60%;height:8px;background:var(--jk-fg);opacity:.75}
+.jk-btn{margin-top:auto;height:16px;border-radius:5px;background:var(--jk-accent);color:#fff;font:600 8.5px/16px var(--jk-sans);text-align:center;transform:scale(.6);opacity:0;
+  transition:transform .5s cubic-bezier(.34,1.9,.5,1) 2.5s,opacity .2s 2.5s}
+.jk-flow.show .jk-btn{transform:none;opacity:1}
+.jk-live{position:absolute;right:-8px;top:-8px;display:flex;align-items:center;gap:4px;font:600 9px/1 var(--jk-sans);color:#fff;background:var(--jk-ok);padding:3px 6px;border-radius:99px;
+  transform:scale(0);transition:transform .45s cubic-bezier(.34,1.9,.5,1) 2.9s}
+.jk-live i{width:5px;height:5px;border-radius:50%;background:#fff;animation:jk-blink 1.2s steps(1) infinite}
+.jk-flow.show .jk-live{transform:scale(1)}
+.jk-win{width:max-content;min-width:220px;height:68px;border-radius:10px;background:#0f1115;padding:6px 12px;box-shadow:0 14px 28px -14px rgba(8,9,10,.6);text-align:left}
+.jk-dots{display:flex;gap:4px;margin-bottom:5px}
+.jk-dots i{width:6px;height:6px;border-radius:50%}
+.jk-dots i:nth-child(1){background:#ff5f57}.jk-dots i:nth-child(2){background:#febc2e}.jk-dots i:nth-child(3){background:#28c840}
+.jk-code{margin:0;min-height:2.9em;font:11px/1.45 var(--jk-mono);color:#c9d1e0;white-space:pre}
+.jk-c-t{color:#7cc4ff}.jk-c-a{color:#ffb86b}.jk-c-v{color:#a5e67a}.jk-c-p{color:#6b7385}
+.jk-ccur{display:inline-block;width:6px;height:11px;vertical-align:-1px;background:#7cc4ff;animation:jk-blink 1s steps(1) infinite}
+.jk-link{width:34px;height:2px;margin:0 6px 34px;background-image:linear-gradient(90deg,var(--jk-fg-3) 50%,transparent 50%);background-size:8px 2px;opacity:0;transition:opacity .3s}
+.jk-flow.show .jk-l1{opacity:1;transition-delay:.4s;animation:jk-dash .6s linear infinite}
+.jk-flow.show .jk-l2{opacity:1;transition-delay:1.9s;animation:jk-dash .6s linear infinite}
+@keyframes jk-dash{to{background-position:8px 0}}
+
+/* tool tiles */
+.jk-tool{flex-direction:column;gap:7px}
+.jk-ti{position:relative;width:42px;height:42px;border-radius:11px;overflow:hidden;box-shadow:0 12px 22px -12px rgba(8,9,10,.45)}
+.jk-ti img{width:100%;height:100%;display:block;object-fit:cover}
+.jk-ti::after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 0 0 1px rgba(8,9,10,.08)}
+.jk-tn{font:var(--jk-w-title) 11px/1 var(--jk-sans);color:var(--jk-fg-2)}
+.jk-tool.show .jk-ti{animation:jk-float 3.6s ease-in-out infinite;animation-delay:calc(var(--d) + .6s)}
+@keyframes jk-float{50%{transform:translateY(-6px)}}
+
+/* ---------- responsive ---------- */
+@media (max-width:1180px){.jk-stage{max-width:880px}}
+@media (max-width:860px){
+  .jk-pops{display:none}
+  .jk-line{display:inline}
+  .jk-stage{margin-top:72px}
+  .jk-peek .jk-para .jk-w{color:var(--jk-fg)}
+  .jk-cred{white-space:normal}
+}
+
+/* ---------- reduced motion: end states only ---------- */
+@media (prefers-reduced-motion:reduce){
+  .jk-hero *,.jk-hero *::before,.jk-hero *::after{animation:none!important;transition-duration:0s!important;transition-delay:0s!important}
+}

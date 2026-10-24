@@ -1,4 +1,5 @@
 import "../styles/globals.css";
+import "../styles/landing-hero.css";
 import ReactGA from "react-ga4";
 import type { AppProps } from "next/app";
 import { AnimatePresence, motion } from "framer-motion";
