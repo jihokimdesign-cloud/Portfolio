@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/router";
 import { SITE } from "../lib/constants";
+import { openAbout } from "../lib/about";
 import ThemeToggle from "./ThemeToggle";
 import SignatureMark from "./SignatureMark";
 
@@ -35,6 +37,8 @@ function EmailCopyButton() {
 
 // Floating glassmorphism nav — frosted pill, DESIGN.md tokens via --glass vars.
 export default function GlassNav() {
+  const router = useRouter();
+  const isHome = router.pathname === "/";
   return (
     <nav
       className="fixed inset-x-0 top-4 z-[150] flex justify-center gap-2 px-4"
@@ -68,15 +72,8 @@ export default function GlassNav() {
         </filter>
       </svg>
       <div
-        className="liquid-glass flex items-center gap-1 rounded-full px-2 py-1.5"
-        style={{
-          // near-opaque fill (over the blur) keeps labels legible over any
-          // thumbnail, in both light and dark mode
-          background: "var(--nav-bg)",
-          border: "1px solid var(--glass-border)",
-          boxShadow: "var(--liquid-rim), var(--glass-shadow)",
-          color: "var(--fg)",
-        }}
+        className="jk-glass flex items-center gap-1 rounded-full px-2 py-1.5"
+        style={{ color: "var(--fg)" }}
       >
         <Link
           href="/"
@@ -108,6 +105,23 @@ export default function GlassNav() {
         >
           LinkedIn
         </a>
+        {isHome ? (
+          <button
+            onClick={(e) => openAbout(router, e.currentTarget)}
+            className="rounded-full px-3 py-1 text-[13px] transition-opacity hover:opacity-70"
+            style={{ color: "var(--fg-secondary)" }}
+          >
+            About
+          </button>
+        ) : (
+          <Link
+            href="/about"
+            className="rounded-full px-3 py-1 text-[13px] transition-opacity hover:opacity-70"
+            style={{ color: "var(--fg-secondary)" }}
+          >
+            About
+          </Link>
+        )}
         <EmailCopyButton />
         <span
           className="mx-1 h-4 w-px"

@@ -1,0 +1,42 @@
+/* =========================================================================
+   ONE glass material for the whole site (nav pill = source of truth).
+   Import this LAST in pages/_app.tsx so it wins over component styles.
+
+   1. Paste the nav pill's real values into the --jk-glass-* tokens (light + dark).
+   2. Make the nav itself use .jk-glass (or these tokens) so there is one definition.
+   3. Every chip / pill button on the site gets the class "jk-glass".
+      The selector list below already covers the components we built
+      (hero chips + hover cards, footer copy, About chips and buttons).
+   ========================================================================= */
+
+:root{
+  --jk-glass-bg:rgba(252,252,253,.88);        /* body of the glass (= nav pill) */
+  --jk-glass-hi:rgba(255,255,255,.95);        /* brighter top edge */
+  --jk-glass-edge:rgba(0,0,0,.06);            /* 1px rim (= nav pill) */
+  --jk-glass-blur:saturate(180%) blur(20px);
+  --jk-glass-shadow:inset 0 1.5px 1px rgba(255,255,255,1),inset 0 -1px 1.5px rgba(255,255,255,.5),inset 1px 0 1px rgba(255,255,255,.35),inset -1px 0 1px rgba(255,255,255,.35),0 10px 30px rgba(8,9,10,.08);
+  --jk-glass-sheet:rgba(244,245,247,.94);     /* full-screen About sheet: nearly opaque */
+}
+[data-theme="dark"],.dark{
+  --jk-glass-bg:rgba(22,22,24,.86);
+  --jk-glass-hi:rgba(255,255,255,.09);
+  --jk-glass-edge:rgba(255,255,255,.14);
+  --jk-glass-shadow:inset 0 1.5px 1px rgba(255,255,255,.45),inset 0 -1px 1.5px rgba(255,255,255,.16),inset 1px 0 1px rgba(255,255,255,.1),inset -1px 0 1px rgba(255,255,255,.1),0 10px 30px rgba(0,0,0,.28);
+  --jk-glass-sheet:rgba(11,12,14,.93);
+}
+
+.jk-glass,
+.jk-hero .jk-chip,
+.jk-hero .jk-ppl,
+.jk-hero .jk-a11y,
+.jk-foot-mail button{
+  background:linear-gradient(180deg,var(--jk-glass-hi),var(--jk-glass-bg));
+  -webkit-backdrop-filter:var(--jk-glass-blur);
+  backdrop-filter:var(--jk-glass-blur);
+  border:1px solid var(--jk-glass-edge);
+  box-shadow:var(--jk-glass-shadow);
+}
+/* pill shape for chips that were square-ish */
+.jk-foot-mail button{border-radius:999px}
+/* keep the hero's active state readable on glass */
+.jk-peek .jk-hot.on .jk-chip{border-color:var(--jk-accent)}
