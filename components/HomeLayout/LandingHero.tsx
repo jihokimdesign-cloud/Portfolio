@@ -122,7 +122,12 @@ const CONFETTI: [angle: number, dist: number, accent: boolean][] = [
 
 /* =========================================================================== */
 
-export default function LandingHero() {
+type HeroProps = {
+  /** Opens the About sheet. Receives the name button so the circle grows from it. */
+  onNameClick?: (el: HTMLElement) => void;
+};
+
+export default function LandingHero({ onNameClick }: HeroProps = {}) {
   const [active, setActive] = useState<Key | null>(null);
   const [revealed, setRevealed] = useState(false);
   const [settled, setSettled] = useState(false);
@@ -328,7 +333,25 @@ export default function LandingHero() {
           aria-label="I'm Jiho, a product designer. I design AI products that adapt to people, and prototype them in code.">
           {LINES.map((line, li) => (
             <span className="jk-line" key={li}>
-              {line.words.map((w, k) => <span key={k}>{word(w, li)} </span>)}
+              {line.words.map((w, k) =>
+                li === 0 && w === "Jiho," ? (
+                  <span key={k}>
+                    <button
+                      type="button"
+                      id="jk-name"
+                      className="jk-name"
+                      aria-haspopup="dialog"
+                      aria-label="About Jiho"
+                      onClick={(e) => onNameClick?.(e.currentTarget)}
+                    >
+                      {word("Jiho", li)}
+                    </button>
+                    {word(",", li)}{" "}
+                  </span>
+                ) : (
+                  <span key={k}>{word(w, li)} </span>
+                )
+              )}
               {line.hot && (
                 <span
                   className={`jk-hot${on(line.hot.key) ? " on" : ""}`}

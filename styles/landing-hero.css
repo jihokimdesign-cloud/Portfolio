@@ -40,6 +40,11 @@
 .jk-hot{position:relative;outline:none;cursor:default;border-radius:.12em}
 .jk-hot .jk-w:not(.jk-chipw){background-image:radial-gradient(circle,var(--jk-fg-3) 1.1px,transparent 1.6px);background-size:6px 4px;background-repeat:repeat-x;background-position:0 96%}
 .jk-peek .jk-hot.on .jk-w:not(.jk-chipw){background-image:radial-gradient(circle,var(--jk-accent) 1.1px,transparent 1.6px)}
+/* "Jiho" opens the About sheet: same dotted affordance, click instead of hover */
+.jk-name{all:unset;cursor:pointer;border-radius:.12em}
+.jk-name .jk-w{background-image:radial-gradient(circle,var(--jk-fg-3) 1.1px,transparent 1.6px);background-size:6px 4px;background-repeat:repeat-x;background-position:0 96%}
+.jk-name:hover .jk-w{color:var(--jk-accent);background-image:radial-gradient(circle,var(--jk-accent) 1.1px,transparent 1.6px)}
+.jk-name:focus-visible{outline:2px solid var(--jk-accent);outline-offset:4px}
 .jk-hot:focus-visible{outline:2px solid var(--jk-accent);outline-offset:4px}
 
 /* inline icon chips */

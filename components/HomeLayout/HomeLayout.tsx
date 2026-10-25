@@ -13,11 +13,12 @@ import { breakpoints } from "../../hooks/useBreakpoints";
 
 type Props = {
   projects: any[];
+  onNameClick?: (el: HTMLElement) => void;
 };
 
 const HERO_OFFSET = 500;
 
-const HomeLayout = ({ projects }: Props) => {
+const HomeLayout = ({ projects, onNameClick }: Props) => {
   const windowDimension = useWindowDimension();
   const projectCount = useMemo(
     () => projects.filter((p) => !getProjectInfo(p.meta).hidden).length,
@@ -71,7 +72,7 @@ const HomeLayout = ({ projects }: Props) => {
         },
       }}
     >
-      <LandingHero />
+      <LandingHero onNameClick={onNameClick} />
       <div
         className="font-inter mb-4"
         style={{ marginTop: "clamp(112px, 14vw, 192px)" }}

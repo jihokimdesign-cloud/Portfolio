@@ -8,6 +8,10 @@ import { NextSeo } from "next-seo";
 import HomeLayout from "../components/HomeLayout/HomeLayout";
 import dynamic from "next/dynamic";
 import Head from "next/head";
+import { useRouter } from "next/router";
+import AboutSheet from "../components/About/AboutSheet";
+import { openAbout, closeAbout } from "../lib/about";
+import ThemeToggle from "../components/ThemeToggle";
 
 const GlassNav = dynamic(() => import("../components/GlassNav"), {
   ssr: false,
@@ -38,6 +42,7 @@ export const getStaticProps: GetStaticProps = () => {
 const Home: NextPage = ({
   projects,
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
+  const router = useRouter();
   const { scrollY, scrollContainerRef } = useContainerScroll();
   // const [isViewingGrid, setIsViewingGrid] = useState(false);
   // const [isViewingGridBar, setIsViewingGridBar] = useState(false);
@@ -102,8 +107,16 @@ const Home: NextPage = ({
         isViewingTopBar={isViewingGridBar}
         projects={projects}
       /> */}
-      <HomeLayout projects={projects} />
+      <HomeLayout
+        projects={projects}
+        onNameClick={(el) => openAbout(router, el)}
+      />
       <GlassNav />
+      <AboutSheet
+        open={router.query.about === "1"}
+        onClose={() => closeAbout(router)}
+        themeToggle={<ThemeToggle inline />}
+      />
     </>
   );
 };

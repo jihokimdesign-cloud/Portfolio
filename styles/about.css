@@ -1,0 +1,147 @@
+/* =========================================================================
+   About sheet + /about page. Everything scoped under .jk-about-* / .jk-about.
+   Uses the same --jk-* tokens as landing-hero.css.
+
+   GLASS: the 6 --jk-glass-* values below must equal the nav pill's material.
+   If your nav CSS uses different numbers, paste the nav's values here
+   (light block AND dark block). Nothing else needs to change.
+   ========================================================================= */
+
+.jk-about-sheet,.jk-about-page{
+  --jk-fg:#08090a; --jk-fg-2:#62666d; --jk-fg-3:#8a8f98;
+  --jk-line:rgba(8,9,10,.06); --jk-line-2:rgba(8,9,10,.1);
+  --jk-surface:#ffffff; --jk-page:#f4f5f7; --jk-accent:#0066ff; --jk-ok:#1f9d63;
+  --jk-sans:"Inter","Inter Variable",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+
+  /* glass = nav pill */
+  --jk-glass-bg:rgba(252,252,253,.88);
+  --jk-glass-hi:rgba(255,255,255,.95);
+  --jk-glass-edge:rgba(0,0,0,.06);
+  --jk-glass-blur:saturate(180%) blur(20px);
+  --jk-glass-shadow:inset 0 1.5px 1px rgba(255,255,255,1),inset 0 -1px 1.5px rgba(255,255,255,.5),inset 1px 0 1px rgba(255,255,255,.35),inset -1px 0 1px rgba(255,255,255,.35),0 10px 30px rgba(8,9,10,.08);
+  --jk-glass-sheet:rgba(244,245,247,.78);
+
+  font-family:var(--jk-sans); font-feature-settings:"cv01","ss03"; color:var(--jk-fg);
+  -webkit-font-smoothing:antialiased;
+}
+[data-theme="dark"] .jk-about-sheet,.dark .jk-about-sheet,[data-theme="dark"] .jk-about-page,.dark .jk-about-page{
+  --jk-fg:#f7f8f8; --jk-fg-2:#8a8f98; --jk-fg-3:#62666d;
+  --jk-line:rgba(255,255,255,.05); --jk-line-2:rgba(255,255,255,.1);
+  --jk-surface:#16171b; --jk-page:#0b0c0e; --jk-accent:#4d94ff;
+  --jk-glass-bg:rgba(22,22,24,.86);
+  --jk-glass-hi:rgba(255,255,255,.09);
+  --jk-glass-edge:rgba(255,255,255,.14);
+  --jk-glass-shadow:inset 0 1.5px 1px rgba(255,255,255,.45),inset 0 -1px 1.5px rgba(255,255,255,.16),inset 1px 0 1px rgba(255,255,255,.1),inset -1px 0 1px rgba(255,255,255,.1),0 10px 30px rgba(0,0,0,.28);
+  --jk-glass-sheet:rgba(11,12,14,.8);
+}
+
+/* shared glass material */
+.jk-about-sheet .jk-glass,.jk-about-page .jk-glass{
+  background:linear-gradient(180deg,var(--jk-glass-hi),var(--jk-glass-bg));
+  -webkit-backdrop-filter:var(--jk-glass-blur); backdrop-filter:var(--jk-glass-blur);
+  border:1px solid var(--jk-glass-edge); box-shadow:var(--jk-glass-shadow);
+}
+
+/* ---------- landing behind the sheet ---------- */
+html.jk-about-lock{overflow:hidden}
+#__next{transition:transform .7s cubic-bezier(.65,0,.35,1),filter .7s;transform-origin:50% 30vh}
+body.jk-about-open #__next{transform:scale(.96);filter:blur(6px)}
+
+/* ---------- sheet ---------- */
+.jk-about-sheet{position:fixed;inset:0;z-index:1000;background:var(--jk-glass-sheet);
+  -webkit-backdrop-filter:var(--jk-glass-blur);backdrop-filter:var(--jk-glass-blur);
+  clip-path:circle(0px at var(--ox,50%) var(--oy,50%));
+  transition:clip-path .7s cubic-bezier(.65,0,.35,1)}
+.jk-about-sheet.open{clip-path:circle(var(--rad,150vmax) at var(--ox,50%) var(--oy,50%));transition-duration:.75s}
+.jk-about-scroll{position:absolute;inset:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+
+.jk-about-controls{position:sticky;top:0;z-index:2;display:flex;justify-content:flex-end;gap:8px;pointer-events:none;
+  padding-top:max(16px,env(safe-area-inset-top,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-left:16px}
+.jk-about-ctl{pointer-events:auto;width:40px;height:40px;border-radius:999px;display:grid;place-items:center;cursor:pointer;color:var(--jk-fg-2);
+  padding:0;transition:color .2s,transform .2s}
+.jk-about-ctl:hover{color:var(--jk-fg);transform:scale(1.04)}
+.jk-about-ctl svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+/* the site's own toggle sits inside .jk-about-ctl: strip its chrome so the glass circle is the button */
+.jk-about-ctl > button{all:unset;display:grid;place-items:center;width:100%;height:100%;cursor:pointer}
+
+/* reveal: items float up one by one after the circle opens */
+.jk-about-sheet .jk-rv{opacity:0;transform:translateY(14px);
+  transition:opacity .5s,transform .7s cubic-bezier(.2,.8,.2,1);transition-delay:calc(var(--i,0) * 70ms + 260ms)}
+.jk-about-sheet.open .jk-rv{opacity:1;transform:none}
+.jk-about-sheet:not(.open) .jk-rv{transition-delay:0s;transition-duration:.2s}
+
+/* ---------- content ---------- */
+.jk-about{max-width:640px;margin:0 auto;display:flex;flex-direction:column;
+  padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px));padding-block:24px 40vh}
+.jk-about-page{padding-top:96px}
+.jk-about-page .jk-about{padding-bottom:160px}
+
+.jk-photo{width:88px;height:88px;border-radius:50%;object-fit:cover;border:1px solid var(--jk-line-2);background:var(--jk-surface)}
+.jk-headline{margin:28px 0 0;font-size:clamp(28px,3.4vw,40px);font-weight:510;letter-spacing:-.022em;line-height:1.15;text-wrap:balance}
+.jk-mail{display:flex;align-items:center;gap:10px;margin-top:22px;flex-wrap:wrap}
+.jk-copy{display:inline-flex;align-items:center;gap:7px;height:36px;padding:0 14px;border-radius:999px;cursor:pointer;
+  font:510 14px/1 var(--jk-sans);color:var(--jk-fg);transition:color .2s}
+.jk-copy svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.jk-copy.done{color:var(--jk-ok)}
+.jk-addr{font-size:14px;color:var(--jk-fg-2);user-select:all}
+
+.jk-prose{margin-top:44px;display:flex;flex-direction:column;gap:18px}
+.jk-prose p{margin:0;font-size:17px;line-height:1.7;color:var(--jk-fg-2)}
+.jk-prose b{color:var(--jk-fg);font-weight:510}
+.jk-ichip{display:inline-flex;align-items:center;gap:6px;vertical-align:baseline;height:26px;padding:0 10px 0 6px;margin:0 1px;
+  border-radius:999px;font-size:14px;font-weight:510;color:var(--jk-fg);line-height:1}
+.jk-ichip.t{padding:0 10px}
+.jk-ichip img{width:16px;height:16px;border-radius:4px;flex:none}
+
+.jk-label{margin:56px 0 14px;font-size:13px;font-weight:510;color:var(--jk-fg-3)}
+.jk-skills{display:flex;flex-wrap:wrap;gap:8px}
+.jk-skills span{height:32px;display:inline-flex;align-items:center;padding:0 13px;border-radius:999px;font-size:13.5px;color:var(--jk-fg)}
+
+/* ---------- timeline ---------- */
+.jk-tl{position:relative;list-style:none;margin:0;padding:0;--rail:132px}
+.jk-tl::before,.jk-tl::after{content:"";position:absolute;left:calc(var(--rail) + 5px);top:var(--t0,8px);width:1.5px;border-radius:2px}
+.jk-tl::before{bottom:var(--b0,8px);background:var(--jk-line-2)}
+.jk-tl::after{height:var(--fh,0px);background:var(--jk-fg);transition:height .12s linear}
+.jk-tl > li{position:relative;display:grid;grid-template-columns:var(--rail) 1fr;column-gap:30px;padding-bottom:34px}
+.jk-tl > li:last-child{padding-bottom:0}
+.jk-tl time{font-size:13px;line-height:1.5;color:var(--jk-fg-3);font-variant-numeric:tabular-nums;text-align:right;padding-right:6px;transition:color .3s}
+.jk-tl-dot{position:absolute;left:var(--rail);top:4px;width:12px;height:12px;border-radius:50%;background:var(--jk-page);border:1.5px solid var(--jk-line-2);
+  transition:background .3s,border-color .3s,transform .4s cubic-bezier(.34,1.7,.5,1)}
+.jk-tl-txt{padding-left:6px;opacity:.42;transition:opacity .35s;min-width:0}
+.jk-tl h3{margin:0;font-size:15px;font-weight:510;line-height:1.4;color:var(--jk-fg)}
+.jk-tl p{margin:6px 0 0;font-size:14px;line-height:1.55;color:var(--jk-fg-2)}
+.jk-tl .jk-tl-org{margin:1px 0 0;color:var(--jk-fg-2)}
+.jk-tl .jk-tl-org a{color:var(--jk-fg);text-decoration:none;background:linear-gradient(var(--jk-line-2),var(--jk-line-2)) 0 100%/100% 1px no-repeat}
+.jk-tl > li.on .jk-tl-dot{background:var(--jk-fg);border-color:var(--jk-fg);transform:scale(1.08)}
+.jk-tl > li.on .jk-tl-txt{opacity:1}
+.jk-tl > li.on time{color:var(--jk-fg-2)}
+.jk-tl > li.now .jk-tl-dot{background:var(--jk-ok);border-color:var(--jk-ok);box-shadow:0 0 0 4px rgba(31,157,99,.15)}
+.jk-tl-sub{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
+.jk-tl-sub li{position:relative;padding-left:14px;font-size:14px;line-height:1.6;color:var(--jk-fg-2)}
+.jk-tl-sub li::before{content:"";position:absolute;left:0;top:.8em;width:6px;height:1.5px;background:var(--jk-line-2)}
+.jk-tl-sub b{font-weight:510;color:var(--jk-fg)}
+.jk-award{display:inline-flex;align-items:center;gap:5px;height:24px;padding:0 9px;margin-right:6px;vertical-align:1px;border-radius:999px;
+  font-size:12.5px;font-weight:510;color:var(--jk-fg)}
+.jk-award svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+
+/* ---------- mobile ---------- */
+@media (max-width:640px){
+  .jk-headline{font-size:26px}
+  .jk-prose p{font-size:16px}
+  .jk-tl{--rail:0px}
+  .jk-tl::before,.jk-tl::after{left:5px}
+  .jk-tl > li{grid-template-columns:1fr;padding-left:28px}
+  .jk-tl time{text-align:left;padding:0 0 2px}
+  .jk-tl-dot{left:0}
+  .jk-tl-txt{padding-left:0}
+}
+
+/* ---------- reduced motion: fade only ---------- */
+@media (prefers-reduced-motion:reduce){
+  #__next{transition:none}
+  body.jk-about-open #__next{transform:none;filter:none}
+  .jk-about-sheet,.jk-about-sheet.open{clip-path:none;opacity:0;transition:opacity .25s}
+  .jk-about-sheet.open{opacity:1}
+  .jk-about-sheet .jk-rv{transform:none;transition:opacity .25s;transition-delay:0s}
+  .jk-tl-dot,.jk-tl::after{transition:none}
+}
