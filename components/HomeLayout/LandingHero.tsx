@@ -149,7 +149,7 @@ export default function LandingHero({ onNameClick }: HeroProps = {}) {
     return () => { cancelAnimationFrame(r1); cancelAnimationFrame(r2); clearTimeout(t); };
   }, []);
 
-  /* hint (every visit) + trophy pop + chip wiggle */
+  /* first-visit hint + trophy pop + chip wiggle */
   useEffect(() => {
     const timers: number[] = [];
     if (!hintSeen.current) timers.push(window.setTimeout(() => !hintSeen.current && setHint(true), 2200));
@@ -345,6 +345,11 @@ export default function LandingHero({ onNameClick }: HeroProps = {}) {
                       onClick={(e) => onNameClick?.(e.currentTarget)}
                     >
                       {word("Jiho", li)}
+                      <span className="jk-name-tip jk-glass" aria-hidden="true">
+                        <img src="/about/profile.jpg" alt="" width={22} height={22} />
+                        About me
+                        <svg viewBox="0 0 12 12"><path d="M3.5 8.5l5-5M4.5 3.5h4v4" /></svg>
+                      </span>
                     </button>
                     {word(",", li)}{" "}
                   </span>

@@ -417,7 +417,6 @@ html.theme-transitioning *::after {
   line-height: 1;
   padding: 5px 9px;
   border-radius: 6px;
-  border: 1px solid var(--tag-border);
   color: var(--tag-fg);
   white-space: nowrap;
 }

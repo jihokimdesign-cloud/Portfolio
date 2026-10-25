@@ -24,7 +24,7 @@ export default function FeaturedCaseTap() {
         <div>
           {/* context row: TAP pill + what it is */}
           <div className="mb-4 flex flex-wrap items-center gap-2.5">
-            <span className="sw-tag" style={{ borderColor: "var(--accent)", color: "var(--accent)" }}>
+            <span className="sw-tag jk-glass" style={{ color: "var(--accent)" }}>
               TAP
             </span>
             <span className="text-[13px]" style={{ color: "var(--hero-fg2)" }}>
@@ -61,7 +61,7 @@ export default function FeaturedCaseTap() {
 
           <div className="flex flex-wrap gap-1.5">
             {TAGS.map((t) => (
-              <span key={t} className="sw-tag">
+              <span key={t} className="sw-tag jk-glass">
                 {t}
               </span>
             ))}

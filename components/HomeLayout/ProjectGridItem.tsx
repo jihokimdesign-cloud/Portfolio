@@ -176,7 +176,7 @@ const ProjectGridItem = ({
         {tags.length > 0 && (
           <div className="mt-1 flex flex-wrap gap-1.5">
             {tags.map((t) => (
-              <span key={t} className="sw-tag">
+              <span key={t} className="sw-tag jk-glass">
                 {t}
               </span>
             ))}

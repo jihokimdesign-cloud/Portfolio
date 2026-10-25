@@ -2,9 +2,7 @@
    About sheet + /about page. Everything scoped under .jk-about-* / .jk-about.
    Uses the same --jk-* tokens as landing-hero.css.
 
-   GLASS: the 6 --jk-glass-* values below must equal the nav pill's material.
-   If your nav CSS uses different numbers, paste the nav's values here
-   (light block AND dark block). Nothing else needs to change.
+   GLASS: all glass values live in styles/glass.css (one source, = nav pill).
    ========================================================================= */
 
 .jk-about-sheet,.jk-about-page{
@@ -13,13 +11,6 @@
   --jk-surface:#ffffff; --jk-page:#f4f5f7; --jk-accent:#0066ff; --jk-ok:#1f9d63;
   --jk-sans:"Inter","Inter Variable",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
 
-  /* glass = nav pill */
-  --jk-glass-bg:rgba(252,252,253,.88);
-  --jk-glass-hi:rgba(255,255,255,.95);
-  --jk-glass-edge:rgba(0,0,0,.06);
-  --jk-glass-blur:saturate(180%) blur(20px);
-  --jk-glass-shadow:inset 0 1.5px 1px rgba(255,255,255,1),inset 0 -1px 1.5px rgba(255,255,255,.5),inset 1px 0 1px rgba(255,255,255,.35),inset -1px 0 1px rgba(255,255,255,.35),0 10px 30px rgba(8,9,10,.08);
-  --jk-glass-sheet:rgba(244,245,247,.78);
 
   font-family:var(--jk-sans); font-feature-settings:"cv01","ss03"; color:var(--jk-fg);
   -webkit-font-smoothing:antialiased;
@@ -28,28 +19,16 @@
   --jk-fg:#f7f8f8; --jk-fg-2:#8a8f98; --jk-fg-3:#62666d;
   --jk-line:rgba(255,255,255,.05); --jk-line-2:rgba(255,255,255,.1);
   --jk-surface:#16171b; --jk-page:#0b0c0e; --jk-accent:#4d94ff;
-  --jk-glass-bg:rgba(22,22,24,.86);
-  --jk-glass-hi:rgba(255,255,255,.09);
-  --jk-glass-edge:rgba(255,255,255,.14);
-  --jk-glass-shadow:inset 0 1.5px 1px rgba(255,255,255,.45),inset 0 -1px 1.5px rgba(255,255,255,.16),inset 1px 0 1px rgba(255,255,255,.1),inset -1px 0 1px rgba(255,255,255,.1),0 10px 30px rgba(0,0,0,.28);
-  --jk-glass-sheet:rgba(11,12,14,.8);
-}
-
-/* shared glass material */
-.jk-about-sheet .jk-glass,.jk-about-page .jk-glass{
-  background:linear-gradient(180deg,var(--jk-glass-hi),var(--jk-glass-bg));
-  -webkit-backdrop-filter:var(--jk-glass-blur); backdrop-filter:var(--jk-glass-blur);
-  border:1px solid var(--jk-glass-edge); box-shadow:var(--jk-glass-shadow);
 }
 
 /* ---------- landing behind the sheet ---------- */
 html.jk-about-lock{overflow:hidden}
 #__next{transition:transform .7s cubic-bezier(.65,0,.35,1),filter .7s;transform-origin:50% 30vh}
-body.jk-about-open #__next{transform:scale(.96);filter:blur(6px)}
+body.jk-about-open #__next{transform:scale(.96);filter:blur(10px)}
 
 /* ---------- sheet ---------- */
 .jk-about-sheet{position:fixed;inset:0;z-index:1000;background:var(--jk-glass-sheet);
-  -webkit-backdrop-filter:var(--jk-glass-blur);backdrop-filter:var(--jk-glass-blur);
+  -webkit-backdrop-filter:saturate(160%) blur(32px);backdrop-filter:saturate(160%) blur(32px);
   clip-path:circle(0px at var(--ox,50%) var(--oy,50%));
   transition:clip-path .7s cubic-bezier(.65,0,.35,1)}
 .jk-about-sheet.open{clip-path:circle(var(--rad,150vmax) at var(--ox,50%) var(--oy,50%));transition-duration:.75s}

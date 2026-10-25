@@ -72,15 +72,8 @@ export default function GlassNav() {
         </filter>
       </svg>
       <div
-        className="liquid-glass flex items-center gap-1 rounded-full px-2 py-1.5"
-        style={{
-          // near-opaque fill (over the blur) keeps labels legible over any
-          // thumbnail, in both light and dark mode
-          background: "var(--nav-bg)",
-          border: "1px solid var(--glass-border)",
-          boxShadow: "var(--liquid-rim), var(--glass-shadow)",
-          color: "var(--fg)",
-        }}
+        className="jk-glass flex items-center gap-1 rounded-full px-2 py-1.5"
+        style={{ color: "var(--fg)" }}
       >
         <Link
           href="/"

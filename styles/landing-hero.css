@@ -41,7 +41,17 @@
 .jk-hot .jk-w:not(.jk-chipw){background-image:radial-gradient(circle,var(--jk-fg-3) 1.1px,transparent 1.6px);background-size:6px 4px;background-repeat:repeat-x;background-position:0 96%}
 .jk-peek .jk-hot.on .jk-w:not(.jk-chipw){background-image:radial-gradient(circle,var(--jk-accent) 1.1px,transparent 1.6px)}
 /* "Jiho" opens the About sheet: same dotted affordance, click instead of hover */
-.jk-name{all:unset;cursor:pointer;border-radius:.12em}
+.jk-name{all:unset;position:relative;cursor:pointer;border-radius:.12em}
+/* hover/focus: a small glass "About me" pill tells you this one is a click, not a hover preview */
+.jk-name-tip{position:absolute;left:50%;bottom:calc(100% + 10px);z-index:3;display:inline-flex;align-items:center;gap:7px;
+  padding:4px 11px 4px 4px;border-radius:999px;white-space:nowrap;pointer-events:none;
+  font:510 13px/1 var(--jk-sans);letter-spacing:0;color:var(--jk-fg);
+  opacity:0;transform:translate(-50%,6px) scale(.92);transform-origin:50% 100%;
+  transition:opacity .2s,transform .35s cubic-bezier(.34,1.6,.5,1)}
+.jk-name-tip img{width:22px;height:22px;border-radius:50%;object-fit:cover}
+.jk-name-tip svg{width:11px;height:11px;fill:none;stroke:var(--jk-fg-2);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.jk-name:hover .jk-name-tip,.jk-name:focus-visible .jk-name-tip{opacity:1;transform:translate(-50%,0) scale(1)}
+@media (hover:none){.jk-name-tip{display:none}}
 .jk-name .jk-w{background-image:radial-gradient(circle,var(--jk-fg-3) 1.1px,transparent 1.6px);background-size:6px 4px;background-repeat:repeat-x;background-position:0 96%}
 .jk-name:hover .jk-w{color:var(--jk-accent);background-image:radial-gradient(circle,var(--jk-accent) 1.1px,transparent 1.6px)}
 .jk-name:focus-visible{outline:2px solid var(--jk-accent);outline-offset:4px}
