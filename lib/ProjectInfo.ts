@@ -5,6 +5,7 @@ export interface ProjectInfo {
   slug: string;
   scope: string;
   previewVideo: string;
+  thumbAutoplay?: boolean; // 호버 없이도 썸네일 영상 계속 재생
   thumbHtml?: string; // 애니메이션 HTML 썸네일 (iframe으로 프리뷰)
   thumbImage?: string; // 정적/애니 이미지 썸네일 (object-cover로 채움)
   heroHtml?: string; // 히어로를 이미지 대신 HTML로 (iframe)
@@ -24,6 +25,7 @@ export function getProjectInfo(meta: any): ProjectInfo {
     scope: meta.scope,
     description: meta.description,
     previewVideo: meta.previewVideo,
+    thumbAutoplay: meta.thumbAutoplay ?? false,
     thumbHtml: meta.thumbHtml ?? null,
     thumbImage: meta.thumbImage ?? null,
     heroHtml: meta.heroHtml ?? null,
