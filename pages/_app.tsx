@@ -15,6 +15,7 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import { initGA, logEvent, logPageView } from "../lib/analytics";
 import dynamic from "next/dynamic";
+import { Analytics } from "@vercel/analytics/next";
 
 const ChatWidget = dynamic(() => import("../components/ChatWidget"), {
   ssr: false,
@@ -107,6 +108,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
           </WindowDimensionContextProvider>
       </HistoryProvider>
       {isRouteHome && <ChatWidget />}
+      <Analytics />
       {/* <!-- Default Statcounter code for portfolio https://alvinn.design --> */}
       {/* <script type="text/javascript">
         {`var sc_project=12719687; var sc_invisible=1; var sc_security="ce1e7f94";`}
