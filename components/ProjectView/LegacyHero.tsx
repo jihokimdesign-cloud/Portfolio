@@ -60,7 +60,7 @@ export default function LegacyHero({ projectInfo, coverImage }: Props) {
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={logo}
-            alt={projectInfo.title}
+            alt=""
             className="mx-auto mb-6 h-5 w-auto object-contain lg:h-6"
             // 배경/그림자 없이 — 다크 테마에선 흰색으로(가독)
             style={{ filter: "var(--logo-filter, none)" }}

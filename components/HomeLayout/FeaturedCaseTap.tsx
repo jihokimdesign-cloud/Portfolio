@@ -25,7 +25,7 @@ export default function FeaturedCaseTap() {
           {/* context row: TAP pill + what it is */}
           <div className="mb-4 flex flex-wrap items-center gap-2.5">
             <span className="sw-tag jk-glass" style={{ color: "var(--accent)" }}>
-              TAP
+              TAP3D
             </span>
             <span className="text-[13px]" style={{ color: "var(--hero-fg2)" }}>
               VR training for manufacturing technicians
@@ -52,7 +52,7 @@ export default function FeaturedCaseTap() {
             style={{ lineHeight: 1.5, color: "var(--fg-secondary)", margin: 0 }}
           >
             <span style={{ color: "var(--fg)", fontWeight: 500 }}>
-              I turned TAP&apos;s passive checklist into an agent that reaches
+              I turned TAP3D&apos;s passive checklist into an agent that reaches
               out first.
             </span>{" "}
             I proved it with a Wizard-of-Oz study of 24 trainees, and the
@@ -94,7 +94,7 @@ export default function FeaturedCaseTap() {
               key={src}
               ref={ref}
               src={src}
-              title="TAP — proactive agent demo"
+              title="TAP3D — proactive agent demo"
               scrolling="no"
               className="absolute inset-0 h-full w-full border-0"
               style={{ pointerEvents: "none" }}
