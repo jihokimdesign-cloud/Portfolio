@@ -20,7 +20,7 @@ PROFILE:
 - Open to relocation
 
 KEY METRICS:
-- **85%** retention rate at Lepal.ai
+- **85%** retention rate at LePal.ai
 - **40%** faster adoption at TAP3D
 - **50%** reduction in engineering handoff cycles
 - **12,000+** accessibility labels mapped at Project Sidewalk
@@ -33,7 +33,7 @@ EXPERIENCE:
    - Embedded context-aware AI assistant within the playback flow
    - Cut engineering handoff cycles by 50% through Cursor AI prototyping
 
-2. Product Designer, Lepal.ai (Sep - Nov 2024)
+2. Product Designer, LePal.ai (Sep - Nov 2024)
    - Designed native iOS/Android features increasing user satisfaction by 60%
    - Optimized subscription funnels and premium upgrade flows
    - A/B tested generative chat flows, achieving 15% lift in Day-7 retention
@@ -49,8 +49,8 @@ EXPERIENCE:
    - Eliminated accessibility debt in production design system
 
 PROJECTS:
-- TAP: AR-based enterprise onboarding, 9-month cliff reduced, 40% faster adoption
-- Lepal: AI wellness app, emotional continuity design, 85% retention, 2.4x engagement
+- TAP3D: AR-based enterprise onboarding, 9-month cliff reduced, 40% faster adoption
+- LePal: AI wellness app, emotional continuity design, 85% retention, 2.4x engagement
 - Cheffy: Hands-free cooking with gesture/voice, multimodal interaction design
 - Project Sidewalk: Civic accessibility mapping, zero-defect design system, 12k+ labels
 

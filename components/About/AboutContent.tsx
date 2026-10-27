@@ -40,7 +40,7 @@ const TIMELINE: TimelineItem[] = [
       <><b>Makeability Lab</b> · CookAR, and Project Sidewalk as Lead Product Designer</>,
       <><span className="jk-award jk-glass"><Trophy />UIST 2024 Best Paper</span>Belonging &amp; Inclusion award for CookAR</>,
     ] },
-  { date: "2024", title: "Lead Product Designer (Contract)", org: "TAP",
+  { date: "2024", title: "Lead Product Designer (Contract)", org: "TAP3D",
     desc: "Led design of a B2B VR training platform and its AI agent, validated with a Wizard-of-Oz study (n=24)." },
   { date: "2024", title: "Product Designer (Contract)", org: "LePal.ai",
     desc: "Designed an adaptive tone framework to break the 72-hour drop-off in an emotion-aware AI journal." },
@@ -94,7 +94,7 @@ export default function AboutContent({ scrollEl }: Props) {
           Most recently, Jiho was the founding designer of an early-stage AI product for hands-free cooking, building a
           multimodal design system in <Chip icon="/icon/figma.png">Figma</Chip> and{" "}
           <Chip icon="/icon/claude.png">Claude Code</Chip> and taking it to a 500-person beta. Before that, Jiho led
-          design for <Chip>TAP</Chip>, a VR training platform with an AI agent, and <Chip>LePal.ai</Chip>, an
+          design for <Chip>TAP3D</Chip>, a VR training platform with an AI agent, and <Chip>LePal.ai</Chip>, an
           emotion-aware AI journal.
         </p>
         <p className="jk-rv" style={rv(5)}>

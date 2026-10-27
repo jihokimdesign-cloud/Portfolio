@@ -98,7 +98,7 @@ const Home: NextPage = ({
       </Head>
       <NextSeo
         title={`Jiho Kim — Product Designer`}
-        description={`Product designer building AI products that adapt to people — and prototyping them in code. Cheffy, TAP, LePal, Project Sidewalk, and UIST 2024 Best Paper research CookAR.`}
+        description={`Product designer building AI products that adapt to people — and prototyping them in code. Cheffy, TAP3D, LePal, Project Sidewalk, and UIST 2024 Best Paper research CookAR.`}
       />
       {/* <LandingHero isViewingGrid={isViewingGrid} /> */}
       {/* <div ref={projectRef} /> */}

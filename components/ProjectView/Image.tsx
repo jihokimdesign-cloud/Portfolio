@@ -10,6 +10,7 @@ type Props = {
   height: number;
   src: string;
   caption?: string;
+  alt?: string;
   fullWidth?: boolean;
   rowSpan?: number;
   priority?: boolean;
@@ -22,6 +23,7 @@ const Image = ({
   height,
   fullWidth,
   caption,
+  alt,
   children,
   rowSpan = 1,
   priority,
@@ -33,7 +35,7 @@ const Image = ({
         src={src}
         width={width}
         height={height}
-        alt={caption || ""}
+        alt={alt || caption || ""}
         // placeholder="blur"
         priority={priority}
       />

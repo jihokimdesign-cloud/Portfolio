@@ -117,11 +117,12 @@ const ProjectGridItem = ({
     return () => vid.removeEventListener("loadedmetadata", onLoaded);
   }, []);
 
-  // play on hover; otherwise hold first frame
+  // autoplay keeps running; otherwise play on hover and hold first frame
+  const autoplay = !!projectInfo.thumbAutoplay;
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
-    if (isHovering) {
+    if (isHovering || autoplay) {
       v.play().catch(() => {});
     } else {
       v.pause();
@@ -129,7 +130,7 @@ const ProjectGridItem = ({
         v.currentTime = 0;
       } catch {}
     }
-  }, [isHovering, isVideoLoaded]);
+  }, [isHovering, isVideoLoaded, autoplay]);
 
   const title =
     projectInfo.cardTitle ?? projectInfo.hook ?? projectInfo.description;
@@ -243,7 +244,8 @@ const ProjectGridItem = ({
               disablePictureInPicture
               ref={videoRef}
               src={projectInfo.previewVideo}
-              preload="metadata"
+              preload={autoplay ? "auto" : "metadata"}
+              autoPlay={autoplay || undefined}
               muted
               loop
               playsInline
