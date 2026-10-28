@@ -5,6 +5,7 @@ import { AnimationConfig } from "../AnimationConfig";
 import { ExternalLink } from "../Layouts/ExternalLink";
 import debounce from "../../lib/debounce";
 import LandingHero from "./LandingHero";
+import SiteFooter from "../SiteFooter";
 import { getProjectInfo } from "../../lib/ProjectInfo";
 import { useContainerScroll } from "../ScrollContainer/ScrollContainer";
 import { useWindowDimension } from "../../hooks/useWindowDimension";
@@ -90,6 +91,7 @@ const HomeLayout = ({ projects, onNameClick }: Props) => {
         </div>
         <SelectedWork projects={projects} />
       </div>
+      <SiteFooter />
     </motion.div>
   );
 };

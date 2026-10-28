@@ -2,6 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+  distDir: process.env.NEXT_DIST_DIR || ".next",
   async redirects() {
     // 구버전 LePal 케이스가 구글에 인덱싱되어 있음 — 새 케이스로 301
     // (path-to-regexp: 소스의 점은 이스케이프 필요)

@@ -33,7 +33,7 @@ function ThemeSwitch() {
   return <ModeSwitch checked={dark} onChange={apply} width={52} />;
 }
 
-export default function CaseStudyNav() {
+export default function CaseStudyNav({ hidden = false }: { hidden?: boolean }) {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
   if (!mounted) return null;
@@ -41,7 +41,12 @@ export default function CaseStudyNav() {
   return createPortal(
     <div
       className="fixed inset-x-0 bottom-4 z-[150] flex justify-center px-4"
-      style={{ fontFamily: FONT_STACK }}
+      style={{
+        fontFamily: FONT_STACK,
+        opacity: hidden ? 0 : 1,
+        pointerEvents: hidden ? "none" : undefined,
+        transition: "opacity .2s ease",
+      }}
     >
       {/* liquid-glass 굴절용 변위 맵 (GlassNav와 동일) */}
       <svg width="0" height="0" style={{ position: "absolute" }} aria-hidden>
