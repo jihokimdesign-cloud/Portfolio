@@ -109,7 +109,9 @@ export default function InlineCase({
     const heroMedia = root.querySelector("#heroMedia") as HTMLElement | null;
     const fitHero = () => {
       if (heroMedia) {
-        heroMedia.style.setProperty("--hero-scale", String(heroMedia.clientWidth / 1440));
+        // cover: scale so the fixed 1440x810 motion fills the hero on both axes
+        const s = Math.max(heroMedia.clientWidth / 1440, heroMedia.clientHeight / 810);
+        heroMedia.style.setProperty("--hero-scale", String(s));
       }
     };
     fitHero();
