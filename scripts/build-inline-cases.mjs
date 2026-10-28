@@ -137,6 +137,10 @@ for (const c of CASES) {
     // the lead's line-height is taller than the H1's, so nudge it up a few px
     // to make the cap tops of the first lines sit on the same visual line
     `${wrap} .hero-right .t-lead{margin-top:-3px}\n` +
+    `\n/* hero fills the viewport; media covers it */\n` +
+    `${wrap} .hero-bleed{height:100vh;height:100svh;min-height:680px;max-height:1100px}\n` +
+    `${wrap} .hero-video,${wrap} .hero-bleed > video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}\n` +
+    `@media (max-width:760px){${wrap} .hero-bleed{height:88svh;min-height:0;max-height:none}}\n` +
     // desktop only: dark over the bottom ~half + soft backdrop blur behind the
     // text (top half of the motion stays clear). On mobile (<=760px) the mockup's
     // own stronger scrim handles the stacked layout where the text sits higher.
@@ -148,7 +152,7 @@ for (const c of CASES) {
     `\n/* hero: summary/primary button moves under the H1 in the left column */\n` +
     `${wrap} .hero-left{display:flex;flex-direction:column;gap:20px;align-items:flex-start}\n` +
     `\n/* iframe hero: render at a fixed 1440x810 design size and scale to cover width, top-centered (no responsive blow-up) */\n` +
-    `${wrap} .hero-media iframe{width:1440px;height:810px;left:50%;top:0;margin-left:-720px;transform-origin:top center;transform:scale(var(--hero-scale,1))}\n` +
+    `${wrap} .hero-media iframe{width:1440px;height:810px;left:50%;top:50%;margin-left:-720px;margin-top:-405px;transform-origin:center center;transform:scale(var(--hero-scale,1))}\n` +
     // the motion iframe is transparent; once it's loaded, hide the poster/art
     // underneath so it doesn't ghost through the motion.
     `${wrap} .hero-bleed:has(.hero-media iframe.ready) > img,${wrap} .hero-bleed:has(.hero-media iframe.ready) > .hero-art{opacity:0 !important}\n` +

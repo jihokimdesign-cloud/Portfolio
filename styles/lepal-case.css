@@ -706,6 +706,11 @@ html[data-theme="dark"] .lepal-case{
 .lepal-case .hero-right{padding-top:0}
 .lepal-case .hero-right .t-lead{margin-top:-3px}
 
+/* hero fills the viewport; media covers it */
+.lepal-case .hero-bleed{height:100vh;height:100svh;min-height:680px;max-height:1100px}
+.lepal-case .hero-video,.lepal-case .hero-bleed > video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+@media (max-width:760px){.lepal-case .hero-bleed{height:88svh;min-height:0;max-height:none}}
+
 /* scrim (desktop): dark over the bottom ~half, soft backdrop blur behind the text */
 @media (min-width:761px){
 .lepal-case .hero-bleed::after{background:linear-gradient(180deg,transparent 0%,transparent 38%,rgba(0,0,0,.5) 55%,rgba(0,0,0,.9) 70%,rgba(0,0,0,.97) 100%)}
@@ -716,7 +721,7 @@ html[data-theme="dark"] .lepal-case{
 .lepal-case .hero-left{display:flex;flex-direction:column;gap:20px;align-items:flex-start}
 
 /* iframe hero: render at a fixed 1440x810 design size and scale to cover width, top-centered (no responsive blow-up) */
-.lepal-case .hero-media iframe{width:1440px;height:810px;left:50%;top:0;margin-left:-720px;transform-origin:top center;transform:scale(var(--hero-scale,1))}
+.lepal-case .hero-media iframe{width:1440px;height:810px;left:50%;top:50%;margin-left:-720px;margin-top:-405px;transform-origin:center center;transform:scale(var(--hero-scale,1))}
 .lepal-case .hero-bleed:has(.hero-media iframe.ready) > img,.lepal-case .hero-bleed:has(.hero-media iframe.ready) > .hero-art{opacity:0 !important}
 
 /* content images: full brightness; only a Before comparison may dim via inline style */
