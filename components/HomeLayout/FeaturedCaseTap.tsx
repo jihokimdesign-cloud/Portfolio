@@ -90,26 +90,25 @@ export default function FeaturedCaseTap() {
           }}
         >
           {mounted && (
+            // The thumbnail (/thumbs/tap3d.html) is a 16:9 design; the panel is
+            // 16:9.4. Size the iframe to the panel height at 16:9 and center it so
+            // it COVERS the panel (crops a sliver of width) instead of under-filling
+            // and leaving an empty band at the bottom.
             <iframe
               key={src}
               ref={ref}
               src={src}
               title="TAP3D — proactive agent demo"
               scrolling="no"
-              className="absolute inset-0 h-full w-full border-0"
-              style={{ pointerEvents: "none" }}
+              className="absolute left-1/2 top-0 h-full border-0"
+              style={{
+                pointerEvents: "none",
+                aspectRatio: "16 / 9",
+                minWidth: "100%",
+                transform: "translateX(-50%)",
+              }}
             />
           )}
-          {/* bottom 12% fades to the page background */}
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-x-0 bottom-0"
-            style={{
-              height: "12%",
-              background:
-                "linear-gradient(to bottom, transparent, var(--panel-fade))",
-            }}
-          />
         </div>
       </Link>
     </div>

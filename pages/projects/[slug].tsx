@@ -5,6 +5,7 @@ import CaseStudyNav from "../../components/ProjectView/CaseStudyNav";
 import CaseStudyTOC from "../../components/ProjectView/CaseStudyTOC";
 import LegacyHero from "../../components/ProjectView/LegacyHero";
 import LinearCaseHero from "../../components/ProjectView/LinearCaseHero";
+import InlineCase from "../../components/ProjectView/InlineCase";
 import { serialize } from "next-mdx-remote/serialize";
 import { GetStaticProps, InferGetStaticPropsType, GetStaticPaths } from "next";
 import { getAllPostSlugs, getPostBySlug } from "../../lib/projects";
@@ -21,6 +22,7 @@ import { NextSeo } from "next-seo";
 import {
   getProjectCover,
   getProjectInfo,
+  getProjectLink,
   getProjectLogo,
   getProjectStyle,
 } from "../../lib/ProjectInfo";
@@ -120,6 +122,25 @@ export default function Post({
 
   const nextProjectStyle = getProjectStyle(nextProjectMeta);
   const nextProjectInfo = getProjectInfo(nextProjectMeta);
+
+  // inlineCase: an approved standalone mockup ported verbatim (no iframe, no
+  // ProjectView transform shell). Renders inside _app's ScrollContainer so the
+  // mockup's fixed/sticky/scroll-reveal logic anchors to the real viewport.
+  if (meta.inlineCase) {
+    return (
+      <>
+        <NextSeo
+          title={`${projectInfo.title} — Jiho Kim`}
+          description={`${projectInfo.description}`}
+        />
+        <InlineCase
+          slug={meta.inlineCase as string}
+          nextTitle={nextProjectInfo.title}
+          nextHref={getProjectLink(meta.nextProject as string)}
+        />
+      </>
+    );
+  }
 
   // legacyHtml 스터디: 셸 크롬(히어로 밴드/푸터)이 고정 다크색이라 라이트
   // 테마에서 흰 본문 위아래로 어두운 띠가 생김 → 크롬을 테마 토큰으로 중립화
