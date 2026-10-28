@@ -7,6 +7,7 @@ import "../styles/lepal-case.css";
 import "../styles/sidewalk-case.css";
 import "../styles/cheffy-case.css";
 import "../styles/cookar-case.css";
+import "../styles/jk-cases-foot.css";
 import ReactGA from "react-ga4";
 import type { AppProps } from "next/app";
 import { AnimatePresence, motion } from "framer-motion";

@@ -379,6 +379,15 @@ html[data-theme="dark"] .tap3d-case{
 .tap3d-case .art-t1{font:600 10px Inter,system-ui,sans-serif;fill:#fff}
 .tap3d-case .art-t2{font:400 10px Inter,system-ui,sans-serif;fill:rgba(255,255,255,.82)}
 .tap3d-case .art-gaze{stroke:#17181a !important;stroke-dasharray:2 4;opacity:.5}
+/* my role block */
+.tap3d-case .role{margin-top:40px}
+.tap3d-case .role-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap}
+.tap3d-case .role-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:12px}
+.tap3d-case .role-grid a{text-decoration:none;padding:14px 16px;border:1px solid var(--hero-tile-border);background:var(--hero-tile);border-radius:12px;display:flex;flex-direction:column;gap:6px;min-width:0;transition:border-color .2s,transform .2s}
+.tap3d-case .role-grid a:hover{border-color:color-mix(in srgb,var(--accent) 55%,transparent);transform:translateY(-1px)}
+.tap3d-case .role-grid a .t-label::after{content:" ↓";color:var(--hero-fg3);font-weight:400}
+.tap3d-case .team{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;align-items:center}
+.tap3d-case .team .t-caption{margin-right:4px}
 /* outcome duo */
 .tap3d-case .duo{display:grid;grid-template-columns:1fr 1fr;gap:20px;padding:36px 36px 0}
 .tap3d-case .duo-col{display:flex;flex-direction:column;gap:12px;min-width:0}
@@ -497,7 +506,7 @@ html[data-theme="dark"] .tap3d-case{
   .tap3d-case .toc{display:none}
 }
 @media (max-width:760px){
-  .tap3d-case .hero-bleed{height:auto;min-height:88svh}
+  .tap3d-case .hero-bleed{height:auto;min-height:88svh;container-type:normal}
   .tap3d-case .hero-bleed img{object-position:62% 30%}
   .tap3d-case .hero-bleed::after{background:linear-gradient(180deg,rgba(0,0,0,.4) 0%,rgba(0,0,0,.1) 14%,rgba(0,0,0,.75) 36%,rgba(0,0,0,.95) 60%)}
   .tap3d-case .hero-inner .hero-grid{grid-template-columns:1fr}
@@ -516,6 +525,7 @@ html[data-theme="dark"] .tap3d-case{
   .tap3d-case .col .v{font-size:11px}
   .tap3d-case .chart-call .big{font-size:30px}
   .tap3d-case .stats-xl,.tap3d-case .deltas,.tap3d-case .options,.tap3d-case .compare,.tap3d-case .duo,.tap3d-case .dec{grid-template-columns:1fr}
+  .tap3d-case .role-grid{grid-template-columns:1fr 1fr}
   .tap3d-case .curtain{grid-template-columns:1fr}
   .tap3d-case .cur-side{padding:16px}
   .tap3d-case .curtain .cur-side.art{border-radius:17px 17px 0 0;min-height:300px}
@@ -563,8 +573,12 @@ html[data-theme="dark"] .tap3d-case{
 .tap3d-case .hero-right{padding-top:0}
 .tap3d-case .hero-right .t-lead{margin-top:-3px}
 
-/* scrim: dark only over the bottom third so the product UI reads clean */
-.tap3d-case .hero-bleed::after{background:linear-gradient(180deg,transparent 0%,transparent 48%,rgba(0,0,0,.5) 74%,rgba(0,0,0,.92) 100%)}
+/* scrim: dark over the bottom ~half, with a soft backdrop blur behind the text only (top half of the motion stays clear) */
+.tap3d-case .hero-bleed::after{background:linear-gradient(180deg,transparent 0%,transparent 46%,rgba(0,0,0,.42) 66%,rgba(0,0,0,.86) 100%)}
+.tap3d-case .hero-bleed::before{content:"";position:absolute;left:0;right:0;bottom:0;top:50%;z-index:2;pointer-events:none;-webkit-backdrop-filter:blur(7px);backdrop-filter:blur(7px);-webkit-mask-image:linear-gradient(180deg,transparent,#000 32%);mask-image:linear-gradient(180deg,transparent,#000 32%)}
+
+/* hero: summary/primary button moves under the H1 in the left column */
+.tap3d-case .hero-left{display:flex;flex-direction:column;gap:20px;align-items:flex-start}
 
 /* iframe hero: render at a fixed 1440x810 design size and scale to cover width, top-centered (no responsive blow-up) */
 .tap3d-case .hero-media iframe{width:1440px;height:810px;left:50%;top:0;margin-left:-720px;transform-origin:top center;transform:scale(var(--hero-scale,1))}

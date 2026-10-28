@@ -10,6 +10,8 @@ import { useEffect, useRef, useState } from "react";
 import Head from "next/head";
 import CaseTopChrome from "./CaseTopChrome";
 import CaseStudyNav from "./CaseStudyNav";
+import CaseNextCard from "./CaseNextCard";
+import SiteFooter from "../SiteFooter";
 
 import * as tap3d from "./generated/tap3d";
 import * as lepal from "./generated/lepal";
@@ -25,14 +27,26 @@ const CASES: Record<string, { html: string; js: string; fontHref: string }> = {
   cookar,
 };
 
+type NextCard = {
+  slug: string;
+  title: string;
+  description: string;
+  thumbHtml?: string;
+  previewVideo?: string;
+  thumbImage?: string;
+  cover?: string;
+};
+
 export default function InlineCase({
   slug,
   nextTitle,
   nextHref,
+  next,
 }: {
   slug: string;
   nextTitle?: string;
   nextHref?: string;
+  next?: NextCard;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [summaryOpen, setSummaryOpen] = useState(false);
@@ -152,6 +166,12 @@ export default function InlineCase({
         className={`${slug}-case`}
         dangerouslySetInnerHTML={{ __html: data.html }}
       />
+      {/* next-project card + site footer, outside the scoped case wrapper so the
+          mockup's reset doesn't clobber the jk-cases / jk-foot layout */}
+      <div style={{ maxWidth: 960, margin: "0 auto", padding: "0 24px" }}>
+        {next && <CaseNextCard {...next} />}
+        <SiteFooter />
+      </div>
       <CaseTopChrome nextTitle={nextTitle} nextHref={nextHref} hidden={summaryOpen} />
       <CaseStudyNav hidden={summaryOpen || !pastHero} />
     </>

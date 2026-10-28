@@ -384,6 +384,15 @@ section.sec{padding:96px 0;border-bottom:1px solid var(--hero-hairline)}
 .art-t1{font:600 10px Inter,system-ui,sans-serif;fill:#fff}
 .art-t2{font:400 10px Inter,system-ui,sans-serif;fill:rgba(255,255,255,.82)}
 .art-gaze{stroke:#17181a !important;stroke-dasharray:2 4;opacity:.5}
+/* my role block */
+.role{margin-top:40px}
+.role-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap}
+.role-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:12px}
+.role-grid a{text-decoration:none;padding:14px 16px;border:1px solid var(--hero-tile-border);background:var(--hero-tile);border-radius:12px;display:flex;flex-direction:column;gap:6px;min-width:0;transition:border-color .2s,transform .2s}
+.role-grid a:hover{border-color:color-mix(in srgb,var(--accent) 55%,transparent);transform:translateY(-1px)}
+.role-grid a .t-label::after{content:" ↓";color:var(--hero-fg3);font-weight:400}
+.team{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;align-items:center}
+.team .t-caption{margin-right:4px}
 /* outcome duo */
 .duo{display:grid;grid-template-columns:1fr 1fr;gap:20px;padding:36px 36px 0}
 .duo-col{display:flex;flex-direction:column;gap:12px;min-width:0}
@@ -502,7 +511,7 @@ section.sec{padding:96px 0;border-bottom:1px solid var(--hero-hairline)}
   .toc{display:none}
 }
 @media (max-width:760px){
-  .hero-bleed{height:auto;min-height:88svh}
+  .hero-bleed{height:auto;min-height:88svh;container-type:normal}
   .hero-bleed img{object-position:62% 30%}
   .hero-bleed::after{background:linear-gradient(180deg,rgba(0,0,0,.4) 0%,rgba(0,0,0,.1) 14%,rgba(0,0,0,.75) 36%,rgba(0,0,0,.95) 60%)}
   .hero-inner .hero-grid{grid-template-columns:1fr}
@@ -521,6 +530,7 @@ section.sec{padding:96px 0;border-bottom:1px solid var(--hero-hairline)}
   .col .v{font-size:11px}
   .chart-call .big{font-size:30px}
   .stats-xl,.deltas,.options,.compare,.duo,.dec{grid-template-columns:1fr}
+  .role-grid{grid-template-columns:1fr 1fr}
   .curtain{grid-template-columns:1fr}
   .cur-side{padding:16px}
   .curtain .cur-side.art{border-radius:17px 17px 0 0;min-height:300px}
@@ -595,8 +605,19 @@ section.sec{padding:96px 0;border-bottom:1px solid var(--hero-hairline)}
     <div class="glance-head"><span class="t-caption">At a glance</span></div>
     <div class="tldr">
       <div><div class="t-caption">Problem</div><p class="t-small"><b>Trainees stalled before review.</b> Completion dropped sharply at Module 3, and the data couldn't say why.</p></div>
-      <div><div class="t-caption">What I did</div><p class="t-small"><b>9 interviews, 3 barriers.</b> Designed a proactive AI agent and simulated it with Wizard-of-Oz before any model existed.</p></div>
+      <div><div class="t-caption">Approach</div><p class="t-small"><b>9 interviews, 3 barriers.</b> Designed a proactive AI agent and simulated it with Wizard-of-Oz before any model existed.</p></div>
       <div><div class="t-caption">Outcome</div><p class="t-small"><b>The CFO said yes.</b> Issue resolution 33% → 71% in simulation; the agent shipped and is being localized for China.</p></div>
+    </div>
+
+    <div class="role reveal">
+      <div class="role-head"><span class="t-caption">What I did</span><span class="t-caption">Click to jump</span></div>
+      <div class="role-grid">
+        <a href="#research"><span class="t-label">Led user research</span><span class="t-caption">9 in-depth interviews · affinity mapping</span></a>
+        <a href="#strategy"><span class="t-label">Designed the AI strategy</span><span class="t-caption">MVP → WoZ validation → production agent</span></a>
+        <a href="#validation"><span class="t-label">Secured C-suite buy-in</span><span class="t-caption">Simulation data → CFO approval</span></a>
+        <a href="#outcome"><span class="t-label">Scaled globally</span><span class="t-caption">Design system expansion · CN localization</span></a>
+      </div>
+      <div class="team"><span class="t-caption">Team</span><span class="tag accent">Me · lead product designer, end to end</span><span class="tag">PM</span><span class="tag">Engineering</span><span class="tag">QA</span><span class="tag">6 cross-functional partners</span></div>
     </div>
   </section>
 
@@ -881,7 +902,7 @@ section.sec{padding:96px 0;border-bottom:1px solid var(--hero-hairline)}
         <figure class="breakout panel duo reveal" aria-label="MVP and AI agent screens side by side">
           <div class="duo-col">
             <div class="duo-label"><span class="tag">Before</span><span class="t-caption">Checklist MVP</span></div>
-            <img src="/TAPimgs/MVP_Checklist.png" alt="Before: the checklist MVP, a static task list that waits for the trainee to decide what to do next" loading="lazy" width="2560" height="1810" style="width:100%;display:block;border-radius:10px 10px 0 0;box-shadow:var(--shot-shadow)">
+            <img src="/TAPimgs/MVP_Checklist.png" alt="Before: the checklist MVP, a static task list that waits for the trainee to decide what to do next" loading="lazy" width="2560" height="1810" style="width:100%;display:block;border-radius:10px 10px 0 0;box-shadow:var(--shot-shadow);filter:saturate(.6);opacity:.85">
           </div>
           <div class="duo-col">
             <div class="duo-label"><span class="tag accent">After</span><span class="t-caption">AI agent</span></div>

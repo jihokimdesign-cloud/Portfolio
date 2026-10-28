@@ -137,6 +137,15 @@ export default function Post({
           slug={meta.inlineCase as string}
           nextTitle={nextProjectInfo.title}
           nextHref={getProjectLink(meta.nextProject as string)}
+          next={{
+            slug: meta.nextProject as string,
+            title: (nextProjectMeta.cardTitle as string) || nextProjectInfo.title,
+            description: (nextProjectMeta.description as string) || "",
+            thumbHtml: nextProjectMeta.thumbHtml as string | undefined,
+            previewVideo: nextProjectMeta.previewVideo as string | undefined,
+            thumbImage: nextProjectMeta.thumbImage as string | undefined,
+            cover: getProjectCover(nextProjectInfo.slug),
+          }}
         />
       </>
     );

@@ -133,8 +133,11 @@ for (const c of CASES) {
     // the lead's line-height is taller than the H1's, so nudge it up a few px
     // to make the cap tops of the first lines sit on the same visual line
     `${wrap} .hero-right .t-lead{margin-top:-3px}\n` +
-    `\n/* scrim: dark only over the bottom third so the product UI reads clean */\n` +
-    `${wrap} .hero-bleed::after{background:linear-gradient(180deg,transparent 0%,transparent 48%,rgba(0,0,0,.5) 74%,rgba(0,0,0,.92) 100%)}\n` +
+    `\n/* scrim: dark over the bottom ~half, with a soft backdrop blur behind the text only (top half of the motion stays clear) */\n` +
+    `${wrap} .hero-bleed::after{background:linear-gradient(180deg,transparent 0%,transparent 46%,rgba(0,0,0,.42) 66%,rgba(0,0,0,.86) 100%)}\n` +
+    `${wrap} .hero-bleed::before{content:"";position:absolute;left:0;right:0;bottom:0;top:50%;z-index:2;pointer-events:none;-webkit-backdrop-filter:blur(7px);backdrop-filter:blur(7px);-webkit-mask-image:linear-gradient(180deg,transparent,#000 32%);mask-image:linear-gradient(180deg,transparent,#000 32%)}\n` +
+    `\n/* hero: summary/primary button moves under the H1 in the left column */\n` +
+    `${wrap} .hero-left{display:flex;flex-direction:column;gap:20px;align-items:flex-start}\n` +
     `\n/* iframe hero: render at a fixed 1440x810 design size and scale to cover width, top-centered (no responsive blow-up) */\n` +
     `${wrap} .hero-media iframe{width:1440px;height:810px;left:50%;top:0;margin-left:-720px;transform-origin:top center;transform:scale(var(--hero-scale,1))}\n` +
     // the motion iframe is transparent; once it's loaded, hide the poster/art
@@ -152,6 +155,13 @@ for (const c of CASES) {
   body = body.replace(
     /<div class="hero-grid">\s*<div>\s*(<div class="hero-top">[\s\S]*?<\/div>)\s*(<h1\b[\s\S]*?<\/h1>)\s*<\/div>/,
     (m, top, h1) => `${top}\n          <div class="hero-grid">\n            ${h1}`
+  );
+  // move the summary / primary CTA button under the H1 in a left column; the
+  // right column keeps lead + tags (+ any store/paper/live link).
+  body = body.replace(
+    /(<h1\b[\s\S]*?<\/h1>)\s*<div class="hero-right">([\s\S]*?)(<(?:button|a) class="btn-summary"[\s\S]*?<\/(?:button|a)>)/,
+    (m, h1, pre, btn) =>
+      `<div class="hero-left">\n            ${h1}\n            ${btn}\n          </div>\n          <div class="hero-right">${pre}`
   );
 
   // guard: no megabyte data-URIs should remain in the shipped markup

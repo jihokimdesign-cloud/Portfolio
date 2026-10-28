@@ -636,8 +636,12 @@ html[data-theme="dark"] .cookar-case{
 .cookar-case .hero-right{padding-top:0}
 .cookar-case .hero-right .t-lead{margin-top:-3px}
 
-/* scrim: dark only over the bottom third so the product UI reads clean */
-.cookar-case .hero-bleed::after{background:linear-gradient(180deg,transparent 0%,transparent 48%,rgba(0,0,0,.5) 74%,rgba(0,0,0,.92) 100%)}
+/* scrim: dark over the bottom ~half, with a soft backdrop blur behind the text only (top half of the motion stays clear) */
+.cookar-case .hero-bleed::after{background:linear-gradient(180deg,transparent 0%,transparent 46%,rgba(0,0,0,.42) 66%,rgba(0,0,0,.86) 100%)}
+.cookar-case .hero-bleed::before{content:"";position:absolute;left:0;right:0;bottom:0;top:50%;z-index:2;pointer-events:none;-webkit-backdrop-filter:blur(7px);backdrop-filter:blur(7px);-webkit-mask-image:linear-gradient(180deg,transparent,#000 32%);mask-image:linear-gradient(180deg,transparent,#000 32%)}
+
+/* hero: summary/primary button moves under the H1 in the left column */
+.cookar-case .hero-left{display:flex;flex-direction:column;gap:20px;align-items:flex-start}
 
 /* iframe hero: render at a fixed 1440x810 design size and scale to cover width, top-centered (no responsive blow-up) */
 .cookar-case .hero-media iframe{width:1440px;height:810px;left:50%;top:0;margin-left:-720px;transform-origin:top center;transform:scale(var(--hero-scale,1))}
