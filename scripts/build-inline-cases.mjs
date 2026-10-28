@@ -109,7 +109,11 @@ for (const c of CASES) {
   const rawCss = styleM[1];
 
   const scriptM = srcText.match(/<script[^>]*>([\s\S]*?)<\/script>/i);
-  const rawJs = scriptM ? scriptM[1] : "";
+  let rawJs = scriptM ? scriptM[1] : "";
+  // Cases render inside the site now, so the hero motion/video should always
+  // load (not just on jihokim.me/localhost). Drop the hostname gate; the
+  // prefers-reduced-motion check inside the script still applies.
+  rawJs = rawJs.replace(/onSite\s*=\s*[^;]*jihokim[^;]*;/g, "onSite=true;");
 
   // the Google Fonts stylesheet link the mockup declares (Inter, + Nunito Sans etc.)
   const fontM = srcText.match(/<link[^>]+href="(https:\/\/fonts\.googleapis\.com\/css2\?[^"]+)"/i);
@@ -133,9 +137,14 @@ for (const c of CASES) {
     // the lead's line-height is taller than the H1's, so nudge it up a few px
     // to make the cap tops of the first lines sit on the same visual line
     `${wrap} .hero-right .t-lead{margin-top:-3px}\n` +
-    `\n/* scrim: dark over the bottom ~half, with a soft backdrop blur behind the text only (top half of the motion stays clear) */\n` +
-    `${wrap} .hero-bleed::after{background:linear-gradient(180deg,transparent 0%,transparent 46%,rgba(0,0,0,.42) 66%,rgba(0,0,0,.86) 100%)}\n` +
-    `${wrap} .hero-bleed::before{content:"";position:absolute;left:0;right:0;bottom:0;top:50%;z-index:2;pointer-events:none;-webkit-backdrop-filter:blur(7px);backdrop-filter:blur(7px);-webkit-mask-image:linear-gradient(180deg,transparent,#000 32%);mask-image:linear-gradient(180deg,transparent,#000 32%)}\n` +
+    // desktop only: dark over the bottom ~half + soft backdrop blur behind the
+    // text (top half of the motion stays clear). On mobile (<=760px) the mockup's
+    // own stronger scrim handles the stacked layout where the text sits higher.
+    `\n/* scrim (desktop): dark over the bottom ~half, soft backdrop blur behind the text */\n` +
+    `@media (min-width:761px){\n` +
+    `${wrap} .hero-bleed::after{background:linear-gradient(180deg,transparent 0%,transparent 38%,rgba(0,0,0,.5) 55%,rgba(0,0,0,.9) 70%,rgba(0,0,0,.97) 100%)}\n` +
+    `${wrap} .hero-bleed::before{content:"";position:absolute;left:0;right:0;bottom:0;top:40%;z-index:2;pointer-events:none;background:rgba(0,0,0,.28);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);-webkit-mask-image:linear-gradient(180deg,transparent,#000 28%);mask-image:linear-gradient(180deg,transparent,#000 28%)}\n` +
+    `}\n` +
     `\n/* hero: summary/primary button moves under the H1 in the left column */\n` +
     `${wrap} .hero-left{display:flex;flex-direction:column;gap:20px;align-items:flex-start}\n` +
     `\n/* iframe hero: render at a fixed 1440x810 design size and scale to cover width, top-centered (no responsive blow-up) */\n` +

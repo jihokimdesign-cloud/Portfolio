@@ -622,7 +622,7 @@ section.sec{padding:96px 0;border-bottom:1px solid var(--hero-hairline)}
 .nb.hot i{background:color-mix(in srgb,var(--accent) 70%,transparent)}
 .nb .v{color:var(--hero-fg);font-variant-numeric:tabular-nums}
 .nb .l{color:var(--hero-fg3)}
-.thr{position:absolute;left:0;right:0;top:0;border-top:1.5px dashed var(--hero-fg2);pointer-events:none}
+.thr{position:absolute;left:0;right:0;top:auto;bottom:calc(var(--t) * 0.82 + 24px);border-top:1.5px dashed var(--hero-fg2);pointer-events:none}
 .thr span{position:absolute;right:0;top:-22px;font-size:12px;color:var(--hero-fg2);background:var(--hero-tile);padding:0 6px}
 .trig{padding:28px}
 .sys-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:24px}
@@ -663,6 +663,7 @@ section.sec{padding:96px 0;border-bottom:1px solid var(--hero-hairline)}
   .methods,.trig-grid,.dgrid,.tech,.tl{grid-template-columns:1fr}
   .methods>div+div{border-left:0;padding-left:0;border-top:1px solid var(--hero-hairline);margin-top:12px}
   .nbars{gap:6px;height:180px}.nb{font-size:10px}
+  .thr{bottom:calc(var(--t) * 0.82 + 19px)}
   .cascade,.noise,.trig{padding:18px 14px}
 }
 

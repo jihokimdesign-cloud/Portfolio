@@ -573,9 +573,11 @@ html[data-theme="dark"] .tap3d-case{
 .tap3d-case .hero-right{padding-top:0}
 .tap3d-case .hero-right .t-lead{margin-top:-3px}
 
-/* scrim: dark over the bottom ~half, with a soft backdrop blur behind the text only (top half of the motion stays clear) */
-.tap3d-case .hero-bleed::after{background:linear-gradient(180deg,transparent 0%,transparent 46%,rgba(0,0,0,.42) 66%,rgba(0,0,0,.86) 100%)}
-.tap3d-case .hero-bleed::before{content:"";position:absolute;left:0;right:0;bottom:0;top:50%;z-index:2;pointer-events:none;-webkit-backdrop-filter:blur(7px);backdrop-filter:blur(7px);-webkit-mask-image:linear-gradient(180deg,transparent,#000 32%);mask-image:linear-gradient(180deg,transparent,#000 32%)}
+/* scrim (desktop): dark over the bottom ~half, soft backdrop blur behind the text */
+@media (min-width:761px){
+.tap3d-case .hero-bleed::after{background:linear-gradient(180deg,transparent 0%,transparent 38%,rgba(0,0,0,.5) 55%,rgba(0,0,0,.9) 70%,rgba(0,0,0,.97) 100%)}
+.tap3d-case .hero-bleed::before{content:"";position:absolute;left:0;right:0;bottom:0;top:40%;z-index:2;pointer-events:none;background:rgba(0,0,0,.28);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);-webkit-mask-image:linear-gradient(180deg,transparent,#000 28%);mask-image:linear-gradient(180deg,transparent,#000 28%)}
+}
 
 /* hero: summary/primary button moves under the H1 in the left column */
 .tap3d-case .hero-left{display:flex;flex-direction:column;gap:20px;align-items:flex-start}

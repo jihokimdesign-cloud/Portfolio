@@ -617,7 +617,7 @@ html[data-theme="dark"] .cheffy-case{
 .cheffy-case .nb.hot i{background:color-mix(in srgb,var(--accent) 70%,transparent)}
 .cheffy-case .nb .v{color:var(--hero-fg);font-variant-numeric:tabular-nums}
 .cheffy-case .nb .l{color:var(--hero-fg3)}
-.cheffy-case .thr{position:absolute;left:0;right:0;top:0;border-top:1.5px dashed var(--hero-fg2);pointer-events:none}
+.cheffy-case .thr{position:absolute;left:0;right:0;top:auto;bottom:calc(var(--t) * 0.82 + 24px);border-top:1.5px dashed var(--hero-fg2);pointer-events:none}
 .cheffy-case .thr span{position:absolute;right:0;top:-22px;font-size:12px;color:var(--hero-fg2);background:var(--hero-tile);padding:0 6px}
 .cheffy-case .trig{padding:28px}
 .cheffy-case .sys-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:24px}
@@ -658,6 +658,7 @@ html[data-theme="dark"] .cheffy-case{
   .cheffy-case .methods,.cheffy-case .trig-grid,.cheffy-case .dgrid,.cheffy-case .tech,.cheffy-case .tl{grid-template-columns:1fr}
   .cheffy-case .methods>div+div{border-left:0;padding-left:0;border-top:1px solid var(--hero-hairline);margin-top:12px}
   .cheffy-case .nbars{gap:6px;height:180px}.cheffy-case .nb{font-size:10px}
+  .cheffy-case .thr{bottom:calc(var(--t) * 0.82 + 19px)}
   .cheffy-case .cascade,.cheffy-case .noise,.cheffy-case .trig{padding:18px 14px}
 }
 
@@ -674,9 +675,11 @@ html[data-theme="dark"] .cheffy-case{
 .cheffy-case .hero-right{padding-top:0}
 .cheffy-case .hero-right .t-lead{margin-top:-3px}
 
-/* scrim: dark over the bottom ~half, with a soft backdrop blur behind the text only (top half of the motion stays clear) */
-.cheffy-case .hero-bleed::after{background:linear-gradient(180deg,transparent 0%,transparent 46%,rgba(0,0,0,.42) 66%,rgba(0,0,0,.86) 100%)}
-.cheffy-case .hero-bleed::before{content:"";position:absolute;left:0;right:0;bottom:0;top:50%;z-index:2;pointer-events:none;-webkit-backdrop-filter:blur(7px);backdrop-filter:blur(7px);-webkit-mask-image:linear-gradient(180deg,transparent,#000 32%);mask-image:linear-gradient(180deg,transparent,#000 32%)}
+/* scrim (desktop): dark over the bottom ~half, soft backdrop blur behind the text */
+@media (min-width:761px){
+.cheffy-case .hero-bleed::after{background:linear-gradient(180deg,transparent 0%,transparent 38%,rgba(0,0,0,.5) 55%,rgba(0,0,0,.9) 70%,rgba(0,0,0,.97) 100%)}
+.cheffy-case .hero-bleed::before{content:"";position:absolute;left:0;right:0;bottom:0;top:40%;z-index:2;pointer-events:none;background:rgba(0,0,0,.28);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);-webkit-mask-image:linear-gradient(180deg,transparent,#000 28%);mask-image:linear-gradient(180deg,transparent,#000 28%)}
+}
 
 /* hero: summary/primary button moves under the H1 in the left column */
 .cheffy-case .hero-left{display:flex;flex-direction:column;gap:20px;align-items:flex-start}
