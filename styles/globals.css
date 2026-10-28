@@ -110,6 +110,8 @@ body {
   --hero-hairline: rgba(255, 255, 255, 0.1);
   --hero-tile: #1c1d1f;
   --hero-tile-border: rgba(255, 255, 255, 0.12);
+  --tile-shadow: inset 0 1px 0 hsla(0, 0%, 100%, 0.04),
+    0 16px 32px -14px rgba(0, 0, 0, 0.7);
 }
 :root[data-theme="light"] {
   --canvas: #f5f5f7;
@@ -146,6 +148,7 @@ body {
   --hero-hairline: rgba(8, 9, 10, 0.08);
   --hero-tile: #ffffff;
   --hero-tile-border: rgba(8, 9, 10, 0.1);
+  --tile-shadow: 0 1px 0 rgba(8, 9, 10, 0.02), 0 12px 22px -12px rgba(8, 9, 10, 0.18);
 }
 
 /* ── Liquid Glass (Apple iOS 26-style material) ───────────────────
@@ -469,3 +472,190 @@ html.theme-transitioning *::after {
   border-top: 1px solid var(--hero-hairline);
 }
 
+
+/* ══════════════════════════════════════════════════════════════════
+   CASE SHELL (Linear) — hero + section rail, built on the hero tokens.
+   The case body itself lives in /public/case-studies/*-embed.html + case.css.
+   ════════════════════════════════════════════════════════════════ */
+.case-hero {
+  max-width: 1152px;
+  margin: 0 auto;
+  padding: 8px 24px 0;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  font-feature-settings: "cv01", "ss03";
+}
+.case-hero .ch-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px 64px;
+  align-items: start;
+}
+.case-hero .ch-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.case-hero .ch-title {
+  font-size: clamp(34px, 5vw, 50px);
+  line-height: 1.12;
+  letter-spacing: -0.022em;
+  font-weight: 510;
+  color: var(--hero-fg);
+  margin: 0;
+}
+.case-hero .ch-right {
+  padding-top: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.case-hero .ch-lead {
+  font-size: 18px;
+  line-height: 1.5;
+  color: var(--hero-fg2);
+  margin: 0;
+}
+.case-hero .ch-lead b {
+  color: var(--hero-fg);
+  font-weight: 510;
+}
+.case-hero .ch-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.case-hero .ch-tag {
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 8px;
+  border: 1px solid var(--tag-border);
+  border-radius: 6px;
+  font-size: 12px;
+  color: var(--tag-fg);
+}
+.case-hero .ch-tag.accent {
+  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+}
+.case-hero .ch-small {
+  font-size: 13px;
+  color: var(--hero-fg2);
+}
+.case-hero .ch-meta {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin-top: 48px;
+  border-top: 1px solid var(--hero-hairline);
+}
+.case-hero .ch-meta > div {
+  padding: 16px 16px 0 0;
+}
+.case-hero .ch-meta > div + div {
+  padding-left: 16px;
+  border-left: 1px solid var(--hero-hairline);
+}
+.case-hero .ch-cap {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--hero-fg3);
+}
+.case-hero .ch-lab {
+  font-size: 13px;
+  line-height: 1.5;
+  font-weight: 510;
+  color: var(--hero-fg);
+  margin-top: 2px;
+}
+/* 16:9 cover panel (keeps the landing→case transition target) */
+.case-panel {
+  max-width: 1152px;
+  margin: 40px auto 0;
+  padding: 0 24px;
+}
+.case-panel .inner {
+  position: relative;
+  border-radius: 18px;
+  border: 1px solid var(--hero-tile-border);
+  background: var(--panel-bg);
+  overflow: hidden;
+  box-shadow: var(--tile-shadow);
+  aspect-ratio: 16 / 9;
+}
+.case-panel .inner > * {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  border: 0;
+}
+.case-panel .inner::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 18%;
+  background: linear-gradient(transparent, var(--panel-fade));
+  pointer-events: none;
+}
+
+/* section rail (shell TOC, portaled) — reference .rail */
+.case-rail {
+  position: fixed;
+  left: 24px;
+  top: 96px;
+  z-index: 140;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+.case-rail ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.case-rail a {
+  display: flex;
+  gap: 12px;
+  padding: 6px 0;
+  font-size: 13px;
+  color: var(--hero-fg3);
+  text-decoration: none;
+  transition: color 0.2s;
+  cursor: pointer;
+}
+.case-rail a .n {
+  font-variant-numeric: tabular-nums;
+  width: 18px;
+}
+.case-rail a:hover,
+.case-rail a.on {
+  color: var(--hero-fg);
+}
+.case-rail a.on .n {
+  color: var(--accent);
+}
+@media (max-width: 1180px) {
+  .case-rail {
+    display: none;
+  }
+}
+@media (max-width: 900px) {
+  .case-hero .ch-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .case-hero .ch-meta {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .case-hero .ch-meta > div:nth-child(3) {
+    border-left: 0;
+    padding-left: 0;
+  }
+}

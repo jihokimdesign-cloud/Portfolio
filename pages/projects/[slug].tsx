@@ -4,6 +4,7 @@ import LegacyEmbed from "../../components/ProjectView/LegacyEmbed";
 import CaseStudyNav from "../../components/ProjectView/CaseStudyNav";
 import CaseStudyTOC from "../../components/ProjectView/CaseStudyTOC";
 import LegacyHero from "../../components/ProjectView/LegacyHero";
+import LinearCaseHero from "../../components/ProjectView/LinearCaseHero";
 import { serialize } from "next-mdx-remote/serialize";
 import { GetStaticProps, InferGetStaticPropsType, GetStaticPaths } from "next";
 import { getAllPostSlugs, getPostBySlug } from "../../lib/projects";
@@ -178,8 +179,14 @@ export default function Post({
               coverImage={getProjectCover(projectInfo.slug)}
               slugTitleMap={slugTitleMap}
             >
-              {/* legacy: 커버 이미지/HTML 히어로. 그 외엔 기존 헤더 */}
-              {meta.legacyHtml && (meta.heroImage || meta.heroHtml) ? (
+              {/* legacy: Linear 히어로(heroTitle 있으면) → 옛 커버 히어로 → 기본 헤더 */}
+              {meta.legacyHtml && meta.heroTitle ? (
+                <LinearCaseHero
+                  projectInfo={projectInfo}
+                  coverImage={meta.heroImage}
+                  meta={meta}
+                />
+              ) : meta.legacyHtml && (meta.heroImage || meta.heroHtml) ? (
                 <LegacyHero
                   projectInfo={projectInfo}
                   coverImage={meta.heroImage}
@@ -246,7 +253,7 @@ export default function Post({
         </ColorShifterContextProvider>
       </VideoHoverContextProvider>
       {meta.legacyHtml && <CaseStudyNav />}
-      {meta.legacyHtml && <CaseStudyTOC />}
+      {meta.legacyHtml && <CaseStudyTOC accent={meta.accent} />}
     </>
   );
 }

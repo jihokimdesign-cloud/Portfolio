@@ -1,0 +1,176 @@
+/* ============================================================
+   CASE TOKENS  (same names/values as Home :root)
+   Source of truth: case-linear-reference.html <style> — copied as-is.
+   ============================================================ */
+:root, :root[data-theme="dark"]{
+  --canvas:#000;
+  --hero-fg:#f7f8f8;          /* headings, strong text */
+  --hero-fg2:#8a8f98;         /* body / description */
+  --hero-fg3:#62666d;         /* labels, captions, index numbers */
+  --hero-hairline:hsla(0,0%,100%,.1);
+  --hero-tile:#1c1d1f;
+  --hero-tile-border:hsla(0,0%,100%,.12);
+  --tag-fg:#86868b;
+  --tag-border:#424245;
+  --panel-bg:radial-gradient(120% 90% at 50% 0%,rgba(64,140,255,.1),transparent 60%),#16181c;
+  --panel-fade:#0a0a0b;
+  --glass:rgba(28,28,30,.68);
+  --glass-border:hsla(0,0%,100%,.14);
+  --liquid-rim:inset 0 1.5px 1px hsla(0,0%,100%,.45),inset 0 -1px 1.5px hsla(0,0%,100%,.16),inset 1px 0 1px hsla(0,0%,100%,.1),inset -1px 0 1px hsla(0,0%,100%,.1);
+  --tile-shadow:inset 0 1px 0 hsla(0,0%,100%,.04),0 16px 32px -14px rgba(0,0,0,.7);
+  --good:#4cc38a; --bad:#eb5757;
+  /* per-project accent: the ONLY thing that changes between cases */
+  --accent:#4d94ff;
+}
+:root[data-theme="light"]{
+  --canvas:#f5f5f7;
+  --hero-fg:#08090a; --hero-fg2:#62666d; --hero-fg3:#8a8f98;
+  --hero-hairline:rgba(8,9,10,.08);
+  --hero-tile:#fff; --hero-tile-border:rgba(8,9,10,.1);
+  --tag-fg:#6e6e73; --tag-border:#d2d2d7;
+  --panel-bg:radial-gradient(120% 90% at 50% 0%,rgba(0,105,228,.07),transparent 60%),#eef1f5;
+  --panel-fade:#f5f5f7;
+  --glass:rgba(255,255,255,.72); --glass-border:rgba(8,9,10,.1);
+  --liquid-rim:inset 0 1px 0 rgba(255,255,255,.9);
+  --tile-shadow:0 1px 0 rgba(8,9,10,.02),0 12px 22px -12px rgba(8,9,10,.18);
+  --good:#1f9d63; --bad:#d64545;
+  --accent:#0066ff;
+}
+
+/* ============================================================
+   TYPE SCALE  (Inter, 510 = Linear "medium")
+   ============================================================ */
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--canvas)}
+body{background:var(--canvas);color:var(--hero-fg2);font:400 16px/1.625 Inter,system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;font-feature-settings:"cv01","ss03";transition:background .3s,color .3s}
+.t-display{font-size:clamp(34px,5vw,50px);line-height:1.12;letter-spacing:-.022em;font-weight:510;color:var(--hero-fg)}
+.t-h2{font-size:clamp(26px,3.2vw,32px);line-height:1.2;letter-spacing:-.022em;font-weight:510;color:var(--hero-fg)}
+.t-h3{font-size:18px;line-height:1.4;letter-spacing:-.012em;font-weight:510;color:var(--hero-fg)}
+.t-lead{font-size:18px;line-height:1.5;color:var(--hero-fg2)}
+.t-lead b,.t-body b{color:var(--hero-fg);font-weight:510}
+.t-body{font-size:16px;line-height:1.625;color:var(--hero-fg2)}
+.t-small{font-size:13px;line-height:1.5;color:var(--hero-fg2)}
+.t-label{font-size:13px;line-height:1.5;font-weight:510;color:var(--hero-fg)}
+.t-caption{font-size:12px;line-height:1.5;color:var(--hero-fg3)}
+.t-num{font-size:40px;line-height:1;letter-spacing:-.03em;font-weight:510;color:var(--hero-fg);font-variant-numeric:tabular-nums}
+.mono{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:12px}
+
+/* ============================================================
+   LAYOUT
+   ============================================================ */
+.wrap{max-width:1152px;margin:0 auto;padding:0 24px}
+.hair{height:1px;background:var(--hero-hairline);border:0}
+
+/* top chrome (same glass as Home nav) */
+.chrome{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;padding:16px 24px;pointer-events:none}
+.chrome>*{pointer-events:auto}
+.glass{background:var(--glass);border:1px solid var(--glass-border);box-shadow:var(--liquid-rim);
+  -webkit-backdrop-filter:saturate(1.8) blur(20px);backdrop-filter:saturate(1.8) blur(20px)}
+.icon-btn{width:36px;height:36px;border-radius:999px;display:grid;place-items:center;color:var(--hero-fg);cursor:pointer;font:500 15px Inter}
+.pill-btn{height:36px;border-radius:999px;display:flex;align-items:center;gap:8px;padding:0 14px 0 12px;color:var(--hero-fg);font:510 13px Inter;text-decoration:none;cursor:pointer}
+.pill-btn .dot{width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.pill-btn .muted{color:var(--hero-fg3);font-weight:400}
+
+/* tags (identical to Home card tags) */
+.tag{display:inline-flex;align-items:center;height:22px;padding:0 8px;border:1px solid var(--tag-border);border-radius:6px;font-size:12px;color:var(--tag-fg)}
+.tag.accent{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 55%,transparent)}
+.tags{display:flex;gap:6px;flex-wrap:wrap}
+
+/* ---------- HERO: same split as Home featured card ---------- */
+.hero{padding:56px 0 40px}
+.hero-top{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px 64px;align-items:start}
+.hero-grid .right{padding-top:6px;display:flex;flex-direction:column;gap:20px}
+.meta{display:grid;grid-template-columns:repeat(4,1fr);margin-top:48px;border-top:1px solid var(--hero-hairline)}
+.meta>div{padding:16px 16px 0 0}
+.meta>div+div{padding-left:16px;border-left:1px solid var(--hero-hairline)}
+
+/* panel = Home featured panel */
+.panel{position:relative;border-radius:18px;border:1px solid var(--hero-tile-border);background:var(--panel-bg);overflow:hidden;box-shadow:var(--tile-shadow)}
+.panel.media{aspect-ratio:16/9;display:grid;place-items:center;padding:6% 8% 0}
+.panel.media img{width:100%;height:100%;object-fit:cover;object-position:top;border-radius:8px 8px 0 0;box-shadow:0 30px 60px -20px rgba(0,0,0,.6)}
+.panel.media::after{content:"";position:absolute;inset:auto 0 0 0;height:22%;background:linear-gradient(transparent,var(--panel-fade))}
+
+/* ---------- TL;DR: hairline 3-col, no colored box ---------- */
+.tldr{display:grid;grid-template-columns:repeat(3,1fr);margin-top:64px;border-top:1px solid var(--hero-hairline);border-bottom:1px solid var(--hero-hairline)}
+.tldr>div{padding:24px 24px 28px 0}
+.tldr>div+div{padding-left:24px;border-left:1px solid var(--hero-hairline)}
+.tldr .t-caption{margin-bottom:10px}
+
+/* ---------- SECTION: index rail + content ---------- */
+.case{display:grid;grid-template-columns:200px minmax(0,680px);gap:0 80px;justify-content:space-between}
+.rail{position:sticky;top:84px;align-self:start;padding-top:96px}
+.rail ol{list-style:none;display:flex;flex-direction:column;gap:2px}
+.rail a{display:flex;gap:12px;padding:6px 0;font-size:13px;color:var(--hero-fg3);text-decoration:none;transition:color .2s}
+.rail a span{font-variant-numeric:tabular-nums;width:18px}
+.rail a:hover,.rail a.on{color:var(--hero-fg)}
+.rail a.on span{color:var(--accent)}
+section.sec{padding:96px 0;border-bottom:1px solid var(--hero-hairline)}
+section.sec:last-child{border-bottom:0}
+.eyebrow{display:flex;gap:10px;align-items:center;font-size:13px;color:var(--hero-fg3);margin-bottom:16px}
+.eyebrow .n{color:var(--accent);font-variant-numeric:tabular-nums}
+.sec h2{margin-bottom:24px}
+.sec p+p{margin-top:16px}
+.block{margin-top:40px}
+
+/* tiles */
+.tiles{display:grid;gap:12px}
+.tiles.c3{grid-template-columns:repeat(3,1fr)}
+.tiles.c2{grid-template-columns:repeat(2,1fr)}
+.tile{background:var(--hero-tile);border:1px solid var(--hero-tile-border);border-radius:12px;padding:20px;box-shadow:var(--tile-shadow)}
+.tile .t-h3{margin:12px 0 6px;font-size:15px}
+.tile .t-num{margin:8px 0 10px}
+.tile .k{font-size:12px;color:var(--hero-fg3)}
+
+/* funnel */
+.funnel{display:flex;flex-direction:column;gap:10px;margin-top:20px}
+.frow{display:grid;grid-template-columns:76px 1fr 44px;gap:12px;align-items:center;font-size:13px}
+.frow .bar{height:8px;border-radius:999px;background:var(--hero-hairline);overflow:hidden}
+.frow .bar i{display:block;height:100%;border-radius:inherit;background:var(--hero-fg3)}
+.frow.hot .bar i{background:var(--accent)}
+.frow .v{text-align:right;color:var(--hero-fg);font-variant-numeric:tabular-nums}
+.frow.hot .l,.frow.hot .v{color:var(--accent)}
+
+/* quote / insight */
+.insight{border-left:2px solid var(--accent);padding:4px 0 4px 20px;margin-top:40px}
+.insight .t-lead{color:var(--hero-fg)}
+
+/* compare */
+.compare .tile{padding:0;overflow:hidden}
+.compare .head{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--hero-hairline)}
+.compare .body{padding:16px;display:flex;flex-direction:column;gap:8px}
+.check{display:flex;gap:10px;align-items:center;height:36px;padding:0 12px;border-radius:8px;border:1px solid var(--hero-hairline);font-size:13px;color:var(--hero-fg2)}
+.check i{width:14px;height:14px;border-radius:50%;border:1.5px solid var(--hero-fg3);flex:none}
+.agent{border-color:color-mix(in srgb,var(--accent) 40%,transparent);background:color-mix(in srgb,var(--accent) 7%,transparent);color:var(--hero-fg)}
+.agent i{border:0;background:var(--accent)}
+
+/* reflection list */
+.list{border-top:1px solid var(--hero-hairline);margin-top:32px}
+.list>div{display:grid;grid-template-columns:32px 1fr;gap:12px;padding:20px 0;border-bottom:1px solid var(--hero-hairline)}
+.list .n{font-size:13px;color:var(--hero-fg3);font-variant-numeric:tabular-nums;padding-top:2px}
+
+/* next project = Home small card pattern */
+.next{display:block;text-decoration:none;margin:96px 0 120px}
+.next .row{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:20px;gap:24px}
+.next .arrow{width:40px;height:40px;border-radius:999px;border:1px solid var(--hero-tile-border);display:grid;place-items:center;color:var(--hero-fg);transition:transform .25s}
+.next:hover .arrow{transform:translateX(4px)}
+.next .panel{aspect-ratio:21/9;display:grid;place-items:center}
+.next .panel b{font-weight:510;color:var(--hero-fg3);font-size:13px}
+
+.annot{position:fixed;right:16px;bottom:16px;z-index:30;max-width:260px;padding:12px 14px;border-radius:12px;font-size:12px;line-height:1.5;color:var(--hero-fg2)}
+.annot b{color:var(--hero-fg);font-weight:510}
+
+@media (max-width:900px){
+  .hero-grid{grid-template-columns:1fr;gap:24px}
+  .meta{grid-template-columns:repeat(2,1fr)}
+  .meta>div:nth-child(3){border-left:0;padding-left:0}
+  .meta>div{padding-bottom:16px}
+  .tldr{grid-template-columns:1fr}
+  .tldr>div+div{border-left:0;padding-left:0;border-top:1px solid var(--hero-hairline)}
+  .case{grid-template-columns:1fr}
+  .rail{display:none}
+  section.sec{padding:64px 0}
+  .tiles.c3,.tiles.c2{grid-template-columns:1fr}
+  .annot{display:none}
+}
