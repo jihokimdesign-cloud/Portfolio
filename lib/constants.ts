@@ -6,7 +6,7 @@ export const SITE = {
   emailHref:
     "https://mail.google.com/mail/?view=cm&fs=1&to=jihokimdesign@gmail.com",
   linkedin: "https://www.linkedin.com/in/hoyak/",
-  resumeUrl: "https://drive.google.com/file/d/1lqlo2l6fnMgX0HX8WQLtgb4yDVCJF4Tr/view?usp=sharing",
+  resumeUrl: "https://drive.google.com/file/d/1TOmwN3m3AOycdyIipj36yg4oe_6Mu0dh/view?usp=sharing",
 } as const;
 
 // Selected Work 순서 — 지원 타깃별로 이 배열만 바꾸면 된다 (마크업 수정 불필요).
