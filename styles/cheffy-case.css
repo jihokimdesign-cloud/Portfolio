@@ -598,6 +598,7 @@ html[data-theme="dark"] .cheffy-case{
 .cheffy-case #heroTab .ts-macro{transform:none;opacity:1}
 .cheffy-case .cascade{padding:28px}
 .cheffy-case .casc{display:grid;grid-template-columns:1fr 20px 1fr 20px 1fr 20px 1fr;gap:8px;align-items:stretch}
+.cheffy-case .casc.p3{grid-template-columns:1fr 20px 1fr 20px 1fr}
 .cheffy-case .casc .arr{display:grid;place-items:center;color:var(--hero-fg3)}
 .cheffy-case .cs{border:1px solid var(--hero-tile-border);background:var(--hero-tile);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:4px;min-width:0}
 .cheffy-case .cs b{font-size:14px;font-weight:510;color:var(--hero-fg)}
@@ -654,7 +655,7 @@ html[data-theme="dark"] .cheffy-case{
 .cheffy-case .nx-chip.blue{color:#93c5fd;border:1px solid rgba(147,197,253,.4)}
 @media (max-width:760px){
   .cheffy-case .tab{display:none}
-  .cheffy-case .casc{grid-template-columns:1fr}.cheffy-case .casc .arr{transform:rotate(90deg);height:16px}
+  .cheffy-case .casc,.cheffy-case .casc.p3{grid-template-columns:1fr}.cheffy-case .casc .arr{transform:rotate(90deg);height:16px}
   .cheffy-case .methods,.cheffy-case .trig-grid,.cheffy-case .dgrid,.cheffy-case .tech,.cheffy-case .tl{grid-template-columns:1fr}
   .cheffy-case .methods>div+div{border-left:0;padding-left:0;border-top:1px solid var(--hero-hairline);margin-top:12px}
   .cheffy-case .nbars{gap:6px;height:180px}.cheffy-case .nb{font-size:10px}
