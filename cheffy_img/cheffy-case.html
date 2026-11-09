@@ -603,6 +603,7 @@ section.sec{padding:96px 0;border-bottom:1px solid var(--hero-hairline)}
 #heroTab .ts-macro{transform:none;opacity:1}
 .cascade{padding:28px}
 .casc{display:grid;grid-template-columns:1fr 20px 1fr 20px 1fr 20px 1fr;gap:8px;align-items:stretch}
+.casc.p3{grid-template-columns:1fr 20px 1fr 20px 1fr}
 .casc .arr{display:grid;place-items:center;color:var(--hero-fg3)}
 .cs{border:1px solid var(--hero-tile-border);background:var(--hero-tile);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:4px;min-width:0}
 .cs b{font-size:14px;font-weight:510;color:var(--hero-fg)}
@@ -659,7 +660,7 @@ section.sec{padding:96px 0;border-bottom:1px solid var(--hero-hairline)}
 .nx-chip.blue{color:#93c5fd;border:1px solid rgba(147,197,253,.4)}
 @media (max-width:760px){
   .tab{display:none}
-  .casc{grid-template-columns:1fr}.casc .arr{transform:rotate(90deg);height:16px}
+  .casc,.casc.p3{grid-template-columns:1fr}.casc .arr{transform:rotate(90deg);height:16px}
   .methods,.trig-grid,.dgrid,.tech,.tl{grid-template-columns:1fr}
   .methods>div+div{border-left:0;padding-left:0;border-top:1px solid var(--hero-hairline);margin-top:12px}
   .nbars{gap:6px;height:180px}.nb{font-size:10px}
@@ -708,9 +709,9 @@ section.sec{padding:96px 0;border-bottom:1px solid var(--hero-hairline)}
   <section class="hero">
     <div class="meta">
       <div><div class="t-caption">Role</div><div class="t-label">Founding Designer</div></div>
-      <div><div class="t-caption">Timeline</div><div class="t-label">8 weeks</div></div>
+      <div><div class="t-caption">Timeline</div><div class="t-label">8 weeks (adaptive mode)</div></div>
       <div><div class="t-caption">Domain</div><div class="t-label">Cooking · IoT</div></div>
-      <div><div class="t-caption">Tools</div><div class="t-label">Figma · Cursor · SwiftUI · TF Lite</div></div>
+      <div><div class="t-caption">Tools</div><div class="t-label">Figma · Claude Code (Figma MCP) · Cursor · Higgsfield · SwiftUI · TF Lite</div></div>
     </div>
     <p class="t-caption" style="margin-top:12px">Product previews are adapted mockups while the product is in stealth.</p>
 
@@ -728,6 +729,7 @@ section.sec{padding:96px 0;border-bottom:1px solid var(--hero-hairline)}
         <a href="#system"><span class="t-label">Designed the adaptive system</span><span class="t-caption">Multi-signal state machine · elbow-bump mode</span></a>
         <a href="#validation"><span class="t-label">Prototyped and tested</span><span class="t-caption">3 prototype rounds · usability study n=18</span></a>
         <a href="#outcome"><span class="t-label">Shipped to beta</span><span class="t-caption">500 users · 4 weeks · live instrumentation</span></a>
+        <a href="#build"><span class="t-label">Set AI quality standards</span><span class="t-caption">Define, generate, review · Higgsfield + Gemini</span></a>
       </div>
       <div class="team"><span class="t-caption">Role</span><span class="tag accent">Founding designer · prototyper &amp; researcher</span></div>
     </div>
@@ -742,7 +744,8 @@ section.sec{padding:96px 0;border-bottom:1px solid var(--hero-hairline)}
         <li><a href="#design"><span>04</span>Design</a></li>
         <li><a href="#validation"><span>05</span>Validation</a></li>
         <li><a href="#outcome"><span>06</span>Outcome</a></li>
-        <li><a href="#reflection"><span>07</span>Reflection</a></li>
+        <li><a href="#build"><span>07</span>Behind the build</a></li>
+        <li><a href="#reflection"><span>08</span>Reflection</a></li>
       </ol>
     </aside>
     <div>
@@ -881,8 +884,44 @@ section.sec{padding:96px 0;border-bottom:1px solid var(--hero-hairline)}
         <p class="t-caption" style="margin-top:12px">8 weeks, run in parallel.</p>
       </section>
 
+      <section class="sec" id="build">
+        <div class="eyebrow"><span class="n">07</span>Behind the build</div>
+        <h2 class="t-h2">Quality standards for AI-made work</h2>
+        <p class="t-body">Speed came from AI. Consistency came from the standards I set before generating.</p>
+
+        <h3 class="t-h3" style="margin-top:48px">Define, generate, review</h3>
+        <p class="t-body" style="margin-top:12px">Every AI-made asset in Cheffy ran through the same loop. I define what good looks like before anything is generated, AI produces options in volume, and I review every output against the standard before it ships. Nothing went live unreviewed.</p>
+        <p class="t-body">The brand renewal went through the same loop: I set the visual direction and the rules first, generated candidates in volume, and reviewed them down to the few that read as one brand.</p>
+
+        <figure class="breakout panel cascade reveal" aria-label="Define, generate, review pipeline">
+          <div class="chart-head"><div><div class="t-label">The production pipeline</div><div class="t-caption">Standards set before generating, every asset reviewed before release</div></div></div>
+          <div class="casc p3">
+            <div class="cs"><span class="t-caption">Define · Me</span><b>Set the standard</b><span class="st">Angle, background, framing rules</span></div>
+            <div class="arr">→</div>
+            <div class="cs"><span class="t-caption">Generate · AI</span><b>Produce in volume</b><span class="st">Higgsfield + Gemini API</span></div>
+            <div class="arr">→</div>
+            <div class="cs on"><span class="t-caption">Review · Me</span><b>Check every asset</b><span class="st">Unify backgrounds and details</span></div>
+          </div>
+        </figure>
+        <div class="stats-xl c2 reveal">
+          <div><span class="num">40–50</span><span class="t-small">assets generated per round</span></div>
+          <div><span class="num accent">~50%</span><span class="t-small">passed review and shipped</span></div>
+        </div>
+
+        <h3 class="t-h3" style="margin-top:56px">AI step videos</h3>
+        <p class="t-body" style="margin-top:12px">Each recipe step needed a visual showing what to do. Cutting existing YouTube recipe videos into steps didn't work: the cuts never lined up cleanly with the recipe. So I designed a generation pipeline connecting Higgsfield and the Gemini API, and put it in front of users.</p>
+        <p class="t-body">Video took too long to generate per step, and quality varied from scene to scene. I set a rule: representative recipes get a human-reviewed video; the rest, or any step where video generation fails, fall back to Gemini-generated images. Images drifted too, in backgrounds and small details, so every image went through review to unify them before release.</p>
+        <p class="t-body">Chicken curry was the dish most people said they wanted to cook in our research; kimchi jjigae was rising with interest in Korean food.</p>
+        <p class="t-small" style="margin-top:16px;max-width:640px"><b>Our standard:</b> an overhead shot on a plain off-white background so the food's state reads at a glance, switching to a side angle when knife work or hand position matters.</p>
+
+        <div class="compare reveal">
+          <div class="tile"><div class="head"><span class="t-label">Representative recipes</span><span class="tag">Reviewed video</span></div><div class="cmp-body"><p class="t-small">Chicken curry, kimchi jjigae. Every video checked before upload.</p></div></div>
+          <div class="tile ai"><div class="head"><span class="t-label">All other recipes</span><span class="tag accent">Still images</span></div><div class="cmp-body"><p class="t-small">Generated with Gemini as a fallback, then reviewed to unify backgrounds and details.</p></div></div>
+        </div>
+      </section>
+
       <section class="sec" id="reflection" style="border-bottom:0">
-        <div class="eyebrow"><span class="n">07</span>Reflection</div>
+        <div class="eyebrow"><span class="n">08</span>Reflection</div>
         <h2 class="t-h2">What I learned</h2>
         <div class="insight reveal" style="margin-top:8px"><p>The breakthrough wasn't adding input modalities. <em>It was listening to what was already failing.</em></p></div>
         <div class="compare reveal">
@@ -892,6 +931,7 @@ section.sec{padding:96px 0;border-bottom:1px solid var(--hero-hairline)}
         <div class="list reveal">
           <div><span class="n">01</span><div><div class="t-h3">Context is the best input</div><p class="t-small">When voice and gestures fail, the system already knows the user needs help.</p></div></div>
           <div><span class="n">02</span><div><div class="t-h3">Body mechanics drive digital design</div><p class="t-small">The half-screen button works because we measured real elbow contact areas (4.2 × 6.8cm) and forearm approach angles first.</p></div></div>
+          <div><span class="n">03</span><div><div class="t-h3">AI gives speed, not direction</div><p class="t-small">Generation made volume cheap. Deciding what good looks like, and what ships, stayed my job.</p></div></div>
         </div>
       </section>
     </div>
