@@ -32,14 +32,11 @@
   .loop{position:absolute;inset:0;animation:loopFade var(--dur) ease infinite}
   @keyframes loopFade{0%,1%{opacity:0}5%,94%{opacity:1}99.5%,100%{opacity:0}}
 
-  .eyebrow{position:absolute;top:34px;left:34px;display:flex;align-items:center;gap:10px}
-  .mark{width:24px;height:24px;border-radius:7px;background:var(--accent);color:#fff;
-    display:grid;place-items:center;font-size:13px;font-weight:800}
-  .eyebrow .txt{font-size:14px;font-weight:800;letter-spacing:.12em;color:var(--txt)}
-  .eyebrow .txt em{font-style:normal;color:var(--dim);font-weight:600}
+  .mark{border-radius:7px;background:var(--accent);color:#fff;
+    display:grid;place-items:center;font-weight:800}
 
   /* ================= iPad ================= */
-  .ipad{position:absolute;left:18px;top:186px;width:546px;height:396px;border-radius:26px;
+  .ipad{position:absolute;left:18px;top:18px;width:546px;height:396px;border-radius:26px;
     background:#0B0F19;border:1px solid #2A3444;padding:15px;
     box-shadow:0 24px 54px rgba(2,6,23,.35), inset 0 0 0 2px #060910;
     animation:frameGlow var(--dur) ease infinite}
@@ -164,11 +161,6 @@
 <div class="frame dark" id="frame">
   <div class="stage" id="stage">
     <div class="loop">
-
-      <div class="eyebrow">
-        <div class="mark">C</div>
-        <div class="txt">CHEFFY <em>· HANDS-FREE COOKING</em></div>
-      </div>
 
       <div class="ipad">
         <div class="cam"></div>
